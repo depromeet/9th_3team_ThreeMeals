@@ -1,31 +1,26 @@
 import Head from 'next/head';
 import { useQuery } from '@apollo/client';
-
 import QUERY_COUNTRIES from './queryCountries.graphql';
-
-import styles from '../styles/Home.module.css';
+import styled from 'styled-components';
 
 export default function Home() {
   const { data, loading, error } = useQuery(QUERY_COUNTRIES);
 
-  // make sure all data is loaded
   if (loading) {
     return <p>loading...</p>;
   }
 
-  // check for errors
   if (error) {
     return <p>:( an error happened</p>;
   }
 
-  // if all good return data
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
-        <title>Countries GraphQL</title>
-        <link rel='icon' href='/favicon.ico' />
+        <title>Three_Meals</title>
       </Head>
-      <h1>Countries</h1>
+      <h1>Three_Meals</h1>
+      <StyledButton>styled Btn</StyledButton>
       <div>
         {data.countries.map((country) => (
           <div key={country._id}>{country.name}</div>
@@ -34,3 +29,13 @@ export default function Home() {
     </div>
   );
 }
+
+const StyledButton = styled.button`
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 1px solid lightgray;
+  color: gray;
+  backgroud: white;
+`;
