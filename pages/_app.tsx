@@ -7,12 +7,12 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const MyApp = ({Component, pageProps}: AppProps) => {
+const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <ApolloProvider client={client}>
       <Component {...pageProps} />
     </ApolloProvider>
   );
-}
+};
 
 export default MyApp;
