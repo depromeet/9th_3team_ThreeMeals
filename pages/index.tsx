@@ -21,6 +21,15 @@ export default function Home() {
       </Head>
       <h1>Three_Meals</h1>
       <StyledButton>styled Btn</StyledButton>
+      <button
+        onClick={() => {
+          window.Kakao.Auth.authorize({
+            redirectUri: 'http://localhost:3002/auth',
+          });
+        }}
+      >
+        카카오로 로그인하기
+      </button>
       <div>
         {data.countries.map((country) => (
           <div key={country._id}>{country.name}</div>
