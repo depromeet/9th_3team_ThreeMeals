@@ -1,5 +1,6 @@
-// eslint-disable-next-line no-undef
-module.exports = {
+/* eslint-disable */
+const withImages = require('next-images')
+module.exports = withImages({
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -14,4 +15,4 @@ module.exports = {
   webpackDevMiddleware: (config) => {
     return config;
   },
-};
+});
