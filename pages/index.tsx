@@ -1,26 +1,26 @@
-import Head from 'next/head';
-import { useQuery } from '@apollo/client';
-import QUERY_COUNTRIES from './queryCountries.graphql';
-import styled from 'styled-components';
-import { IMAGES } from '../src/constants/images';
+import Head from 'next/head'
+import { useQuery } from '@apollo/client'
+import QUERY_COUNTRIES from './queryCountries.graphql'
+import styled from 'styled-components'
+import { IMAGES } from '../src/constants/images'
 
 interface Props {
-  id?: string;
+  id?: string
 }
 type conturies = {
-  _id: string;
-  name: string;
-};
+  _id: string
+  name: string
+}
 
 const Home: React.FC<Props> = (prop) => {
-  const { data, loading, error } = useQuery(QUERY_COUNTRIES);
+  const { data, loading, error } = useQuery(QUERY_COUNTRIES)
 
   if (loading) {
     return (
       <div>
         <p>loading...</p>
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -28,7 +28,7 @@ const Home: React.FC<Props> = (prop) => {
       <div>
         <p>:( an error happened</p>
       </div>
-    );
+    )
   }
 
   return (
@@ -43,10 +43,26 @@ const Home: React.FC<Props> = (prop) => {
         onClick={() => {
           window.Kakao.Auth.authorize({
             redirectUri: 'http://localhost:3002/auth',
-          });
+          })
         }}
       >
         카카오로 로그인하기
+      </button>
+      <button
+        onClick={() => {
+          if (navigator.share) {
+            navigator
+              .share({
+                title: 'web.dev',
+                text: 'Check out web.dev.',
+                url: 'https://www.naver.com/',
+              })
+              .then(() => console.log('Successful share'))
+              .catch((error) => console.log('Error sharing', error))
+          }
+        }}
+      >
+        공유하기
       </button>
       <div>
         {data.countries.map((country: conturies) => (
@@ -55,8 +71,8 @@ const Home: React.FC<Props> = (prop) => {
       </div>
       {prop.id && prop.id}
     </div>
-  );
-};
+  )
+}
 
 const StyledButton = styled.button`
   padding: 0.375rem 0.75rem;
@@ -66,6 +82,6 @@ const StyledButton = styled.button`
   border: 1px solid lightgray;
   color: gray;
   background: white;
-`;
+`
 
-export default Home;
+export default Home
