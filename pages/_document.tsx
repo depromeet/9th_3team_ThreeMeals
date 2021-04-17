@@ -1,10 +1,15 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
 class MyDocument extends Document {
-  render() {
+  render(): JSX.Element {
     return (
       <Html>
-        <Head />
+        <Head>
+          <meta
+            name='viewport'
+            content='initial-scale=1.0, width=device-width'
+          />
+        </Head>
         <body>
           <Main />
           <NextScript />
