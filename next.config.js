@@ -1,6 +1,11 @@
 /* eslint-disable */
+const withPlugins = require('next-compose-plugins')
 const withImages = require('next-images')
-module.exports = withImages({
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+module.exports = withPlugins([[withBundleAnalyzer], [withImages]], {
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -9,10 +14,10 @@ module.exports = withImages({
       test: /\.(graphql|gql)$/,
       exclude: /node_modules/,
       loader: 'graphql-tag/loader',
-    });
-    return config;
+    })
+    return config
   },
   webpackDevMiddleware: (config) => {
-    return config;
+    return config
   },
-});
+})
