@@ -1,24 +1,24 @@
-import React from 'react';
-import { useRouter } from 'next/router';
+import React from 'react'
+import { useRouter } from 'next/router'
 
 const Auth: React.FC = () => {
-  const rotuer = useRouter();
-  const [isLogined, setIsLogined] = React.useState(false);
+  const rotuer = useRouter()
+  const [isLogined, setIsLogined] = React.useState(false)
 
   React.useEffect(() => {
-    const { code } = rotuer.query;
+    const { code } = rotuer.query
 
-    if (!code) return;
+    if (!code) return
 
     const bodyData = {
       grant_type: 'authorization_code',
       client_id: process.env.NEXT_PUBLIC_REST_API_KEY,
       redirect_uri: 'http://localhost:3002/auth',
       code,
-    };
+    }
     const queryStringBody = Object.keys(bodyData)
       .map((k) => encodeURIComponent(k) + '=' + encodeURI(bodyData[k]))
-      .join('&');
+      .join('&')
 
     fetch(`https://kauth.kakao.com/oauth/token?${queryStringBody}`, {
       method: 'POST',
@@ -26,19 +26,19 @@ const Auth: React.FC = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        console.log(data)
         if (data.access_token) {
-          setIsLogined(true);
+          setIsLogined(true)
         }
-      });
-  }, [rotuer.query]);
+      })
+  }, [rotuer.query])
 
   return (
     <div>
       {isLogined && '로그인 되었습니다!'}
       {!isLogined && '로그인 중입니다!!'}
     </div>
-  );
-};
+  )
+}
 
-export default Auth;
+export default Auth
