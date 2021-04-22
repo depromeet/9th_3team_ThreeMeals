@@ -17,7 +17,7 @@ const StyledTag = styled(NextButton)`
   color: white;
   background-color: #242424;
   border-radius: 11px;
-  padding: 2px 8px;
+  padding: 0 8px;
   display: flex;
   justify-content: center;
   align-items: center;
