@@ -1,7 +1,7 @@
-import * as React from 'react';
+import * as React from 'react'
 
 type Props = {
-  text: string;
-};
+  text: string
+}
 
-export default ({ text }: Props) => <button>{text}</button>;
+export default ({ text }: Props) => <button>{text}</button>

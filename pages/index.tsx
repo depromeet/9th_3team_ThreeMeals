@@ -7,21 +7,17 @@ import { IMAGES } from '../src/constants/images'
 interface Props {
   id?: string
 }
-type conturies = {
-  _id: string
-  name: string
-}
 
 const Home: React.FC<Props> = (prop) => {
-  const { data, loading, error } = useQuery(QUERY_COUNTRIES)
+  const { loading, error } = useQuery(QUERY_COUNTRIES)
 
-  if (loading) {
-    return (
-      <div>
-        <p>loading...</p>
-      </div>
-    )
-  }
+  // if (loading) {
+  //   return (
+  //     <div>
+  //       <p>loading...</p>
+  //     </div>
+  //   )
+  // }
 
   if (error) {
     return (
@@ -64,11 +60,6 @@ const Home: React.FC<Props> = (prop) => {
       >
         공유하기
       </button>
-      <div>
-        {data.countries.map((country: conturies) => (
-          <div key={country._id}>{country.name}</div>
-        ))}
-      </div>
       {prop.id && prop.id}
     </div>
   )
