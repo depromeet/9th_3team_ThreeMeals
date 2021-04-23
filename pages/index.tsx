@@ -4,6 +4,7 @@ import QUERY_COUNTRIES from './queryCountries.graphql'
 import styled from 'styled-components'
 import { IMAGES } from '../src/constants/images'
 import QuizCard from '../src/components/molecules/QuizCard'
+
 interface Props {
   id?: string
 }
@@ -64,12 +65,14 @@ const Home: React.FC<Props> = (prop) => {
       >
         공유하기
       </button>
-      <div>
+      {/* <div>
         {data.countries.map((country: conturies) => (
           <div key={country._id}>{country.name}</div>
         ))}
+      </div> */}
+      <div style={{ position: 'fixed' }}>
+        <QuizCard />
       </div>
-      <QuizCard />
       {prop.id && prop.id}
     </div>
   )
