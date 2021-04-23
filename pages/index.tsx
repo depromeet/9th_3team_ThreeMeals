@@ -3,7 +3,6 @@ import { useQuery } from '@apollo/client'
 import QUERY_COUNTRIES from './queryCountries.graphql'
 import styled from 'styled-components'
 import { IMAGES } from '../src/constants/images'
-import QuizCard from '../src/components/molecules/QuizCard'
 
 interface Props {
   id?: string
