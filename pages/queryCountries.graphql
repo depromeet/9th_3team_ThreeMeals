@@ -1,6 +1,5 @@
 query {
-  countries: Country {
-    _id
+  countries: countries {
     name
   }
 }
