@@ -13,7 +13,7 @@ const Auth: React.FC = () => {
     const bodyData = {
       grant_type: 'authorization_code',
       client_id: process.env.NEXT_PUBLIC_REST_API_KEY,
-      redirect_uri: 'http://localhost:3002/auth',
+      redirect_uri: `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/auth`,
       code,
     }
     const queryStringBody = Object.keys(bodyData)
