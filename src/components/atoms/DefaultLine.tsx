@@ -1,8 +1,12 @@
 import * as React from 'react'
-import styled from 'styled-components'
+import styled, { CSSProperties } from 'styled-components'
 
-const DefaultLine: React.FC = () => {
-  return <Container />
+interface Props {
+  containerStyle?: CSSProperties
+}
+
+const DefaultLine: React.FC<Props> = (props: Props) => {
+  return <Container style={props.containerStyle} />
 }
 
 export default DefaultLine
