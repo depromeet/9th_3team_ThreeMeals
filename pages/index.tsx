@@ -38,7 +38,7 @@ const Home: React.FC<Props> = (prop) => {
       <button
         onClick={() => {
           window.Kakao.Auth.authorize({
-            redirectUri: 'http://localhost:3002/auth',
+            redirectUri: `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/auth`,
           })
         }}
       >
