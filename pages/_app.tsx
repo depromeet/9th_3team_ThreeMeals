@@ -5,6 +5,8 @@ import Head from 'next/head'
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { ApolloProvider } from '@apollo/client'
 
+import { GlobalStyle } from '../src/utils/GlobalStyle'
+
 const client = new ApolloClient({
   uri: 'https://countries-274616.ew.r.appspot.com',
   cache: new InMemoryCache(),
@@ -21,6 +23,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+      <GlobalStyle></GlobalStyle>
       <Component {...pageProps} />
     </ApolloProvider>
   )
