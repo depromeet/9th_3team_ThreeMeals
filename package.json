@@ -20,14 +20,10 @@
     "next-images": "1.7.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-<<<<<<< HEAD
     "react-spring": "^9.1.1",
     "react-use-gesture": "^9.1.3",
-    "styled-components": "5.2.3"
-=======
     "styled-components": "5.2.3",
     "styled-reset": "^4.3.4"
->>>>>>> 6101498a1f0befff19ed53c96a70084385a9f0b8
   },
   "devDependencies": {
     "@babel/core": "7.13.14",
