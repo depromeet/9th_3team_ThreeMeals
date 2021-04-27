@@ -11,6 +11,8 @@ interface Props {
 
 const Container = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 `
 
 const LabelCardHeader: React.FunctionComponent<Props> = (props) => {
@@ -19,8 +21,18 @@ const LabelCardHeader: React.FunctionComponent<Props> = (props) => {
       <CardLabel text={props.labelString} />
 
       <span>
-        {props.isLikeActive ? SVGS.icon_32_like_active : SVGS.icon_32_like}
-        {SVGS.icon_32_option}
+        {props.isLikeActive ? (
+          <button type="button">
+            <img src={SVGS.icon_32_like_active} alt="active" />
+          </button>
+        ) : (
+          <button type="button">
+            <img src={SVGS.icon_32_like} alt="inactive" />
+          </button>
+        )}
+        <button type="button">
+          <img src={SVGS.icon_32_option} alt="option" />
+        </button>
       </span>
     </Container>
   )

@@ -3,4 +3,7 @@ import reset from 'styled-reset'
 
 export const GlobalStyle = createGlobalStyle`
   ${reset};
+  button { 
+    border: none;    
+  }
 `
