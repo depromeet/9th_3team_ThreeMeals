@@ -6,13 +6,19 @@ import CardLabel from '../atoms/CardLabel'
 
 interface Props {
   labelString: string
-  isLikeActive: boolean
+  isLikeActive?: boolean
 }
 
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  button {
+    &:first-child {
+      margin-right: 8px;
+    }
+  }
 `
 
 const LabelCardHeader: React.FunctionComponent<Props> = (props) => {
