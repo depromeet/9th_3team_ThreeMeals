@@ -37,11 +37,7 @@ class MyDocument extends Document {
 
   render(): JSX.Element {
     return (
-<<<<<<< HEAD
-      <Html>
-=======
       <Html lang="ko">
->>>>>>> 7de855e8be6d24f69665c130c5583767ee77c76d
         <Head>
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link

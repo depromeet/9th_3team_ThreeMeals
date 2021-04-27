@@ -23,12 +23,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-<<<<<<< HEAD
-      <GlobalStyle></GlobalStyle>
-=======
       <GlobalStyle />
->>>>>>> 7de855e8be6d24f69665c130c5583767ee77c76d
-      <Component {...pageProps} />
     </ApolloProvider>
   )
 }
