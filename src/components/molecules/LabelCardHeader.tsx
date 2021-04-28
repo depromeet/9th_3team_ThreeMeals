@@ -2,11 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { SVGS } from '../../constants/svgs'
-import CardLabel from '../atoms/CardLabel'
 
 interface Props {
-  labelString: string
   isLikeActive?: boolean
+  labelComponent: React.ReactNode
+  className?: string
 }
 
 const Container = styled.div`
@@ -23,8 +23,8 @@ const Container = styled.div`
 
 const LabelCardHeader: React.FunctionComponent<Props> = (props) => {
   return (
-    <Container>
-      <CardLabel text={props.labelString} />
+    <Container className={props.className}>
+      {props.labelComponent}
 
       <span>
         {props.isLikeActive ? (
