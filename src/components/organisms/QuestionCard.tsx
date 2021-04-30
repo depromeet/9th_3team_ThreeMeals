@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import LabelCardHeader from '../molecules/LabelCardHeader'
 import CardLabel from '../atoms/CardLabel'
+import { SVGS } from '../../constants/svgs'
 
 interface Props {
   questionTitle: string
@@ -32,8 +33,24 @@ const Container = styled.div<{ backColor: string }>`
 const StyledLabelCardHeader = styled(LabelCardHeader)`
   position: absolute;
   width: 100%;
-  right: 24px;
   top: 16px;
+  left: -14px;
+`
+
+const BottomContainer = styled.div`
+  display: flex;
+  position: absolute;
+  bottom: 24px;
+  left: -5px;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: -0.02em;
+  color: white;
+  img {
+    margin-right: 7px;
+  }
 `
 
 const QuestionCard: React.FunctionComponent<Props> = (props) => {
@@ -43,6 +60,15 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
         labelComponent={<CardLabel text={'-13:33:33'} />}
       />
       <p>{props.questionTitle}</p>
+      <BottomContainer>
+        <img
+          src={SVGS.icon_left_arrow_wh}
+          alt="arrow-left"
+          width={45}
+          height={37}
+        />
+        밀어서 답장보기
+      </BottomContainer>
     </Container>
   )
 }
