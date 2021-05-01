@@ -14,9 +14,11 @@ const client = new ApolloClient({
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   React.useEffect(() => {
-    window.Kakao.init(process.env.NEXT_PUBLIC_JAVASCRIPT_KEY)
-    window.Kakao.isInitialized()
-  }, [])
+    if (window?.Kakao) {
+      window.Kakao.init(process.env.NEXT_PUBLIC_JAVASCRIPT_KEY)
+      window.Kakao.isInitialized()
+    }
+  }, [window])
 
   return (
     <ApolloProvider client={client}>
