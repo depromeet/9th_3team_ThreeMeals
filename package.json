@@ -10,7 +10,8 @@
     "export": "yarn build && next export",
     "lint": "yarn eslint .",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "deploy:firebase": "yarn build-storybook && firebase deploy"
   },
   "dependencies": {
     "@apollo/client": "^3.1.3",
