@@ -33,3 +33,10 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# build-static
+storybook-static/**/*
+
+# fierbase
+firebase.json
+.firebase*
