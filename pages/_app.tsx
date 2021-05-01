@@ -27,7 +27,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
       document.body.append(js)
     }
-  })
+  }, [])
 
   return (
     <ApolloProvider client={client}>
