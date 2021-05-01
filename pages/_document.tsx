@@ -48,7 +48,6 @@ class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
         </body>
       </Html>
     )
