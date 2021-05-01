@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
+import { IMAGES } from '../../constants/images'
 const TapeLabelContainer = styled.div`
   position: absolute;
   min-height: 195px;
@@ -23,9 +24,9 @@ const CrossedTapesLabel: FC = () => {
   return (
     <>
       <TapeLabelContainer>
-        <img src="/home_tape_bl.png" alt="tape_bl" className="tapeBl" />
-        <img src="/home_tape_gr.png" alt="tape_gr" className="tapeGr" />
-        <img src="/home_tape_yr.png" alt="tape_yr" className="tapeYr" />
+        <img src={IMAGES.home_tape_bl} alt="tape_bl" className="tapeBl" />
+        <img src={IMAGES.home_tape_gr} alt="tape_gr" className="tapeGr" />
+        <img src={IMAGES.home_tape_yr} alt="tape_yr" className="tapeYr" />
       </TapeLabelContainer>
     </>
   )

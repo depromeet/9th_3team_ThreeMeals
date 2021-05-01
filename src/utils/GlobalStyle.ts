@@ -24,11 +24,4 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
     cursor: pointer;
   }
-<<<<<<< HEAD
-
-  * { 
-    box-sizing: border-box;
-  }
-=======
->>>>>>> 31f858a64f79671976d5762c62e84017b52db342
 `
