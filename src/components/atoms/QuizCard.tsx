@@ -2,6 +2,7 @@ import React, { FC, PropsWithChildren } from 'react'
 import styled from 'styled-components'
 import { animated, to, SpringValue } from 'react-spring'
 import { Vector2, ReactEventHandlers } from 'react-use-gesture/dist/types'
+import { IMAGES } from '../../constants/images'
 interface DragEventProps {
   args: Array<number>
   down: boolean
@@ -58,15 +59,17 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
         {...props.bind(props.i)}
         style={{
           transform: to([props.rot, props.scale], props.trans),
-          backgroundImage: `url('/Rectangle.png')`,
-          height: '400px',
-          width: '400px',
+          backgroundColor: '#FF833D',
+          height: '360px',
+          width: '327px',
           cursor: 'pointer',
           willChange: 'transform',
           overflow: 'hidden',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+          borderRadius: '24px',
+          boxShadow: '0px 30px 40px rgba(255, 131, 61, 0.15)',
         }}
       >
         <ContextContainer>
@@ -74,13 +77,13 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
           <div>{props.children}</div>{' '}
           <div>
             <img
-              src="/leftArrowCircle.png"
+              src={IMAGES.leftCircleArrow}
               alt="LArrow"
               id="-1"
               style={{ width: '30%' }}
             />
             <img
-              src="/rightArrowX.png"
+              src={IMAGES.rightXArrow}
               alt="RArrow"
               id="+1"
               style={{ width: '30%' }}
