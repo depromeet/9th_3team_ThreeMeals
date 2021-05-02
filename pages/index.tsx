@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client'
 import QUERY_COUNTRIES from './queryCountries.graphql'
 import styled from 'styled-components'
 import { IMAGES } from '../src/constants/images'
+import Link from 'next/link'
 
 interface Props {
   id?: string
@@ -61,6 +62,12 @@ const Home: React.FC<Props> = (prop) => {
         공유하기
       </button>
       {prop.id && prop.id}
+
+      <div>
+        <Link href="/profile">
+          <a>profile</a>
+        </Link>
+      </div>
     </div>
   )
 }

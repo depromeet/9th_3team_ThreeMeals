@@ -9,7 +9,9 @@ interface Props {
 const NextButton: React.FunctionComponent<Props> = (props) => {
   return (
     <Link href={props.href}>
-      <a className={props.className}>{props.children}</a>
+      <a className={props.className} target="_blank">
+        {props.children}
+      </a>
     </Link>
   )
 }

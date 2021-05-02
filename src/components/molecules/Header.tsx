@@ -10,6 +10,7 @@ interface Props {
   rightIcon?: string
   rightSecondIcon?: string
   rightText?: string
+  blurRightText?: boolean
 
   onClickLeft?: () => void
   onClickRight?: () => void
@@ -22,10 +23,12 @@ interface Props {
 const Header: React.FC<Props> = (props: Props) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
 
-  const onClickRight = React.useCallback(() => {
+  const { onClickRight } = props
+
+  const onClickRightBtn = React.useCallback(() => {
     setIsOpen(true)
-    props.onClickRight && props.onClickRight()
-  }, [isOpen, props.onClickRight])
+    onClickRight && onClickRight()
+  }, [isOpen, onClickRight])
 
   const onClickExit = React.useCallback(() => {
     setIsOpen(false)
@@ -57,7 +60,7 @@ const Header: React.FC<Props> = (props: Props) => {
           )}
           {props.rightIcon ? (
             <>
-              <RightIcon src={props.rightIcon} onClick={onClickRight} />
+              <RightIcon src={props.rightIcon} onClick={onClickRightBtn} />
               <BurgerMenu
                 right={true}
                 width={331}
@@ -88,7 +91,18 @@ const Header: React.FC<Props> = (props: Props) => {
               </BurgerMenu>
             </>
           ) : (
-            <>{props.rightText && <RightText>{props.rightText}</RightText>}</>
+            <>
+              {props.rightText && (
+                <RightText
+                  onClick={onClickRightBtn}
+                  style={{
+                    opacity: props.blurRightText === true ? 0.5 : 1,
+                  }}
+                >
+                  {props.rightText}
+                </RightText>
+              )}
+            </>
           )}
         </ContentRight>
       </Container>

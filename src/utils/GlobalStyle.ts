@@ -5,7 +5,9 @@ export const GlobalStyle = createGlobalStyle`
   ${reset};
 
   html,
-  body,
+  body {
+    background: #191919;
+  }
   #root {
     height: 100%;
   }
@@ -16,7 +18,9 @@ export const GlobalStyle = createGlobalStyle`
       box-sizing: inherit;
     }
   }
-  
+  a, u {
+    text-decoration: none;
+  }
   button { 
     border: none;
     outline: none;

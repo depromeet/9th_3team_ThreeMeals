@@ -5,7 +5,7 @@ import NextButton from './NextButton'
 interface Props {
   href: string
   text: string
-  icon?: React.ReactNode
+  icon?: string
 }
 
 const StyledTag = styled(NextButton)`
@@ -23,12 +23,19 @@ const StyledTag = styled(NextButton)`
   align-items: center;
   height: 22px;
 `
-
+const Icon = styled.img`
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+`
+const Text = styled.span`
+  margin-top: 2px;
+`
 const Tag: React.FunctionComponent<Props> = (props) => {
   return (
     <StyledTag href={props.href}>
-      {props.icon}
-      {props.text}
+      <Icon src={props.icon} />
+      <Text>{props.text}</Text>
     </StyledTag>
   )
 }
