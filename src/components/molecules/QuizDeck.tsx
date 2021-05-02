@@ -1,7 +1,7 @@
 import React, { useState, FC } from 'react'
 import { useSprings } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
-import QuizCard from '../molecules/QuizCard'
+import QuizCard from '../atoms/QuizCard'
 
 interface Props {
   data: Array<string>
@@ -9,7 +9,7 @@ interface Props {
 
 const toD = (i: number) => ({
   x: 0,
-  y: i,
+  y: i * -4,
   scale: 1,
   rot: 0,
   delay: i * 100,

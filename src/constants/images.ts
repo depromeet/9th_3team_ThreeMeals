@@ -16,17 +16,7 @@ export const IMAGES = {
   home_tape_yr: require('../assets/images/home_tape_yr.png'),
 
   // OXQuiz //
-  img_quiz_o_bl: require('../assets/images/img_quiz_o_bl.png'),
-  img_quiz_o_gr: require('../assets/images/img_quiz_o_gr.png'),
-  img_quiz_o_yl: require('../assets/images/img_quiz_o_yl.png'),
-  img_quiz_o_yr: require('../assets/images/img_quiz_o_yr.png'),
-  img_quiz_x_bl: require('../assets/images/img_quiz_x_bl.png'),
-  img_quiz_x_gr: require('../assets/images/img_quiz_x_gr.png'),
-  img_quiz_x_yr: require('../assets/images/img_quiz_x_yr.png'),
-  img_quiz_x_yl: require('../assets/images/img_quiz_x_yl.png'),
-  img_quiz_bl: require('../assets/images/img_quiz_bl.png'),
-  img_quiz_gr: require('../assets/images/img_quiz_gr.png'),
-  img_quiz_yl: require('../assets/images/img_quiz_yl.png'),
-  img_quiz_yr: require('../assets/images/img_quiz_yr.png'),
-  img_quiz_rd: require('../assets/images/img_quiz_rd.png'),
+  rightXArrow: require('../assets/images/rightXArrow.png'),
+  leftCircleArrow: require('../assets/images/leftCircleArrow.png'),
+  img_quiz_or: require('../assets/images/img_quiz_or.png'),
 }

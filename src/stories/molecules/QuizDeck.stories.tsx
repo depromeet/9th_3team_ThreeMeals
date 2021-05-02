@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
-import QuizDeck from '../../components/organisms/QuizDeck'
+import QuizDeck from '../../components/molecules/QuizDeck'
 
 const dummyCardData = [
   '다시 제출하시겠습니까?',
@@ -10,6 +10,6 @@ const dummyCardData = [
   'check out',
 ]
 
-storiesOf('organisms/QuizDeck', module).add('with text', () => {
+storiesOf('molecules/QuizDeck', module).add('with text', () => {
   return <QuizDeck data={dummyCardData} />
 })
