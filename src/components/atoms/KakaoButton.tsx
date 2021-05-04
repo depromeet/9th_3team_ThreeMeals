@@ -2,8 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { SVGS } from '../../constants/svgs'
 const Button = styled.button`
-  min-width: 327px;
-  /* width: 50%; */
+  width: 100%;
   height: 48px;
   display: flex;
   align-items: center;

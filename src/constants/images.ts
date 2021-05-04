@@ -15,6 +15,7 @@ export const IMAGES = {
   home_tape_bl: require('../assets/images/home_tape_bl.png'),
   home_tape_gr: require('../assets/images/home_tape_gr.png'),
   home_tape_yr: require('../assets/images/home_tape_yr.png'),
+  img_scrolldown: require('../assets/images/img_scrolldown.png'),
 
   // OXQuiz //
   img_quiz_o_bl: require('../assets/images/img_quiz_o_bl.png'),
