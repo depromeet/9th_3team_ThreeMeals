@@ -89,9 +89,9 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
         }}
       >
         <ContextContainer>
-          <StyledLabelCardHeader
+          {/* <StyledLabelCardHeader
             labelComponent={<img src={IMAGES.img_quiz_yr} alt="quizIcon" />}
-          />
+          /> */}
           <div className="textArea">{props.children}</div>
           <div className="bottomArea">
             <img
