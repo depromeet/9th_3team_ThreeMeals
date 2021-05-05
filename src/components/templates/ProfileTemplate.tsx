@@ -122,7 +122,7 @@ const FooterText = styled.div`
   font-size: 16px;
   line-height: 19px;
   letter-spacing: -0.02em;
-
+  cursor: pointer;
   color: #ff5050;
   margin-top: 23px;
 `
