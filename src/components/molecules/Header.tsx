@@ -32,7 +32,7 @@ const Header: React.FC<Props> = (props: Props) => {
 
   const onClickExit = React.useCallback(() => {
     setIsOpen(false)
-  }, [isOpen])
+  }, [])
 
   return (
     <>
