@@ -94,7 +94,7 @@ const Header: React.FC<Props> = (props: Props) => {
             <>
               {props.rightText && (
                 <RightText
-                  onClick={onClickRightBtn}
+                  onClick={!props.blurRightText ? onClickRightBtn : undefined}
                   style={{
                     opacity: props.blurRightText === true ? 0.5 : 1,
                   }}
