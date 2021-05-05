@@ -1,5 +1,3 @@
-// src/stories/Button.stories.tsx
-
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 import Header from '../../components/molecules/Header'
