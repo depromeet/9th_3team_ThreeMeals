@@ -25,21 +25,23 @@ const HomeTemplate: FC<Props> = (props) => {
           <span className="icon">🤫</span>
         </CharIconContainer>
         <PhraseContainer>
-          <div className="text1">쉿!</div>
-          <div className="text2">
+          <StyledText className="text1">쉿!</StyledText>
+          <StyledText className="text2">
             너를 향한 <span className="emphasis">비밀</span>들
-          </div>
+          </StyledText>
         </PhraseContainer>
         <TapesContainer>
           <CrossedTapesLabel />
         </TapesContainer>
         <TextContainer>
-          <div className="text1">
+          <StyledText className="text1">
             <span>너에게 궁금한것</span>
             <span>너에게 말하고 싶었던 것</span>
             <span>모두 카드에 남길게요</span>
-          </div>
-          <div className="text2">24시간 후면 내가 누군지 알게될거야!</div>
+          </StyledText>
+          <StyledText className="text2">
+            24시간 후면 내가 누군지 알게될거야!
+          </StyledText>
         </TextContainer>
         <BottomContainer>
           <div className="kakao">
@@ -107,6 +109,10 @@ const PhraseContainer = styled.div`
   }
 `
 
+const StyledText = styled.div`
+  font-family: 'Apple SD Gothic Neo';
+`
+
 const TapesContainer = styled.div`
   width: 100%;
   height: 170px;
@@ -139,6 +145,9 @@ const TextContainer = styled.div`
     align-items: center;
     height: 40%;
     font-size: 20px;
+    @media screen and (max-width: 320px) {
+      font-size: 18px;
+    }
   }
 `
 

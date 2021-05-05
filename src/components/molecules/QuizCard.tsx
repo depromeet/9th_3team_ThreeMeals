@@ -92,7 +92,7 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
           <StyledLabelCardHeader
             labelComponent={<img src={IMAGES.img_quiz_yr} alt="quizIcon" />}
           />
-          <div className="textArea">{props.children}</div>{' '}
+          <div className="textArea">{props.children}</div>
           <div className="bottomArea">
             <img
               src={IMAGES.img_quiz_o_bl}
