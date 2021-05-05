@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import DefaultLine from '../atoms/DefaultLine'
@@ -9,15 +9,22 @@ import Header from '../molecules/Header'
 interface Props {
   onClickLeft?: () => void
   onClickRight?: () => void
+  onClickIntro?: () => void
   onClickLogout?: () => void
 }
 
 const ProfileTemplate: React.FC<Props> = (props: Props) => {
   const [blurRightText, setBlurRightText] = useState<boolean>(true)
 
-  setTimeout(() => {
-    setBlurRightText(false)
-  }, 1000)
+  useEffect(() => {
+    setTimeout(() => {
+      setBlurRightText(false)
+    }, 1000)
+  }, [])
+
+  const onClickClose = useCallback((id: string) => {
+    console.log('id:', id)
+  }, [])
   return (
     <Container>
       <Header
@@ -40,29 +47,35 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
       />
       <IntroContainer style={{ marginTop: 40 }}>
         <IntroTitle>이름</IntroTitle>
-        <IntroDesc placeholder={'김덕배'} />
+        <IntroDesc>{'김덕배'}</IntroDesc>
       </IntroContainer>
       <DefaultLine containerStyle={{ marginTop: 16, marginBottom: 16 }} />
       <IntroContainer>
         <IntroTitle>소개</IntroTitle>
-        <IntroDesc placeholder={'소개글을 작성해주세요!'} />
+        <IntroDesc onClick={props.onClickIntro}>
+          {'소개글을 작성해주세요!'}
+        </IntroDesc>
       </IntroContainer>
 
       <DefaultLine containerStyle={{ marginTop: 16, marginBottom: 16 }} />
 
       <TagContainer>
         <Tag
+          id={'1'}
           icon={IMAGES.icon_16_insta_wh}
           text={'Add Instgram'}
           href="https://google.com"
+          onClickClose={onClickClose}
         />
       </TagContainer>
       <DefaultLine containerStyle={{ marginTop: 16, marginBottom: 16 }} />
       <TagContainer>
         <Tag
+          id={'2'}
           icon={IMAGES.share_16}
           text={'figma.com/duck-bae'}
           href="https://google.com"
+          onClickClose={onClickClose}
         />
       </TagContainer>
       <Footer>
@@ -93,10 +106,17 @@ const IntroTitle = styled.div`
 
   color: #ffffff;
 `
-const IntroDesc = styled.input`
+const IntroDesc = styled.span`
   margin-left: 24px;
-  background: #191919;
-  border: none;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: -0.02em;
+
+  color: #ffffff;
+
+  opacity: 0.3;
 `
 
 const TagContainer = styled.div`

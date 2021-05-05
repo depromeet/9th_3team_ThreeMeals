@@ -7,6 +7,7 @@ const ProfilePage: React.FC = () => {
     <ProfileTemplate
       onClickLeft={router.back}
       onClickRight={router.back}
+      onClickIntro={() => router.push('/profileEdit')}
       onClickLogout={() => {
         console.log('logout')
       }}
