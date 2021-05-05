@@ -2,11 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { SVGS } from '../../constants/svgs'
+import { IMAGES } from '../../constants/images'
 
 interface Props {
   isLikeActive?: boolean
-  labelComponent: React.ReactNode
   className?: string
+  color: 'blue' | 'green' | 'orange' | 'red' | 'yellow'
 }
 
 const Container = styled.div`
@@ -21,10 +22,27 @@ const Container = styled.div`
   }
 `
 
+const getImage = (color: 'blue' | 'green' | 'orange' | 'red' | 'yellow') => {
+  switch (color) {
+    case 'blue':
+      return IMAGES.img_quiz_bl
+    case 'green':
+      return IMAGES.img_quiz_gr
+    case 'orange':
+      return IMAGES.img_quiz_or
+    case 'red':
+      return IMAGES.img_quiz_rd
+    case 'yellow':
+      return IMAGES.img_quiz_yr
+    default:
+      break
+  }
+}
+
 const QuizCardHeader: React.FunctionComponent<Props> = (props) => {
   return (
     <Container className={props.className}>
-      {props.labelComponent}
+      <img src={getImage(props.color)} alt={'quiz'} width="89" height="39" />
 
       <span>
         {props.isLikeActive ? (
