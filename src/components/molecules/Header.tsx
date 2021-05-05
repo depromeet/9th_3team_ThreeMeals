@@ -22,14 +22,15 @@ interface Props {
 const Header: React.FC<Props> = (props: Props) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
 
-  const onClickRight = React.useCallback(() => {
+  const { onClickRight } = props
+  const onClickBurger = React.useCallback(() => {
     setIsOpen(true)
-    props.onClickRight && props.onClickRight()
-  }, [isOpen, props.onClickRight])
+    onClickRight && onClickRight()
+  }, [onClickRight])
 
   const onClickExit = React.useCallback(() => {
     setIsOpen(false)
-  }, [isOpen])
+  }, [])
 
   return (
     <>
@@ -57,7 +58,7 @@ const Header: React.FC<Props> = (props: Props) => {
           )}
           {props.rightIcon ? (
             <>
-              <RightIcon src={props.rightIcon} onClick={onClickRight} />
+              <RightIcon src={props.rightIcon} onClick={onClickBurger} />
               <BurgerMenu
                 right={true}
                 width={331}

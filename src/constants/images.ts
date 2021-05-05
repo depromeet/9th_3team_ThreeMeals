@@ -9,6 +9,7 @@ export const IMAGES = {
   icon_24_close_wh: require('../assets/images/icon_24_close_wh.png'),
   icon_24_drawer: require('../assets/images/icon_24_drawer.png'),
   icon_24_back_wh: require('../assets/images/icon_24_back_wh.png'),
+  icon_20_camera: require('../assets/images/icon_20_camera.png'),
 
   // Home img //
   home_tape_bl: require('../assets/images/home_tape_bl.png'),
