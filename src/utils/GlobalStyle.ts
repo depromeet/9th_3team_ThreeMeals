@@ -17,11 +17,12 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
   
-  button { 
+  a, button { 
     border: none;
     outline: none;
     background: none;
     padding: 0;
     cursor: pointer;
+    text-decoration: none;
   }
 `
