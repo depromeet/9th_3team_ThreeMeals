@@ -14,4 +14,14 @@ export const IMAGES = {
   img_quiz_or: require('../assets/images/img_quiz_or.png'),
   img_quiz_rd: require('../assets/images/img_quiz_rd.png'),
   img_quiz_yr: require('../assets/images/img_quiz_yr.png'),
+  icon_20_camera: require('../assets/images/icon_20_camera.png'),
+
+  // Home img //
+  home_tape_bl: require('../assets/images/home_tape_bl.png'),
+  home_tape_gr: require('../assets/images/home_tape_gr.png'),
+  home_tape_yr: require('../assets/images/home_tape_yr.png'),
+
+  // OXQuiz //
+  rightXArrow: require('../assets/images/rightXArrow.png'),
+  leftCircleArrow: require('../assets/images/leftCircleArrow.png'),
 }

@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-
+import { SVGS } from '../../constants/svgs'
 const Button = styled.button`
   min-width: 327px;
   /* width: 50%; */
@@ -25,7 +25,7 @@ const KakaoButton: FC = () => {
         })
       }}
     >
-      <img src="/icon_24_kakao.svg" alt="Balloon" />
+      <img src={SVGS.icon_24_kakao} alt="Balloon" />
       <span>카카오 로그인</span>
     </Button>
   )
