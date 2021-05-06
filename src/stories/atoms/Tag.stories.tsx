@@ -11,7 +11,7 @@ storiesOf('atoms/Tag', module).add('with text', () => {
         display: 'flex',
       }}
     >
-      <Tag text="to google!!" href="https://google.com" />
+      <Tag text="figma.com" href="https://google.com" />
     </div>
   )
 })

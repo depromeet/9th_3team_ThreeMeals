@@ -9,9 +9,7 @@ interface Props {
 }
 
 const StyledTag = styled(NextButton)`
-  font-family: SF Pro Display;
   font-size: 15px;
-  line-height: 22px;
   letter-spacing: -0.02em;
   text-align: left;
   color: white;
@@ -22,6 +20,7 @@ const StyledTag = styled(NextButton)`
   justify-content: center;
   align-items: center;
   height: 22px;
+  color: #ffffffb2;
 `
 
 const Tag: React.FunctionComponent<Props> = (props) => {
