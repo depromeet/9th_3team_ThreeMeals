@@ -7,6 +7,7 @@ interface Props {
   imageStyle?: CSSProperties
   icon: string
   iconStyle?: CSSProperties
+  onClickIcon?: () => void
 }
 
 const IconOnImage: React.FC<Props> = (props: Props) => {
@@ -14,7 +15,11 @@ const IconOnImage: React.FC<Props> = (props: Props) => {
     <Container style={props.containerStyle}>
       <Image style={props.imageStyle} src={props.image} />
       <IconContainer>
-        <Icon style={props.iconStyle} src={props.icon} />
+        <Icon
+          onClick={props.onClickIcon}
+          style={props.iconStyle}
+          src={props.icon}
+        />
       </IconContainer>
     </Container>
   )
