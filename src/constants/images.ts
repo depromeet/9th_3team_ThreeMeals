@@ -7,6 +7,7 @@ export const IMAGES = {
   btn_20_revise: require('../assets/images/btn_20_revise.png'),
   icon_24_alram2_wh: require('../assets/images/icon_24_alram2_wh.png'),
   icon_24_close_wh: require('../assets/images/icon_24_close_wh.png'),
+  icon_24_close_green_wh: require('../assets/images/icon_24_close_green_wh.png'),
   icon_24_drawer: require('../assets/images/icon_24_drawer.png'),
   icon_24_back_wh: require('../assets/images/icon_24_back_wh.png'),
   img_quiz_bl: require('../assets/images/img_quiz_bl.png'),
@@ -22,7 +23,9 @@ export const IMAGES = {
   home_tape_yr: require('../assets/images/home_tape_yr.png'),
   img_scrolldown: require('../assets/images/img_scrolldown.png'),
 
-  // OXQuiz //
+  // Profile img //
+  icon_16_insta_wh: require('../assets/images/icon_16_insta_wh.png'),
+  share_16: require('../assets/images/share_16.png'),
   img_quiz_o_bl: require('../assets/images/img_quiz_o_bl.png'),
   img_quiz_o_gr: require('../assets/images/img_quiz_o_gr.png'),
   img_quiz_o_yl: require('../assets/images/img_quiz_o_yl.png'),
