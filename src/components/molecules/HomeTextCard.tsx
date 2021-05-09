@@ -1,12 +1,8 @@
 import React, { FC, CSSProperties } from 'react'
 import styled from 'styled-components'
+import { SpacingText } from '../../utils/SpacingText'
 interface Props {
-  text:
-    | string
-    | React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLDivElement>,
-        HTMLDivElement
-      >
+  text: string
   style?: CSSProperties
   textStyle?: CSSProperties
 }
@@ -32,10 +28,11 @@ const Card = styled.div`
 `
 
 const HomeTextCard: FC<Props> = (props) => {
+  const content = SpacingText(props.text)
   return (
     <Card style={props.style}>
       <div className="text" style={props.textStyle}>
-        {props.text}
+        {content}
       </div>
     </Card>
   )

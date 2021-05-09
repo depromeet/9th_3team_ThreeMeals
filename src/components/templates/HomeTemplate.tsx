@@ -67,12 +67,7 @@ const HomeTemplate: FC<Props> = (props) => {
         <HomeTextCard text="지금 여자친구 있어?" />
         <HomeTextCard text="요즘 좋아하는 노래 뭐야?" />
         <HomeTextCard
-          text={
-            <>
-              <div>{'<- 귀여운 남자'}</div>
-              <div>{'시크한 남자 ->'}</div>
-            </>
-          }
+          text="<- 귀여운 남자 /n시크한 남자 ->"
           textStyle={{ flexDirection: 'column' }}
         />
         <HomeTextCard text="나랑 영화보러 갈래?" />
@@ -80,7 +75,6 @@ const HomeTemplate: FC<Props> = (props) => {
     </AppContainer>
   )
 }
-
 export default HomeTemplate
 
 const AppContainer = styled.div`
