@@ -13,11 +13,10 @@ const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
 
   useEffect(() => {
-    let height = textareaRef.current?.style.height
-    if (height) {
-      height = '0px'
-      const scrollHeight = textareaRef.current?.scrollHeight
-      height = scrollHeight + 'px'
+    if (textareaRef.current) {
+      textareaRef.current.style.height = '0px'
+      const scrollHeight = textareaRef.current.scrollHeight
+      textareaRef.current.style.height = scrollHeight + 'px'
     }
   }, [currentValue])
 

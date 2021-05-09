@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import DefaultLine from '../atoms/DefaultLine'
@@ -7,6 +7,9 @@ import Tag from '../atoms/Tag'
 import Header from '../molecules/Header'
 
 interface Props {
+  profileImage: string
+  previewImage: string | ArrayBuffer | null
+  onChangeImage?: (e: any) => void
   onClickLeft?: () => void
   onClickRight?: () => void
   onClickIntro?: () => void
@@ -15,6 +18,7 @@ interface Props {
 
 const ProfileTemplate: React.FC<Props> = (props: Props) => {
   const [blurRightText, setBlurRightText] = useState<boolean>(true)
+  const fileInput = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
     setTimeout(() => {
@@ -25,6 +29,7 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
   const onClickClose = useCallback((id: string) => {
     console.log('id:', id)
   }, [])
+
   return (
     <Container>
       <Header
@@ -40,10 +45,19 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
           justifyContent: 'center',
           marginLeft: '2rem',
         }}
-        image={IMAGES.background}
+        image={props.previewImage || IMAGES.background}
         icon={IMAGES.icon_20_camera}
         imageStyle={{ width: 88, height: 88 }}
         iconStyle={{ width: 20, height: 20 }}
+        onClickIcon={() => fileInput.current?.click()}
+      />
+      <input
+        hidden
+        ref={fileInput}
+        type="file"
+        accept="image/*"
+        name="profile_img"
+        onChange={props.onChangeImage}
       />
       <IntroContainer style={{ marginTop: 40 }}>
         <IntroTitle>이름</IntroTitle>

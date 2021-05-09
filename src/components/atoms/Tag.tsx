@@ -32,7 +32,6 @@ const Icon = styled.img`
   height: 16px;
   margin-right: 4px;
   position: relative;
-  top: 2.5px;
   color: #ffffffb2;
 `
 
@@ -50,13 +49,13 @@ const Tag: React.FunctionComponent<Props> = (props) => {
       <StyledTag href={props.href}>
         <Icon src={props.icon} />
         <Text>{props.text}</Text>
+        <CloseIcon
+          src={IMAGES.icon_24_close_green_wh}
+          onClick={() => {
+            props.onClickClose && props.id && props.onClickClose(props.id)
+          }}
+        />
       </StyledTag>
-      <CloseIcon
-        src={IMAGES.icon_24_close_green_wh}
-        onClick={() => {
-          props.onClickClose && props.id && props.onClickClose(props.id)
-        }}
-      />
     </Container>
   )
 }

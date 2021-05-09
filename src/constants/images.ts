@@ -23,10 +23,6 @@ export const IMAGES = {
   home_tape_yr: require('../assets/images/home_tape_yr.png'),
   img_scrolldown: require('../assets/images/img_scrolldown.png'),
 
-  // OXQuiz //
-  rightXArrow: require('../assets/images/rightXArrow.png'),
-  leftCircleArrow: require('../assets/images/leftCircleArrow.png'),
-
   // Profile img //
   icon_16_insta_wh: require('../assets/images/icon_16_insta_wh.png'),
   share_16: require('../assets/images/share_16.png'),
