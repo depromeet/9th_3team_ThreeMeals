@@ -2,7 +2,7 @@ import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 import QuestionCard from '../../components/organisms/QuestionCard'
 
-storiesOf('molecules/QuestionCard', module).add('with #67D585', () => {
+storiesOf('organisms/QuestionCard', module).add('with #67D585', () => {
   return (
     <div style={{ display: 'flex', width: 400, paddingLeft: 100 }}>
       <QuestionCard
@@ -13,7 +13,7 @@ storiesOf('molecules/QuestionCard', module).add('with #67D585', () => {
   )
 })
 
-storiesOf('molecules/QuestionCard', module).add('with #FF833D', () => {
+storiesOf('organisms/QuestionCard', module).add('with #FF833D', () => {
   return (
     <div style={{ display: 'flex', width: 400, paddingLeft: 100 }}>
       <QuestionCard

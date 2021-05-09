@@ -13,8 +13,9 @@ interface Props {
 
 const Container = styled.div`
   font-family: SF Pro Display;
+`
+const StyledTag = styled(NextButton)`
   font-size: 15px;
-  line-height: 22px;
   letter-spacing: -0.02em;
   text-align: left;
   color: white;
@@ -26,15 +27,13 @@ const Container = styled.div`
   height: 22px;
   padding: 0 8px;
 `
-const StyledTag = styled(NextButton)`
-  color: white;
-`
 const Icon = styled.img`
   width: 16px;
   height: 16px;
   margin-right: 4px;
   position: relative;
   top: 2.5px;
+  color: #ffffffb2;
 `
 
 const CloseIcon = styled.img`

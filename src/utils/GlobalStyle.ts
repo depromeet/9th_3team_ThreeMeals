@@ -27,12 +27,12 @@ export const GlobalStyle = createGlobalStyle`
   a, u {
     text-decoration: none;
   }
-  button { 
+  a, button { 
     border: none;
     outline: none;
     background: none;
     padding: 0;
     cursor: pointer;
+    text-decoration: none;
   }
-  
 `

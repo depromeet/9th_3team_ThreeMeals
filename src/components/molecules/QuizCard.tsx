@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { animated, to, SpringValue } from 'react-spring'
 import { Vector2, ReactEventHandlers } from 'react-use-gesture/dist/types'
 import { IMAGES } from '../../constants/images'
+import LabelCardHeader from './LabelCardHeader'
 interface DragEventProps {
   args: Array<number>
   down: boolean
@@ -23,22 +24,37 @@ interface Props {
 const ContextContainer = styled.div`
   width: 100%;
   height: 100%;
-  padding: 10px;
-  & :nth-child(1) {
+  padding: 20px 25px;
+  display: flex;
+  flex-direction: column;
+  .textArea {
     width: 100%;
-    height: 20%;
+    flex: 1;
+    padding-top: 30px;
+    font-size: 25px;
   }
-  & :nth-child(2) {
+  .bottomArea {
     width: 100%;
-    height: 50%;
-    text-align: center;
+    height: 27%;
   }
-  & :nth-child(3) {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+  .leftArrow {
+    position: absolute;
+    left: -10px;
+    width: 35%;
+  }
+  .rightArrow {
+    position: absolute;
+    right: -10px;
+    width: 35%;
   }
 `
+const StyledLabelCardHeader = styled(LabelCardHeader)`
+  width: 100%;
+  & span {
+    display: flex;
+  }
+`
+
 const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
   return (
     <animated.div
@@ -51,6 +67,7 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
         width: '100vw',
         position: 'fixed',
         display: 'flex',
+        alignItems: 'center',
         justifyContent: 'center',
         willChange: 'transform',
       }}
@@ -64,7 +81,6 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
           width: '327px',
           cursor: 'pointer',
           willChange: 'transform',
-          overflow: 'hidden',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -73,20 +89,22 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
         }}
       >
         <ContextContainer>
-          <div></div>
-          <div>{props.children}</div>{' '}
-          <div>
+          {/* <StyledLabelCardHeader
+            labelComponent={<img src={IMAGES.img_quiz_yr} alt="quizIcon" />}
+          /> */}
+          <div className="textArea">{props.children}</div>
+          <div className="bottomArea">
             <img
-              src={IMAGES.leftCircleArrow}
+              src={IMAGES.img_quiz_o_bl}
               alt="LArrow"
               id="-1"
-              style={{ width: '30%' }}
+              className="leftArrow"
             />
             <img
-              src={IMAGES.rightXArrow}
+              src={IMAGES.img_quiz_x_gr}
               alt="RArrow"
               id="+1"
-              style={{ width: '30%' }}
+              className="rightArrow"
             />
           </div>
         </ContextContainer>

@@ -4,6 +4,8 @@ import QUERY_COUNTRIES from './queryCountries.graphql'
 import { IMAGES } from '../src/constants/images'
 import Link from 'next/link'
 
+import NameLabel from '../src/components/atoms/NameLabel'
+
 interface Props {
   id?: string
 }
@@ -61,10 +63,11 @@ const Home: React.FC<Props> = (prop) => {
       </button>
       {prop.id && prop.id}
 
-      <div>
+      <div style={{ display: 'flex' }}>
         <Link href="/profile">
           <a>profile</a>
         </Link>
+        <NameLabel text="한영수" />
       </div>
     </div>
   )

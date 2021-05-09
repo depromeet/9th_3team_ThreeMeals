@@ -6,6 +6,9 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 
 module.exports = withPlugins([[withBundleAnalyzer], [withImages]], {
+  images: {
+    domains: ['www.fillmurray.com'],
+  },
   typescript: {
     ignoreBuildErrors: true,
   },

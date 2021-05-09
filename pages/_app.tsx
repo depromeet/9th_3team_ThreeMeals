@@ -14,8 +14,19 @@ const client = new ApolloClient({
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   React.useEffect(() => {
-    window.Kakao.init(process.env.NEXT_PUBLIC_JAVASCRIPT_KEY)
-    window.Kakao.isInitialized()
+    const id = 'kakao-sdk'
+    if (document.getElementById(id) == null) {
+      const js = document.createElement('script')
+
+      js.id = id
+      js.src = 'https://developers.kakao.com/sdk/js/kakao.js'
+      js.onload = () => {
+        window.Kakao.init(process.env.NEXT_PUBLIC_JAVASCRIPT_KEY)
+        window.Kakao.isInitialized()
+      }
+
+      document.body.append(js)
+    }
   }, [])
 
   return (
