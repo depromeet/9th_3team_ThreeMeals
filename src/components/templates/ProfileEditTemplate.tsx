@@ -34,7 +34,6 @@ const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
           ref={textareaRef}
           value={currentValue}
           onChange={(e) => {
-            console.log('e:', e.target.value)
             setCurrentValue(e.target.value)
           }}
           placeholder={'소개글을 작성해주세요.'}
