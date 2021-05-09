@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Modal, { ModalProvider, BaseModalBackground } from 'styled-react-modal'
 
@@ -12,28 +12,38 @@ interface Props {
   open?: boolean
   onClickConfirm?: () => void
   onClickConfirmSecond?: () => void
+  onClickCancel?: () => void
 }
 const ModalContainer: React.FC<Props> = (props: Props) => {
-  const [isOpen, setIsOpen] = useState(props.open)
+  const [isOpen, setIsOpen] = useState(false)
   const [opacity, setOpacity] = useState(0)
 
   const toggleModal = useCallback(() => {
     setOpacity(0)
     setIsOpen(!isOpen)
-  }, [opacity, isOpen])
+  }, [isOpen])
 
   const afterOpen = useCallback(() => {
     setTimeout(() => {
       setOpacity(1)
     }, 100)
-  }, [opacity])
+  }, [])
 
   const beforeClose = useCallback(() => {
     return new Promise((resolve) => {
       setOpacity(0)
       setTimeout(resolve, 300)
     })
-  }, [opacity])
+  }, [])
+
+  const onClickCancel = useCallback(() => {
+    props.onClickCancel && props.onClickCancel()
+    toggleModal()
+  }, [props, toggleModal])
+
+  useEffect(() => {
+    props.open !== undefined && setIsOpen(props.open)
+  }, [props.open])
 
   return (
     <ModalProvider backgroundComponent={FadingBackground}>
@@ -42,8 +52,8 @@ const ModalContainer: React.FC<Props> = (props: Props) => {
         isOpen={isOpen || false}
         afterOpen={afterOpen}
         beforeClose={beforeClose}
-        onBackgroundClick={toggleModal}
-        onEscapeKeydown={toggleModal}
+        onBackgroundClick={undefined}
+        onEscapeKeydown={undefined}
         backgroundProps={{ opacity }}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -64,7 +74,7 @@ const ModalContainer: React.FC<Props> = (props: Props) => {
               {props.confirmSecondText}
             </ConfirmText>
           )}
-          <CancelText onClick={toggleModal}>{props.cancelText}</CancelText>
+          <CancelText onClick={onClickCancel}>{props.cancelText}</CancelText>
         </Container>
       </StyledModal>
     </ModalProvider>

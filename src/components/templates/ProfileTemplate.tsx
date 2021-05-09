@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { MutableRefObject, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import DefaultLine from '../atoms/DefaultLine'
@@ -9,7 +9,9 @@ import Header from '../molecules/Header'
 interface Props {
   profileImage: string
   previewImage: string | ArrayBuffer | null
+  fileInput: MutableRefObject<HTMLInputElement | null>
   onChangeImage?: (e: any) => void
+  onClickIcon?: () => void
   onClickLeft?: () => void
   onClickRight?: () => void
   onClickIntro?: () => void
@@ -18,7 +20,6 @@ interface Props {
 
 const ProfileTemplate: React.FC<Props> = (props: Props) => {
   const [blurRightText, setBlurRightText] = useState<boolean>(true)
-  const fileInput = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
     setTimeout(() => {
@@ -49,11 +50,11 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
         icon={IMAGES.icon_20_camera}
         imageStyle={{ width: 88, height: 88 }}
         iconStyle={{ width: 20, height: 20 }}
-        onClickIcon={() => fileInput.current?.click()}
+        onClickIcon={props.onClickIcon}
       />
       <input
         hidden
-        ref={fileInput}
+        ref={props.fileInput}
         type="file"
         accept="image/*"
         name="profile_img"
