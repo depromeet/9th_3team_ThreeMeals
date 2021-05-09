@@ -28,11 +28,11 @@ const Card = styled.div`
 `
 
 const HomeTextCard: FC<Props> = (props) => {
-  const content = SpacingText(props.text)
+  const SplitedText = SpacingText(props.text)
   return (
     <Card style={props.style}>
       <div className="text" style={props.textStyle}>
-        {content}
+        {SplitedText}
       </div>
     </Card>
   )
