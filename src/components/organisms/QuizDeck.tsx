@@ -2,9 +2,11 @@ import React, { useState, FC } from 'react'
 import { useSprings } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
 import QuizCard from '../molecules/QuizCard'
+import { CardHeaderProps } from '../molecules/QuizCardHeader'
 
 interface Props {
   data: Array<string>
+  cardHeader: CardHeaderProps
 }
 
 const toD = (i: number) => ({
@@ -71,6 +73,7 @@ const QuizDeck: FC<Props> = (deckProps) => {
           key={i}
           bind={bind}
           trans={trans}
+          cardHeader={deckProps.cardHeader}
         >
           {deckProps.data[i]}
         </QuizCard>

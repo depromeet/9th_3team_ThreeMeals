@@ -81,7 +81,6 @@ export default HomeTemplate
 const AppContainer = styled.div`
   max-width: 500px;
   width: 100%;
-  background: #191919;
   color: #ffffff;
 `
 const MainContainer = styled.div`

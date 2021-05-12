@@ -10,6 +10,12 @@ const dummyCardData = [
   'check out',
 ]
 
+const dummyCardHeaderData = {
+  isLikeActive: false,
+  className: 'cardHeader',
+  color: 'orange' as const,
+}
+
 storiesOf('organisms/QuizDeck', module).add('with text', () => {
-  return <QuizDeck data={dummyCardData} />
+  return <QuizDeck data={dummyCardData} cardHeader={dummyCardHeaderData} />
 })
