@@ -27,6 +27,7 @@ const Auth: React.FC = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
+        localStorage.setItem('kakao_token', data.access_token)
         if (data.access_token) {
           setIsLogined(true)
         }
