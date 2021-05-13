@@ -1,6 +1,4 @@
 import Head from 'next/head'
-import { useQuery } from '@apollo/client'
-import QUERY_COUNTRIES from './queryCountries.graphql'
 import { IMAGES } from '../src/constants/images'
 import Link from 'next/link'
 
@@ -11,24 +9,6 @@ interface Props {
 }
 
 const Home: React.FC<Props> = (prop) => {
-  const { loading, error } = useQuery(QUERY_COUNTRIES)
-
-  // if (loading) {
-  //   return (
-  //     <div>
-  //       <p>loading...</p>
-  //     </div>
-  //   )
-  // }
-
-  if (error) {
-    return (
-      <div>
-        <p>:( an error happened</p>
-      </div>
-    )
-  }
-
   return (
     <div>
       <Head>
