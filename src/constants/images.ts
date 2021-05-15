@@ -22,6 +22,8 @@ export const IMAGES = {
   home_tape_gr: require('../assets/images/home_tape_gr.png'),
   home_tape_yr: require('../assets/images/home_tape_yr.png'),
   img_scrolldown: require('../assets/images/img_scrolldown.png'),
+  icon_floating: require('../assets/images/icon_floating.png'),
+  img_homebox: require('../assets/images/img_homebox.png'),
 
   // Profile img //
   icon_16_insta_wh: require('../assets/images/icon_16_insta_wh.png'),

@@ -4,6 +4,7 @@ import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
 import CrossedTapesLabel from '../atoms/CrossedTapesLabel'
 import KakaoButton from '../atoms/KakaoButton'
+import HomeTextCard from '../molecules/HomeTextCard'
 interface Props {
   data?: string
   isProfile: boolean
@@ -57,6 +58,20 @@ const HomeTemplate: FC<Props> = (props) => {
           </div>
         </BottomContainer>
       </MainContainer>
+      <ImageIconContainer>
+        <img src={IMAGES.img_homebox} alt="homebox" className="image" />
+        <div className="iconBackground">?</div>
+      </ImageIconContainer>
+      <HomeTextCardContainer>
+        <HomeTextCard text="내 첫인상은 어땠어?" />
+        <HomeTextCard text="지금 여자친구 있어?" />
+        <HomeTextCard text="요즘 좋아하는 노래 뭐야?" />
+        <HomeTextCard
+          text="<- 귀여운 남자 \n 시크한 남자 ->"
+          textStyle={{ flexDirection: 'column' }}
+        />
+        <HomeTextCard text="나랑 영화보러 갈래?" />
+      </HomeTextCardContainer>
     </AppContainer>
   )
 }
@@ -66,14 +81,12 @@ export default HomeTemplate
 const AppContainer = styled.div`
   max-width: 500px;
   width: 100%;
-  background: #191919;
   color: #ffffff;
 `
 const MainContainer = styled.div`
   width: 100%;
   height: calc(100vh - 64px);
 `
-
 const CharIconContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -186,4 +199,29 @@ const BottomContainer = styled.div`
   @media screen and (max-width: 320px) {
     height: calc(55% - 150px);
   }
+`
+const ImageIconContainer = styled.div`
+  width: 100%;
+  .image {
+    width: 100%;
+    margin-top: 50px;
+  }
+  .iconBackground {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url(${IMAGES.icon_floating}) no-repeat;
+    color: #67d585;
+    font-weight: bold;
+    height: 180px;
+    background-position: center;
+    font-size: 25px;
+    background-size: 90px;
+  }
+`
+const HomeTextCardContainer = styled.div`
+  width: 100%;
+  justify-content: center;
+  padding: 10px;
 `

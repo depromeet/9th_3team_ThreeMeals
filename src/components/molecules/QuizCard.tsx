@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { animated, to, SpringValue } from 'react-spring'
 import { Vector2, ReactEventHandlers } from 'react-use-gesture/dist/types'
 import { IMAGES } from '../../constants/images'
-import LabelCardHeader from './LabelCardHeader'
+import QuizCardHeader, { CardHeaderProps } from './QuizCardHeader'
 interface DragEventProps {
   args: Array<number>
   down: boolean
@@ -20,6 +20,7 @@ interface Props {
   i: number
   x: SpringValue<number>
   y: SpringValue<number>
+  cardHeader: CardHeaderProps
 }
 const ContextContainer = styled.div`
   width: 100%;
@@ -48,7 +49,7 @@ const ContextContainer = styled.div`
     width: 35%;
   }
 `
-const StyledLabelCardHeader = styled(LabelCardHeader)`
+const StyledQuizCardHeader = styled(QuizCardHeader)`
   width: 100%;
   & span {
     display: flex;
@@ -89,9 +90,11 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
         }}
       >
         <ContextContainer>
-          {/* <StyledLabelCardHeader
-            labelComponent={<img src={IMAGES.img_quiz_yr} alt="quizIcon" />}
-          /> */}
+          <StyledQuizCardHeader
+            isLikeActive={props.cardHeader.isLikeActive}
+            className={props.cardHeader.className}
+            color={props.cardHeader.color}
+          />
           <div className="textArea">{props.children}</div>
           <div className="bottomArea">
             <img

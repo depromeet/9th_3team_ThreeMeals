@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { SVGS } from '../../constants/svgs'
 import { IMAGES } from '../../constants/images'
 
-interface Props {
+export interface CardHeaderProps {
   isLikeActive?: boolean
   className?: string
   color: 'blue' | 'green' | 'orange' | 'red' | 'yellow'
@@ -39,7 +39,7 @@ const getImage = (color: 'blue' | 'green' | 'orange' | 'red' | 'yellow') => {
   }
 }
 
-const QuizCardHeader: React.FunctionComponent<Props> = (props) => {
+const QuizCardHeader: React.FunctionComponent<CardHeaderProps> = (props) => {
   return (
     <Container className={props.className}>
       <img src={getImage(props.color)} alt={'quiz'} width="89" height="39" />
