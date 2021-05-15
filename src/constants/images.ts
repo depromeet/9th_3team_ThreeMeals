@@ -36,4 +36,10 @@ export const IMAGES = {
   img_quiz_x_gr: require('../assets/images/img_quiz_x_gr.png'),
   img_quiz_x_yr: require('../assets/images/img_quiz_x_yr.png'),
   img_quiz_x_yl: require('../assets/images/img_quiz_x_yl.png'),
+
+  // contactUs img //
+  tape_contact: require('../assets/images/tape_contact.png'),
+  button_floating_send: require('../assets/images/button_floating_send.png'),
+  button_floating_send_disabled: require('../assets/images/button_floating_send_disabled.png'),
+  contactUs_fanish: require('../assets/images/contactUs_fanish.png'),
 }
