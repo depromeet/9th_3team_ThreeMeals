@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
-
+import Slick from 'react-slick'
 import LabelCardHeader from '../molecules/LabelCardHeader'
 import CardLabel from '../atoms/CardLabel'
 import { SVGS } from '../../constants/svgs'
@@ -8,6 +8,7 @@ import { SVGS } from '../../constants/svgs'
 interface Props {
   questionTitle: string
   backColor: string
+  labelComponent?: ReactNode
 }
 
 const Container = styled.div<{ backColor: string }>`
@@ -18,7 +19,6 @@ const Container = styled.div<{ backColor: string }>`
   height: 360px;
   border-radius: 24px;
   padding: 96px 24px 24px;
-  width: 100%;
 
   p {
     font-style: normal;
@@ -27,6 +27,13 @@ const Container = styled.div<{ backColor: string }>`
     line-height: 32px;
     letter-spacing: -0.02em;
     color: #000000;
+  }
+  margin-bottom: 16px;
+  margin-left: 5%;
+  margin-right: 5%;
+  width: initial !important;
+  *:focus {
+    outline: 0;
   }
 `
 
@@ -55,21 +62,47 @@ const BottomContainer = styled.div`
 
 const QuestionCard: React.FunctionComponent<Props> = (props) => {
   return (
-    <Container backColor={props.backColor}>
-      <StyledLabelCardHeader
-        labelComponent={<CardLabel text={'-13:33:33'} />}
-      />
-      <p>{props.questionTitle}</p>
-      <BottomContainer>
-        <img
-          src={SVGS.icon_left_arrow_wh}
-          alt="arrow-left"
-          width={45}
-          height={37}
+    <Slick
+      dots={false}
+      arrows={undefined}
+      infinite={false}
+      variableWidth={false}
+    >
+      <Container backColor={props.backColor}>
+        <StyledLabelCardHeader
+          labelComponent={
+            props.labelComponent || <CardLabel text={'-13:33:33'} />
+          }
         />
-        밀어서 답장보기
-      </BottomContainer>
-    </Container>
+        <p>{props.questionTitle}</p>
+        <BottomContainer>
+          <img
+            src={SVGS.icon_left_arrow_wh}
+            alt="arrow-left"
+            width={45}
+            height={37}
+          />
+          밀어서 답장보기
+        </BottomContainer>
+      </Container>
+      <Container backColor={props.backColor} style={{ opacity: 0.05 }}>
+        <StyledLabelCardHeader
+          labelComponent={
+            props.labelComponent || <CardLabel text={'-13:33:33'} />
+          }
+        />
+        <p>{props.questionTitle}</p>
+        <BottomContainer>
+          <img
+            src={SVGS.icon_left_arrow_wh}
+            alt="arrow-left"
+            width={45}
+            height={37}
+          />
+          밀어서 답장보기
+        </BottomContainer>
+      </Container>
+    </Slick>
   )
 }
 

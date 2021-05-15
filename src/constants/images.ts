@@ -42,4 +42,9 @@ export const IMAGES = {
   button_floating_send: require('../assets/images/button_floating_send.png'),
   button_floating_send_disabled: require('../assets/images/button_floating_send_disabled.png'),
   contactUs_fanish: require('../assets/images/contactUs_fanish.png'),
+
+  // content img //
+  img_newq_1: require('../assets/images/img_newq_1.png'),
+  img_tape_newq: require('../assets/images/img_tape_newq.png'),
+  rightButton: require('../assets/images/rightButton.png'),
 }
