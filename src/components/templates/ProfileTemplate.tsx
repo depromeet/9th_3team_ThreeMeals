@@ -94,7 +94,7 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
         />
       </TagContainer>
       <Footer>
-        <DefaultLine />
+        <DefaultLine containerStyle={{ maxWidth: 500 }} />
         <FooterText onClick={props.onClickLogout}>로그아웃</FooterText>
       </Footer>
     </Container>
@@ -104,7 +104,8 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
 export default ProfileTemplate
 
 const Container = styled.div`
-  display: block;
+  max-width: 500px;
+  width: 100%;
 `
 const IntroContainer = styled.div`
   display: flex;
@@ -159,5 +160,7 @@ const FooterText = styled.div`
   letter-spacing: -0.02em;
   cursor: pointer;
   color: #ff5050;
+  margin: 0 auto;
   margin-top: 23px;
+  max-width: 500px;
 `

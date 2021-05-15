@@ -3,6 +3,7 @@ import { useCallback, useRef, useState } from 'react'
 import ProfileTemplate from '../templates/ProfileTemplate'
 import Modal from '../molecules/Modal'
 import { IMAGES } from '../../constants/images'
+import styled from 'styled-components'
 
 const ProfilePage: React.FC = () => {
   const fileInput = useRef<HTMLInputElement | null>(null)
@@ -29,7 +30,7 @@ const ProfilePage: React.FC = () => {
     reader.readAsDataURL(file)
   }, [])
   return (
-    <>
+    <AppContainer>
       <ProfileTemplate
         fileInput={fileInput}
         profileImage={profileImage}
@@ -61,8 +62,13 @@ const ProfilePage: React.FC = () => {
           setIsOpen(false)
         }}
       />
-    </>
+    </AppContainer>
   )
 }
 
 export default ProfilePage
+const AppContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
