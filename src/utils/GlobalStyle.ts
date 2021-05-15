@@ -35,4 +35,5 @@ export const GlobalStyle = createGlobalStyle`
     cursor: pointer;
     text-decoration: none;
   }
+  
 `

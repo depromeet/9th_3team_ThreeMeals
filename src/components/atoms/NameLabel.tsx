@@ -1,5 +1,4 @@
 import React from 'react'
-import Image from 'next/image'
 import styled from 'styled-components'
 
 const Container = styled.span`
@@ -33,8 +32,7 @@ interface Props {
 const NameLabel: React.FunctionComponent<Props> = (props) => {
   return (
     <Container>
-      <Image
-        priority={true}
+      <img
         src={props.profileUrl || 'https://www.fillmurray.com/50/50'}
         width={32}
         height={32}
