@@ -34,6 +34,7 @@ const authLink = setContext((_, { headers }) => {
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
+  ssrMode: typeof window === 'undefined',
 })
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
