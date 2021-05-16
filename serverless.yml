@@ -4,3 +4,5 @@ myNextApplication:
   inputs:
     bucketRegion: 'ap-northeast-2'
     bucketName: 'hush-static'
+    cloudfront:
+      distributionId: 'EFA4PDMIEXVIK'
