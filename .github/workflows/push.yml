@@ -10,6 +10,14 @@ jobs:
       - uses: borales/actions-yarn@v2.0.0
         with:
           cmd: install # will run `yarn install` command
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          NEXT_PUBLIC_DOMAIN_NAME: ${{ secrets.NEXT_PUBLIC_DOMAIN_NAME }}
+          NEXT_PUBLIC_JAVASCRIPT_KEY: ${{ secrets.NEXT_PUBLIC_JAVASCRIPT_KEY }}
+          NEXT_PUBLIC_REST_API_KEY: ${{ secrets.NEXT_PUBLIC_REST_API_KEY }}
+          directory: .
+          file_name: .env.production
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
