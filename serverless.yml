@@ -1,0 +1,8 @@
+# serverless.yml
+myNextApplication:
+  component: '@sls-next/serverless-component@1.19.0'
+  inputs:
+    bucketRegion: 'ap-northeast-2'
+    bucketName: 'hush-static'
+    cloudfront:
+      distributionId: 'EFA4PDMIEXVIK'
