@@ -7,6 +7,7 @@ import { CardHeaderProps } from '../molecules/QuizCardHeader'
 interface Props {
   data: Array<string>
   cardHeader: CardHeaderProps
+  backColor: string
 }
 
 const toD = (i: number) => ({
@@ -74,6 +75,8 @@ const QuizDeck: FC<Props> = (deckProps) => {
           bind={bind}
           trans={trans}
           cardHeader={deckProps.cardHeader}
+          bottomHeight={27}
+          backColor={deckProps.backColor}
         >
           {deckProps.data[i]}
         </QuizCard>
