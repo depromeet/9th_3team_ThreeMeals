@@ -47,4 +47,10 @@ export const IMAGES = {
   // Profile img //
   icon_16_insta_wh: require('../assets/images/icon_16_insta_wh.png'),
   share_16: require('../assets/images/share_16.png'),
+
+  // contactUs img //
+  tape_contact: require('../assets/images/tape_contact.png'),
+  button_floating_send: require('../assets/images/button_floating_send.png'),
+  button_floating_send_disabled: require('../assets/images/button_floating_send_disabled.png'),
+  contactUs_fanish: require('../assets/images/contactUs_fanish.png'),
 }

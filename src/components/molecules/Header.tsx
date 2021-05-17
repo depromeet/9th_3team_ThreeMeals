@@ -2,6 +2,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import { slide as Menu } from 'react-burger-menu'
+import { useRouter } from 'next/router'
 interface Props {
   isProfile?: boolean
   profileImage?: string
@@ -22,13 +23,13 @@ interface Props {
 
 const Header: React.FC<Props> = (props: Props) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
-
+  const router = useRouter()
   const { onClickRight } = props
 
   const onClickRightBtn = React.useCallback(() => {
     setIsOpen(true)
     onClickRight && onClickRight()
-  }, [isOpen, onClickRight])
+  }, [onClickRight])
 
   const onClickExit = React.useCallback(() => {
     setIsOpen(false)
@@ -81,7 +82,11 @@ const Header: React.FC<Props> = (props: Props) => {
                     How to use
                   </BurgerText>
                 </BurgerContent>
-                <BurgerSmallText>Context us</BurgerSmallText>
+                {props.isProfile && (
+                  <BurgerSmallText onClick={() => router.push('/contactUs')}>
+                    Context us
+                  </BurgerSmallText>
+                )}
                 <BurgerExitContent onClick={props.onClickContect}>
                   <BurgerExitIcon
                     src={IMAGES.icon_24_close_wh}

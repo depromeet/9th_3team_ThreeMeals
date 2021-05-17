@@ -1,0 +1,27 @@
+name: CI
+on:
+  push:
+    branches: [master]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: install # will run `yarn install` command
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_NEXT_PUBLIC_DOMAIN_NAME: ${{ secrets.NEXT_PUBLIC_DOMAIN_NAME }}
+          envkey_NEXT_PUBLIC_JAVASCRIPT_KEY: ${{ secrets.NEXT_PUBLIC_JAVASCRIPT_KEY }}
+          envkey_NEXT_PUBLIC_REST_API_KEY: ${{ secrets.NEXT_PUBLIC_REST_API_KEY }}
+          file_name: .env.production
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET }}
+          aws-region: us-east-1
+      - name: Deploy Next.js app
+        run: npx serverless
