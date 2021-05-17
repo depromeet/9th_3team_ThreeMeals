@@ -7,20 +7,19 @@ import DefaultLine from '../atoms/DefaultLine'
 import QuestionCard, { CardColor } from '../organisms/QuestionCard'
 import PrivateCardLabel from '../atoms/PrivateCardLabel'
 interface Props {
-  isProfile: boolean
   profileImage: string
+  onClickWrite?: () => void
   onClickLeft?: () => void
   onClickSecondRight?: () => void
-  onClickNewSecretCard?: () => void
 }
 
-const ContentTemplate: FC<Props> = (props) => {
+const OthersContentTemplate: FC<Props> = (props) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
 
   return (
     <AppContainer>
       <Header
-        isProfile={props.isProfile}
+        isProfile
         profileImage={props.profileImage}
         rightIcon={IMAGES.icon_24_drawer}
         rightSecondIcon={IMAGES.icon_24_alram2_wh}
@@ -87,30 +86,6 @@ const ContentTemplate: FC<Props> = (props) => {
         <DefaultLine
           containerStyle={{ position: 'relative', bottom: 8, zIndex: -1 }}
         />
-        <NoticeContainer>
-          <NoticeText>
-            <img
-              style={{ position: 'relative', bottom: 15 }}
-              src={IMAGES.img_newq_1}
-              width={106}
-              height={72}
-            />
-            <span style={{ marginTop: 1 }} onClick={props.onClickNewSecretCard}>
-              {'12개의 비밀카드 도착'}
-            </span>
-            <img
-              onClick={props.onClickNewSecretCard}
-              src={IMAGES.rightButton}
-              width={22}
-              height={22}
-            />
-          </NoticeText>
-          <img
-            style={{ position: 'relative', bottom: 65, zIndex: -1 }}
-            src={IMAGES.img_tape_newq}
-            width={'100%'}
-          />
-        </NoticeContainer>
         <ContentContainer>
           <QuestionCard
             labelComponent={<PrivateCardLabel text="BONG IN" />}
@@ -127,11 +102,14 @@ const ContentTemplate: FC<Props> = (props) => {
           />
         </ContentContainer>
       </MainContainer>
+      <WriteButton>
+        <img onClick={props.onClickWrite} src={IMAGES.write} width={88} />
+      </WriteButton>
     </AppContainer>
   )
 }
 
-export default ContentTemplate
+export default OthersContentTemplate
 
 const AppContainer = styled.div`
   color: #ffffff;
@@ -167,25 +145,14 @@ const Tab = styled.div`
   padding-bottom: 7px;
 `
 
-const NoticeContainer = styled.div`
-  margin-top: 32px;
-`
-const NoticeText = styled.div`
-  display: flex;
-  justify-content: center;
-  font-family: SF Pro Display;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 22px;
-  /* identical to box height, or 157% */
-
-  text-align: center;
-  letter-spacing: -0.04em;
-
-  color: rgba(255, 255, 255, 0.8);
-
-  opacity: 0.9;
+const ContentContainer = styled.div`
+  margin-top: 10px;
 `
 
-const ContentContainer = styled.div``
+const WriteButton = styled.div`
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  overflow-y: scroll;
+  overflow-x: hidden;
+`

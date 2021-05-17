@@ -5,6 +5,7 @@ import { slide as Menu } from 'react-burger-menu'
 import { useRouter } from 'next/router'
 interface Props {
   isProfile?: boolean
+  isLogin?: boolean
   profileImage?: string
   leftIcon?: string
   centerText?: string
@@ -82,11 +83,12 @@ const Header: React.FC<Props> = (props: Props) => {
                     How to use
                   </BurgerText>
                 </BurgerContent>
-                {props.isProfile && (
-                  <BurgerSmallText onClick={() => router.push('/contactUs')}>
-                    Context us
-                  </BurgerSmallText>
-                )}
+                {props.isProfile ||
+                  (props.isLogin && (
+                    <BurgerSmallText onClick={() => router.push('/contactUs')}>
+                      Context us
+                    </BurgerSmallText>
+                  ))}
                 <BurgerExitContent onClick={props.onClickContect}>
                   <BurgerExitIcon
                     src={IMAGES.icon_24_close_wh}

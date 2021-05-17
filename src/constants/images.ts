@@ -16,6 +16,7 @@ export const IMAGES = {
   img_quiz_rd: require('../assets/images/img_quiz_rd.png'),
   img_quiz_yr: require('../assets/images/img_quiz_yr.png'),
   icon_20_camera: require('../assets/images/icon_20_camera.png'),
+  write: require('../assets/images/write.png'),
 
   // Home img //
   home_tape_bl: require('../assets/images/home_tape_bl.png'),
@@ -47,4 +48,9 @@ export const IMAGES = {
   img_newq_1: require('../assets/images/img_newq_1.png'),
   img_tape_newq: require('../assets/images/img_tape_newq.png'),
   rightButton: require('../assets/images/rightButton.png'),
+
+  // newSecretCard //
+
+  button_floating_save_active: require('../assets/images/button_floating_save_active.png'),
+  button_floating_save_disabled: require('../assets/images/button_floating_save_disabled.png'),
 }
