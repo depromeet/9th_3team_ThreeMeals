@@ -1,11 +1,15 @@
-import HomePage from '../src/components/pages/HomePage'
+import dynamic from 'next/dynamic'
+
+const DynamicHomePage = dynamic(
+  () => import('../src/components/pages/HomePage')
+)
 
 interface Props {
   id?: string
 }
 
 const Home: React.FC<Props> = (prop) => {
-  return <HomePage />
+  return <DynamicHomePage />
 }
 
 export default Home
