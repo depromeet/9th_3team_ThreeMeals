@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext } from 'next'
+import { GetServerSideProps } from 'next'
 
 import ProfilePage from '../src/components/pages/ProfilePage'
 import { initializeApollo } from '../src/lib/apollo'
@@ -29,15 +29,12 @@ const Profile: React.FC = () => {
 
 export default Profile
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const cookie = context.req.headers.cookie
-  const apolloClient = initializeApollo(context)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const apolloClient = initializeApollo({}, ctx)
   await apolloClient.query({
     query: GET_MY_NEW_POST_COUNT,
   })
   return {
-    props: { cookie, initialApolloState: apolloClient.cache.extract() },
+    props: { initialApolloState: apolloClient.cache.extract() },
   }
 }

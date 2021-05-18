@@ -1,3 +1,4 @@
+import { GetServerSidePropsContext } from 'next'
 import { useMemo } from 'react'
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client'
 import _isEmpty from 'lodash-es/isEmpty'
@@ -10,9 +11,9 @@ let apolloClient: ApolloClient<NormalizedCacheObject>
 
 export function initializeApollo(
   initialState: initialStateType = {},
-  cookie: string
+  ctx: GetServerSidePropsContext
 ): ApolloClient<NormalizedCacheObject> {
-  const _apolloClient = apolloClient ?? createApolloClient(cookie)
+  const _apolloClient = apolloClient ?? createApolloClient(ctx)
 
   // If your page has Next.js data fetching methods that use Apollo Client,
   // the initial state gets hydrated here
@@ -35,10 +36,11 @@ export function initializeApollo(
 
 export function useApollo(
   initialState: initialStateType,
-  cookie: string
+  ctx: GetServerSidePropsContext
 ): ApolloClient<NormalizedCacheObject> {
-  const store = useMemo(() => initializeApollo(initialState, cookie), [
+  const store = useMemo(() => initializeApollo(initialState, ctx), [
     initialState,
+    ctx,
   ])
   return store
 }

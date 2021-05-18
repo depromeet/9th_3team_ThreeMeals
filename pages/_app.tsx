@@ -9,7 +9,7 @@ import { useApollo } from '../src/lib/apollo'
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const MyApp = ({ Component, pageProps }: AppProps) => {
-  const apolloClient = useApollo(pageProps.initialApolloState, cookie)
+  const apolloClient = useApollo(pageProps.initialApolloState)
 
   useEffect(() => {
     const id = 'kakao-sdk'
