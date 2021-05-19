@@ -67,4 +67,8 @@ const TapesContainer = styled.div`
 const ContentContainer = styled.div`
   padding: 0 10px;
   margin-top: 10px;
+
+  div {
+    margin-bottom: 12px;
+  }
 `
