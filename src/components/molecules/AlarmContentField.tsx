@@ -15,6 +15,7 @@ const FieldContainer = styled.div`
   background: rgba(255, 255, 255, 0.05);
   color: #ffffff;
   padding: 15px 20px;
+  margin-bottom: 12px;
   .header {
     width: 100%;
     height: 50%;

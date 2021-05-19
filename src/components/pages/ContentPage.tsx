@@ -11,7 +11,9 @@ const ContentPage: React.FC = () => {
         isProfile={true}
         profileImage={IMAGES.background}
         onClickLeft={router.back}
-        onClickSecondRight={router.back}
+        onClickSecondRight={() => {
+          router.push('/notification')
+        }}
         onClickNewSecretCard={() => {
           router.push('/newSecretCard')
         }}
