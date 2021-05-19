@@ -19,6 +19,7 @@ export const IMAGES = {
   img_quiz_or: require('../assets/images/img_quiz_or.png'),
   img_quiz_rd: require('../assets/images/img_quiz_rd.png'),
   img_quiz_yr: require('../assets/images/img_quiz_yr.png'),
+  write: require('../assets/images/write.png'),
   img_quiz_o_bl: require('../assets/images/img_quiz_o_bl.png'),
   img_quiz_o_gr: require('../assets/images/img_quiz_o_gr.png'),
   img_quiz_o_yl: require('../assets/images/img_quiz_o_yl.png'),
@@ -53,4 +54,14 @@ export const IMAGES = {
   button_floating_send: require('../assets/images/button_floating_send.png'),
   button_floating_send_disabled: require('../assets/images/button_floating_send_disabled.png'),
   contactUs_fanish: require('../assets/images/contactUs_fanish.png'),
+
+  // content img //
+  img_newq_1: require('../assets/images/img_newq_1.png'),
+  img_tape_newq: require('../assets/images/img_tape_newq.png'),
+  rightButton: require('../assets/images/rightButton.png'),
+
+  // newSecretCard //
+
+  button_floating_save_active: require('../assets/images/button_floating_save_active.png'),
+  button_floating_save_disabled: require('../assets/images/button_floating_save_disabled.png'),
 }
