@@ -2,42 +2,15 @@ import React, { useEffect } from 'react'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  createHttpLink,
-} from '@apollo/client'
-import { setContext } from '@apollo/client/link/context'
+import { ApolloProvider } from '@apollo/client'
 
 import { GlobalStyle } from '../src/utils/GlobalStyle'
-
-const httpLink = createHttpLink({
-  uri: process.env.NEXT_PUBLIC_API_URL,
-  credentials: 'same-origin',
-})
-
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('kakao_token')
-  // return the headers to the context so httpLink can read them
-  return {
-    headers: {
-      ...headers,
-      // authorization: token ? `Bearer ${token}` : '',
-
-      'account-id': '1',
-    },
-  }
-})
-
-const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
-})
+import { useApollo } from '../src/lib/apollo'
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const MyApp = ({ Component, pageProps }: AppProps) => {
+  const apolloClient = useApollo(pageProps.initialApolloState)
+
   useEffect(() => {
     const id = 'kakao-sdk'
     if (document.getElementById(id) == null) {
@@ -55,7 +28,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   }, [])
 
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={apolloClient}>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>

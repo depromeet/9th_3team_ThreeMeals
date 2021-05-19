@@ -1,9 +1,12 @@
+import { GetServerSideProps } from 'next'
 import { useQuery } from '@apollo/client'
-import ProfilePage from '../src/components/pages/ProfilePage'
 
+import ProfilePage from '../src/components/pages/ProfilePage'
+import { initializeApollo } from '../src/lib/apollo'
 import { GET_MY_NEW_POST_COUNT } from '../src/lib/queries/getQueries'
+
 const Profile: React.FC = () => {
-  // const { loading, error, data } = useQuery(GET_MY_NEW_POST_COUNT)
+  const { loading, error, data } = useQuery(GET_MY_NEW_POST_COUNT)
 
   // if (loading) {
   //   return (
@@ -21,8 +24,18 @@ const Profile: React.FC = () => {
   //     </div>
   //   )
   // }
-  // console.log('data:', data)
+  console.log('data:', data)
   return <ProfilePage />
 }
 
 export default Profile
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const apolloClient = initializeApollo({}, ctx)
+  await apolloClient.query({
+    query: GET_MY_NEW_POST_COUNT,
+  })
+  return {
+    props: { initialApolloState: apolloClient.cache.extract() },
+  }
+}
