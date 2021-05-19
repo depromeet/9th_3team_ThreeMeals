@@ -21,41 +21,13 @@ interface Props {
   x: SpringValue<number>
   y: SpringValue<number>
   cardHeader: CardHeaderProps
+  bottomHeight: number | string
+  backColor: string
 }
-const ContextContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: 20px 25px;
-  display: flex;
-  flex-direction: column;
-  .textArea {
-    width: 100%;
-    flex: 1;
-    padding-top: 30px;
-    font-size: 25px;
-  }
-  .bottomArea {
-    width: 100%;
-    height: 27%;
-  }
-  .leftArrow {
-    position: absolute;
-    left: -10px;
-    width: 35%;
-  }
-  .rightArrow {
-    position: absolute;
-    right: -10px;
-    width: 35%;
-  }
-`
-const StyledQuizCardHeader = styled(QuizCardHeader)`
-  width: 100%;
-  & span {
-    display: flex;
-  }
-`
 
+interface StyledProps {
+  bottomHeight: number | string
+}
 const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
   return (
     <animated.div
@@ -77,7 +49,7 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
         {...props.bind(props.i)}
         style={{
           transform: to([props.rot, props.scale], props.trans),
-          backgroundColor: '#FF833D',
+          backgroundColor: `${props.backColor}`,
           height: '360px',
           width: '327px',
           cursor: 'pointer',
@@ -89,11 +61,12 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
           boxShadow: '0px 30px 40px rgba(255, 131, 61, 0.15)',
         }}
       >
-        <ContextContainer>
+        <ContextContainer bottomHeight={props.bottomHeight}>
           <StyledQuizCardHeader
             isLikeActive={props.cardHeader.isLikeActive}
             className={props.cardHeader.className}
             color={props.cardHeader.color}
+            isMyFeed={true}
           />
           <div className="textArea">{props.children}</div>
           <div className="bottomArea">
@@ -117,3 +90,42 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
 }
 
 export default QuizCard
+
+export const ContextContainer = styled.div<StyledProps>`
+  width: 100%;
+  height: 100%;
+  padding: 20px 25px;
+  display: flex;
+  flex-direction: column;
+  .textArea {
+    width: 100%;
+    flex: 1;
+    padding-top: 30px;
+    font-size: 25px;
+  }
+  .bottomArea {
+    width: 100%;
+    height: ${(props) => props.bottomHeight}%;
+  }
+  .leftArrow {
+    position: absolute;
+    left: -10px;
+    width: 35%;
+  }
+  .rightArrow {
+    position: absolute;
+    right: -10px;
+    width: 35%;
+  }
+  .answerImg {
+    right: -90px;
+    position: relative;
+    width: 70%;
+  }
+`
+export const StyledQuizCardHeader = styled(QuizCardHeader)`
+  width: 100%;
+  & span {
+    display: flex;
+  }
+`

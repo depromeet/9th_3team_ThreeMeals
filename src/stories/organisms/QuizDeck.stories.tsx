@@ -14,8 +14,15 @@ const dummyCardHeaderData = {
   isLikeActive: false,
   className: 'cardHeader',
   color: 'orange' as const,
+  isMyFeed: true,
 }
 
 storiesOf('organisms/QuizDeck', module).add('with text', () => {
-  return <QuizDeck data={dummyCardData} cardHeader={dummyCardHeaderData} />
+  return (
+    <QuizDeck
+      data={dummyCardData}
+      cardHeader={dummyCardHeaderData}
+      backColor="#FF833D"
+    />
+  )
 })

@@ -13,10 +13,9 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1
         with:
-          NEXT_PUBLIC_DOMAIN_NAME: ${{ secrets.NEXT_PUBLIC_DOMAIN_NAME }}
-          NEXT_PUBLIC_JAVASCRIPT_KEY: ${{ secrets.NEXT_PUBLIC_JAVASCRIPT_KEY }}
-          NEXT_PUBLIC_REST_API_KEY: ${{ secrets.NEXT_PUBLIC_REST_API_KEY }}
-          directory: .
+          envkey_NEXT_PUBLIC_DOMAIN_NAME: ${{ secrets.NEXT_PUBLIC_DOMAIN_NAME }}
+          envkey_NEXT_PUBLIC_JAVASCRIPT_KEY: ${{ secrets.NEXT_PUBLIC_JAVASCRIPT_KEY }}
+          envkey_NEXT_PUBLIC_REST_API_KEY: ${{ secrets.NEXT_PUBLIC_REST_API_KEY }}
           file_name: .env.production
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
