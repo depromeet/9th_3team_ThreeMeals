@@ -11,7 +11,7 @@ let apolloClient: ApolloClient<NormalizedCacheObject>
 
 export function initializeApollo(
   initialState: initialStateType = {},
-  ctx: GetServerSidePropsContext
+  ctx?: GetServerSidePropsContext
 ): ApolloClient<NormalizedCacheObject> {
   const _apolloClient = apolloClient ?? createApolloClient(ctx)
 
@@ -36,7 +36,7 @@ export function initializeApollo(
 
 export function useApollo(
   initialState: initialStateType,
-  ctx: GetServerSidePropsContext
+  ctx?: GetServerSidePropsContext
 ): ApolloClient<NormalizedCacheObject> {
   const store = useMemo(() => initializeApollo(initialState, ctx), [
     initialState,

@@ -6,15 +6,25 @@ import {
   NormalizedCacheObject,
 } from '@apollo/client'
 import cookies from 'next-cookies'
+import jsCookies from 'js-cookie'
 import { setContext } from '@apollo/client/link/context'
 
 function createApolloClient(
-  ctx: GetServerSidePropsContext
+  ctx?: GetServerSidePropsContext
 ): ApolloClient<NormalizedCacheObject> {
   let headers = {}
   let accessToken = ''
   if (ctx) {
+    // 서버 사이드
     accessToken = cookies(ctx).token ?? ''
+    if (accessToken) {
+      headers = {
+        Authorization: accessToken,
+      }
+    }
+  } else {
+    // 클라이언트에서는 브라우저 쿠키를 참조
+    accessToken = jsCookies.get('token') ?? ''
     if (accessToken) {
       headers = {
         Authorization: accessToken,
@@ -24,7 +34,7 @@ function createApolloClient(
 
   const httpLink = createHttpLink({
     uri: process.env.NEXT_PUBLIC_API_URL,
-    credentials: 'include',
+    credentials: 'same-origin',
   })
 
   const authLink = setContext((__, { headers }) => {
@@ -41,7 +51,6 @@ function createApolloClient(
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
     ssrMode: typeof window === 'undefined',
-    credentials: 'includes',
     headers: headers,
   })
   return client
