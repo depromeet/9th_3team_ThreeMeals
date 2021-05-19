@@ -6,8 +6,6 @@ import { action } from '@storybook/addon-actions'
 storiesOf('templates/NewSecretCard', module).add(
   'NewSecretCardTemplate',
   () => {
-    return (
-      <NewSecretCardTemplate isProfile onClickSend={action('onClickSend')} />
-    )
+    return <NewSecretCardTemplate onClickSend={action('onClickSend')} />
   }
 )
