@@ -56,12 +56,12 @@ yarn storybook #스토리북 실행
 
 Git Flow방식을 사용하여 브랜치를 관리한다.
 
-1. master : 배포 버전 소스(release브랜치를 통해서만 merge)
-2. feat/{기능} : 새로운 기능 개발
-3. refactor/{기능} : 리팩토링
-4. fix/{기능} : 기능 & 버그 픽스
+1. master : 배포 버전 소스
+2. feat/{?} : 새로운 기능 개발
+3. refactor/{?} : 리팩토링
+4. fix/{?} : 기능 & 버그 픽스
 
-- 개발 진행 시 develop에서 브랜치를 분리하여 기능작업 후 develop에 병합을 수행한다.
+- 개발 진행 시 master에서 브랜치를 분리하여 기능작업 후 적어도 한명의 코드 리뷰 승인 후 master에 병합을 수행한다.
 
 <!-- LICENSE -->
 
