@@ -2,23 +2,13 @@ import React, { FC } from 'react'
 import { ContextContainer, StyledQuizCardHeader } from '../molecules/QuizCard'
 import { CardHeaderProps } from '../molecules/QuizCardHeader'
 import { IMAGES } from '../../constants/images'
-import styled from 'styled-components'
+import CardContainer from '../atoms/CardContainer'
 interface Props {
   cardHeader: CardHeaderProps
   backColor: string
   answerType: boolean
 }
-interface StyledProps {
-  backColor: string
-}
 
-const AppContainer = styled.div<StyledProps>`
-  height: 360px;
-  width: 327px;
-  border-radius: 24px;
-  background: ${(props) => props.backColor};
-  position: relative;
-`
 const getImage = (backColor: string, answerType: boolean) => {
   switch (backColor) {
     case answerType && '#6799FE':
@@ -43,7 +33,7 @@ const getImage = (backColor: string, answerType: boolean) => {
 }
 const QuizAnswerCard: FC<Props> = (props) => {
   return (
-    <AppContainer backColor={props.backColor}>
+    <CardContainer backColor={props.backColor}>
       <ContextContainer bottomHeight="none">
         <StyledQuizCardHeader
           isLikeActive={props.cardHeader.isLikeActive}
@@ -60,7 +50,7 @@ const QuizAnswerCard: FC<Props> = (props) => {
           />
         </div>
       </ContextContainer>
-    </AppContainer>
+    </CardContainer>
   )
 }
 
