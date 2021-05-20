@@ -1,30 +1,20 @@
 import React, { FC } from 'react'
+import { Vector2d } from 'konva/types/types'
 
-interface Props extends StickerInfo {
-  addStickerToPanel: (prop: StickerInfo) => void
-}
 export interface StickerInfo {
   imgUrl: string
   width: number
-  positionX: number
-  positionY: number
+  positions?: Vector2d | null
 }
 
-const PickableSticker: FC<Props> = (props) => {
+const PickableSticker: FC<StickerInfo> = (props) => {
   return (
-    <button
-      type="button"
-      onClick={() => {
-        props.addStickerToPanel({
-          imgUrl: props.imgUrl,
-          width: props.width,
-          positionX: props.positionX,
-          positionY: props.positionY,
-        })
-      }}
-    >
-      <img alt="stickerImg" src={props.imgUrl} width={props.width} />
-    </button>
+    <img
+      alt="stickerImg"
+      src={props.imgUrl}
+      width={props.width}
+      draggable={true}
+    />
   )
 }
 
