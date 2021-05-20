@@ -9,6 +9,7 @@ interface Props {
   text: string
   icon?: string
   onClickClose?: (id: string) => void
+  isNonClose?: boolean
 }
 
 const Container = styled.div`
@@ -49,12 +50,14 @@ const Tag: React.FunctionComponent<Props> = (props) => {
       <StyledTag href={props.href}>
         <Icon src={props.icon} />
         <Text>{props.text}</Text>
-        <CloseIcon
-          src={IMAGES.icon_24_close_green_wh}
-          onClick={() => {
-            props.onClickClose && props.id && props.onClickClose(props.id)
-          }}
-        />
+        {!props.isNonClose && (
+          <CloseIcon
+            src={IMAGES.icon_24_close_green_wh}
+            onClick={() => {
+              props.onClickClose && props.id && props.onClickClose(props.id)
+            }}
+          />
+        )}
       </StyledTag>
     </Container>
   )

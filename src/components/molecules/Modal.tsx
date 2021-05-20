@@ -47,7 +47,6 @@ const ModalContainer: React.FC<Props> = (props: Props) => {
 
   return (
     <ModalProvider backgroundComponent={FadingBackground}>
-      <button onClick={toggleModal}>{props.title}</button>
       <StyledModal
         isOpen={isOpen || false}
         afterOpen={afterOpen}

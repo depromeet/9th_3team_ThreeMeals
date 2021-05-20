@@ -1,14 +1,12 @@
 /* eslint-disable */
+const withTM = require('next-transpile-modules')(['lodash-es'])
 const withPlugins = require('next-compose-plugins')
 const withImages = require('next-images')
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
-module.exports = withPlugins([[withBundleAnalyzer], [withImages]], {
-  images: {
-    domains: ['www.fillmurray.com'],
-  },
+module.exports = withPlugins([[withBundleAnalyzer], [withImages], [withTM]], {
   typescript: {
     ignoreBuildErrors: true,
   },

@@ -8,6 +8,7 @@ export interface CardHeaderProps {
   isLikeActive?: boolean
   className?: string
   color: 'blue' | 'green' | 'orange' | 'red' | 'yellow'
+  isMyFeed: boolean
 }
 
 const Container = styled.div`
@@ -19,6 +20,11 @@ const Container = styled.div`
     &:first-child {
       margin-right: 8px;
     }
+  }
+
+  .writeContainer {
+    position: absolute;
+    right: -15px;
   }
 `
 
@@ -43,21 +49,28 @@ const QuizCardHeader: React.FunctionComponent<CardHeaderProps> = (props) => {
   return (
     <Container className={props.className}>
       <img src={getImage(props.color)} alt={'quiz'} width="89" height="39" />
-
-      <span>
-        {props.isLikeActive ? (
+      {props.isMyFeed ? (
+        <span>
+          {props.isLikeActive ? (
+            <button type="button">
+              <img src={SVGS.icon_32_like_active} alt="active" />
+            </button>
+          ) : (
+            <button type="button">
+              <img src={SVGS.icon_32_like} alt="inactive" />
+            </button>
+          )}
           <button type="button">
-            <img src={SVGS.icon_32_like_active} alt="active" />
+            <img src={SVGS.icon_32_option} alt="option" />
           </button>
-        ) : (
+        </span>
+      ) : (
+        <span className="writeContainer">
           <button type="button">
-            <img src={SVGS.icon_32_like} alt="inactive" />
+            <img src={IMAGES.icon_write_gr} alt="icon_write" />
           </button>
-        )}
-        <button type="button">
-          <img src={SVGS.icon_32_option} alt="option" />
-        </button>
-      </span>
+        </span>
+      )}
     </Container>
   )
 }

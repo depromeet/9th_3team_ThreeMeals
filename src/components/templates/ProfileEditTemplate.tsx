@@ -46,7 +46,8 @@ const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
 export default ProfileEditTemplate
 
 const Container = styled.div`
-  display: block;
+  max-width: 500px;
+  width: 100%;
 `
 
 const InputContainer = styled.div`

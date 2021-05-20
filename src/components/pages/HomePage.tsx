@@ -1,6 +1,6 @@
 import React, { VFC } from 'react'
-import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
+
 import HomeTemplate from '../templates/HomeTemplate'
 const AppContainer = styled.div`
   width: 100%;
@@ -11,7 +11,7 @@ const AppContainer = styled.div`
 const HomePage: VFC = () => {
   return (
     <AppContainer>
-      <HomeTemplate isProfile={true} profileImage={IMAGES.background} />
+      <HomeTemplate isProfile={false} />
     </AppContainer>
   )
 }
