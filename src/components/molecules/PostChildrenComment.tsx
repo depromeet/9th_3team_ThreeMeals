@@ -10,25 +10,25 @@ interface Props {
 
 interface CommentInfo {
   id: string
-  content: string
+  content: String
   secretType: string
   commentState: string
   createdAt: string
   updatedAt: string
   account: Account
-  postId: string
-  parentId: string
+  postId: String
+  parentId: String
 }
 
 interface Account {
   id: string
-  nickname: string
+  nickname: String
   //   provider: !Provider
-  providerId: string
-  status: string
-  image: string
-  content: string
-  profileUrl: string
+  providerId: String
+  status: String
+  image: String
+  content: String
+  profileUrl: String
   createdAt: string
   updatedAt: string
 }
@@ -48,12 +48,10 @@ const PostChildrenComment: FC<Props> = (props) => {
         <img className="profileImg" src={props.profileImg} alt="profileImg" />
       </ProfileContainer>
       <BodyContainer>
-        <div className="namespace">
-          {props.commentsInfo[0]?.account.nickname}
-        </div>
         {props.commentsInfo.map((comment, i) => {
           return (
             <>
+              <div className="namespace">{comment.account.nickname}</div>
               <ContentsContainer>
                 <div className="header">
                   <span className="time">{comment.createdAt}</span>
@@ -99,6 +97,7 @@ const ProfileContainer = styled.div`
 `
 const BodyContainer = styled.div`
   color: white;
+  border-bottom: 1px solid rgba(125, 125, 125, 0.5);
   padding: 20px 0;
   .namespace {
     height: 30px;
@@ -107,11 +106,10 @@ const BodyContainer = styled.div`
   }
 `
 const ContentsContainer = styled.div`
-  border-bottom: 1px solid rgba(125, 125, 125, 0.5);
   .header {
     display: flex;
     justify-content: space-between;
-    height: 60px;
+    height: 40px;
     align-items: center;
     .dropMenu {
       letter-spacing: -5px;
@@ -122,7 +120,7 @@ const ContentsContainer = styled.div`
     line-height: 25px;
   }
   .footer {
-    height: 60px;
+    height: 50px;
     display: flex;
     align-items: center;
     color: #999999;

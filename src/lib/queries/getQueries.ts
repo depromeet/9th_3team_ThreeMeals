@@ -14,9 +14,9 @@ export const GET_MY_NEW_POST_COUNT = gql`
 export const GET_CHILDREN_COMMENTS = gql`
   query getChildrenComments(
     $first: Float!
-    $after: String
-    $postId: String!
-    $parentId: String!
+    $after: string
+    $postId: string!
+    $parentId: string!
   ) {
     getChildrenComments(
       first: $first
@@ -32,10 +32,7 @@ export const GET_CHILDREN_COMMENTS = gql`
           commentState
           createdAt
           updatedAt
-          account {
-            id
-            nickname
-          }
+          account
           postId
           parentId
         }

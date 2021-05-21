@@ -64,7 +64,4 @@ export const IMAGES = {
 
   button_floating_save_active: require('../assets/images/button_floating_save_active.png'),
   button_floating_save_disabled: require('../assets/images/button_floating_save_disabled.png'),
-
-  //sample sticker //
-  sample_sticker: require('../assets/images/sampleSticker.png'),
 }
