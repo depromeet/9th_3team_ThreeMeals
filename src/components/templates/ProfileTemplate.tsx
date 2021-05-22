@@ -9,7 +9,7 @@ import Header from '../molecules/Header'
 interface Props {
   profileImage: string
   previewImage: string | ArrayBuffer | null
-  fileInput: MutableRefObject<HTMLInputElement | null>
+  fileInput?: MutableRefObject<HTMLInputElement | null>
   onChangeImage?: (e: any) => void
   onClickIcon?: () => void
   onClickLeft?: () => void

@@ -10,7 +10,7 @@ interface Props {
 const Card = styled.div`
   width: 100%;
   height: 280px;
-  padding: 19px 30px;
+  padding: 19px 10px;
   .text {
     display: flex;
     justify-content: center;
@@ -24,6 +24,8 @@ const Card = styled.div`
     border-radius: 24px;
     font-size: 24px;
     height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 `
 

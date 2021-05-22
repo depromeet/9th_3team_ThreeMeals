@@ -61,11 +61,13 @@ export const IMAGES = {
   rightButton: require('../assets/images/rightButton.png'),
 
   // newSecretCard //
-
   button_floating_save_active: require('../assets/images/button_floating_save_active.png'),
   button_floating_save_disabled: require('../assets/images/button_floating_save_disabled.png'),
 
   //sticker //
   sample_sticker: require('../assets/images/sampleSticker.png'),
   icon_32_close: require('../assets/images/icon_32_close.png'),
+
+  // notification //
+  tape_notification: require('../assets/images/tape_notification.png'),
 }

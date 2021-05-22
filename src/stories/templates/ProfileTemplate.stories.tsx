@@ -1,17 +1,16 @@
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
-import ContentTemplate from '../../components/templates/ContentTemplate'
+import ProfileTemplate from '../../components/templates/ProfileTemplate'
 import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
 
-storiesOf('templates/Content', module).add('ContentTemplate', () => {
+storiesOf('templates/Profile', module).add('ProfileTemplate', () => {
   return (
     <AppContainer>
-      <ContentTemplate profileImage={IMAGES.background} isProfile={false} />
+      <ProfileTemplate profileImage={IMAGES.background} previewImage={null} />
     </AppContainer>
   )
 })
-
 const AppContainer = styled.div`
   width: 100%;
   display: flex;
