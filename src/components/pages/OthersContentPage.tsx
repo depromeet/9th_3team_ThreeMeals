@@ -13,7 +13,9 @@ const OthersContentPage: React.FC = () => {
           router.push('newSecretCard')
         }}
         onClickLeft={router.back}
-        onClickSecondRight={router.back}
+        onClickSecondRight={() => {
+          router.push('/notification')
+        }}
       />
     </AppContainer>
   )
