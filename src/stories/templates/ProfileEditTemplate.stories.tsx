@@ -1,13 +1,12 @@
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
-import ContentTemplate from '../../components/templates/ContentTemplate'
-import { IMAGES } from '../../constants/images'
+import ProfileEditTemplate from '../../components/templates/ProfileEditTemplate'
 import styled from 'styled-components'
 
-storiesOf('templates/Content', module).add('ContentTemplate', () => {
+storiesOf('templates/ProfileEdit', module).add('ProfileEditTemplate', () => {
   return (
     <AppContainer>
-      <ContentTemplate profileImage={IMAGES.background} isProfile={false} />
+      <ProfileEditTemplate />
     </AppContainer>
   )
 })

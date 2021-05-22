@@ -90,7 +90,6 @@ const MainContainer = styled.div`
 `
 
 const TapesContainer = styled.div`
-  height: 50px;
   width: 100%;
 `
 const InputContainer = styled.div`
