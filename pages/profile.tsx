@@ -3,10 +3,10 @@ import { useQuery } from '@apollo/client'
 
 import ProfilePage from '../src/components/pages/ProfilePage'
 import { initializeApollo } from '../src/lib/apollo'
-import { GET_MY_NEW_POST_COUNT } from '../src/lib/queries/getQueries'
+import { GET_PARENT_COMMENTS } from '../src/lib/queries/getQueries'
 
 const Profile: React.FC = () => {
-  const { loading, error, data } = useQuery(GET_MY_NEW_POST_COUNT)
+  const { loading, error, data } = useQuery(GET_PARENT_COMMENTS)
 
   // if (loading) {
   //   return (
@@ -20,7 +20,7 @@ const Profile: React.FC = () => {
   //   console.log('error:', error)
   //   return (
   //     <div>
-  //       <p>:( an error happened {error}</p>
+  //       <p>:( an error happened </p>
   //     </div>
   //   )
   // }
@@ -33,7 +33,7 @@ export default Profile
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const apolloClient = initializeApollo({}, ctx)
   await apolloClient.query({
-    query: GET_MY_NEW_POST_COUNT,
+    query: GET_PARENT_COMMENTS,
   })
   return {
     props: { initialApolloState: apolloClient.cache.extract() },

@@ -19,7 +19,7 @@ function createApolloClient(
     accessToken = cookies(ctx).token ?? ''
     if (accessToken) {
       headers = {
-        Authorization: accessToken,
+        authorization: accessToken,
       }
     }
   } else {
@@ -27,7 +27,7 @@ function createApolloClient(
     accessToken = jsCookies.get('token') ?? ''
     if (accessToken) {
       headers = {
-        Authorization: accessToken,
+        authorization: `Bearer ${accessToken}`,
       }
     }
   }
@@ -41,8 +41,6 @@ function createApolloClient(
     return {
       headers: {
         ...headers,
-        // authorization: token ? `Bearer ${token}` : '',
-        'account-id': '2',
       },
     }
   })
