@@ -1,9 +1,16 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-
+import { useMutation } from '@apollo/client'
+import { SIGN_IN } from '../src/lib/queries/signInQueries'
+import jsCookies from 'js-cookie'
 const Auth: React.FC = () => {
   const router = useRouter()
-  const [isLogined, setIsLogined] = React.useState(false)
+
+  const [signIn] = useMutation(SIGN_IN, {
+    onCompleted: () => {
+      console.log('success')
+    },
+  })
 
   React.useEffect(() => {
     const { code } = router.query
@@ -26,20 +33,22 @@ const Auth: React.FC = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
-        localStorage.setItem('kakao_token', data.access_token)
         if (data.access_token) {
-          setIsLogined(true)
+          signIn({
+            variables: { accessToken: data.access_token, provider: 'Kakao' },
+          })
+            .then((token) => {
+              jsCookies.set('token', token.data.signIn.token, { path: '/' })
+              router.replace('/profile')
+            })
+            .catch((error) => {
+              console.log('error:', error)
+            })
         }
       })
-  }, [router.query])
+  }, [router, router.query, signIn])
 
-  return (
-    <div>
-      {isLogined && '로그인 되었습니다!'}
-      {!isLogined && '로그인 중입니다!!'}
-    </div>
-  )
+  return null
 }
 
 export default Auth
