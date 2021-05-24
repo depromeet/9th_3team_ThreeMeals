@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback } from 'react'
+import React, { FC, useState, useCallback, useEffect } from 'react'
 import useImage from 'use-image'
 import { Image as KonvaImage, Group } from 'react-konva'
 import { StickerInfo } from './PickableSticker'
@@ -8,6 +8,9 @@ interface Props {
   stickerImage: StickerInfo
   onDelete: (evt: KonvaEventObject<TouchEvent | MouseEvent>) => void
   onDragEnd: (evt: KonvaEventObject<DragEvent>) => void
+  showDeleteBtnByTouching: (i: KonvaEventObject<TouchEvent>) => void
+  showDeleteBtnIdx: number | string
+  idx: number
 }
 const DraggableSticker: FC<Props> = (props) => {
   const [stickerImage] = useImage(props.stickerImage.imgUrl)
@@ -23,6 +26,9 @@ const DraggableSticker: FC<Props> = (props) => {
   const outHovering = useCallback(() => {
     setShowDeleteBtn(false)
   }, [])
+  const showDeleteBtnByTouching = useCallback((boolean) => {
+    setShowDeleteBtn(boolean)
+  }, [])
   const onDragEndImg = useCallback(
     (e: KonvaEventObject<DragEvent>) => {
       setIsDragging(false)
@@ -36,6 +42,13 @@ const DraggableSticker: FC<Props> = (props) => {
   const onDragStart = useCallback(() => {
     setIsDragging(true)
   }, [])
+  useEffect(() => {
+    if (props.showDeleteBtnIdx === props.idx) {
+      showDeleteBtnByTouching(true)
+    } else {
+      showDeleteBtnByTouching(false)
+    }
+  }, [props.idx, props.showDeleteBtnIdx, showDeleteBtnByTouching])
   return (
     <Group
       draggable
@@ -47,6 +60,7 @@ const DraggableSticker: FC<Props> = (props) => {
       onDragEnd={onDragEndImg}
       onMouseOver={onHovering}
       onMouseLeave={outHovering}
+      onTouchStart={props.showDeleteBtnByTouching}
     >
       <KonvaImage
         width={props.stickerImage.width}

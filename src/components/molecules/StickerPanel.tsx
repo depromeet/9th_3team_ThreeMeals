@@ -6,11 +6,12 @@ import DraggableSticker from './DraggableSticker'
 import { StickerInfo } from './PickableSticker'
 import { KonvaEventObject } from 'konva/types/Node'
 interface Props extends StickerInfo {
-  pickedImgUrl?: string | React.MutableRefObject<undefined>
-  addToPanelByClicking: () => {
-    imgUrl: string
+  addToPanelByClicking?: (
+    imgUrl: string,
     width: number
-  }
+  ) => { imgUrl: string; width: number }
+  clickedSticker: boolean
+  closeDeleteBtn: boolean
 }
 
 interface OnDragFuncProps {
@@ -21,6 +22,7 @@ interface OnDragFuncProps {
 const StickerPanel: FC<Props> = (props) => {
   const stageRef: React.RefObject<Konva.Stage> | null = useRef(null)
   const [images, setImages] = useState<StickerInfo[]>([])
+  const [showDeleteBtn, setShowDeleteBtn] = useState<number | string>('')
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault()
@@ -37,20 +39,27 @@ const StickerPanel: FC<Props> = (props) => {
     [images, props.imgUrl, props.width]
   )
   const addToPanelByClicking = useCallback(
-    (stickerInfo) => {
+    (width, imgUrl) => {
       const droppedImgInfo = {
         positions: { x: 200, y: 200 },
-        imgUrl: stickerInfo.imgUrl,
-        width: stickerInfo.width,
+        imgUrl: imgUrl,
+        width: width,
       }
       setImages([...images, droppedImgInfo])
     },
     [images]
   )
-  //   useEffect(() => {
-  //     const pickedStickerInfo = props.addToPanelByClicking()
-  //     addToPanelByClicking(pickedStickerInfo)
-  //   }, [addToPanelByClicking, props])
+  useEffect(() => {
+    if (props.clickedSticker) {
+      addToPanelByClicking(props.width, props.imgUrl)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.clickedSticker, props.imgUrl, props.width])
+  useEffect(() => {
+    if (props.closeDeleteBtn) {
+      setShowDeleteBtn('')
+    }
+  }, [props.closeDeleteBtn])
   const onDeleteImg = useCallback(
     (index) => {
       const newImages = [...images]
@@ -59,15 +68,26 @@ const StickerPanel: FC<Props> = (props) => {
     },
     [images]
   )
-  const onDragEndImg = useCallback((props: OnDragFuncProps) => {
-    if (props.image.positions && props.e?.target) {
-      props.image.positions.x = props.e.target.x()
-      props.image.positions.y = props.e.target.y()
+  const onDragEndImg = useCallback((dragProps: OnDragFuncProps) => {
+    if (dragProps.image.positions && dragProps.e?.target) {
+      dragProps.image.positions.x = dragProps.e.target.x()
+      dragProps.image.positions.y = dragProps.e.target.y()
     }
   }, [])
-
+  const showDeleteBtnByTouching = useCallback(
+    (e: KonvaEventObject<TouchEvent>, i: number) => {
+      setShowDeleteBtn(i)
+    },
+    []
+  )
   return (
-    <PanelContainer onDrop={onDrop} onDragOver={(e) => e.preventDefault()}>
+    <PanelContainer
+      onDrop={onDrop}
+      onDragOver={(e) => e.preventDefault()}
+      onTouchStart={(e) => {
+        e.stopPropagation()
+      }}
+    >
       <Stage
         width={500}
         height={500}
@@ -79,9 +99,12 @@ const StickerPanel: FC<Props> = (props) => {
             return (
               <DraggableSticker
                 key={i}
+                idx={i}
                 stickerImage={image}
                 onDelete={() => onDeleteImg(i)}
                 onDragEnd={() => onDragEndImg({ i: i, image: image })}
+                showDeleteBtnByTouching={(e) => showDeleteBtnByTouching(e, i)}
+                showDeleteBtnIdx={showDeleteBtn}
               />
             )
           })}

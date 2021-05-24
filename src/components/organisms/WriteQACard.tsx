@@ -1,7 +1,6 @@
-import React, { FC, useRef, RefObject, useState } from 'react'
+import React, { FC, useState } from 'react'
 import styled from 'styled-components'
 import CardContainer from '../atoms/CardContainer'
-import { Image as KonvaImage, Layer, Stage } from 'react-konva'
 import { StickerInfo } from '../molecules/PickableSticker'
 
 interface Props {

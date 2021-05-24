@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback } from 'react'
+import React, { FC, useCallback } from 'react'
 import styled from 'styled-components'
 import PickableSticker, { StickerInfo } from '../molecules/PickableSticker'
 interface Props {
@@ -52,6 +52,5 @@ const GridContainer = styled.div`
   width: 100vw;
   /* height: 100vh; */
   display: grid;
-  grid-template-rows: repeat(4, 100px);
   grid-template-columns: repeat(3, 100px);
 `
