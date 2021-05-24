@@ -10,3 +10,36 @@ export const GET_MY_NEW_POST_COUNT = gql`
     }
   }
 `
+
+export const GET_CHILDREN_COMMENTS = gql`
+  query getChildrenComments(
+    $first: Float!
+    $after: String
+    $postId: String!
+    $parentId: String!
+  ) {
+    getChildrenComments(
+      first: $first
+      after: $after
+      postId: $postId
+      parentId: $parentId
+    ) {
+      edges {
+        node {
+          id
+          content
+          secretType
+          commentState
+          createdAt
+          updatedAt
+          account {
+            id
+            nickname
+          }
+          postId
+          parentId
+        }
+      }
+    }
+  }
+`

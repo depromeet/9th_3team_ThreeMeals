@@ -2,11 +2,11 @@ import React from 'react'
 import { useRouter } from 'next/router'
 
 const Auth: React.FC = () => {
-  const rotuer = useRouter()
+  const router = useRouter()
   const [isLogined, setIsLogined] = React.useState(false)
 
   React.useEffect(() => {
-    const { code } = rotuer.query
+    const { code } = router.query
 
     if (!code) return
 
@@ -32,7 +32,7 @@ const Auth: React.FC = () => {
           setIsLogined(true)
         }
       })
-  }, [rotuer.query])
+  }, [router.query])
 
   return (
     <div>
