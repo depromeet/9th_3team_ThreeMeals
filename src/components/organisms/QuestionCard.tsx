@@ -78,7 +78,7 @@ const SecondContainer = styled.div<{ backColor: string }>`
   margin-bottom: 16px;
   margin-left: 5%;
   margin-right: 5%;
-  width: initial !important;
+  width: 335px !important;
   *:focus {
     outline: 0;
   }

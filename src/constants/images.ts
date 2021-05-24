@@ -66,4 +66,9 @@ export const IMAGES = {
 
   // notification //
   tape_notification: require('../assets/images/tape_notification.png'),
+
+  // AnswerCard //
+  icon_32_option: require('../assets/images/icon_32_option.png'),
+  icon_32_share: require('../assets/images/icon_32_share.png'),
+  icon_24_comment: require('../assets/images/icon_24_comment.png'),
 }
