@@ -33,7 +33,6 @@ const Auth: React.FC = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.access_token) {
-          console.log(data.access_token)
           signIn({
             variables: { accessToken: data.access_token, provider: 'Kakao' },
           })

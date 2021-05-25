@@ -36,8 +36,6 @@ const ProfilePage: React.FC = () => {
     reader.readAsDataURL(file)
   }, [])
 
-  console.log('data', getAccountInfo)
-
   return (
     <AppContainer>
       <ProfileTemplate

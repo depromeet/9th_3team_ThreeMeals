@@ -14,7 +14,6 @@ export default Profile
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const token = cookies(ctx).token
-  console.log('token', token)
 
   if (_isEmpty(token)) {
     ctx.res.writeHead(302, { Location: '/' })
