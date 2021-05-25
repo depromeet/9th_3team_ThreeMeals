@@ -29,11 +29,11 @@ const Auth: React.FC = () => {
 
     fetch(`https://kauth.kakao.com/oauth/token?${queryStringBody}`, {
       method: 'POST',
-      //   headers: kakaoHeader,
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.access_token) {
+          console.log(data.access_token)
           signIn({
             variables: { accessToken: data.access_token, provider: 'Kakao' },
           })
