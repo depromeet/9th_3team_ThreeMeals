@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, ReactElement, useMemo, useState } from 'react'
 import Header from '../molecules/Header'
 import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
@@ -17,6 +17,125 @@ interface Props {
 const ContentTemplate: FC<Props> = (props) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
 
+  const ContentView = useMemo((): ReactElement | undefined => {
+    switch (tabIndex) {
+      case 0:
+        return (
+          <>
+            <NoticeContainer>
+              <NoticeText>
+                <img
+                  style={{ position: 'relative', bottom: 15 }}
+                  src={IMAGES.img_newq_1}
+                  width={106}
+                  height={72}
+                />
+                <span
+                  style={{ marginTop: 1 }}
+                  onClick={props.onClickNewSecretCard}
+                >
+                  {'12개의 비밀카드 도착'}
+                </span>
+                <img
+                  onClick={props.onClickNewSecretCard}
+                  src={IMAGES.rightButton}
+                  width={22}
+                  height={22}
+                />
+              </NoticeText>
+              <img
+                style={{ position: 'relative', bottom: 65, zIndex: -1 }}
+                src={IMAGES.img_tape_newq}
+                width={'100%'}
+              />
+            </NoticeContainer>
+            <ContentContainer>
+              <QuestionCard
+                labelComponent={<PrivateCardLabel text="BONG IN" />}
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={CardColor.orange}
+              />
+              <QuestionCard
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={CardColor.blue}
+              />
+              <QuestionCard
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={CardColor.green}
+              />
+            </ContentContainer>
+          </>
+        )
+      case 1:
+        return (
+          <>
+            <ContentContainer>
+              <AnswerCard
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={CardColor.orange}
+              />
+              <AnswerCard
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={CardColor.blue}
+              />
+              <AnswerCard
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={CardColor.green}
+              />
+            </ContentContainer>
+          </>
+        )
+      case 2:
+        return (
+          <>
+            <NoticeContainer>
+              <NoticeText>
+                <img
+                  style={{ position: 'relative', bottom: 15 }}
+                  src={IMAGES.img_newq_1}
+                  width={106}
+                  height={72}
+                />
+                <span
+                  style={{ marginTop: 1 }}
+                  onClick={props.onClickNewSecretCard}
+                >
+                  {'12개의 OX퀴즈 도착'}
+                </span>
+                <img
+                  onClick={props.onClickNewSecretCard}
+                  src={IMAGES.rightButton}
+                  width={22}
+                  height={22}
+                />
+              </NoticeText>
+              <img
+                style={{ position: 'relative', bottom: 65, zIndex: -1 }}
+                src={IMAGES.img_tape_newq}
+                width={'100%'}
+              />
+            </NoticeContainer>
+            <ContentContainer>
+              <QuestionCard
+                labelComponent={<PrivateCardLabel text="BONG IN" />}
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={CardColor.orange}
+              />
+              <QuestionCard
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={CardColor.blue}
+              />
+              <QuestionCard
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={CardColor.green}
+              />
+            </ContentContainer>
+          </>
+        )
+      default:
+        break
+    }
+  }, [props.onClickNewSecretCard, tabIndex])
   return (
     <AppContainer>
       <Header
@@ -87,45 +206,7 @@ const ContentTemplate: FC<Props> = (props) => {
         <DefaultLine
           containerStyle={{ position: 'relative', bottom: 8, zIndex: -1 }}
         />
-        <NoticeContainer>
-          <NoticeText>
-            <img
-              style={{ position: 'relative', bottom: 15 }}
-              src={IMAGES.img_newq_1}
-              width={106}
-              height={72}
-            />
-            <span style={{ marginTop: 1 }} onClick={props.onClickNewSecretCard}>
-              {'12개의 비밀카드 도착'}
-            </span>
-            <img
-              onClick={props.onClickNewSecretCard}
-              src={IMAGES.rightButton}
-              width={22}
-              height={22}
-            />
-          </NoticeText>
-          <img
-            style={{ position: 'relative', bottom: 65, zIndex: -1 }}
-            src={IMAGES.img_tape_newq}
-            width={'100%'}
-          />
-        </NoticeContainer>
-        <ContentContainer>
-          <QuestionCard
-            labelComponent={<PrivateCardLabel text="BONG IN" />}
-            questionTitle="김덕배님 남자친구는 있으신지요 ????"
-            backColor={CardColor.orange}
-          />
-          <QuestionCard
-            questionTitle="김덕배님 남자친구는 있으신지요 ????"
-            backColor={CardColor.blue}
-          />
-          <QuestionCard
-            questionTitle="김덕배님 남자친구는 있으신지요 ????"
-            backColor={CardColor.green}
-          />
-        </ContentContainer>
+        {ContentView}
       </MainContainer>
     </AppContainer>
   )

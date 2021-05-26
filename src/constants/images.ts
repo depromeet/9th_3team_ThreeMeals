@@ -12,6 +12,7 @@ export const IMAGES = {
   icon_24_back_wh: require('../assets/images/icon_24_back_wh.png'),
   icon_write_gr: require('../assets/images/icon_write_gr.png'),
   icon_20_camera: require('../assets/images/icon_20_camera.png'),
+  icon_32_close: require('../assets/images/icon_32_close.png'),
 
   // OX Quiz img //
   img_quiz_bl: require('../assets/images/img_quiz_bl.png'),
@@ -61,7 +62,17 @@ export const IMAGES = {
   rightButton: require('../assets/images/rightButton.png'),
 
   // newSecretCard //
-
   button_floating_save_active: require('../assets/images/button_floating_save_active.png'),
   button_floating_save_disabled: require('../assets/images/button_floating_save_disabled.png'),
+<<<<<<< HEAD
+=======
+
+  //sticker //
+  sticker_food_apple: require('../assets/images/sticker_food_apple.png'),
+  sticker_food_bread: require('../assets/images/sticker_food_bread.png'),
+  sticker_food_watermelon: require('../assets/images/sticker_food_watermelon.png'),
+
+  // notification //
+  tape_notification: require('../assets/images/tape_notification.png'),
+>>>>>>> feat/sticker
 }

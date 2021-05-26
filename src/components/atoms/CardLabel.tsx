@@ -5,6 +5,7 @@ import { SVGS } from '../../constants/svgs'
 
 interface Props {
   text: string
+  active: boolean
 }
 
 const Container = styled.span`

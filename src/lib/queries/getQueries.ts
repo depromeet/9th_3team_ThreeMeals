@@ -10,7 +10,28 @@ export const GET_MY_NEW_POST_COUNT = gql`
     }
   }
 `
-
+export const GET_PARENT_COMMENTS = gql`
+  query {
+    getParentComments(first: 30, postId: "1") {
+      edges {
+        node {
+          id
+          content
+          secretType
+          account {
+            id
+          }
+          childrenCount
+        }
+        cursor
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+`
 export const GET_CHILDREN_COMMENTS = gql`
   query getChildrenComments(
     $first: Float!

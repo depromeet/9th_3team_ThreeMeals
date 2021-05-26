@@ -1,7 +1,17 @@
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 import HomeTemplate from '../../components/templates/HomeTemplate'
+import styled from 'styled-components'
 
 storiesOf('templates/Home', module).add('homeTemplate', () => {
-  return <HomeTemplate isProfile={false} />
+  return (
+    <AppContainer>
+      <HomeTemplate isProfile={false} />
+    </AppContainer>
+  )
 })
+const AppContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`

@@ -71,13 +71,15 @@ const Header: React.FC<Props> = (props: Props) => {
                 isOpen={isOpen}
                 noOverlay
               >
-                <BurgerProfileImage src={props.profileImage} />
+                {props.profileImage && (
+                  <BurgerProfileImage src={props.profileImage} />
+                )}
                 <BurgerContent>
                   <BurgerText
                     style={{ marginBottom: '4rem' }}
                     onClick={props.onClickMyFeed}
                   >
-                    My feed
+                    {props.isLogin ? 'My feed' : 'Log in'}
                   </BurgerText>
                   <BurgerText onClick={props.onClickHowToUse}>
                     How to use

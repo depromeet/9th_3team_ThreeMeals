@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 interface Props {
   text: string
+  active: boolean
 }
 
 const Container = styled.span`
