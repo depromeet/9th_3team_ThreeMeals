@@ -3,7 +3,7 @@ import useImage from 'use-image'
 import { Image as KonvaImage, Group } from 'react-konva'
 import { StickerInfo } from './PickableSticker'
 import { KonvaEventObject } from 'konva/types/Node'
-import { IMAGES } from '../../constants/images'
+import { SVGS } from '../../constants/svgs'
 interface Props {
   stickerImage: StickerInfo
   onDelete: (evt: KonvaEventObject<TouchEvent | MouseEvent>) => void
@@ -14,7 +14,7 @@ interface Props {
 }
 const DraggableSticker: FC<Props> = (props) => {
   const [stickerImage] = useImage(props.stickerImage.imgUrl)
-  const [deleteImage] = useImage(IMAGES.icon_32_close)
+  const [deleteImage] = useImage(SVGS.icon_delete_sticker)
   const [showDeleteBtn, setShowDeleteBtn] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const stickerHeight = stickerImage

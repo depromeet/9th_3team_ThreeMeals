@@ -7,4 +7,5 @@ export const SVGS = {
   icon_32_share: require('../assets/svgs/icon_32_share.svg'),
   icon_24_kakao: require('../assets/svgs/icon_24_kakao.svg'),
   icon_24_comment: require('../assets/svgs/icon_24_comment.svg'),
+  icon_delete_sticker: require('../assets/svgs/icon_delete_sticker.svg'),
 }

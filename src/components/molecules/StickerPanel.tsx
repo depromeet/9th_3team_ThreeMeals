@@ -41,7 +41,7 @@ const StickerPanel: FC<Props> = (props) => {
   const addToPanelByClicking = useCallback(
     (width, imgUrl) => {
       const droppedImgInfo = {
-        positions: { x: 200, y: 200 },
+        positions: { x: 279 / 2, y: 192 / 2 },
         imgUrl: imgUrl,
         width: width,
       }
@@ -89,8 +89,8 @@ const StickerPanel: FC<Props> = (props) => {
       }}
     >
       <Stage
-        width={500}
-        height={500}
+        width={279}
+        height={192}
         style={{ border: '1px solid grey' }}
         ref={stageRef}
       >
@@ -117,7 +117,7 @@ const StickerPanel: FC<Props> = (props) => {
 export default StickerPanel
 
 const PanelContainer = styled.div`
-  width: 500px;
+  width: 279px;
   border: 1px solid black;
-  height: 500px;
+  height: 192px;
 `

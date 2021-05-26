@@ -1,7 +1,8 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import CardContainer from '../atoms/CardContainer'
 import { StickerInfo } from '../molecules/PickableSticker'
+import StickerPanel from '../molecules/StickerPanel'
 
 interface Props {
   backColor: string
@@ -10,17 +11,40 @@ interface Props {
 }
 
 const WriteQACard: FC<Props> = (props) => {
-  const [droppedStickers, setDroppedStickers] = useState([])
-
+  const [pickedImgUrl, setPickedImgUrl] = useState<string>('')
+  const [pickedImgWidth, setPickedImgWidth] = useState<number>(0)
+  const [clickedSticker, setClickedSticker] = useState<boolean>(false)
+  const [closeDeleteBtn, setCloseDeleteBtn] = useState<boolean>(false)
+  const updatePickedImgUrl = useCallback((imgUrl: string) => {
+    setPickedImgUrl(imgUrl)
+  }, [])
+  const updatePickedImgWidth = useCallback((width: number) => {
+    setPickedImgWidth(width)
+  }, [])
+  const addToPanelByClicking = useCallback(() => {
+    setClickedSticker(true)
+    setTimeout(() => {
+      setClickedSticker(false)
+    }, 500)
+  }, [])
+  const closeDeleteBtnByTouching = useCallback(() => {
+    setCloseDeleteBtn(true)
+    setTimeout(() => {
+      setCloseDeleteBtn(false)
+    }, 500)
+  }, [])
   return (
     <CardContainer backColor={props.backColor}>
       <ContentContainer>
         <textarea placeholder={`질문을 자유롭게\n작성해 주세요.`} />
         <StickerContainer isWithSticker={props.isWithSticker}>
-          {props.stickers ? (
-            props.stickers?.map((sticker, i) => {
-              return <div key={i}></div>
-            })
+          {pickedImgUrl && pickedImgWidth ? (
+            <StickerPanel
+              imgUrl={pickedImgUrl}
+              width={pickedImgWidth}
+              clickedSticker={clickedSticker}
+              closeDeleteBtn={closeDeleteBtn}
+            />
           ) : (
             <div style={{ padding: '10px' }}>stickers!</div>
           )}

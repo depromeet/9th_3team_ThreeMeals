@@ -5,28 +5,28 @@ import { IMAGES } from '../../constants/images'
 import StickerPanel from '../../components/molecules/StickerPanel'
 const dummyStickersData = [
   {
-    imgUrl: IMAGES.sample_sticker,
-    width: 100,
+    imgUrl: IMAGES.sticker_food_apple,
+    width: 125,
   },
   {
-    imgUrl: IMAGES.sample_sticker,
-    width: 100,
+    imgUrl: IMAGES.sticker_food_bread,
+    width: 125,
   },
   {
-    imgUrl: IMAGES.sample_sticker,
-    width: 100,
+    imgUrl: IMAGES.sticker_food_watermelon,
+    width: 125,
   },
   {
-    imgUrl: IMAGES.sample_sticker,
-    width: 100,
+    imgUrl: IMAGES.sticker_food_apple,
+    width: 125,
   },
   {
-    imgUrl: IMAGES.sample_sticker,
-    width: 100,
+    imgUrl: IMAGES.sticker_food_bread,
+    width: 125,
   },
   {
-    imgUrl: IMAGES.sample_sticker,
-    width: 100,
+    imgUrl: IMAGES.sticker_food_watermelon,
+    width: 125,
   },
 ]
 
