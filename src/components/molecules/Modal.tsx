@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Modal, { ModalProvider, BaseModalBackground } from 'styled-react-modal'
 
 interface Props {
-  titleEmoji: string
+  titleEmoji?: string
   title: string
   description?: string
   confirmText: string
@@ -61,7 +61,7 @@ const ModalContainer: React.FC<Props> = (props: Props) => {
       >
         <Container>
           <EmojiContainer>
-            <Emoji src={props.titleEmoji} />
+            {props.titleEmoji && <Emoji src={props.titleEmoji} />}
           </EmojiContainer>
           <Title>{props.title}</Title>
           <Description>{props.description}</Description>

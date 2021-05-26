@@ -1,10 +1,17 @@
 import { useRouter } from 'next/router'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import ContentTemplate from '../templates/ContentTemplate'
 const ContentPage: React.FC = () => {
   const router = useRouter()
 
+  const onClickAnswerCard = useCallback(
+    (postId) => {
+      router.push({ pathname: '/answerDetail', query: { postId } })
+    },
+    [router]
+  )
   return (
     <AppContainer>
       <ContentTemplate
@@ -17,6 +24,7 @@ const ContentPage: React.FC = () => {
         onClickNewSecretCard={() => {
           router.push('/newSecretCard')
         }}
+        onClickAnswerCard={onClickAnswerCard}
       />
     </AppContainer>
   )

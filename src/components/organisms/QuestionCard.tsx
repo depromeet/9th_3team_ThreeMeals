@@ -51,6 +51,7 @@ const Container = styled.div<{ backColor: string }>`
   margin-left: 5%;
   margin-right: 5%;
   width: initial !important;
+  max-width: 396px;
   *:focus {
     outline: 0;
   }
@@ -78,7 +79,9 @@ const SecondContainer = styled.div<{ backColor: string }>`
   margin-bottom: 16px;
   margin-left: 5%;
   margin-right: 5%;
-  width: 335px !important;
+  width: initial !important;
+  max-width: 396px;
+  text-align: center;
   *:focus {
     outline: 0;
   }
@@ -159,6 +162,7 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
       arrows={undefined}
       infinite={false}
       variableWidth={false}
+      css={{ textAlign: 'center' }}
     >
       <Container backColor={backgroundColor[props.backColor]}>
         <StyledLabelCardHeader

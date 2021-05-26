@@ -5,6 +5,8 @@ interface Props {
   containerStyle?: CSSProperties
   placeholder: string
   onChange: (text: string) => void
+  onFocus?: () => void
+  onBlur?: () => void
 }
 
 const DefaultInput: React.FC<Props> = (props: Props) => {
@@ -15,6 +17,8 @@ const DefaultInput: React.FC<Props> = (props: Props) => {
       onChange={(e) => {
         props.onChange(e.target.value)
       }}
+      onFocus={props.onFocus}
+      onBlur={props.onBlur}
     />
   )
 }
@@ -29,6 +33,8 @@ const Container = styled.input`
   border: 0px;
   outline: none;
   border-radius: 24px;
+  padding-left: 5%;
+  padding-right: 5%;
   &:focus {
     outline: none;
   }

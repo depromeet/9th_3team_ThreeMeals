@@ -6,12 +6,14 @@ import ProfileContent from '../molecules/ProfileContent'
 import DefaultLine from '../atoms/DefaultLine'
 import QuestionCard, { CardColor } from '../organisms/QuestionCard'
 import PrivateCardLabel from '../atoms/PrivateCardLabel'
+import AnswerCard from '../organisms/AnswerCard'
 interface Props {
   isProfile: boolean
   profileImage: string
   onClickLeft?: () => void
   onClickSecondRight?: () => void
   onClickNewSecretCard?: () => void
+  onClickAnswerCard: (postId: string) => void
 }
 
 const ContentTemplate: FC<Props> = (props) => {
@@ -56,11 +58,11 @@ const ContentTemplate: FC<Props> = (props) => {
                 backColor={CardColor.orange}
               />
               <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                questionTitle="김덕배님 남자친구는 있으신지요 ????ㅋㅋ"
                 backColor={CardColor.blue}
               />
               <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                questionTitle="김덕배님 남자친구는 있으신지요 ????ㅋㅋ"
                 backColor={CardColor.green}
               />
             </ContentContainer>
@@ -73,14 +75,23 @@ const ContentTemplate: FC<Props> = (props) => {
               <AnswerCard
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
                 backColor={CardColor.orange}
+                onClickPost={() => {
+                  props.onClickAnswerCard('0')
+                }}
               />
               <AnswerCard
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
                 backColor={CardColor.blue}
+                onClickPost={() => {
+                  props.onClickAnswerCard('1')
+                }}
               />
               <AnswerCard
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
                 backColor={CardColor.green}
+                onClickPost={() => {
+                  props.onClickAnswerCard('2')
+                }}
               />
             </ContentContainer>
           </>
