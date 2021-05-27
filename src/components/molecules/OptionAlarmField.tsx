@@ -15,8 +15,8 @@ const OptionAlarmField: FC<Props> = (props) => {
         <span className="header">Bong-in</span>
       ) : (
         <span className="header">
-          <img src={SVGS.time_wh} alt="time_wh" />
-          secret 24
+          <img src={SVGS.icon_time_gr} alt="time_wh" />
+          &nbsp; secret 24
         </span>
       )}
       <span className="explanation">
@@ -37,12 +37,16 @@ const FieldContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 78px;
-  border-radius: 12px;
-  background: #67d585;
-  opacity: 0.3;
-  border: 1px solid #67d585;
+  border-radius: 16px;
+  background: rgba(103, 213, 133, 0.1);
+  border: 1px solid rgba(103, 213, 133, 0.2);
+  line-height: 30px;
   .header {
     color: #67d585;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-family: Montserrat;
   }
   .explanation {
     color: #ffffff;

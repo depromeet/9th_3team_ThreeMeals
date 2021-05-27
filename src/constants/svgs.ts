@@ -8,4 +8,7 @@ export const SVGS = {
   icon_24_kakao: require('../assets/svgs/icon_24_kakao.svg'),
   icon_24_comment: require('../assets/svgs/icon_24_comment.svg'),
   icon_delete_sticker: require('../assets/svgs/icon_delete_sticker.svg'),
+  icon_time_gr: require('../assets/svgs/icon_time_gr.svg'),
+  icon_time_trans: require('../assets/svgs/icon_time_trans.svg'),
+  icon_32_emoji_wh: require('../assets/svgs/icon_32_emoji_wh.svg'),
 }
