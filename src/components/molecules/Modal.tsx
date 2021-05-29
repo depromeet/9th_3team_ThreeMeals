@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Modal, { ModalProvider, BaseModalBackground } from 'styled-react-modal'
 
-interface Props {
-  titleEmoji: string
+export interface ModalDataProps {
+  titleEmoji?: string
   title: string
   description?: string
   confirmText: string
@@ -14,7 +14,7 @@ interface Props {
   onClickConfirmSecond?: () => void
   onClickCancel?: () => void
 }
-const ModalContainer: React.FC<Props> = (props: Props) => {
+const ModalContainer: React.FC<ModalDataProps> = (props: ModalDataProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [opacity, setOpacity] = useState(0)
 
@@ -61,7 +61,7 @@ const ModalContainer: React.FC<Props> = (props: Props) => {
       >
         <Container>
           <EmojiContainer>
-            <Emoji src={props.titleEmoji} />
+            {props.titleEmoji && <Emoji src={props.titleEmoji} />}
           </EmojiContainer>
           <Title>{props.title}</Title>
           <Description>{props.description}</Description>

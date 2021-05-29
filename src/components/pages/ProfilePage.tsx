@@ -1,15 +1,21 @@
 import { useRouter } from 'next/router'
+import { useQuery } from '@apollo/client'
 import { useCallback, useRef, useState } from 'react'
+import styled from 'styled-components'
+
 import ProfileTemplate from '../templates/ProfileTemplate'
 import Modal from '../molecules/Modal'
 import { IMAGES } from '../../constants/images'
-import styled from 'styled-components'
+import { GET_MY_PROFILE } from '../../lib/queries/meQueries'
 
 const ProfilePage: React.FC = () => {
+  const {
+    data: { getAccountInfo },
+  } = useQuery(GET_MY_PROFILE)
   const fileInput = useRef<HTMLInputElement | null>(null)
-  const [profileImage, setProfileImage] = useState<string>('')
+  const [profileImage, setProfileImage] = useState<string>(getAccountInfo.image)
   const [previewImage, setPreviewImage] = useState<string | ArrayBuffer | null>(
-    ''
+    getAccountInfo.image
   )
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const router = useRouter()
@@ -29,6 +35,7 @@ const ProfilePage: React.FC = () => {
     event.target.value = null
     reader.readAsDataURL(file)
   }, [])
+
   return (
     <AppContainer>
       <ProfileTemplate
@@ -40,8 +47,9 @@ const ProfilePage: React.FC = () => {
         onChangeImage={onChangeImage}
         onClickIntro={() => router.push('/profileEdit')}
         onClickLogout={() => {
-          console.log('logout')
+          router.push('/')
         }}
+        nickName={getAccountInfo.nickname}
         onClickIcon={onClickIcon}
       />
 

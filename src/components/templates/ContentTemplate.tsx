@@ -4,14 +4,17 @@ import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
 import ProfileContent from '../molecules/ProfileContent'
 import DefaultLine from '../atoms/DefaultLine'
-import QuestionCard, { CardColor } from '../organisms/QuestionCard'
+import QuestionCard from '../organisms/QuestionCard'
 import PrivateCardLabel from '../atoms/PrivateCardLabel'
+import AnswerCard from '../organisms/AnswerCard'
 interface Props {
   isProfile: boolean
   profileImage: string
   onClickLeft?: () => void
   onClickSecondRight?: () => void
   onClickNewSecretCard?: () => void
+  onClickAnswerCard: (postId: string) => void
+  onClickWrite?: () => void
 }
 
 const ContentTemplate: FC<Props> = (props) => {
@@ -53,15 +56,15 @@ const ContentTemplate: FC<Props> = (props) => {
               <QuestionCard
                 labelComponent={<PrivateCardLabel text="BONG IN" />}
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={CardColor.orange}
+                backColor={'#FF833D'}
               />
               <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={CardColor.blue}
+                questionTitle="김덕배님 남자친구는 있으신지요 ????ㅋㅋ"
+                backColor={'#67D585'}
               />
               <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={CardColor.green}
+                questionTitle="김덕배님 남자친구는 있으신지요 ????ㅋㅋ"
+                backColor={'#67D585'}
               />
             </ContentContainer>
           </>
@@ -72,15 +75,24 @@ const ContentTemplate: FC<Props> = (props) => {
             <ContentContainer>
               <AnswerCard
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={CardColor.orange}
+                backColor={'#FF833D'}
+                onClickPost={() => {
+                  props.onClickAnswerCard('0')
+                }}
               />
               <AnswerCard
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={CardColor.blue}
+                backColor={'#67D585'}
+                onClickPost={() => {
+                  props.onClickAnswerCard('1')
+                }}
               />
               <AnswerCard
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={CardColor.green}
+                backColor={'#67D585'}
+                onClickPost={() => {
+                  props.onClickAnswerCard('2')
+                }}
               />
             </ContentContainer>
           </>
@@ -119,15 +131,15 @@ const ContentTemplate: FC<Props> = (props) => {
               <QuestionCard
                 labelComponent={<PrivateCardLabel text="BONG IN" />}
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={CardColor.orange}
+                backColor={'#FF833D'}
               />
               <QuestionCard
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={CardColor.blue}
+                backColor={'#67D585'}
               />
               <QuestionCard
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={CardColor.green}
+                backColor={'#67D585'}
               />
             </ContentContainer>
           </>
@@ -135,7 +147,7 @@ const ContentTemplate: FC<Props> = (props) => {
       default:
         break
     }
-  }, [props.onClickNewSecretCard, tabIndex])
+  }, [props, tabIndex])
   return (
     <AppContainer>
       <Header
@@ -208,6 +220,11 @@ const ContentTemplate: FC<Props> = (props) => {
         />
         {ContentView}
       </MainContainer>
+      {tabIndex === 1 && (
+        <WriteButton>
+          <img onClick={props.onClickWrite} src={IMAGES.write} width={88} />
+        </WriteButton>
+      )}
     </AppContainer>
   )
 }
@@ -270,3 +287,11 @@ const NoticeText = styled.div`
 `
 
 const ContentContainer = styled.div``
+
+const WriteButton = styled.div`
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  overflow-y: scroll;
+  overflow-x: hidden;
+`

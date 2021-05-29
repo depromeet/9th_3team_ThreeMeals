@@ -1,4 +1,3 @@
-import { GetStaticProps } from 'next'
 import Document, {
   Html,
   Head,

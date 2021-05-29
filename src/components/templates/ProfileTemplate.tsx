@@ -10,6 +10,7 @@ interface Props {
   profileImage: string
   previewImage: string | ArrayBuffer | null
   fileInput?: MutableRefObject<HTMLInputElement | null>
+  nickName: string
   onChangeImage?: (e: any) => void
   onClickIcon?: () => void
   onClickLeft?: () => void
@@ -48,7 +49,7 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
         }}
         image={props.previewImage || IMAGES.background}
         icon={IMAGES.icon_20_camera}
-        imageStyle={{ width: 88, height: 88 }}
+        imageStyle={{ width: 88, height: 88, objectFit: 'cover' }}
         iconStyle={{ width: 20, height: 20 }}
         onClickIcon={props.onClickIcon}
       />
@@ -62,7 +63,7 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
       />
       <IntroContainer style={{ marginTop: 40 }}>
         <IntroTitle>이름</IntroTitle>
-        <IntroDesc>{'김덕배'}</IntroDesc>
+        <IntroDesc>{props.nickName}</IntroDesc>
       </IntroContainer>
       <DefaultLine containerStyle={{ marginTop: 16, marginBottom: 16 }} />
       <IntroContainer>
