@@ -12,24 +12,13 @@ import { setContext } from '@apollo/client/link/context'
 function createApolloClient(
   ctx?: GetServerSidePropsContext
 ): ApolloClient<NormalizedCacheObject> {
-  let headers = {}
   let accessToken = ''
   if (ctx) {
     // 서버 사이드
     accessToken = cookies(ctx).token ?? ''
-    if (accessToken) {
-      headers = {
-        authorization: accessToken,
-      }
-    }
-  } else {
+  } else if (typeof window !== 'undefined') {
     // 클라이언트에서는 브라우저 쿠키를 참조
     accessToken = jsCookies.get('token') ?? ''
-    if (accessToken) {
-      headers = {
-        authorization: `Bearer ${accessToken}`,
-      }
-    }
   }
 
   const httpLink = createHttpLink({
@@ -41,6 +30,7 @@ function createApolloClient(
     return {
       headers: {
         ...headers,
+        authorization: accessToken ? `Bearer ${accessToken}` : '',
       },
     }
   })
@@ -49,8 +39,9 @@ function createApolloClient(
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
     ssrMode: typeof window === 'undefined',
-    headers: headers,
+    connectToDevTools: process.env.NODE_ENV !== 'production',
   })
+
   return client
 }
 
