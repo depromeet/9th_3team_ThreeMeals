@@ -1,8 +1,9 @@
 import React, { FC, useState, useCallback } from 'react'
 import styled from 'styled-components'
-import CardContainer from '../atoms/CardContainer'
+
 import { StickerInfo } from '../molecules/PickableSticker'
 import StickerPanel from '../molecules/StickerPanel'
+import CardContainer from '../atoms/CardContainer'
 
 interface Props {
   backColor: string
