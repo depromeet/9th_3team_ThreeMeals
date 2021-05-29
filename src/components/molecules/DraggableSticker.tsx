@@ -30,7 +30,7 @@ const DraggableSticker: FC<Props> = (props) => {
     setShowDeleteBtn(boolean)
   }, [])
   const onDragEndImg = useCallback(
-    (e: KonvaEventObject<DragEvent>) => {
+    (e) => {
       setIsDragging(false)
       if (props.stickerImage.positions) {
         props.stickerImage.positions.x = e.target.x()

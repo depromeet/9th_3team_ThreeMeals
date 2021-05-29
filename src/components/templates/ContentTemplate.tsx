@@ -54,7 +54,9 @@ const ContentTemplate: FC<Props> = (props) => {
             </NoticeContainer>
             <ContentContainer>
               <QuestionCard
-                labelComponent={<PrivateCardLabel text="BONG IN" />}
+                labelComponent={
+                  <PrivateCardLabel text="BONG IN" active={false} />
+                }
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
                 backColor={'#FF833D'}
               />
@@ -129,7 +131,9 @@ const ContentTemplate: FC<Props> = (props) => {
             </NoticeContainer>
             <ContentContainer>
               <QuestionCard
-                labelComponent={<PrivateCardLabel text="BONG IN" />}
+                labelComponent={
+                  <PrivateCardLabel text="BONG IN" active={false} />
+                }
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
                 backColor={'#FF833D'}
               />
