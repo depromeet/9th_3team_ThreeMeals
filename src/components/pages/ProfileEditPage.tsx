@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
 import { initializeApollo } from '../../lib/apollo'
-import { GET_MY_PROFILE } from '../../lib/queries/meQueries'
+import { GET_MY_CONTENT } from '../../lib/queries/meQueries'
 import ProfileEditTemplate from '../templates/ProfileEditTemplate'
 
 const ProfileEditPage: React.FC = () => {
@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const apolloClient = initializeApollo({}, ctx)
   await apolloClient.query({
-    query: GET_MY_PROFILE,
+    query: GET_MY_CONTENT,
   })
   return {
     props: { initialApolloState: apolloClient.cache.extract() },
