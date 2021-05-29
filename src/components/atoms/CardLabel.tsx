@@ -7,8 +7,10 @@ interface Props {
   text: string
   active: boolean
 }
-
-const Container = styled.span`
+interface ContainerProps {
+  active: boolean
+}
+const Container = styled.span<ContainerProps>`
   background-color: #333333;
   display: flex;
   justify-content: center;
@@ -18,9 +20,10 @@ const Container = styled.span`
   font-weight: 800;
   line-height: 48px;
   letter-spacing: 0.04em;
-  color: white;
   height: 48px;
   padding: 0 12px;
+  ${({ active }) =>
+    active ? `color:white;` : `color:rgba(255, 255, 255, 0.5);`}
   img {
     margin-right: 8px;
   }
@@ -28,8 +31,12 @@ const Container = styled.span`
 
 const CardLabel: React.FunctionComponent<Props> = (props) => {
   return (
-    <Container>
-      <img src={SVGS.time_wh}></img>
+    <Container active={props.active}>
+      {props.active ? (
+        <img src={SVGS.time_wh}></img>
+      ) : (
+        <img src={SVGS.icon_time_trans}></img>
+      )}
       <span>{props.text}</span>
     </Container>
   )

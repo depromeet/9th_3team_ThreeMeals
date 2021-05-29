@@ -152,7 +152,9 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
       <Container backColor={props.backColor}>
         <StyledLabelCardHeader
           labelComponent={
-            props.labelComponent || <CardLabel text={'-13:33:33'} />
+            props.labelComponent || (
+              <CardLabel text={'-13:33:33'} active={true} />
+            )
           }
         />
         <p>{props.questionTitle}</p>

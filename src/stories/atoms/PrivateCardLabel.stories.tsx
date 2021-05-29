@@ -11,7 +11,7 @@ storiesOf('atoms/PrivateCardLabel', module).add('with text', () => {
         display: 'flex',
       }}
     >
-      <PrivateCardLabel text={'BONG-IN'} />
+      <PrivateCardLabel text={'BONG-IN'} active={false} />
     </div>
   )
 })
