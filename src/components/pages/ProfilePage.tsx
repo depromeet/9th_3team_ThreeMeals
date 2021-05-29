@@ -1,17 +1,33 @@
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useQuery } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
 import { useCallback, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import ProfileTemplate from '../templates/ProfileTemplate'
 import Modal from '../molecules/Modal'
 import { IMAGES } from '../../constants/images'
-import { GET_MY_PROFILE } from '../../lib/queries/meQueries'
+import {
+  GET_MY_PROFILE,
+  UPDATE_DEFAULT_PROFILE_IMAGE,
+} from '../../lib/queries/meQueries'
+import { SINGLE_UPLOAD } from '../../lib/queries/singleFileUploadQuery'
 
 const ProfilePage: React.FC = () => {
   const {
     data: { getAccountInfo },
+    refetch,
   } = useQuery(GET_MY_PROFILE)
+  const [singleUploadMutation] = useMutation(SINGLE_UPLOAD)
+  const [updateDefaultProfileImage] = useMutation(
+    UPDATE_DEFAULT_PROFILE_IMAGE,
+    {
+      onCompleted: () => {
+        refetch()
+      },
+    }
+  )
+
   const fileInput = useRef<HTMLInputElement | null>(null)
   const [profileImage, setProfileImage] = useState<string>(getAccountInfo.image)
   const [previewImage, setPreviewImage] = useState<string | ArrayBuffer | null>(
@@ -23,18 +39,31 @@ const ProfilePage: React.FC = () => {
     setIsOpen(true)
   }, [])
 
-  const onChangeImage = useCallback((event) => {
-    event.preventDefault()
-    const reader = new FileReader()
-    const file = event.target.files[0]
-    reader.onloadend = () => {
-      setProfileImage(file)
-      setPreviewImage(reader.result)
-      setIsOpen(false)
-    }
-    event.target.value = null
-    reader.readAsDataURL(file)
-  }, [])
+  const onChangeImage = useCallback(
+    (event) => {
+      event.preventDefault()
+      const reader = new FileReader()
+      const file = event.target.files[0]
+      reader.onloadend = () => {
+        setProfileImage(file)
+        setPreviewImage(reader.result)
+        setIsOpen(false)
+      }
+      event.target.value = null
+      reader.readAsDataURL(file)
+      singleUploadMutation({
+        variables: {
+          file,
+        },
+      })
+    },
+    [singleUploadMutation]
+  )
+
+  useEffect(() => {
+    setProfileImage(getAccountInfo.image)
+    setPreviewImage(getAccountInfo.image)
+  }, [getAccountInfo])
 
   return (
     <AppContainer>
@@ -51,6 +80,7 @@ const ProfilePage: React.FC = () => {
         }}
         nickName={getAccountInfo.nickname}
         onClickIcon={onClickIcon}
+        introdunction={getAccountInfo.content}
       />
 
       <Modal
@@ -64,7 +94,8 @@ const ProfilePage: React.FC = () => {
           fileInput.current?.click()
         }}
         onClickConfirmSecond={() => {
-          console.log('second')
+          updateDefaultProfileImage()
+          setIsOpen(false)
         }}
         onClickCancel={() => {
           setIsOpen(false)
