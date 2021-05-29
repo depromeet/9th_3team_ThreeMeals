@@ -11,7 +11,7 @@ storiesOf('atoms/CardLabel', module).add('with text', () => {
         display: 'flex',
       }}
     >
-      <CardLabel text={'secret 24'} />
+      <CardLabel text={'secret 24'} active={true} />
     </div>
   )
 })
@@ -23,7 +23,7 @@ storiesOf('atoms/CardLabel', module).add('with time', () => {
         display: 'flex',
       }}
     >
-      <CardLabel text={new Date().toISOString()} />
+      <CardLabel text={new Date().toISOString()} active={true} />
     </div>
   )
 })
