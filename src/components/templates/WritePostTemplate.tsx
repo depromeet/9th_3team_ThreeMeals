@@ -82,6 +82,9 @@ const TempContainer = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 770px) {
+    height: none;
+  }
 `
 
 const Header = styled.div`
@@ -100,6 +103,9 @@ const MainContainer = styled.div`
   justify-content: center;
   flex: 1;
   align-items: center;
+  @media screen and (max-width: 770px) {
+    padding: 20px 0;
+  }
 `
 
 const BottomContainer = styled.div`
@@ -123,7 +129,7 @@ const OptionContainer = styled.div<OptionProps>`
     justify-content: space-between;
     padding: 25px 0;
     .tempBtn {
-      width: 47%;
+      width: 48%;
       ${(props) =>
         props.buttonActive.Temp &&
         `border: 2px solid rgba(255, 255, 255, 0.5);`}
