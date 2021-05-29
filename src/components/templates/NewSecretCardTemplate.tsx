@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import Header from '../molecules/Header'
 import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
-import QuestionCard, { CardColor } from '../organisms/QuestionCard'
+import QuestionCard from '../organisms/QuestionCard'
 import PrivateCardLabel from '../atoms/PrivateCardLabel'
 interface Props {
   profileImage?: string
@@ -27,19 +27,19 @@ const ContactUsTemplate: FC<Props> = (props) => {
           <QuestionCard
             labelComponent={<PrivateCardLabel text="BONG IN" />}
             questionTitle="김덕배님 남자친구는 있으신지요 ????"
-            backColor={CardColor.orange}
+            backColor={'#FF833D'}
             isInput
             onClickSend={props.onClickSend}
           />
           <QuestionCard
             questionTitle="김덕배님 남자친구는 있으신지요 ????"
-            backColor={CardColor.blue}
+            backColor={'#67D585'}
             isInput
             onClickSend={props.onClickSend}
           />
           <QuestionCard
             questionTitle="김덕배님 남자친구는 있으신지요 ????"
-            backColor={CardColor.green}
+            backColor={'#67D585'}
             isInput
             onClickSend={props.onClickSend}
           />
