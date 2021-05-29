@@ -17,7 +17,7 @@ interface Props {
   onClickRight?: () => void
   onClickIntro?: () => void
   onClickLogout?: () => void
-  introdunction?: string
+  introduction?: string
 }
 
 const ProfileTemplate: React.FC<Props> = (props: Props) => {
@@ -70,7 +70,7 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
       <IntroContainer>
         <IntroTitle>소개</IntroTitle>
         <IntroDesc onClick={props.onClickIntro}>
-          {props.introdunction ?? '소개글을 작성해주세요!'}
+          {props.introduction ?? '소개글을 작성해주세요!'}
         </IntroDesc>
       </IntroContainer>
 
