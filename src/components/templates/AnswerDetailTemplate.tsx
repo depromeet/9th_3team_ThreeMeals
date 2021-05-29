@@ -9,7 +9,6 @@ import DefaultInput from '../atoms/DefaultInput'
 import Header from '../molecules/Header'
 import PostComment from '../molecules/PostComment'
 import AnswerCard from '../organisms/AnswerCard'
-import { CardColor } from '../organisms/QuestionCard'
 import { AnswerContactType } from '../pages/AnswerDetailPage'
 
 interface Props {
@@ -39,7 +38,7 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
 
       <AnswerCard
         questionTitle="김덕배님 남자친구는 있으신지요 ????"
-        backColor={CardColor.green}
+        backColor={'#67D585'}
         onClickOption={() => {
           props.onClickRemove && props.onClickRemove('parent', 'parentId')
         }}

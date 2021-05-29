@@ -8,25 +8,10 @@ import { IMAGES } from '../../constants/images'
 
 interface Props {
   questionTitle: string
-  backColor: CardColor
+  backColor: string
   labelComponent?: ReactNode
   isInput?: boolean
   onClickSend?: (text: string) => void
-}
-
-export enum CardColor {
-  orange,
-  green,
-  blue,
-  yellow,
-  red,
-}
-const backgroundColor = {
-  [CardColor.orange]: '#FF823D',
-  [CardColor.green]: '#67D585',
-  [CardColor.blue]: '#6799FE',
-  [CardColor.yellow]: '#F1D75F',
-  [CardColor.red]: '#CC4349',
 }
 
 const Container = styled.div<{ backColor: string }>`
@@ -164,7 +149,7 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
       variableWidth={false}
       css={{ textAlign: 'center' }}
     >
-      <Container backColor={backgroundColor[props.backColor]}>
+      <Container backColor={props.backColor}>
         <StyledLabelCardHeader
           labelComponent={
             props.labelComponent || <CardLabel text={'-13:33:33'} />
@@ -181,10 +166,7 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
           밀어서 답장보기
         </BottomContainer>
       </Container>
-      <SecondContainer
-        backColor={backgroundColor[props.backColor]}
-        style={{ opacity: 0.05 }}
-      >
+      <SecondContainer backColor={props.backColor} style={{ opacity: 0.05 }}>
         {props.isInput ? (
           <>
             <TextArea

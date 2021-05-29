@@ -1,11 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
-import { CardColor } from './QuestionCard'
 
 interface Props {
   questionTitle: string
-  backColor: CardColor
+  backColor: string
   time?: string
   count?: number
   onClickShare?: () => void
@@ -13,18 +12,10 @@ interface Props {
   onClickPost?: () => void
 }
 
-const backgroundColor = {
-  [CardColor.orange]: '#FF823D',
-  [CardColor.green]: '#67D585',
-  [CardColor.blue]: '#6799FE',
-  [CardColor.yellow]: '#F1D75F',
-  [CardColor.red]: '#CC4349',
-}
-
 const AnswerCard: React.FunctionComponent<Props> = (props) => {
   return (
     <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-      <Container backColor={backgroundColor[props.backColor]}>
+      <Container backColor={props.backColor}>
         <Header>
           <TimeContainer>{props.time || '-13:33:33'}</TimeContainer>
           <div>

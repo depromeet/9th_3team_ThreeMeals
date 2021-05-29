@@ -12,6 +12,9 @@ const ContentPage: React.FC = () => {
     },
     [router]
   )
+  const onClickWrite = useCallback(() => {
+    console.log('onClickWrite')
+  }, [])
   return (
     <AppContainer>
       <ContentTemplate
@@ -25,6 +28,7 @@ const ContentPage: React.FC = () => {
           router.push('/newSecretCard')
         }}
         onClickAnswerCard={onClickAnswerCard}
+        onClickWrite={onClickWrite}
       />
     </AppContainer>
   )
