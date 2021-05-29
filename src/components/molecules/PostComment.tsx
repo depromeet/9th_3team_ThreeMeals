@@ -1,11 +1,11 @@
 import React, { FC, useCallback, useState } from 'react'
 import styled from 'styled-components'
-import { useLazyQuery } from '@apollo/client'
-import { GET_CHILDREN_COMMENTS } from '../../lib/queries/getQueries'
+import { AnswerContactType } from '../pages/AnswerDetailPage'
 interface Props {
   profileImg: string
   commentsInfo: CommentInfo[]
   childrenCommentInfo: ChildrenCommentInfo[]
+  onClickRemove?: (type: AnswerContactType, id: string) => void
 }
 
 export interface CommentInfo {
@@ -58,7 +58,14 @@ const PostComment: FC<Props> = (props) => {
           <CommentContainer key={i}>
             <CommentHeader>
               <CommentId>{comment.id}</CommentId>
-              <DropMenu>•••</DropMenu>
+              <DropMenu
+                onClick={() => {
+                  props.onClickRemove &&
+                    props.onClickRemove('children', comment.id)
+                }}
+              >
+                •••
+              </DropMenu>
             </CommentHeader>
             <CommentContent>{comment.content}</CommentContent>
             <CommentFooter>
@@ -84,7 +91,14 @@ const PostComment: FC<Props> = (props) => {
                           {childrenComment.account.nickname}
                         </CommentId>
                       </ChildrenHeader>
-                      <DropMenu>•••</DropMenu>
+                      <DropMenu
+                        onClick={() => {
+                          props.onClickRemove &&
+                            props.onClickRemove('children', childrenComment.id)
+                        }}
+                      >
+                        •••
+                      </DropMenu>
                     </ProfileContainer>
                     <BodyContainer>
                       <ContentsContainer>

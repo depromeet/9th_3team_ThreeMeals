@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import {
@@ -10,11 +10,13 @@ import Header from '../molecules/Header'
 import PostComment from '../molecules/PostComment'
 import AnswerCard from '../organisms/AnswerCard'
 import { CardColor } from '../organisms/QuestionCard'
+import { AnswerContactType } from '../pages/AnswerDetailPage'
 
 interface Props {
   onClickLeft?: () => void
   onClickRight?: () => void
   onSendComment: (comment: string) => void
+  onClickRemove?: (type: AnswerContactType, id: string) => void
 }
 
 const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
@@ -38,12 +40,16 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
       <AnswerCard
         questionTitle="김덕배님 남자친구는 있으신지요 ????"
         backColor={CardColor.green}
+        onClickOption={() => {
+          props.onClickRemove && props.onClickRemove('parent', 'parentId')
+        }}
       />
       <PostContainer>
         <PostComment
           profileImg={IMAGES.background}
           commentsInfo={dummyCommentData}
           childrenCommentInfo={dummyChildrenCommentData}
+          onClickRemove={props.onClickRemove}
         />
       </PostContainer>
       <div style={{ paddingBottom: 30 }}>
@@ -57,7 +63,8 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
           />
           <Postimg
             src={IMAGES.inputSend}
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault()
               props.onSendComment(comment)
             }}
             style={{ visibility: isFocus ? 'initial' : 'hidden' }}
