@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import NewSecretCardTemplate from '../templates/NewSecretCardTemplate'
 
-const ProfileEditPage: React.FC = () => {
+const NewSecretCardPage: React.FC = () => {
   const router = useRouter()
   const onClickSend = useCallback((text: string) => {
     console.log('finish text : ', text)
@@ -20,7 +20,7 @@ const ProfileEditPage: React.FC = () => {
   )
 }
 
-export default ProfileEditPage
+export default NewSecretCardPage
 
 const AppContainer = styled.div`
   width: 100%;

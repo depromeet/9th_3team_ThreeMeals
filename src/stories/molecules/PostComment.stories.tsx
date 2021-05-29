@@ -5,7 +5,7 @@ import PostComment, {
   CommentInfo,
 } from '../../components/molecules/PostComment'
 import { IMAGES } from '../../constants/images'
-const dummyCommentData: CommentInfo[] = [
+export const dummyCommentData: CommentInfo[] = [
   {
     id: 'test123',
     content: '헐랭 너 누구냐? 그리고 나 너보다 안못생겼을걸..:(',
@@ -50,7 +50,7 @@ const dummyCommentData: CommentInfo[] = [
   },
 ]
 
-const dummyChildrenCommentData: ChildrenCommentInfo[] = [
+export const dummyChildrenCommentData: ChildrenCommentInfo[] = [
   {
     id: 'test123',
     content: '헐랭 너 누구냐? 그리고 나 너보다 안못생겼을걸..:(',

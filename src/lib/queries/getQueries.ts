@@ -10,9 +10,10 @@ export const GET_MY_NEW_POST_COUNT = gql`
     }
   }
 `
+
 export const GET_PARENT_COMMENTS = gql`
-  query {
-    getParentComments(first: 30, postId: "1") {
+  query getParentComments($first: number, $postId: string) {
+    getParentComments(first: $first, postId: $postId) {
       edges {
         node {
           id

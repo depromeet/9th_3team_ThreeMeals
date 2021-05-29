@@ -1,11 +1,11 @@
 import React, { FC, useCallback, useState } from 'react'
 import styled from 'styled-components'
-import { useLazyQuery } from '@apollo/client'
-import { GET_CHILDREN_COMMENTS } from '../../lib/queries/getQueries'
+import { AnswerContactType } from '../pages/AnswerDetailPage'
 interface Props {
   profileImg: string
   commentsInfo: CommentInfo[]
   childrenCommentInfo: ChildrenCommentInfo[]
+  onClickRemove?: (type: AnswerContactType, id: string) => void
 }
 
 export interface CommentInfo {
@@ -43,9 +43,6 @@ interface Account {
   updatedAt: string
 }
 const PostComment: FC<Props> = (props) => {
-  // const [getChildrenComments, { loading, error, data }] = useLazyQuery(
-  //   GET_CHILDREN_COMMENTS
-  // )
   const [writeOpen, setWriteOpen] = useState(false)
   const handleWriteComment = useCallback(() => {
     setWriteOpen(!writeOpen)
@@ -61,7 +58,14 @@ const PostComment: FC<Props> = (props) => {
           <CommentContainer key={i}>
             <CommentHeader>
               <CommentId>{comment.id}</CommentId>
-              <DropMenu>•••</DropMenu>
+              <DropMenu
+                onClick={() => {
+                  props.onClickRemove &&
+                    props.onClickRemove('children', comment.id)
+                }}
+              >
+                •••
+              </DropMenu>
             </CommentHeader>
             <CommentContent>{comment.content}</CommentContent>
             <CommentFooter>
@@ -87,7 +91,14 @@ const PostComment: FC<Props> = (props) => {
                           {childrenComment.account.nickname}
                         </CommentId>
                       </ChildrenHeader>
-                      <DropMenu>•••</DropMenu>
+                      <DropMenu
+                        onClick={() => {
+                          props.onClickRemove &&
+                            props.onClickRemove('children', childrenComment.id)
+                        }}
+                      >
+                        •••
+                      </DropMenu>
                     </ProfileContainer>
                     <BodyContainer>
                       <ContentsContainer>
@@ -114,13 +125,14 @@ const PostComment: FC<Props> = (props) => {
 export default PostComment
 
 const AppContainer = styled.div`
-  width: 100%;
   padding: 0 24px;
   display: flex;
   flex-direction: column;
   background: rgba(255, 131, 61, 0.05);
   border: 2px solid #ff833d;
   border-radius: 24px;
+  margin-left: 5%;
+  margin-right: 5%;
 `
 
 const CommentContainer = styled.div`
