@@ -11,7 +11,7 @@ interface Props {
   onClickSend: (text: string) => void
 }
 
-const ContactUsTemplate: FC<Props> = (props) => {
+const NewSecretCardTemplate: FC<Props> = (props) => {
   return (
     <AppContainer>
       <Header
@@ -49,7 +49,7 @@ const ContactUsTemplate: FC<Props> = (props) => {
   )
 }
 
-export default ContactUsTemplate
+export default NewSecretCardTemplate
 
 const AppContainer = styled.div`
   color: #ffffff;

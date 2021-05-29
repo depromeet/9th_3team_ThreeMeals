@@ -13,8 +13,8 @@ const ContentPage: React.FC = () => {
     [router]
   )
   const onClickWrite = useCallback(() => {
-    console.log('onClickWrite')
-  }, [])
+    router.push('/writePost')
+  }, [router])
   return (
     <AppContainer>
       <ContentTemplate
