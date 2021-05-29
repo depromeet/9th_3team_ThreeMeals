@@ -1,45 +1,39 @@
 import React from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
-import { CardColor } from './QuestionCard'
 
 interface Props {
   questionTitle: string
-  backColor: CardColor
+  backColor: string
   time?: string
   count?: number
   onClickShare?: () => void
   onClickOption?: () => void
-}
-
-const backgroundColor = {
-  [CardColor.orange]: '#FF823D',
-  [CardColor.green]: '#67D585',
-  [CardColor.blue]: '#6799FE',
-  [CardColor.yellow]: '#F1D75F',
-  [CardColor.red]: '#CC4349',
+  onClickPost?: () => void
 }
 
 const AnswerCard: React.FunctionComponent<Props> = (props) => {
   return (
-    <Container backColor={backgroundColor[props.backColor]}>
-      <Header>
-        <TimeContainer>{props.time || '-13:33:33'}</TimeContainer>
-        <div>
-          <Image src={IMAGES.icon_32_share} onClick={props.onClickShare} />
-          <Image src={IMAGES.icon_32_option} onClick={props.onClickOption} />
-        </div>
-      </Header>
-      <p>{props.questionTitle}</p>
-      <StickerContainer>스티커</StickerContainer>
-      <BottomContainer>
-        <CommentImage
-          src={IMAGES.icon_24_comment}
-          onClick={props.onClickOption}
-        />
-        <CommentCount>{`${props.count || 0}` + '개'}</CommentCount>
-      </BottomContainer>
-    </Container>
+    <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+      <Container backColor={props.backColor}>
+        <Header>
+          <TimeContainer>{props.time || '-13:33:33'}</TimeContainer>
+          <div>
+            <Image src={IMAGES.icon_32_share} onClick={props.onClickShare} />
+            <Image src={IMAGES.icon_32_option} onClick={props.onClickOption} />
+          </div>
+        </Header>
+        <p>{props.questionTitle}</p>
+        <StickerContainer>스티커</StickerContainer>
+        <BottomContainer onClick={props.onClickPost}>
+          <CommentImage
+            src={IMAGES.icon_24_comment}
+            onClick={props.onClickOption}
+          />
+          <CommentCount>{`${props.count || 0}` + '개'}</CommentCount>
+        </BottomContainer>
+      </Container>
+    </div>
   )
 }
 
@@ -49,7 +43,8 @@ const Container = styled.div<{ backColor: string }>`
   display: flex;
   flex-direction: column;
   background-color: ${({ backColor }) => backColor};
-  width: 327px;
+  width: initial !important;
+  max-width: 396px;
   height: 392px;
   border-radius: 24px;
   padding: 24px;

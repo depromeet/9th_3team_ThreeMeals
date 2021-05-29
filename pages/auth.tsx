@@ -29,7 +29,6 @@ const Auth: React.FC = () => {
 
     fetch(`https://kauth.kakao.com/oauth/token?${queryStringBody}`, {
       method: 'POST',
-      //   headers: kakaoHeader,
     })
       .then((res) => res.json())
       .then((data) => {

@@ -1,5 +1,6 @@
 import React, { VFC } from 'react'
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
 
 import HomeTemplate from '../templates/HomeTemplate'
 const AppContainer = styled.div`
@@ -9,6 +10,7 @@ const AppContainer = styled.div`
 `
 
 const HomePage: VFC = () => {
+  const router = useRouter()
   return (
     <AppContainer>
       <HomeTemplate isProfile={false} />
