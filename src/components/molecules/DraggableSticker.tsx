@@ -2,13 +2,13 @@ import React, { FC, useState, useCallback, useEffect } from 'react'
 import useImage from 'use-image'
 import { Image as KonvaImage, Group } from 'react-konva'
 import { StickerInfo } from './PickableSticker'
-import { KonvaEventObject } from 'konva/types/Node'
 import { SVGS } from '../../constants/svgs'
+import Konva from 'konva'
 interface Props {
   stickerImage: StickerInfo
-  onDelete: (evt: KonvaEventObject<TouchEvent | MouseEvent>) => void
-  onDragEnd: (evt: KonvaEventObject<DragEvent>) => void
-  showDeleteBtnByTouching: (i: KonvaEventObject<TouchEvent>) => void
+  onDelete: (evt: Konva.KonvaEventObject<TouchEvent | MouseEvent>) => void
+  onDragEnd: (evt: Konva.KonvaEventObject<DragEvent>) => void
+  showDeleteBtnByTouching: (i: Konva.KonvaEventObject<TouchEvent>) => void
   showDeleteBtnIdx: number | string
   idx: number
 }
@@ -30,7 +30,7 @@ const DraggableSticker: FC<Props> = (props) => {
     setShowDeleteBtn(boolean)
   }, [])
   const onDragEndImg = useCallback(
-    (e: KonvaEventObject<DragEvent>) => {
+    (e: Konva.KonvaEventObject<DragEvent>) => {
       setIsDragging(false)
       if (props.stickerImage.positions) {
         props.stickerImage.positions.x = e.target.x()
