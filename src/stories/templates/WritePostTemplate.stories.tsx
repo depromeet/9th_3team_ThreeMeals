@@ -6,7 +6,11 @@ import WritePostTemplate from '../../components/templates/WritePostTemplate'
 storiesOf('templates/WritePost', module).add('QuestionOtherFeed', () => {
   return (
     <AppContainer>
-      <WritePostTemplate TempType="Q" isWithSticker={true} />
+      <WritePostTemplate
+        TempType="Q"
+        optionActiveState={{ Temp: false, Forever: false }}
+        backColor={'#6799FE'}
+      />
     </AppContainer>
   )
 })
@@ -14,7 +18,11 @@ storiesOf('templates/WritePost', module).add('QuestionOtherFeed', () => {
 storiesOf('templates/WritePost', module).add('AnswerMyFeed', () => {
   return (
     <AppContainer>
-      <WritePostTemplate TempType="A" isWithSticker={true} />
+      <WritePostTemplate
+        TempType="A"
+        optionActiveState={{ Temp: false, Forever: false }}
+        backColor={'#6799FE'}
+      />
     </AppContainer>
   )
 })
@@ -22,7 +30,11 @@ storiesOf('templates/WritePost', module).add('AnswerMyFeed', () => {
 storiesOf('templates/WritePost', module).add('OXOtherFeed', () => {
   return (
     <AppContainer>
-      <WritePostTemplate TempType="OX" isWithSticker={false} />
+      <WritePostTemplate
+        TempType="OX"
+        optionActiveState={{ Temp: false, Forever: false }}
+        backColor={'#6799FE'}
+      />
     </AppContainer>
   )
 })

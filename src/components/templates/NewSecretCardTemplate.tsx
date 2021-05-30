@@ -25,7 +25,7 @@ const NewSecretCardTemplate: FC<Props> = (props) => {
         <CardCountText>{'12개의 비밀카드 도착'}</CardCountText>
         <ContentContainer>
           <QuestionCard
-            labelComponent={<PrivateCardLabel text="BONG IN" />}
+            labelComponent={<PrivateCardLabel text="BONG IN" active={false} />}
             questionTitle="김덕배님 남자친구는 있으신지요 ????"
             backColor={'#FF833D'}
             isInput

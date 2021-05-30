@@ -3,11 +3,14 @@ import { useSprings } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
 import QuizCard from '../molecules/QuizCard'
 import { CardHeaderProps } from '../molecules/QuizCardHeader'
+import { SVGS } from '../../constants/svgs'
+import styled from 'styled-components'
+import { BackColor } from '../../types/types'
 
 interface Props {
   data: Array<string>
-  cardHeader: CardHeaderProps
-  backColor: string
+  cardHeader?: CardHeaderProps
+  backColors: Array<BackColor>
 }
 
 const toD = (i: number) => ({
@@ -64,6 +67,19 @@ const QuizDeck: FC<Props> = (deckProps) => {
   )
   return (
     <>
+      <SkipCardHandlerContainer>
+        <img
+          src={SVGS.icon_24_prev_wh}
+          alt="prevIcon"
+          onClick={props.handleSkippingToPrev}
+        />
+        <span>1/{props.cardData.length}</span>
+        <img
+          src={SVGS.icon_24_next_wh}
+          alt="nextIcon"
+          onClick={props.handleSkippingToNext}
+        />
+      </SkipCardHandlerContainer>
       {propsData.map(({ x, y, rot, scale }, i) => (
         <QuizCard
           x={x}
@@ -74,9 +90,8 @@ const QuizDeck: FC<Props> = (deckProps) => {
           key={i}
           bind={bind}
           trans={trans}
-          cardHeader={deckProps.cardHeader}
           bottomHeight={27}
-          backColor={deckProps.backColor}
+          backColor={deckProps.backColors[i]}
         >
           {deckProps.data[i]}
         </QuizCard>
@@ -86,3 +101,7 @@ const QuizDeck: FC<Props> = (deckProps) => {
 }
 
 export default QuizDeck
+
+const SkipCardHandlerContainer = styled.div`
+  display: flex;
+`

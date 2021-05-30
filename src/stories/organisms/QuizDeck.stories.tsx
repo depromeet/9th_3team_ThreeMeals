@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 import QuizDeck from '../../components/organisms/QuizDeck'
+import { BackColor } from '../../types/types'
 
 const dummyCardData = [
   '다시 제출하시겠습니까?',
@@ -10,10 +11,18 @@ const dummyCardData = [
   'check out',
 ]
 
+const colors: BackColor[] = [
+  '#6799FE',
+  '#6799FE',
+  '#6799FE',
+  '#6799FE',
+  '#6799FE',
+]
+
 const dummyCardHeaderData = {
   isLikeActive: false,
   className: 'cardHeader',
-  color: 'orange' as const,
+  color: '#6799FE' as const,
   isMyFeed: true,
 }
 
@@ -22,7 +31,7 @@ storiesOf('organisms/QuizDeck', module).add('with text', () => {
     <QuizDeck
       data={dummyCardData}
       cardHeader={dummyCardHeaderData}
-      backColor="#FF833D"
+      backColors={colors}
     />
   )
 })

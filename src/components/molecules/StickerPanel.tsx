@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Konva from 'konva'
 import DraggableSticker from './DraggableSticker'
 import { StickerInfo } from './PickableSticker'
-import { KonvaEventObject } from 'konva/types/Node'
+
 interface Props extends StickerInfo {
   addToPanelByClicking?: (
     imgUrl: string,
@@ -15,7 +15,7 @@ interface Props extends StickerInfo {
 }
 
 interface OnDragFuncProps {
-  e?: KonvaEventObject<DragEvent>
+  e?: Konva.KonvaEventObject<DragEvent>
   i: number
   image: StickerInfo
 }
@@ -75,7 +75,7 @@ const StickerPanel: FC<Props> = (props) => {
     }
   }, [])
   const showDeleteBtnByTouching = useCallback(
-    (e: KonvaEventObject<TouchEvent>, i: number) => {
+    (e: Konva.KonvaEventObject<TouchEvent>, i: number) => {
       setShowDeleteBtn(i)
     },
     []

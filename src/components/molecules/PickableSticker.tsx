@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
-import { Vector2d } from 'konva/types/types'
+import Konva from 'konva'
 
 export interface StickerInfo {
   imgUrl: string
   width: number
-  positions?: Vector2d | null
+  positions?: Konva.Vector2d | null
 }
 
 const PickableSticker: FC<StickerInfo> = (props) => {

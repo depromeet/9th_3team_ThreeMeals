@@ -5,8 +5,8 @@ interface Props {
   optionType: OptionType
 }
 export interface OptionType {
-  Temp?: boolean
-  Forever?: boolean
+  Temp: boolean
+  Forever: boolean
 }
 const OptionAlarmField: FC<Props> = (props) => {
   return (

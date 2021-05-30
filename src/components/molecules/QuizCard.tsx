@@ -1,9 +1,10 @@
-import React, { FC, PropsWithChildren } from 'react'
+import React, { FC, PropsWithChildren, useCallback } from 'react'
 import styled from 'styled-components'
 import { animated, to, SpringValue } from 'react-spring'
 import { Vector2, ReactEventHandlers } from 'react-use-gesture/dist/types'
 import { IMAGES } from '../../constants/images'
-import QuizCardHeader, { CardHeaderProps } from './QuizCardHeader'
+import QuizCardHeader from './QuizCardHeader'
+import { BackColor } from '../../types/types'
 interface DragEventProps {
   args: Array<number>
   down: boolean
@@ -20,15 +21,48 @@ interface Props {
   i: number
   x: SpringValue<number>
   y: SpringValue<number>
-  cardHeader: CardHeaderProps
   bottomHeight: number | string
-  backColor: string
+  backColor: BackColor
 }
 
 interface StyledProps {
   bottomHeight: number | string
 }
 const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
+  const getOImg = useCallback(
+    (color: '#6799FE' | '#67D585' | '#FF823D' | '#F1D75F' | '#CC4349') => {
+      switch (color) {
+        case '#6799FE':
+          return IMAGES.img_quiz_o_gr
+        case '#67D585':
+          return IMAGES.img_quiz_o_yl
+        case '#FF823D':
+          return IMAGES.img_quiz_o_bl
+        case '#F1D75F':
+          return IMAGES.img_quiz_o_bl
+        default:
+          break
+      }
+    },
+    []
+  )
+  const getXImg = useCallback(
+    (color: '#6799FE' | '#67D585' | '#FF823D' | '#F1D75F' | '#CC4349') => {
+      switch (color) {
+        case '#6799FE':
+          return IMAGES.img_quiz_x_bl
+        case '#67D585':
+          return IMAGES.img_quiz_x_yl
+        case '#FF823D':
+          return IMAGES.img_quiz_x_gr
+        case '#F1D75F':
+          return IMAGES.img_quiz_x_yr
+        default:
+          break
+      }
+    },
+    []
+  )
   return (
     <animated.div
       key={props.i}
@@ -63,21 +97,21 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
       >
         <ContextContainer bottomHeight={props.bottomHeight}>
           <StyledQuizCardHeader
-            isLikeActive={props.cardHeader.isLikeActive}
-            className={props.cardHeader.className}
-            color={props.cardHeader.color}
+            // isLikeActive={props.cardHeader.isLikeActive}
+            // className={props.cardHeader.className}
+            color={props.backColor}
             isMyFeed={true}
           />
           <div className="textArea">{props.children}</div>
           <div className="bottomArea">
             <img
-              src={IMAGES.img_quiz_o_bl}
+              src={getOImg(props.backColor)}
               alt="LArrow"
               id="-1"
               className="leftArrow"
             />
             <img
-              src={IMAGES.img_quiz_x_gr}
+              src={getXImg(props.backColor)}
               alt="RArrow"
               id="+1"
               className="rightArrow"

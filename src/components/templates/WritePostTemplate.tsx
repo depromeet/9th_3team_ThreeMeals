@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import WriteQACard from '../organisms/WriteQACard'
 import PrivateCardLabel from '../atoms/PrivateCardLabel'
@@ -6,20 +6,21 @@ import CardLabel from '../atoms/CardLabel'
 import OptionAlarmField, { OptionType } from '../molecules/OptionAlarmField'
 import { IMAGES } from '../../constants/images'
 import { SVGS } from '../../constants/svgs'
+import { BackColor } from '../../types/types'
 interface Props {
   emoticons?: Array<string>
-  TempType: 'Q' | 'A' | 'OX'
-  isWithSticker: boolean
-  optionActiveState?: OptionType
+  TempType: string | string[]
+  optionActiveState: OptionType
+  backColor: BackColor
 }
 
 const WritePostTemplate: FC<Props> = (props) => {
-  const [backColor, setBackColor] = useState('#67D585')
-  const [optionActiveState, setOptionActiveState] = useState({
-    Temp: false,
-    Forever: false,
-  })
-
+  const [withSticker, setWithSticker] = useState(false)
+  useEffect(() => {
+    if (props.TempType === 'Q' || props.TempType === 'A') {
+      setWithSticker(true)
+    }
+  }, [props.TempType])
   return (
     <TempContainer>
       <Header>
@@ -27,23 +28,23 @@ const WritePostTemplate: FC<Props> = (props) => {
         <span>저장</span>
       </Header>
       <MainContainer>
-        <WriteQACard
-          backColor={backColor}
-          isWithSticker={props.isWithSticker}
-        />
+        <WriteQACard backColor={props.backColor} isWithSticker={withSticker} />
       </MainContainer>
       <BottomContainer>
         {props.TempType === 'Q' ? (
-          <OptionContainer buttonActive={optionActiveState}>
-            <OptionAlarmField optionType={optionActiveState} />
+          <OptionContainer buttonActive={props.optionActiveState}>
+            <OptionAlarmField optionType={props.optionActiveState} />
             <div className="LabelContainer">
               <button className="tempBtn">
-                <CardLabel text="secret 24" active={optionActiveState.Temp} />
+                <CardLabel
+                  text="secret 24"
+                  active={props.optionActiveState.Temp}
+                />
               </button>
               <button className="foreverBtn">
                 <PrivateCardLabel
                   text="Bong-in"
-                  active={optionActiveState.Forever}
+                  active={props.optionActiveState.Forever}
                 />
               </button>
             </div>
