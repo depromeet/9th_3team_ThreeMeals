@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { useQuery, useMutation } from '@apollo/client'
+
+import {
+  CREATE_ACCOUNT_INFO,
+  GET_MY_CONTENT,
+} from '../../lib/queries/meQueries'
 import { IMAGES } from '../../constants/images'
 import Header from '../molecules/Header'
 
@@ -9,8 +15,17 @@ interface Props {
 }
 
 const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
-  const [currentValue, setCurrentValue] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+  const {
+    data: { getAccountInfo },
+  } = useQuery(GET_MY_CONTENT)
+  const [currentValue, setCurrentValue] = useState(getAccountInfo.content)
+
+  const [createAccountInfo] = useMutation(CREATE_ACCOUNT_INFO, {
+    onCompleted: () => {
+      props.onClickRight?.()
+    },
+  })
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -20,13 +35,19 @@ const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
     }
   }, [currentValue])
 
+  const onSave = () => {
+    createAccountInfo({
+      variables: { content: currentValue },
+    })
+  }
+
   return (
     <Container>
       <Header
         leftIcon={IMAGES.icon_24_back_wh}
         rightText={'저장'}
         onClickLeft={props.onClickLeft}
-        onClickRight={props.onClickRight}
+        onClickRight={onSave}
         blurRightText={currentValue === ''}
       />
       <InputContainer>
