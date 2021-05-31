@@ -24,6 +24,7 @@ const Container = styled.div<{ backColor: string }>`
   padding: 96px 24px 24px;
 
   p {
+    text-align: initial;
     font-style: normal;
     font-weight: 500;
     font-size: 24px;

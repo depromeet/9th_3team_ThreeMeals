@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, ReactElement, useMemo, useState } from 'react'
 import Header from '../molecules/Header'
 import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
@@ -6,15 +6,96 @@ import ProfileContent from '../molecules/ProfileContent'
 import DefaultLine from '../atoms/DefaultLine'
 import QuestionCard from '../organisms/QuestionCard'
 import PrivateCardLabel from '../atoms/PrivateCardLabel'
+import AnswerCard from '../organisms/AnswerCard'
 interface Props {
   profileImage: string
   onClickWrite?: () => void
   onClickLeft?: () => void
+  onClickAnswerCard: (postId: string) => void
   onClickSecondRight?: () => void
 }
 
 const OthersContentTemplate: FC<Props> = (props) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
+
+  const ContentView = useMemo((): ReactElement | undefined => {
+    switch (tabIndex) {
+      case 0:
+        return (
+          <>
+            <ContentContainer>
+              <QuestionCard
+                labelComponent={
+                  <PrivateCardLabel text="BONG IN" active={false} />
+                }
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={'#FF833D'}
+              />
+              <QuestionCard
+                questionTitle="김덕배님 남자친구는 있으신지요 ????ㅋㅋ"
+                backColor={'#67D585'}
+              />
+              <QuestionCard
+                questionTitle="김덕배님 남자친구는 있으신지요 ????ㅋㅋ"
+                backColor={'#67D585'}
+              />
+            </ContentContainer>
+          </>
+        )
+      case 1:
+        return (
+          <>
+            <ContentContainer>
+              <AnswerCard
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={'#FF833D'}
+                onClickPost={() => {
+                  props.onClickAnswerCard('0')
+                }}
+              />
+              <AnswerCard
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={'#67D585'}
+                onClickPost={() => {
+                  props.onClickAnswerCard('1')
+                }}
+              />
+              <AnswerCard
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={'#67D585'}
+                onClickPost={() => {
+                  props.onClickAnswerCard('2')
+                }}
+              />
+            </ContentContainer>
+          </>
+        )
+      case 2:
+        return (
+          <>
+            <ContentContainer>
+              <QuestionCard
+                labelComponent={
+                  <PrivateCardLabel text="BONG IN" active={false} />
+                }
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={'#FF833D'}
+              />
+              <QuestionCard
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={'#67D585'}
+              />
+              <QuestionCard
+                questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                backColor={'#67D585'}
+              />
+            </ContentContainer>
+          </>
+        )
+      default:
+        break
+    }
+  }, [props, tabIndex])
 
   return (
     <AppContainer>
@@ -86,25 +167,13 @@ const OthersContentTemplate: FC<Props> = (props) => {
         <DefaultLine
           containerStyle={{ position: 'relative', bottom: 8, zIndex: -1 }}
         />
-        <ContentContainer>
-          <QuestionCard
-            labelComponent={<PrivateCardLabel text="BONG IN" active={false} />}
-            questionTitle="김덕배님 남자친구는 있으신지요 ????"
-            backColor={'#FF833D'}
-          />
-          <QuestionCard
-            questionTitle="김덕배님 남자친구는 있으신지요 ????"
-            backColor={'#67D585'}
-          />
-          <QuestionCard
-            questionTitle="김덕배님 남자친구는 있으신지요 ????"
-            backColor={'#67D585'}
-          />
-        </ContentContainer>
+        {ContentView}
       </MainContainer>
-      <WriteButton>
-        <img onClick={props.onClickWrite} src={IMAGES.write} width={88} />
-      </WriteButton>
+      {tabIndex !== 1 && (
+        <WriteButton>
+          <img onClick={props.onClickWrite} src={IMAGES.write} width={88} />
+        </WriteButton>
+      )}
     </AppContainer>
   )
 }
@@ -144,7 +213,6 @@ const Tab = styled.div`
 
   padding-bottom: 7px;
 `
-
 const ContentContainer = styled.div`
   margin-top: 10px;
 `
