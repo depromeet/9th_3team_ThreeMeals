@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { useQuery, useMutation } from '@apollo/client'
 
 import {
-  CREATE_ACCOUNT_INFO,
-  GET_MY_CONTENT,
+  UPDATE_ACCOUNT_INFO,
+  GET_MY_PROFILE,
 } from '../../lib/queries/meQueries'
 import { IMAGES } from '../../constants/images'
 import Header from '../molecules/Header'
@@ -18,10 +18,10 @@ const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const {
     data: { getAccountInfo },
-  } = useQuery(GET_MY_CONTENT)
+  } = useQuery(GET_MY_PROFILE)
   const [currentValue, setCurrentValue] = useState(getAccountInfo.content)
 
-  const [createAccountInfo] = useMutation(CREATE_ACCOUNT_INFO, {
+  const [updateAccountInfo] = useMutation(UPDATE_ACCOUNT_INFO, {
     onCompleted: () => {
       props.onClickRight?.()
     },
@@ -36,8 +36,11 @@ const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
   }, [currentValue])
 
   const onSave = () => {
-    createAccountInfo({
-      variables: { content: currentValue },
+    updateAccountInfo({
+      variables: {
+        content: currentValue,
+        nickname: getAccountInfo.nickname,
+      },
     })
   }
 
