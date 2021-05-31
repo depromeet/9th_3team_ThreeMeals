@@ -25,7 +25,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
           <>
             <ContentContainer>
               <QuestionCard
-                labelComponent={<PrivateCardLabel text="BONG IN" />}
+                labelComponent={<PrivateCardLabel text="BONG IN" active />}
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
                 backColor={'#FF833D'}
               />
@@ -73,7 +73,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
           <>
             <ContentContainer>
               <QuestionCard
-                labelComponent={<PrivateCardLabel text="BONG IN" />}
+                labelComponent={<PrivateCardLabel text="BONG IN" active />}
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
                 backColor={'#FF833D'}
               />
@@ -165,7 +165,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
         />
         {ContentView}
       </MainContainer>
-      {tabIndex !== 1 && (
+      {tabIndex === 0 && (
         <WriteButton>
           <img onClick={props.onClickWrite} src={IMAGES.write} width={88} />
         </WriteButton>
@@ -208,6 +208,7 @@ const Tab = styled.div`
   margin-left: 24px;
 
   padding-bottom: 7px;
+  cursor: pointer;
 `
 const ContentContainer = styled.div`
   margin-top: 10px;
