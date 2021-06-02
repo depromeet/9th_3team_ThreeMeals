@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import styled from 'styled-components'
+import styled, { keyframes, css } from 'styled-components'
 import { SVGS } from '../../constants/svgs'
 interface Props {
   optionType: OptionType
@@ -10,7 +10,7 @@ export interface OptionType {
 }
 const OptionAlarmField: FC<Props> = (props) => {
   return (
-    <FieldContainer>
+    <FieldContainer optionType={props.optionType}>
       {props.optionType.Forever ? (
         <span className="header">Bong-in</span>
       ) : (
@@ -28,9 +28,30 @@ const OptionAlarmField: FC<Props> = (props) => {
   )
 }
 
-export default OptionAlarmField
+export default React.memo(OptionAlarmField)
 
-const FieldContainer = styled.div`
+interface FieldProps {
+  optionType: OptionType
+}
+const showDisplay = keyframes`
+    0% {
+      opacity: 0;
+    }
+    30%{
+      opacity:1;
+    }
+    50% {
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+`
+
+const FieldContainer = styled.div<FieldProps>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -55,4 +76,11 @@ const FieldContainer = styled.div`
     text-align: center;
     font-family: SF Pro Display;
   }
+  ${({ optionType }) => {
+    if (optionType.Temp || optionType.Forever) {
+      return css`
+        animation: ${showDisplay} 3s linear both;
+      `
+    }
+  }}
 `

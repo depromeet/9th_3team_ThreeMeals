@@ -1,9 +1,15 @@
-import React, { FC, useState, useCallback } from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
-
 import { StickerInfo } from '../molecules/PickableSticker'
-import StickerPanel from '../molecules/StickerPanel'
 import CardContainer from '../atoms/CardContainer'
+import dynamic from 'next/dynamic'
+import addToPanelVar from '../../lib/localStore/stickerPanel'
+import { useReactiveVar } from '@apollo/client'
+
+const StickerPanelWithNoSSR = dynamic(
+  () => import('../molecules/StickerPanel'),
+  { ssr: false }
+)
 
 interface Props {
   backColor: string
@@ -12,42 +18,16 @@ interface Props {
 }
 
 const WriteQACard: FC<Props> = (props) => {
-  const [pickedImgUrl, setPickedImgUrl] = useState<string>('')
-  const [pickedImgWidth, setPickedImgWidth] = useState<number>(0)
-  const [clickedSticker, setClickedSticker] = useState<boolean>(false)
-  const [closeDeleteBtn, setCloseDeleteBtn] = useState<boolean>(false)
-  const updatePickedImgUrl = useCallback((imgUrl: string) => {
-    setPickedImgUrl(imgUrl)
-  }, [])
-  const updatePickedImgWidth = useCallback((width: number) => {
-    setPickedImgWidth(width)
-  }, [])
-  const addToPanelByClicking = useCallback(() => {
-    setClickedSticker(true)
-    setTimeout(() => {
-      setClickedSticker(false)
-    }, 500)
-  }, [])
-  const closeDeleteBtnByTouching = useCallback(() => {
-    setCloseDeleteBtn(true)
-    setTimeout(() => {
-      setCloseDeleteBtn(false)
-    }, 500)
-  }, [])
+  const addToPanelInfo = useReactiveVar(addToPanelVar)
   return (
     <CardContainer backColor={props.backColor}>
       <ContentContainer>
         <textarea placeholder={`질문을 자유롭게\n작성해 주세요.`} />
         <StickerContainer isWithSticker={props.isWithSticker}>
-          {pickedImgUrl && pickedImgWidth ? (
-            <StickerPanel
-              imgUrl={pickedImgUrl}
-              width={pickedImgWidth}
-              clickedSticker={clickedSticker}
-              closeDeleteBtn={closeDeleteBtn}
-            />
+          {addToPanelInfo?.imgUrl && addToPanelInfo.width ? (
+            <StickerPanelWithNoSSR />
           ) : (
-            <div style={{ padding: '10px' }}>stickers!</div>
+            <div style={{ padding: '10px', opacity: '0.5' }}>stickers!</div>
           )}
         </StickerContainer>
       </ContentContainer>
@@ -55,7 +35,7 @@ const WriteQACard: FC<Props> = (props) => {
   )
 }
 
-export default WriteQACard
+export default React.memo(WriteQACard)
 
 interface StickerProps {
   isWithSticker: boolean
@@ -96,7 +76,6 @@ const StickerContainer = styled.div<StickerProps>`
   display: ${(props) => (props.isWithSticker ? 'block' : 'none')};
   border: dashed 1px #000000;
   height: 60%;
-  opacity: 0.5;
   img {
     width: 100%;
   }

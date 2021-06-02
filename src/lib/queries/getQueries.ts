@@ -62,3 +62,9 @@ export const GET_CHILDREN_COMMENTS = gql`
     }
   }
 `
+
+export const GET_WRITE_POST_INFO = gql`
+  query {
+    getWritePostInfo @client
+  }
+`

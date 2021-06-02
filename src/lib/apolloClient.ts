@@ -9,6 +9,7 @@ import cookies from 'next-cookies'
 import jsCookies from 'js-cookie'
 import { setContext } from '@apollo/client/link/context'
 import { createUploadLink } from 'apollo-upload-client'
+import writePostInfoVar from './localStore/writePost'
 
 function createApolloClient(
   ctx?: GetServerSidePropsContext
@@ -43,7 +44,19 @@ function createApolloClient(
 
   const client = new ApolloClient({
     link: additiveLink,
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            getWritePostInfo: {
+              read() {
+                return writePostInfoVar()
+              },
+            },
+          },
+        },
+      },
+    }),
     ssrMode: typeof window === 'undefined',
     connectToDevTools: process.env.NODE_ENV !== 'production',
   })

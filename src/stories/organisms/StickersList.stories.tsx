@@ -56,16 +56,15 @@ storiesOf('organisms/stickersList', module).add('sample', () => {
   return (
     <div style={{ width: '500px' }} onTouchStart={closeDeleteBtnByTouching}>
       <StickersList
-        stickersData={dummyStickersData}
         updatePickedImgUrl={updatePickedImgUrl}
         updatePickedImgWidth={updatePickedImgWidth}
         addToPanelByClicking={addToPanelByClicking}
       />
       <StickerPanel
-        imgUrl={pickedImgUrl}
-        width={pickedImgWidth}
-        clickedSticker={clickedSticker}
-        closeDeleteBtn={closeDeleteBtn}
+      // imgUrl={pickedImgUrl}
+      // width={pickedImgWidth}
+      // clickedSticker={clickedSticker}
+      // closeDeleteBtn={closeDeleteBtn}
       />
     </div>
   )

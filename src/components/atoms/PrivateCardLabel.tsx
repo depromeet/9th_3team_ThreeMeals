@@ -22,6 +22,11 @@ const Container = styled.span<ContainerProps>`
   padding: 0 31px;
   ${({ active }) =>
     active ? `color:white;` : `color:rgba(255, 255, 255, 0.5);`}
+  @media screen and (max-width: 320px) {
+    span {
+      font-size: 14px;
+    }
+  }
 `
 
 const PrivateCardLabel: React.FunctionComponent<Props> = (props) => {
@@ -32,4 +37,4 @@ const PrivateCardLabel: React.FunctionComponent<Props> = (props) => {
   )
 }
 
-export default PrivateCardLabel
+export default React.memo(PrivateCardLabel)

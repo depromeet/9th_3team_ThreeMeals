@@ -1,42 +1,36 @@
-import React, { FC, useRef, useState, useCallback, useEffect } from 'react'
+import React, { VFC, useRef, useState, useCallback, useEffect } from 'react'
 import { Stage, Layer } from 'react-konva'
 import styled from 'styled-components'
 import Konva from 'konva'
 import DraggableSticker from './DraggableSticker'
 import { StickerInfo } from './PickableSticker'
-
-interface Props extends StickerInfo {
-  addToPanelByClicking?: (
-    imgUrl: string,
-    width: number
-  ) => { imgUrl: string; width: number }
-  clickedSticker: boolean
-  closeDeleteBtn: boolean
-}
+import { useReactiveVar } from '@apollo/client'
+import addToPanelVar from '../../lib/localStore/stickerPanel'
 
 interface OnDragFuncProps {
   e?: Konva.KonvaEventObject<DragEvent>
   i: number
   image: StickerInfo
 }
-const StickerPanel: FC<Props> = (props) => {
+const StickerPanel: VFC = () => {
   const stageRef: React.RefObject<Konva.Stage> | null = useRef(null)
+  const addToPanelInfo = useReactiveVar(addToPanelVar)
   const [images, setImages] = useState<StickerInfo[]>([])
   const [showDeleteBtn, setShowDeleteBtn] = useState<number | string>('')
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault()
-      if (stageRef.current) {
+      if (stageRef.current && addToPanelInfo.imgUrl && addToPanelInfo.width) {
         stageRef.current.setPointersPositions(e)
         const droppedImgInfo = {
           positions: stageRef.current.getPointerPosition(),
-          imgUrl: props.imgUrl,
-          width: props.width,
+          imgUrl: addToPanelInfo.imgUrl,
+          width: addToPanelInfo.width,
         }
         setImages([...images, droppedImgInfo])
       }
     },
-    [images, props.imgUrl, props.width]
+    [addToPanelInfo.imgUrl, addToPanelInfo.width, images]
   )
   const addToPanelByClicking = useCallback(
     (width, imgUrl) => {
@@ -50,16 +44,20 @@ const StickerPanel: FC<Props> = (props) => {
     [images]
   )
   useEffect(() => {
-    if (props.clickedSticker) {
-      addToPanelByClicking(props.width, props.imgUrl)
+    if (addToPanelInfo.clickedSticker) {
+      addToPanelByClicking(addToPanelInfo.width, addToPanelInfo.imgUrl)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.clickedSticker, props.imgUrl, props.width])
+  }, [
+    addToPanelInfo.clickedSticker,
+    addToPanelInfo.imgUrl,
+    addToPanelInfo.width,
+  ])
   useEffect(() => {
-    if (props.closeDeleteBtn) {
+    if (addToPanelInfo.closeDeleteBtn) {
       setShowDeleteBtn('')
     }
-  }, [props.closeDeleteBtn])
+  }, [addToPanelInfo.closeDeleteBtn])
   const onDeleteImg = useCallback(
     (index) => {
       const newImages = [...images]
@@ -88,12 +86,7 @@ const StickerPanel: FC<Props> = (props) => {
         e.stopPropagation()
       }}
     >
-      <Stage
-        width={279}
-        height={192}
-        style={{ border: '1px solid grey' }}
-        ref={stageRef}
-      >
+      <Stage width={279} height={192} ref={stageRef}>
         <Layer>
           {images.map((image, i) => {
             return (
@@ -114,10 +107,9 @@ const StickerPanel: FC<Props> = (props) => {
   )
 }
 
-export default StickerPanel
+export default React.memo(StickerPanel)
 
 const PanelContainer = styled.div`
   width: 279px;
-  border: 1px solid black;
   height: 192px;
 `

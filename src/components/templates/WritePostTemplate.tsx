@@ -7,11 +7,20 @@ import OptionAlarmField, { OptionType } from '../molecules/OptionAlarmField'
 import { IMAGES } from '../../constants/images'
 import { SVGS } from '../../constants/svgs'
 import { BackColor } from '../../types/types'
+import StickersList from '../organisms/StickersList'
 interface Props {
-  emoticons?: Array<string>
   TempType: string | string[]
   optionActiveState: OptionType
   backColor: BackColor
+  openStickerList: boolean
+  onClickTermType: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  onClickBackColor: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  onClickOpenStickerList: () => void
+  updatePickedImgUrl: (imgUrl: string) => void
+  updatePickedImgWidth: (width: number) => void
+  addToPanelByClicking: () => void
+  closeDeleteBtnByTouching: () => void
+  onClickSaveBtn: () => void
 }
 
 const WritePostTemplate: FC<Props> = (props) => {
@@ -22,10 +31,10 @@ const WritePostTemplate: FC<Props> = (props) => {
     }
   }, [props.TempType])
   return (
-    <TempContainer>
+    <TempContainer onTouchStart={props.closeDeleteBtnByTouching}>
       <Header>
         <img src={IMAGES.icon_32_close} alt="closeIcon" />
-        <span>저장</span>
+        <span onClick={props.onClickSaveBtn}>저장</span>
       </Header>
       <MainContainer>
         <WriteQACard backColor={props.backColor} isWithSticker={withSticker} />
@@ -33,15 +42,28 @@ const WritePostTemplate: FC<Props> = (props) => {
       <BottomContainer>
         {props.TempType === 'Q' ? (
           <OptionContainer buttonActive={props.optionActiveState}>
-            <OptionAlarmField optionType={props.optionActiveState} />
+            {props.optionActiveState.Forever && (
+              <OptionAlarmField optionType={props.optionActiveState} />
+            )}
+            {props.optionActiveState.Temp && (
+              <OptionAlarmField optionType={props.optionActiveState} />
+            )}
             <div className="LabelContainer">
-              <button className="tempBtn">
+              <button
+                className="tempBtn"
+                onClick={props.onClickTermType}
+                value="Temp"
+              >
                 <CardLabel
                   text="secret 24"
                   active={props.optionActiveState.Temp}
                 />
               </button>
-              <button className="foreverBtn">
+              <button
+                className="foreverBtn"
+                onClick={props.onClickTermType}
+                value="Forever"
+              >
                 <PrivateCardLabel
                   text="Bong-in"
                   active={props.optionActiveState.Forever}
@@ -52,19 +74,50 @@ const WritePostTemplate: FC<Props> = (props) => {
         ) : null}
         <Footer>
           <BackColorList>
-            <BackColorButton color="#FF823D" />
-            <BackColorButton color="#67D585" />
-            <BackColorButton color="#6799FE" />
-            <BackColorButton color="#F1D75F" />
-            <BackColorButton color="#CC4349" />
+            <BackColorButton
+              color="#FF823D"
+              id="#FF823D"
+              onClick={props.onClickBackColor}
+            />
+            <BackColorButton
+              color="#67D585"
+              id="#67D585"
+              onClick={props.onClickBackColor}
+            />
+            <BackColorButton
+              color="#6799FE"
+              id="#6799FE"
+              onClick={props.onClickBackColor}
+            />
+            <BackColorButton
+              color="#F1D75F"
+              id="#F1D75F"
+              onClick={props.onClickBackColor}
+            />
+            <BackColorButton
+              color="#CC4349"
+              id="#CC4349"
+              onClick={props.onClickBackColor}
+            />
           </BackColorList>
           {props.TempType === 'OX' ? null : (
-            <button className="stickerButton">
+            <button
+              className="stickerButton"
+              onClick={props.onClickOpenStickerList}
+            >
               <img src={SVGS.icon_32_emoji_wh} alt="emoji_icon" />
             </button>
           )}
         </Footer>
       </BottomContainer>
+      {props.openStickerList ? (
+        <StickersList
+          updatePickedImgUrl={props.updatePickedImgUrl}
+          updatePickedImgWidth={props.updatePickedImgWidth}
+          addToPanelByClicking={props.addToPanelByClicking}
+          onClickOpenStickerList={props.onClickOpenStickerList}
+        />
+      ) : null}
     </TempContainer>
   )
 }
@@ -85,6 +138,7 @@ const TempContainer = styled.div`
   flex-direction: column;
   @media screen and (max-width: 770px) {
     height: none;
+    padding: 20px;
   }
 `
 
@@ -96,6 +150,10 @@ const Header = styled.div`
   height: 64px;
   img {
     height: 24px;
+  }
+  span {
+    color: white;
+    cursor: pointer;
   }
 `
 const MainContainer = styled.div`

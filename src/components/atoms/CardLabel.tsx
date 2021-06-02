@@ -27,6 +27,11 @@ const Container = styled.span<ContainerProps>`
   img {
     margin-right: 8px;
   }
+  @media screen and (max-width: 320px) {
+    span {
+      font-size: 14px;
+    }
+  }
 `
 
 const CardLabel: React.FunctionComponent<Props> = (props) => {
@@ -42,4 +47,4 @@ const CardLabel: React.FunctionComponent<Props> = (props) => {
   )
 }
 
-export default CardLabel
+export default React.memo(CardLabel)
