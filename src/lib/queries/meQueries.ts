@@ -21,9 +21,9 @@ export const GET_MY_CONTENT = gql`
   }
 `
 
-export const CREATE_ACCOUNT_INFO = gql`
-  mutation createAccountInfo($content: String!) {
-    createAccountInfo(content: $content) {
+export const UPDATE_ACCOUNT_INFO = gql`
+  mutation updateAccountInfo($content: String, $nickname: String!) {
+    updateAccountInfo(content: $content, nickname: $nickname) {
       id
       nickname
       provider
