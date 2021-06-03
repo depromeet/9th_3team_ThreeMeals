@@ -99,6 +99,7 @@ storiesOf('molecules/PostComment', module).add('with text', () => {
   return (
     <div style={{ width: '327px' }}>
       <PostComment
+        isMine
         profileImg={IMAGES.background}
         commentsInfo={dummyCommentData}
         childrenCommentInfo={dummyChildrenCommentData}

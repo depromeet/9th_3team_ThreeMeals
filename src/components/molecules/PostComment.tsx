@@ -2,6 +2,7 @@ import React, { FC, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { AnswerContactType } from '../pages/AnswerDetailPage'
 interface Props {
+  isMine: boolean
   profileImg: string
   commentsInfo: CommentInfo[]
   childrenCommentInfo: ChildrenCommentInfo[]
@@ -58,24 +59,30 @@ const PostComment: FC<Props> = (props) => {
           <CommentContainer key={i}>
             <CommentHeader>
               <CommentId>{comment.id}</CommentId>
-              <DropMenu
-                onClick={() => {
-                  props.onClickRemove &&
-                    props.onClickRemove('children', comment.id)
-                }}
-              >
-                •••
-              </DropMenu>
+              {props.isMine && (
+                <DropMenu
+                  onClick={() => {
+                    props.onClickRemove &&
+                      props.onClickRemove('children', comment.id)
+                  }}
+                >
+                  •••
+                </DropMenu>
+              )}
             </CommentHeader>
             <CommentContent>{comment.content}</CommentContent>
-            <CommentFooter>
-              <Write className="write" onClick={handleWriteComment}>
-                답글쓰기
-              </Write>
-              <LikeAction className="likeActive" onClick={handleLikeActive}>
-                좋아요
-              </LikeAction>
-            </CommentFooter>
+            {props.isMine && (
+              <CommentFooter>
+                <>
+                  <Write className="write" onClick={handleWriteComment}>
+                    답글쓰기
+                  </Write>
+                  <LikeAction className="likeActive" onClick={handleLikeActive}>
+                    좋아요
+                  </LikeAction>
+                </>
+              </CommentFooter>
+            )}
             {props.childrenCommentInfo.map((childrenComment, i) => {
               if (comment.account.id === childrenComment.postId) {
                 return (
@@ -91,24 +98,31 @@ const PostComment: FC<Props> = (props) => {
                           {childrenComment.account.nickname}
                         </CommentId>
                       </ChildrenHeader>
-                      <DropMenu
-                        onClick={() => {
-                          props.onClickRemove &&
-                            props.onClickRemove('children', childrenComment.id)
-                        }}
-                      >
-                        •••
-                      </DropMenu>
+                      {props.isMine && (
+                        <DropMenu
+                          onClick={() => {
+                            props.onClickRemove &&
+                              props.onClickRemove(
+                                'children',
+                                childrenComment.id
+                              )
+                          }}
+                        >
+                          •••
+                        </DropMenu>
+                      )}
                     </ProfileContainer>
                     <BodyContainer>
                       <ContentsContainer>
                         <CommentContent>{comment.content}</CommentContent>
-                        <ChildrenFooter>
-                          <Write onClick={handleWriteComment}>답글쓰기</Write>
-                          <LikeAction onClick={handleLikeActive}>
-                            좋아요
-                          </LikeAction>
-                        </ChildrenFooter>
+                        {props.isMine && (
+                          <ChildrenFooter>
+                            <Write onClick={handleWriteComment}>답글쓰기</Write>
+                            <LikeAction onClick={handleLikeActive}>
+                              좋아요
+                            </LikeAction>
+                          </ChildrenFooter>
+                        )}
                       </ContentsContainer>
                     </BodyContainer>
                   </ChildrenContainer>
@@ -133,6 +147,8 @@ const AppContainer = styled.div`
   border-radius: 24px;
   margin-left: 5%;
   margin-right: 5%;
+  width: 100%;
+  max-width: 396px;
 `
 
 const CommentContainer = styled.div`
