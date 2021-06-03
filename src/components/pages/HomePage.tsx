@@ -10,7 +10,6 @@ const AppContainer = styled.div`
 `
 
 const HomePage: VFC = () => {
-  const router = useRouter()
   return (
     <AppContainer>
       <HomeTemplate isProfile={false} />

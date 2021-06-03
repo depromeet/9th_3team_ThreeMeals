@@ -22,8 +22,16 @@ export const GET_MY_CONTENT = gql`
 `
 
 export const UPDATE_ACCOUNT_INFO = gql`
-  mutation updateAccountInfo($content: String, $nickname: String!) {
-    updateAccountInfo(content: $content, nickname: $nickname) {
+  mutation updateAccountInfo(
+    $content: String
+    $nickname: String!
+    $profileUrl: String
+  ) {
+    updateAccountInfo(
+      content: $content
+      nickname: $nickname
+      profileUrl: $profileUrl
+    ) {
       id
       nickname
       provider

@@ -2,9 +2,9 @@ import { GetServerSideProps } from 'next'
 import cookies from 'next-cookies'
 import _isEmpty from 'lodash-es/isEmpty'
 
-import ProfileEditPage from '../src/components/pages/ProfileEditPage'
-import { initializeApollo } from '../src/lib/apollo'
-import { GET_MY_PROFILE } from '../src/lib/queries/meQueries'
+import ProfileEditPage from '../../src/components/pages/ProfileEditPage'
+import { initializeApollo } from '../../src/lib/apollo'
+import { GET_MY_PROFILE } from '../../src/lib/queries/meQueries'
 
 const ProfileEdit: React.FC = () => {
   return <ProfileEditPage />
