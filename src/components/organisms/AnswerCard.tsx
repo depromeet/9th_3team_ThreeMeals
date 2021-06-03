@@ -19,8 +19,15 @@ const AnswerCard: React.FunctionComponent<Props> = (props) => {
         <Header>
           <TimeContainer>{props.time || '-13:33:33'}</TimeContainer>
           <div>
-            <Image src={IMAGES.icon_32_share} onClick={props.onClickShare} />
-            <Image src={IMAGES.icon_32_option} onClick={props.onClickOption} />
+            {props.onClickShare && (
+              <Image src={IMAGES.icon_32_share} onClick={props.onClickShare} />
+            )}
+            {props.onClickOption && (
+              <Image
+                src={IMAGES.icon_32_option}
+                onClick={props.onClickOption}
+              />
+            )}
           </div>
         </Header>
         <p>{props.questionTitle}</p>
@@ -90,6 +97,7 @@ const Image = styled.img`
 `
 
 const StickerContainer = styled.div`
+  margin-top: 16px;
   width: 100%;
   height: 192px;
   border: 1px solid red;

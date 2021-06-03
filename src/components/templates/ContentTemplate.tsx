@@ -15,6 +15,8 @@ interface Props {
   onClickNewSecretCard?: () => void
   onClickAnswerCard: (postId: string) => void
   onClickWrite?: () => void
+  onClickRemove: (id: string, tabIndex: number) => void
+  onClickLike: (id: string, tabIndex: number) => void
 }
 
 const ContentTemplate: FC<Props> = (props) => {
@@ -34,7 +36,7 @@ const ContentTemplate: FC<Props> = (props) => {
                   height={72}
                 />
                 <span
-                  style={{ marginTop: 1 }}
+                  style={{ marginTop: 1, cursor: 'pointer' }}
                   onClick={props.onClickNewSecretCard}
                 >
                   {'12개의 비밀카드 도착'}
@@ -54,17 +56,37 @@ const ContentTemplate: FC<Props> = (props) => {
             </NoticeContainer>
             <ContentContainer>
               <QuestionCard
-                labelComponent={<PrivateCardLabel text="BONG IN" />}
+                labelComponent={
+                  <PrivateCardLabel text="BONG IN" active={false} />
+                }
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
                 backColor={'#FF833D'}
+                onClickOption={() => {
+                  props.onClickRemove('0', tabIndex)
+                }}
+                onClickLike={() => {
+                  props.onClickLike('0', tabIndex)
+                }}
               />
               <QuestionCard
                 questionTitle="김덕배님 남자친구는 있으신지요 ????ㅋㅋ"
                 backColor={'#67D585'}
+                onClickOption={() => {
+                  props.onClickRemove('1', tabIndex)
+                }}
+                onClickLike={() => {
+                  props.onClickLike('1', tabIndex)
+                }}
               />
               <QuestionCard
                 questionTitle="김덕배님 남자친구는 있으신지요 ????ㅋㅋ"
                 backColor={'#67D585'}
+                onClickOption={() => {
+                  props.onClickRemove('2', tabIndex)
+                }}
+                onClickLike={() => {
+                  props.onClickLike('2', tabIndex)
+                }}
               />
             </ContentContainer>
           </>
@@ -79,6 +101,9 @@ const ContentTemplate: FC<Props> = (props) => {
                 onClickPost={() => {
                   props.onClickAnswerCard('0')
                 }}
+                onClickOption={() => {
+                  props.onClickRemove('0', tabIndex)
+                }}
               />
               <AnswerCard
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
@@ -86,12 +111,18 @@ const ContentTemplate: FC<Props> = (props) => {
                 onClickPost={() => {
                   props.onClickAnswerCard('1')
                 }}
+                onClickOption={() => {
+                  props.onClickRemove('1', tabIndex)
+                }}
               />
               <AnswerCard
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
                 backColor={'#67D585'}
                 onClickPost={() => {
                   props.onClickAnswerCard('2')
+                }}
+                onClickOption={() => {
+                  props.onClickRemove('2', tabIndex)
                 }}
               />
             </ContentContainer>
@@ -129,7 +160,9 @@ const ContentTemplate: FC<Props> = (props) => {
             </NoticeContainer>
             <ContentContainer>
               <QuestionCard
-                labelComponent={<PrivateCardLabel text="BONG IN" />}
+                labelComponent={
+                  <PrivateCardLabel text="BONG IN" active={false} />
+                }
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
                 backColor={'#FF833D'}
               />
@@ -263,6 +296,7 @@ const Tab = styled.div`
   margin-left: 24px;
 
   padding-bottom: 7px;
+  cursor: pointer;
 `
 
 const NoticeContainer = styled.div`

@@ -12,6 +12,7 @@ import AnswerCard from '../organisms/AnswerCard'
 import { AnswerContactType } from '../pages/AnswerDetailPage'
 
 interface Props {
+  isMine: boolean
   onClickLeft?: () => void
   onClickRight?: () => void
   onSendComment: (comment: string) => void
@@ -29,36 +30,41 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
       setIsFocus(false)
     }, 1000)
   }, [])
+  console.log('propssss:', props.isMine, props.onClickRemove)
   return (
     <Container>
       <Header
         leftIcon={IMAGES.icon_24_back_wh}
         onClickLeft={props.onClickLeft}
       />
-
       <AnswerCard
         questionTitle="김덕배님 남자친구는 있으신지요 ????"
         backColor={'#67D585'}
-        onClickOption={() => {
-          props.onClickRemove && props.onClickRemove('parent', 'parentId')
-        }}
+        onClickOption={
+          props.isMine
+            ? () => {
+                props.onClickRemove && props.onClickRemove('parent', 'parentId')
+              }
+            : undefined
+        }
       />
       <PostContainer>
         <PostComment
+          isMine={props.isMine}
           profileImg={IMAGES.background}
           commentsInfo={dummyCommentData}
           childrenCommentInfo={dummyChildrenCommentData}
           onClickRemove={props.onClickRemove}
         />
       </PostContainer>
-      <div style={{ paddingBottom: 30 }}>
+      <BottomContainer style={{ paddingBottom: 30 }}>
         <InputContainer>
           <DefaultInput
             placeholder="댓글을 입력하세요."
             onChange={(e) => setComment(e)}
             onFocus={onFocus}
             onBlur={onBlur}
-            containerStyle={{ width: isFocus ? '74%' : '85%', height: '100%' }}
+            containerStyle={{ width: isFocus ? '80%' : '85%', height: '100%' }}
           />
           <Postimg
             src={IMAGES.inputSend}
@@ -69,7 +75,7 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
             style={{ visibility: isFocus ? 'initial' : 'hidden' }}
           />
         </InputContainer>
-      </div>
+      </BottomContainer>
     </Container>
   )
 }
@@ -80,14 +86,8 @@ const Container = styled.div`
   max-width: 500px;
   width: 100%;
 `
-const InputContainer = styled.div`
-  height: 78px;
-  margin-left: 10%;
-  padding-bottom: 30px;
-`
 
 const PostContainer = styled.div`
-  width: 100%;
   display: flex;
   justify-content: center;
 `
@@ -95,6 +95,19 @@ const Postimg = styled.img`
   width: 48px;
   height: 48px;
   position: relative;
-  top: 20px;
   left: 10px;
+`
+
+const BottomContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`
+const InputContainer = styled.div`
+  height: 78px;
+  margin-left: 5%;
+  padding-bottom: 30px;
+  display: flex;
+  width: 100%;
+  margin: 15px 5% 0 5%;
+  max-width: 396px;
 `

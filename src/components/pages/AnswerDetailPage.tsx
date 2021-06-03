@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import Modal from '../molecules/Modal'
 import AnswerDetailTemplate from '../templates/AnswerDetailTemplate'
@@ -7,9 +7,6 @@ import AnswerDetailTemplate from '../templates/AnswerDetailTemplate'
 export type AnswerContactType = 'parent' | 'children'
 const AnswerDetailPage: React.FC = () => {
   const router = useRouter()
-  //   const { loading, error, data } = useQuery(GET_PARENT_COMMENTS, {
-  //     variables: { first: 30, postId: '1' },
-  //   })
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [modalTitle, setModalTitle] = useState<string>()
@@ -27,6 +24,14 @@ const AnswerDetailPage: React.FC = () => {
     setIsOpen(true)
   }, [])
 
+  const isMine = useMemo((): boolean => {
+    /** Check 내피드 or 타인피드
+     * 내피드 - 좋아요 / 답글보기 / 옵션 노출 > true
+     * 타인피드 - 좋아요 / 답글보기 / 옵션 미 노출 > false
+     */
+    return false
+  }, [])
+
   return (
     <AppContainer>
       <AnswerDetailTemplate
@@ -34,6 +39,7 @@ const AnswerDetailPage: React.FC = () => {
         onClickRight={router.back}
         onSendComment={onSendComment}
         onClickRemove={onClickRemove}
+        isMine={isMine}
       />
       <Modal
         open={isOpen}
