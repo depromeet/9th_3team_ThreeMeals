@@ -1,9 +1,11 @@
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
+
 import ProfileEditTemplate from '../templates/ProfileEditTemplate'
 
 const ProfileEditPage: React.FC = () => {
   const router = useRouter()
+
   return (
     <AppContainer>
       <ProfileEditTemplate

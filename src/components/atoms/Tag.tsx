@@ -49,6 +49,7 @@ const CloseIcon = styled.img`
 const Text = styled.span`
   margin-top: 2px;
   float: left;
+  cursor: pointer;
 `
 const Tag: React.FunctionComponent<Props> = (props) => {
   return (

@@ -12,6 +12,8 @@ interface Props {
   labelComponent?: ReactNode
   isInput?: boolean
   onClickSend?: (text: string) => void
+  onClickLike?: () => void
+  onClickOption?: () => void
 }
 
 const Container = styled.div<{ backColor: string }>`
@@ -157,6 +159,8 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
               <CardLabel text={'-13:33:33'} active={true} />
             )
           }
+          onClickLike={props.onClickLike}
+          onClickOption={props.onClickOption}
         />
         <p>{props.questionTitle}</p>
         <BottomContainer>
