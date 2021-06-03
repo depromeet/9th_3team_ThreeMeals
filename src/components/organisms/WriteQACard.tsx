@@ -1,11 +1,12 @@
-import React, { FC } from 'react'
+import React, { FC, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { StickerInfo } from '../molecules/PickableSticker'
 import CardContainer from '../atoms/CardContainer'
 import dynamic from 'next/dynamic'
 import addToPanelVar from '../../lib/localStore/stickerPanel'
 import { useReactiveVar } from '@apollo/client'
-
+import { addToWritePostInfo } from '../../lib/localStore/writePost'
+import { debounce } from 'lodash'
 const StickerPanelWithNoSSR = dynamic(
   () => import('../molecules/StickerPanel'),
   { ssr: false }
@@ -18,11 +19,29 @@ interface Props {
 }
 
 const WriteQACard: FC<Props> = (props) => {
+  const [content, setContent] = useState('')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const addContentToWritePost = useCallback(
+    debounce((value) => addToWritePostInfo({ content: value }), 500),
+    []
+  )
+  const onChangeContent = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const { value } = e.target
+      setContent(value)
+      addContentToWritePost(value)
+    },
+    [addContentToWritePost]
+  )
   const addToPanelInfo = useReactiveVar(addToPanelVar)
   return (
     <CardContainer backColor={props.backColor}>
       <ContentContainer>
-        <textarea placeholder={`질문을 자유롭게\n작성해 주세요.`} />
+        <textarea
+          placeholder={`질문을 자유롭게\n작성해 주세요.`}
+          onChange={onChangeContent}
+          value={content}
+        />
         <StickerContainer isWithSticker={props.isWithSticker}>
           {addToPanelInfo?.imgUrl && addToPanelInfo.width ? (
             <StickerPanelWithNoSSR />

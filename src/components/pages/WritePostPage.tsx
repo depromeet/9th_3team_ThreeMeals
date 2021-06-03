@@ -7,12 +7,13 @@ import { useReactiveVar } from '@apollo/client'
 import writePostInfoVar, {
   addToWritePostInfo,
 } from '../../lib/localStore/writePost'
-import addToPanelVar, { addToPanel } from '../../lib/localStore/stickerPanel'
+import { addToPanel } from '../../lib/localStore/stickerPanel'
+import StickersList from '../organisms/StickersList'
+import Modal from '../molecules/Modal'
 const WritePostPage: VFC = () => {
   const router = useRouter()
   const { id: postType } = router.query
   const writePostInfo = useReactiveVar(writePostInfoVar)
-  const addToPanelInfo = useReactiveVar(addToPanelVar)
   const [backColor, setBackColor] = useState<BackColor>('#67D585')
   const [optionActiveState, setOptionActiveState] = useState({
     Temp: true,
@@ -71,6 +72,9 @@ const WritePostPage: VFC = () => {
   const onClickSaveBtn = useCallback(() => {
     setOpenSaveModal(true)
   }, [])
+  const onClickConfirm = () => {
+    console.log('send:', writePostInfo)
+  }
   useEffect(() => {
     if (typeof postType === 'string') {
       addToWritePostInfo({
@@ -90,11 +94,27 @@ const WritePostPage: VFC = () => {
         onClickTermType={onClickTermType}
         onClickBackColor={onClickBackColor}
         onClickOpenStickerList={onClickOpenStickerList}
-        updatePickedImgUrl={updatePickedImgUrl}
-        updatePickedImgWidth={updatePickedImgWidth}
-        addToPanelByClicking={addToPanelByClicking}
         closeDeleteBtnByTouching={closeDeleteBtnByTouching}
         onClickSaveBtn={onClickSaveBtn}
+      />
+      {openStickerList ? (
+        <StickersList
+          updatePickedImgUrl={updatePickedImgUrl}
+          updatePickedImgWidth={updatePickedImgWidth}
+          addToPanelByClicking={addToPanelByClicking}
+          onClickOpenStickerList={onClickOpenStickerList}
+        />
+      ) : null}
+      <Modal
+        open={openSaveModal}
+        title="작성을 완료하시겠습니까?"
+        description="욕설 및 비방은 신고의 대상이 될 수 있습니다."
+        confirmText="작성완료"
+        cancelText="취소"
+        onClickCancel={() => {
+          setOpenSaveModal(false)
+        }}
+        onClickConfirm={onClickConfirm}
       />
     </AppContainer>
   )

@@ -7,7 +7,6 @@ import OptionAlarmField, { OptionType } from '../molecules/OptionAlarmField'
 import { IMAGES } from '../../constants/images'
 import { SVGS } from '../../constants/svgs'
 import { BackColor } from '../../types/types'
-import StickersList from '../organisms/StickersList'
 interface Props {
   TempType: string | string[]
   optionActiveState: OptionType
@@ -16,9 +15,6 @@ interface Props {
   onClickTermType: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   onClickBackColor: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   onClickOpenStickerList: () => void
-  updatePickedImgUrl: (imgUrl: string) => void
-  updatePickedImgWidth: (width: number) => void
-  addToPanelByClicking: () => void
   closeDeleteBtnByTouching: () => void
   onClickSaveBtn: () => void
 }
@@ -110,14 +106,6 @@ const WritePostTemplate: FC<Props> = (props) => {
           )}
         </Footer>
       </BottomContainer>
-      {props.openStickerList ? (
-        <StickersList
-          updatePickedImgUrl={props.updatePickedImgUrl}
-          updatePickedImgWidth={props.updatePickedImgWidth}
-          addToPanelByClicking={props.addToPanelByClicking}
-          onClickOpenStickerList={props.onClickOpenStickerList}
-        />
-      ) : null}
     </TempContainer>
   )
 }
