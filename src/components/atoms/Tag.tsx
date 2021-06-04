@@ -10,6 +10,7 @@ interface Props {
   icon?: string
   onClickClose?: (id: string) => void
   isNonClose?: boolean
+  external?: boolean
 }
 
 const Container = styled.div`
@@ -49,7 +50,7 @@ const Text = styled.span`
 const Tag: React.FunctionComponent<Props> = (props) => {
   return (
     <Container>
-      <StyledTag href={props.href}>
+      <StyledTag href={props.href} external={props.external}>
         <Icon src={props.icon} />
         <Text>{props.text}</Text>
         {!props.isNonClose && (

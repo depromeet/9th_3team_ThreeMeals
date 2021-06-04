@@ -74,7 +74,10 @@ const ProfilePage: React.FC = () => {
         onClickLeft={router.back}
         onClickRight={router.back}
         onChangeImage={onChangeImage}
-        onClickIntro={() => router.push('/profileEdit')}
+        onClickIntro={() =>
+          router.push('/profile/[edit]', '/profile/contentEdit')
+        }
+        onClickName={() => router.push('/profile/[edit]', '/profile/nameEdit')}
         onClickLogout={() => {
           router.push('/')
         }}
