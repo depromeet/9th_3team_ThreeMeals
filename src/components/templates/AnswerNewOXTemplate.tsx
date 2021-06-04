@@ -5,7 +5,7 @@ import { IMAGES } from '../../constants/images'
 import QuizDeck from '../organisms/QuizDeck'
 import { BackColor } from '../../types/types'
 interface Props {
-  cardData: Array<string>
+  cardData: Array<{ id: number; content: string }>
   backColors: Array<BackColor>
   onClickHeaderLeft: () => void
 }
@@ -19,7 +19,7 @@ const AnswerNewOXTemplate: FC<Props> = (props) => {
         onClickLeft={props.onClickHeaderLeft}
       />
       <BodyContainer>
-        <QuizDeck data={props.cardData} backColors={props.backColors} />
+        <QuizDeck cardData={props.cardData} backColors={props.backColors} />
       </BodyContainer>
     </TempContainer>
   )
@@ -34,4 +34,7 @@ const TempContainer = styled.div`
 const BodyContainer = styled.div`
   height: calc(100vh - 64px);
   width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 `

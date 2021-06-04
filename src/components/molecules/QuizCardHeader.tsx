@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { SVGS } from '../../constants/svgs'
 import { IMAGES } from '../../constants/images'
+import { BackColor } from '../../types/types'
 
 export interface CardHeaderProps {
   isLikeActive?: boolean
   className?: string
-  color: 'blue' | 'green' | 'orange' | 'red' | 'yellow'
+  color: BackColor
   isMyFeed: boolean
 }
 
@@ -27,25 +28,26 @@ const Container = styled.div`
     right: -15px;
   }
 `
-
-const getImage = (color: 'blue' | 'green' | 'orange' | 'red' | 'yellow') => {
-  switch (color) {
-    case 'blue':
-      return IMAGES.img_quiz_bl
-    case 'green':
-      return IMAGES.img_quiz_gr
-    case 'orange':
-      return IMAGES.img_quiz_or
-    case 'red':
-      return IMAGES.img_quiz_rd
-    case 'yellow':
-      return IMAGES.img_quiz_yr
-    default:
-      break
-  }
-}
-
 const QuizCardHeader: React.FunctionComponent<CardHeaderProps> = (props) => {
+  const getImage = useCallback(
+    (color: '#6799FE' | '#67D585' | '#FF823D' | '#CC4349' | '#F1D75F') => {
+      switch (color) {
+        case '#6799FE':
+          return IMAGES.img_quiz_bl
+        case '#67D585':
+          return IMAGES.img_quiz_gr
+        case '#FF823D':
+          return IMAGES.img_quiz_or
+        case '#CC4349':
+          return IMAGES.img_quiz_rd
+        case '#F1D75F':
+          return IMAGES.img_quiz_yr
+        default:
+          break
+      }
+    },
+    []
+  )
   return (
     <Container className={props.className}>
       <img src={getImage(props.color)} alt={'quiz'} width="89" height="39" />
@@ -75,4 +77,4 @@ const QuizCardHeader: React.FunctionComponent<CardHeaderProps> = (props) => {
   )
 }
 
-export default QuizCardHeader
+export default React.memo(QuizCardHeader)
