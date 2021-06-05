@@ -1,8 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
-
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 interface Props {
+  /** isContent is for only contents without otherContents */
+  isContent?: boolean
+  id?: string
   questionTitle: string
   backColor: string
   time?: string
@@ -19,8 +22,13 @@ const AnswerCard: React.FunctionComponent<Props> = (props) => {
         <Header>
           <TimeContainer>{props.time || '-13:33:33'}</TimeContainer>
           <div>
-            {props.onClickShare && (
-              <Image src={IMAGES.icon_32_share} onClick={props.onClickShare} />
+            {props.isContent && props.id && (
+              <CopyToClipboard text={props.id}>
+                <Image
+                  src={IMAGES.icon_32_share}
+                  onClick={props.onClickShare}
+                />
+              </CopyToClipboard>
             )}
             {props.onClickOption && (
               <Image
