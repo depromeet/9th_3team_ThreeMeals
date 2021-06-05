@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import styled from 'styled-components'
 import { useQuery, useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
@@ -23,7 +23,7 @@ const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
     data: { getAccountInfo },
   } = useQuery(GET_MY_PROFILE)
 
-  const getContent = (edit?: string | string[]) => {
+  const content = useMemo(() => {
     if (edit === 'profileEdit') {
       return getAccountInfo.profileUrl
     }
@@ -33,9 +33,9 @@ const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
     if (edit === 'contentEdit') {
       return getAccountInfo.content
     }
-  }
+  }, [edit])
 
-  const getPlaceHolder = (edit?: string | string[]) => {
+  const placeHolder = useMemo(() => {
     if (edit === 'profileEdit') {
       return '인스타그램 아이디를 작성해주세요.'
     }
@@ -45,21 +45,18 @@ const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
     if (edit === 'contentEdit') {
       return '소개글을 작성해주세요.'
     }
-  }
+    return ''
+  }, [edit])
 
-  const getMaxLengthTextArea = (edit?: string | string[]) => {
-    if (edit === 'profileEdit') {
-      return 1
-    }
-    if (edit === 'nameEdit') {
-      return 1
-    }
+  const maxLengthTextArea = useMemo(() => {
     if (edit === 'contentEdit') {
-      return 3
+      return 50
     }
-  }
 
-  const [currentValue, setCurrentValue] = useState(getContent(edit))
+    return 18
+  }, [edit])
+
+  const [currentValue, setCurrentValue] = useState(content)
 
   const [updateAccountInfo] = useMutation(UPDATE_ACCOUNT_INFO, {
     onCompleted: () => {
@@ -119,8 +116,8 @@ const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
           onChange={(e) => {
             setCurrentValue(e.target.value)
           }}
-          placeholder={getPlaceHolder(edit)}
-          maxLength={getMaxLengthTextArea(edit)}
+          placeholder={placeHolder}
+          maxLength={maxLengthTextArea}
         />
       </InputContainer>
     </Container>
