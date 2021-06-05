@@ -11,4 +11,6 @@ export const SVGS = {
   icon_time_gr: require('../assets/svgs/icon_time_gr.svg'),
   icon_time_trans: require('../assets/svgs/icon_time_trans.svg'),
   icon_32_emoji_wh: require('../assets/svgs/icon_32_emoji_wh.svg'),
+  icon_24_prev_wh: require('../assets/svgs/icon_24_prev_wh.svg'),
+  icon_24_next_wh: require('../assets/svgs/icon_24_next_wh.svg'),
 }
