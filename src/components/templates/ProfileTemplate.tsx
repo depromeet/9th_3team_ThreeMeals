@@ -16,6 +16,7 @@ interface Props {
   onClickLeft?: () => void
   onClickRight?: () => void
   onClickIntro?: () => void
+  onClickName?: () => void
   onClickLogout?: () => void
   introduction?: string
 }
@@ -64,7 +65,7 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
       />
       <IntroContainer style={{ marginTop: 40 }}>
         <IntroTitle>이름</IntroTitle>
-        <IntroDesc>{props.nickName}</IntroDesc>
+        <IntroDesc onClick={props.onClickName}>{props.nickName}</IntroDesc>
       </IntroContainer>
       <DefaultLine containerStyle={{ marginTop: 16, marginBottom: 16 }} />
       <IntroContainer>
@@ -81,17 +82,16 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
           id={'1'}
           icon={IMAGES.icon_16_insta_wh}
           text={'Add Instgram'}
-          href="https://google.com"
           onClickClose={onClickClose}
         />
       </TagContainer>
       <DefaultLine containerStyle={{ marginTop: 16, marginBottom: 16 }} />
       <TagContainer>
         <Tag
+          external
           id={'2'}
           icon={IMAGES.share_16}
           text={'figma.com/duck-bae'}
-          href="https://google.com"
           onClickClose={onClickClose}
         />
       </TagContainer>
@@ -131,6 +131,7 @@ const IntroDesc = styled.span`
   font-size: 16px;
   line-height: 19px;
   letter-spacing: -0.02em;
+  cursor: pointer;
 
   color: #ffffff;
 

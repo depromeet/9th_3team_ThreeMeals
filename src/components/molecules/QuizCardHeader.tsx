@@ -28,7 +28,6 @@ const Container = styled.div`
     right: -15px;
   }
 `
-
 const QuizCardHeader: React.FunctionComponent<CardHeaderProps> = (props) => {
   const getImage = useCallback(
     (color: '#6799FE' | '#67D585' | '#FF823D' | '#CC4349' | '#F1D75F') => {
@@ -78,4 +77,4 @@ const QuizCardHeader: React.FunctionComponent<CardHeaderProps> = (props) => {
   )
 }
 
-export default QuizCardHeader
+export default React.memo(QuizCardHeader)

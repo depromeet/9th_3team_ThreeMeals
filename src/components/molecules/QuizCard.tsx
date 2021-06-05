@@ -28,6 +28,7 @@ interface Props {
 interface StyledProps {
   bottomHeight: number | string
 }
+
 const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
   const getOImg = useCallback(
     (color: '#6799FE' | '#67D585' | '#FF823D' | '#F1D75F' | '#CC4349') => {
@@ -50,9 +51,9 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
     (color: '#6799FE' | '#67D585' | '#FF823D' | '#F1D75F' | '#CC4349') => {
       switch (color) {
         case '#6799FE':
-          return IMAGES.img_quiz_x_bl
+          return IMAGES.img_quiz_x_yr
         case '#67D585':
-          return IMAGES.img_quiz_x_yl
+          return IMAGES.img_quiz_x_bl
         case '#FF823D':
           return IMAGES.img_quiz_x_gr
         case '#F1D75F':
@@ -92,7 +93,7 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
           justifyContent: 'center',
           alignItems: 'center',
           borderRadius: '24px',
-          boxShadow: '0px 30px 40px rgba(255, 131, 61, 0.15)',
+          boxShadow: '0px 30px 40px #191919',
         }}
       >
         <ContextContainer bottomHeight={props.bottomHeight}>
