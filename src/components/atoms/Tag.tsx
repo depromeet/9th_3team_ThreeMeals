@@ -54,8 +54,8 @@ const Text = styled.span`
 const Tag: React.FunctionComponent<Props> = (props) => {
   return (
     <Container>
+      <Icon src={props.icon} />
       <StyledTag text={props.text}>
-        <Icon src={props.icon} />
         <Text>{props.text}</Text>
       </StyledTag>
       {!props.isNonClose && (
