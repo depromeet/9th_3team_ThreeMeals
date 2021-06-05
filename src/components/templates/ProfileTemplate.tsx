@@ -82,7 +82,6 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
           id={'1'}
           icon={IMAGES.icon_16_insta_wh}
           text={'Add Instgram'}
-          href={'/profile/profileEdit'}
           onClickClose={onClickClose}
         />
       </TagContainer>
@@ -93,9 +92,6 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
           id={'2'}
           icon={IMAGES.share_16}
           text={'figma.com/duck-bae'}
-          href={
-            'https://www.figma.com/file/CfsFP2qgpxeV06XO3BS2yj/%EB%94%94%ED%94%84%EB%A7%8C-3%EC%A1%B0?node-id=70%3A20'
-          }
           onClickClose={onClickClose}
         />
       </TagContainer>
