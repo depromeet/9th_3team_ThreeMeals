@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useQuery, useMutation } from '@apollo/client'
+import { useRouter } from 'next/router'
 
 import {
   UPDATE_ACCOUNT_INFO,
@@ -15,11 +16,50 @@ interface Props {
 }
 
 const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
+  const router = useRouter()
+  const { edit } = router.query
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const {
     data: { getAccountInfo },
   } = useQuery(GET_MY_PROFILE)
-  const [currentValue, setCurrentValue] = useState(getAccountInfo.content)
+
+  const getContent = (edit?: string | string[]) => {
+    if (edit === 'profileEdit') {
+      return getAccountInfo.profileUrl
+    }
+    if (edit === 'nameEdit') {
+      return getAccountInfo.nickname
+    }
+    if (edit === 'contentEdit') {
+      return getAccountInfo.content
+    }
+  }
+
+  const getPlaceHolder = (edit?: string | string[]) => {
+    if (edit === 'profileEdit') {
+      return '인스타그램 아이디를 작성해주세요.'
+    }
+    if (edit === 'nameEdit') {
+      return '닉네임을 작성해주세요.'
+    }
+    if (edit === 'contentEdit') {
+      return '소개글을 작성해주세요.'
+    }
+  }
+
+  const getMaxLengthTextArea = (edit?: string | string[]) => {
+    if (edit === 'profileEdit') {
+      return 1
+    }
+    if (edit === 'nameEdit') {
+      return 1
+    }
+    if (edit === 'contentEdit') {
+      return 3
+    }
+  }
+
+  const [currentValue, setCurrentValue] = useState(getContent(edit))
 
   const [updateAccountInfo] = useMutation(UPDATE_ACCOUNT_INFO, {
     onCompleted: () => {
@@ -36,12 +76,31 @@ const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
   }, [currentValue])
 
   const onSave = () => {
-    updateAccountInfo({
-      variables: {
-        content: currentValue,
-        nickname: getAccountInfo.nickname,
-      },
-    })
+    if (edit === 'profileEdit') {
+      updateAccountInfo({
+        variables: {
+          profileUrl: currentValue,
+          nickname: getAccountInfo.nickname,
+        },
+      })
+      return
+    }
+    if (edit === 'nameEdit') {
+      updateAccountInfo({
+        variables: {
+          nickname: currentValue,
+        },
+      })
+      return
+    }
+    if (edit === 'contentEdit') {
+      updateAccountInfo({
+        variables: {
+          content: currentValue,
+          nickname: getAccountInfo.nickname,
+        },
+      })
+    }
   }
 
   return (
@@ -60,7 +119,8 @@ const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
           onChange={(e) => {
             setCurrentValue(e.target.value)
           }}
-          placeholder={'소개글을 작성해주세요.'}
+          placeholder={getPlaceHolder(edit)}
+          maxLength={getMaxLengthTextArea(edit)}
         />
       </InputContainer>
     </Container>
@@ -89,6 +149,11 @@ const TextArea = styled.textarea`
   opacity: 0.3;
   text-align: center;
   width: 70%;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.02em;
+
   &:focus {
     outline: none;
   }

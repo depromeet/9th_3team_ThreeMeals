@@ -5,11 +5,11 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 interface Props {
   id?: string
-  href: string
   text: string
   icon?: string
   onClickClose?: (id: string) => void
   isNonClose?: boolean
+  external?: boolean
 }
 
 const Container = styled.div`
@@ -54,8 +54,8 @@ const Text = styled.span`
 const Tag: React.FunctionComponent<Props> = (props) => {
   return (
     <Container>
-      <Icon src={props.icon} />
       <StyledTag text={props.text}>
+        <Icon src={props.icon} />
         <Text>{props.text}</Text>
       </StyledTag>
       {!props.isNonClose && (

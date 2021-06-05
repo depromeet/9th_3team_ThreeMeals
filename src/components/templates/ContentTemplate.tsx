@@ -96,6 +96,8 @@ const ContentTemplate: FC<Props> = (props) => {
           <>
             <ContentContainer>
               <AnswerCard
+                isContent
+                id={'0'}
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
                 backColor={'#FF833D'}
                 onClickPost={() => {
@@ -106,6 +108,8 @@ const ContentTemplate: FC<Props> = (props) => {
                 }}
               />
               <AnswerCard
+                isContent
+                id={'1'}
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
                 backColor={'#67D585'}
                 onClickPost={() => {
@@ -116,6 +120,8 @@ const ContentTemplate: FC<Props> = (props) => {
                 }}
               />
               <AnswerCard
+                isContent
+                id={'2'}
                 questionTitle="김덕배님 남자친구는 있으신지요 ????"
                 backColor={'#67D585'}
                 onClickPost={() => {
