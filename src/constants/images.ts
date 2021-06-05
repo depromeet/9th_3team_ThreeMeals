@@ -60,6 +60,7 @@ export const IMAGES = {
   img_newq_1: require('../assets/images/img_newq_1.png'),
   img_tape_newq: require('../assets/images/img_tape_newq.png'),
   rightButton: require('../assets/images/rightButton.png'),
+  icon_floating_wr: require('../assets/images/icon_floating_wr.png')
 
   // newSecretCard //
   button_floating_save_active: require('../assets/images/button_floating_save_active.png'),
