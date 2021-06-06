@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 export const GET_MY_PROFILE = gql`
   query {
-    getAccountInfo {
+    getMyAccountInfo {
       id
       nickname
       status
@@ -15,7 +15,7 @@ export const GET_MY_PROFILE = gql`
 
 export const GET_MY_CONTENT = gql`
   query {
-    getAccountInfo {
+    getMyAccountInfo {
       content
     }
   }
