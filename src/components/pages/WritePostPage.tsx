@@ -108,6 +108,7 @@ const WritePostPage: VFC = () => {
       <Modal
         open={openSaveModal}
         title="작성을 완료하시겠습니까?"
+        titleEmojiTextType="✏️"
         description="욕설 및 비방은 신고의 대상이 될 수 있습니다."
         confirmText="작성완료"
         cancelText="취소"

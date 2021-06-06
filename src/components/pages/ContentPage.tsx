@@ -45,7 +45,8 @@ const ContentPage: React.FC = () => {
       />
       <Modal
         open={isOpen}
-        title={'💬 이 질문을 삭제하시겠습니까?'}
+        title={'이 질문을 삭제하시겠습니까?'}
+        titleEmojiTextType="💬"
         confirmText={'삭제하기'}
         cancelText={'취소'}
         onClickConfirm={() => {
