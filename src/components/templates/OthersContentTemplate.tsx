@@ -229,4 +229,15 @@ const WriteButton = styled.div`
   position: fixed;
   overflow-y: scroll;
   overflow-x: hidden;
+
+  @media all and (min-width: 515px) {
+    margin-right: -webkit-calc((100% - 400px) / 2);
+    margin-right: -moz-calc((100% - 400px) / 2);
+    margin-right: calc((100% - 400px) / 2);
+  }
+  @media all and (max-width: 515px) {
+    margin-right: -webkit-calc((7%) / 2);
+    margin-right: -moz-calc((7%) / 2);
+    margin-right: calc((7%) / 2);
+  }
 `
