@@ -20,18 +20,18 @@ const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
   const { edit } = router.query
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const {
-    data: { getAccountInfo },
+    data: { getMyAccountInfo },
   } = useQuery(GET_MY_PROFILE)
 
   const content = useMemo(() => {
     if (edit === 'profileEdit') {
-      return getAccountInfo.profileUrl
+      return getMyAccountInfo.profileUrl
     }
     if (edit === 'nameEdit') {
-      return getAccountInfo.nickname
+      return getMyAccountInfo.nickname
     }
     if (edit === 'contentEdit') {
-      return getAccountInfo.content
+      return getMyAccountInfo.content
     }
   }, [edit])
 
@@ -77,7 +77,7 @@ const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
       updateAccountInfo({
         variables: {
           profileUrl: currentValue,
-          nickname: getAccountInfo.nickname,
+          nickname: getMyAccountInfo.nickname,
         },
       })
       return
@@ -94,7 +94,7 @@ const ProfileEditTemplate: React.FC<Props> = (props: Props) => {
       updateAccountInfo({
         variables: {
           content: currentValue,
-          nickname: getAccountInfo.nickname,
+          nickname: getMyAccountInfo.nickname,
         },
       })
     }
