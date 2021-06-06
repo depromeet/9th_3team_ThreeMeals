@@ -16,10 +16,8 @@ const OthersContentPage: React.FC = () => {
   return (
     <AppContainer>
       <OthersContentTemplate
+        router={router}
         profileImage={IMAGES.background}
-        onClickWrite={() => {
-          // router.push('/newSecretCard')
-        }}
         onClickLeft={router.back}
         onClickSecondRight={() => {
           router.push('/notification')
