@@ -7,15 +7,19 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 
 module.exports = withPlugins([[withBundleAnalyzer], [withImages], [withTM]], {
+  target: 'serverless',
   typescript: {
     ignoreBuildErrors: true,
   },
-  webpack: (config) => {
+  webpack: (config, { isServer, webpack }) => {
     config.module.rules.push({
       test: /\.(graphql|gql)$/,
       exclude: /node_modules/,
       loader: 'graphql-tag/loader',
     })
+    if (isServer) {
+      config.plugins.push(new webpack.IgnorePlugin(/canvas|jsdom/, /konva/))
+    }
     return config
   },
   webpackDevMiddleware: (config) => {
