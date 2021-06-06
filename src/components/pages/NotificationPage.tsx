@@ -1,6 +1,8 @@
+import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
+import { GET_NOTIFICATIONS } from '../../lib/queries/getQueries'
 import NotificationTemplate from '../templates/NotificationTemplate'
 
 export interface NoticeData {
@@ -11,6 +13,11 @@ export interface NoticeData {
 
 const NotificationPage: React.FC = () => {
   const router = useRouter()
+
+  const {
+    data: { getNotifications },
+    refetch,
+  } = useQuery(GET_NOTIFICATIONS)
 
   const dummyData: NoticeData[] = [
     {
