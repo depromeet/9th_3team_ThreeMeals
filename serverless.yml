@@ -1,7 +1,10 @@
 # serverless.yml
-myNextApplication:
+hush:
   component: '@sls-next/serverless-component@1.19.0'
   inputs:
+    name:
+      defaultLambda: hushDefaultLamda
+      apiLambda: hushApiLamda
     bucketRegion: 'ap-northeast-2'
     bucketName: 'hush-static'
     cloudfront:
