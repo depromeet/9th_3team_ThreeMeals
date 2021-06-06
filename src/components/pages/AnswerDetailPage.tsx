@@ -17,8 +17,8 @@ const AnswerDetailPage: React.FC = () => {
   const onClickRemove = useCallback((type: AnswerContactType, id: string) => {
     const modalData: string =
       type === 'parent'
-        ? '💬 이 질문을 삭제하시겠습니까?'
-        : '💬 이 댓글을 삭제하시겠습니까?'
+        ? '이 질문을 삭제하시겠습니까?'
+        : '이 댓글을 삭제하시겠습니까?'
 
     setModalTitle(modalData)
     setIsOpen(true)
@@ -44,6 +44,7 @@ const AnswerDetailPage: React.FC = () => {
       <Modal
         open={isOpen}
         title={modalTitle || ''}
+        titleEmojiTextType="💬"
         confirmText={'삭제하기'}
         cancelText={'취소'}
         onClickConfirm={() => {
