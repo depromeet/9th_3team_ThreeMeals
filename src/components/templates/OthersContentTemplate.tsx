@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useMemo, useState } from 'react'
+import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react'
 import Header from '../molecules/Header'
 import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
@@ -7,9 +7,10 @@ import DefaultLine from '../atoms/DefaultLine'
 import QuestionCard from '../organisms/QuestionCard'
 import PrivateCardLabel from '../atoms/PrivateCardLabel'
 import AnswerCard from '../organisms/AnswerCard'
+import { NextRouter } from 'next/router'
 interface Props {
+  router: NextRouter
   profileImage: string
-  onClickWrite?: () => void
   onClickLeft?: () => void
   onClickAnswerCard: (postId: string) => void
   onClickSecondRight?: () => void
@@ -18,6 +19,13 @@ interface Props {
 const OthersContentTemplate: FC<Props> = (props) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
 
+  const onClickWrite = useCallback(() => {
+    if (tabIndex === 0) {
+      props.router.push('writePost/Q')
+    } else {
+      props.router.push('writePost/OX')
+    }
+  }, [props.router, tabIndex])
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:
@@ -165,9 +173,9 @@ const OthersContentTemplate: FC<Props> = (props) => {
         />
         {ContentView}
       </MainContainer>
-      {tabIndex === 0 && (
+      {tabIndex !== 1 && (
         <WriteButton>
-          <img onClick={props.onClickWrite} src={IMAGES.write} width={88} />
+          <img onClick={onClickWrite} src={IMAGES.write} width={88} />
         </WriteButton>
       )}
     </AppContainer>
@@ -215,6 +223,7 @@ const ContentContainer = styled.div`
 `
 
 const WriteButton = styled.div`
+  max-width: 500px;
   bottom: 0;
   right: 0;
   position: fixed;
