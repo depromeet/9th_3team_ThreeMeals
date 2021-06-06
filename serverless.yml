@@ -4,7 +4,7 @@ hush:
   inputs:
     name:
       defaultLambda: hushDefaultLamda
-      imageLambda: hushImageLambda
+      apiLambda: hushApiLamda
     bucketRegion: 'ap-northeast-2'
     bucketName: 'hush-static'
     cloudfront:
