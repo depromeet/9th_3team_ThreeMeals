@@ -7,7 +7,9 @@ import DefaultLine from '../atoms/DefaultLine'
 import QuestionCard from '../organisms/QuestionCard'
 import PrivateCardLabel from '../atoms/PrivateCardLabel'
 import AnswerCard from '../organisms/AnswerCard'
+import { getMyAccountInfo } from '../../lib/queries/meQueries'
 interface Props {
+  myAccount?: getMyAccountInfo
   isProfile: boolean
   profileImage: string
   onClickLeft?: () => void
@@ -187,11 +189,17 @@ const ContentTemplate: FC<Props> = (props) => {
         break
     }
   }, [props, tabIndex])
+
+  const profileImage = useMemo(() => {
+    return props.myAccount?.getMyAccountInfo.image
+  }, [props.myAccount?.getMyAccountInfo.image])
+
   return (
     <AppContainer>
       <Header
-        isProfile={props.isProfile}
-        profileImage={props.profileImage}
+        isLogin={props.myAccount ? true : false}
+        isProfile={profileImage ? true : false}
+        profileImage={profileImage}
         rightIcon={IMAGES.icon_24_drawer}
         rightSecondIcon={IMAGES.icon_24_alram2_wh}
         onClickSecondRight={props.onClickSecondRight}

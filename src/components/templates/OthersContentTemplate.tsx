@@ -8,8 +8,10 @@ import QuestionCard from '../organisms/QuestionCard'
 import PrivateCardLabel from '../atoms/PrivateCardLabel'
 import AnswerCard from '../organisms/AnswerCard'
 import { useRouter } from 'next/router'
+import { getMyAccountInfo } from '../../lib/queries/meQueries'
 
 interface Props {
+  myAccount?: getMyAccountInfo
   profileImage: string
   onClickLeft?: () => void
   onClickAnswerCard: (postId: string) => void
@@ -101,11 +103,15 @@ const OthersContentTemplate: FC<Props> = (props) => {
     }
   }, [props, tabIndex])
 
+  const profileImage = useMemo(() => {
+    return props.myAccount?.getMyAccountInfo.image
+  }, [props.myAccount?.getMyAccountInfo.image])
   return (
     <AppContainer>
       <Header
-        isProfile
-        profileImage={props.profileImage}
+        isLogin={props.myAccount ? true : false}
+        isProfile={profileImage ? true : false}
+        profileImage={profileImage}
         rightIcon={IMAGES.icon_24_drawer}
         rightSecondIcon={IMAGES.icon_24_alram2_wh}
         onClickSecondRight={props.onClickSecondRight}
