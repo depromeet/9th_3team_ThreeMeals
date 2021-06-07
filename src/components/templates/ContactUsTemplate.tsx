@@ -1,9 +1,11 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 import Header from '../molecules/Header'
 import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
 import { SpacingText } from '../../utils/SpacingText'
+import { getMyAccountInfo } from '../../lib/queries/meQueries'
 interface Props {
+  myAccount?: getMyAccountInfo
   data?: string
   isProfile: boolean
   profileImage?: string
@@ -14,11 +16,15 @@ interface Props {
 
 const ContactUsTemplate: FC<Props> = (props) => {
   const [currentValue, setCurrentValue] = useState('')
+
+  const profileImage = useMemo(() => {
+    return props.myAccount?.getMyAccountInfo.image
+  }, [props.myAccount?.getMyAccountInfo.image])
   return (
     <AppContainer>
       <Header
-        isProfile={props.isProfile}
-        profileImage={props.profileImage}
+        isLogin={props.myAccount ? true : false}
+        profileImage={profileImage}
         leftIcon={IMAGES.icon_24_back_wh}
         rightIcon={IMAGES.icon_24_drawer}
         onClickLeft={props.onClickLeft}

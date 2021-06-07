@@ -4,8 +4,11 @@ import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import ContentTemplate from '../templates/ContentTemplate'
 import Modal from '../molecules/Modal'
+import { getMyAccountInfo, GET_MY_PROFILE } from '../../lib/queries/meQueries'
+import { useQuery } from '@apollo/client'
 
 const ContentPage: React.FC = () => {
+  const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const onClickAnswerCard = useCallback(
@@ -26,9 +29,11 @@ const ContentPage: React.FC = () => {
   const onClickLike = useCallback((id: string, tabIndex: number) => {
     console.log('onClickLike id', id, tabIndex)
   }, [])
+
   return (
     <AppContainer>
       <ContentTemplate
+        myAccount={myAccount.data}
         isProfile={true}
         profileImage={IMAGES.background}
         onClickLeft={router.back}

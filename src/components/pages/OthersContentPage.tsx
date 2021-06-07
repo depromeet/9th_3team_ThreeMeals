@@ -1,9 +1,12 @@
+import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
+import { getMyAccountInfo, GET_MY_PROFILE } from '../../lib/queries/meQueries'
 import OthersContentTemplate from '../templates/OthersContentTemplate'
 const OthersContentPage: React.FC = () => {
+  const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
   const router = useRouter()
 
   const onClickAnswerCard = useCallback(
@@ -12,10 +15,10 @@ const OthersContentPage: React.FC = () => {
     },
     [router]
   )
-
   return (
     <AppContainer>
       <OthersContentTemplate
+        myAccount={myAccount.data}
         profileImage={IMAGES.background}
         onClickLeft={router.back}
         onClickSecondRight={() => {

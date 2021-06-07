@@ -1,20 +1,27 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import Header from '../molecules/Header'
 import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
 import AlarmContentField from '../molecules/AlarmContentField'
 import { NoticeData } from '../pages/NotificationPage'
+import { getMyAccountInfo } from '../../lib/queries/meQueries'
 interface Props {
+  myAccount?: getMyAccountInfo
   profileImage?: string
   noticeData?: NoticeData[]
   onClickLeft?: () => void
 }
 
 const NotificationTemplate: FC<Props> = (props) => {
+  const profileImage = useMemo(() => {
+    return props.myAccount?.getMyAccountInfo.image
+  }, [props.myAccount?.getMyAccountInfo.image])
+
   return (
     <AppContainer>
       <Header
-        isProfile
+        isLogin={props.myAccount ? true : false}
+        profileImage={profileImage}
         leftIcon={IMAGES.icon_24_back_wh}
         rightIcon={IMAGES.icon_24_drawer}
         rightSecondIcon={IMAGES.icon_24_alram2_wh}
