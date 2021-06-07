@@ -16,7 +16,6 @@ const OthersContentPage: React.FC = () => {
   return (
     <AppContainer>
       <OthersContentTemplate
-        router={router}
         profileImage={IMAGES.background}
         onClickLeft={router.back}
         onClickSecondRight={() => {
