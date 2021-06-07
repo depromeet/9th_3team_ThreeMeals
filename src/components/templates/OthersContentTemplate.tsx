@@ -7,9 +7,9 @@ import DefaultLine from '../atoms/DefaultLine'
 import QuestionCard from '../organisms/QuestionCard'
 import PrivateCardLabel from '../atoms/PrivateCardLabel'
 import AnswerCard from '../organisms/AnswerCard'
-import { NextRouter } from 'next/router'
+import { useRouter } from 'next/router'
+
 interface Props {
-  router: NextRouter
   profileImage: string
   onClickLeft?: () => void
   onClickAnswerCard: (postId: string) => void
@@ -18,14 +18,14 @@ interface Props {
 
 const OthersContentTemplate: FC<Props> = (props) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
-
+  const router = useRouter()
   const onClickWrite = useCallback(() => {
     if (tabIndex === 0) {
-      props.router.push('writePost/Q')
+      router.push('/writePost/Q')
     } else {
-      props.router.push('writePost/OX')
+      router.push('/writePost/OX')
     }
-  }, [props.router, tabIndex])
+  }, [router, tabIndex])
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:
@@ -229,4 +229,15 @@ const WriteButton = styled.div`
   position: fixed;
   overflow-y: scroll;
   overflow-x: hidden;
+
+  @media all and (min-width: 515px) {
+    margin-right: -webkit-calc((100% - 400px) / 2);
+    margin-right: -moz-calc((100% - 400px) / 2);
+    margin-right: calc((100% - 400px) / 2);
+  }
+  @media all and (max-width: 515px) {
+    margin-right: -webkit-calc((7%) / 2);
+    margin-right: -moz-calc((7%) / 2);
+    margin-right: calc((7%) / 2);
+  }
 `
