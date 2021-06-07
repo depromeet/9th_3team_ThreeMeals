@@ -15,7 +15,7 @@ import { SINGLE_UPLOAD } from '../../lib/queries/singleFileUploadQuery'
 
 const ProfilePage: React.FC = () => {
   const {
-    data: { getAccountInfo },
+    data: { getMyAccountInfo },
     refetch,
   } = useQuery(GET_MY_PROFILE)
   const [singleUploadMutation] = useMutation(SINGLE_UPLOAD)
@@ -29,9 +29,11 @@ const ProfilePage: React.FC = () => {
   )
 
   const fileInput = useRef<HTMLInputElement | null>(null)
-  const [profileImage, setProfileImage] = useState<string>(getAccountInfo.image)
+  const [profileImage, setProfileImage] = useState<string>(
+    getMyAccountInfo.image
+  )
   const [previewImage, setPreviewImage] = useState<string | ArrayBuffer | null>(
-    getAccountInfo.image
+    getMyAccountInfo.image
   )
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const router = useRouter()
@@ -61,9 +63,9 @@ const ProfilePage: React.FC = () => {
   )
 
   useEffect(() => {
-    setProfileImage(getAccountInfo.image)
-    setPreviewImage(getAccountInfo.image)
-  }, [getAccountInfo])
+    setProfileImage(getMyAccountInfo.image)
+    setPreviewImage(getMyAccountInfo.image)
+  }, [getMyAccountInfo])
 
   return (
     <AppContainer>
@@ -81,9 +83,9 @@ const ProfilePage: React.FC = () => {
         onClickLogout={() => {
           router.push('/')
         }}
-        nickName={getAccountInfo.nickname}
+        nickName={getMyAccountInfo.nickname}
         onClickIcon={onClickIcon}
-        introduction={getAccountInfo.content}
+        introduction={getMyAccountInfo.content}
       />
 
       <Modal
