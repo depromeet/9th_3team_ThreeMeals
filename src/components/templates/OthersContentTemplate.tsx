@@ -7,9 +7,8 @@ import DefaultLine from '../atoms/DefaultLine'
 import QuestionCard from '../organisms/QuestionCard'
 import PrivateCardLabel from '../atoms/PrivateCardLabel'
 import AnswerCard from '../organisms/AnswerCard'
-import { NextRouter } from 'next/router'
+import { useRouter } from 'next/router'
 interface Props {
-  router: NextRouter
   profileImage: string
   onClickLeft?: () => void
   onClickAnswerCard: (postId: string) => void
@@ -17,15 +16,16 @@ interface Props {
 }
 
 const OthersContentTemplate: FC<Props> = (props) => {
+  const router = useRouter()
   const [tabIndex, setTabIndex] = useState<number>(0)
 
   const onClickWrite = useCallback(() => {
     if (tabIndex === 0) {
-      props.router.push('writePost/Q')
+      router.push('/writePost/Q')
     } else {
-      props.router.push('writePost/OX')
+      router.push('/writePost/OX')
     }
-  }, [props.router, tabIndex])
+  }, [router, tabIndex])
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:
