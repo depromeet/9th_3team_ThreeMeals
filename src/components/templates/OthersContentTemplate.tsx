@@ -21,9 +21,9 @@ const OthersContentTemplate: FC<Props> = (props) => {
   const router = useRouter()
   const onClickWrite = useCallback(() => {
     if (tabIndex === 0) {
-      router.push('writePost/Q')
+      router.push('/writePost/Q')
     } else {
-      router.push('writePost/OX')
+      router.push('/writePost/OX')
     }
   }, [router, tabIndex])
   const ContentView = useMemo((): ReactElement | undefined => {
