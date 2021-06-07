@@ -4,6 +4,7 @@ import _isEmpty from 'lodash-es/isEmpty'
 
 import { initializeApollo } from '../src/lib/apollo'
 import { GET_MY_PROFILE } from '../src/lib/queries/meQueries'
+import { GET_NOTIFICATIONS } from '../src/lib/queries/notificationQueries'
 
 import NotificationPage from '../src/components/pages/NotificationPage'
 
@@ -24,6 +25,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const apolloClient = initializeApollo({}, ctx)
   await apolloClient.query({
     query: GET_MY_PROFILE,
+  })
+  await apolloClient.query({
+    query: GET_NOTIFICATIONS,
   })
   return {
     props: { initialApolloState: apolloClient.cache.extract() },

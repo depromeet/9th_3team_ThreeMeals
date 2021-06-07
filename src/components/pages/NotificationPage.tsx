@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import { getMyAccountInfo, GET_MY_PROFILE } from '../../lib/queries/meQueries'
+import { GET_NOTIFICATIONS } from '../../lib/queries/notificationQueries'
 import NotificationTemplate from '../templates/NotificationTemplate'
 
 export interface NoticeData {
@@ -13,6 +14,7 @@ export interface NoticeData {
 
 const NotificationPage: React.FC = () => {
   const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
+  const { data } = useQuery(GET_NOTIFICATIONS)
   const router = useRouter()
 
   const dummyData: NoticeData[] = [
