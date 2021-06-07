@@ -71,7 +71,7 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
       <IntroContainer>
         <IntroTitle>소개</IntroTitle>
         <IntroDesc onClick={props.onClickIntro}>
-          {props.introduction ?? '소개글을 작성해주세요!'}
+          {props.introduction ?? '소개글을 작성해주세요'}
         </IntroDesc>
       </IntroContainer>
 
@@ -121,7 +121,7 @@ const IntroTitle = styled.div`
   font-size: 16px;
   line-height: 19px;
   letter-spacing: -0.02em;
-
+  white-space: nowrap;
   color: #ffffff;
 `
 const IntroDesc = styled.span`
@@ -132,10 +132,10 @@ const IntroDesc = styled.span`
   line-height: 19px;
   letter-spacing: -0.02em;
   cursor: pointer;
-
   color: #ffffff;
-
   opacity: 0.3;
+  white-space: nowrap;
+  overflow-x: hidden;
 `
 
 const TagContainer = styled.div`
@@ -151,7 +151,6 @@ const Footer = styled.div`
   width: 100%;
   border: 1px;
   border-color: #202020;
-
   text-align: center;
 `
 
