@@ -4,6 +4,7 @@ import Modal, { ModalProvider, BaseModalBackground } from 'styled-react-modal'
 
 export interface ModalDataProps {
   titleEmoji?: string
+  titleEmojiTextType?: string
   title: string
   description?: string
   confirmText: string
@@ -62,6 +63,9 @@ const ModalContainer: React.FC<ModalDataProps> = (props: ModalDataProps) => {
         <Container>
           <EmojiContainer>
             {props.titleEmoji && <Emoji src={props.titleEmoji} />}
+            {props.titleEmojiTextType && (
+              <EmojiTextType>{props.titleEmojiTextType}</EmojiTextType>
+            )}
           </EmojiContainer>
           <Title>{props.title}</Title>
           <Description>{props.description}</Description>
@@ -108,6 +112,11 @@ const EmojiContainer = styled.div`
 `
 const Emoji = styled.img`
   width: 24px;
+  height: 24px;
+  margin-bottom: 3px;
+`
+const EmojiTextType = styled.div`
+  width: 100%;
   height: 24px;
   margin-bottom: 3px;
 `

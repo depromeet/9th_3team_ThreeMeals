@@ -112,12 +112,18 @@ const PhraseContainer = styled.div`
     font-weight: 800;
     font-size: 27px;
     margin-bottom: 10px;
+    @media screen and (max-width: 320px) {
+      font-size: 20px;
+    }
   }
   .text2 {
     font-weight: 200;
     font-size: 17px;
     .emphasis {
       font-weight: bold;
+    }
+    @media screen and (max-width: 320px) {
+      font-size: 15px;
     }
   }
 `
@@ -142,6 +148,9 @@ const TextContainer = styled.div`
   width: 100%;
   height: 25%;
   font-size: 18px;
+  @media screen and (max-width: 320px) {
+    font-size: 15px;
+  }
   .text1 {
     opacity: 0.6;
     display: flex;
@@ -186,12 +195,20 @@ const BottomContainer = styled.div`
   .arrowIcon {
     width: 100px;
     padding-left: 30px;
-    margin-bottom: 20px;
+    @media screen and (min-width: 450px) {
+      margin-bottom: 20px;
+    }
+    @media screen and (max-width: 320px) {
+      width: 80px;
+    }
   }
   .downText {
     color: #ff833d;
     font-weight: 200;
     letter-spacing: -0.04em;
+    @media screen and (max-width: 320px) {
+      font-size: 15px;
+    }
   }
   @media screen and (min-width: 450px) {
     height: calc(55% - 205px);
