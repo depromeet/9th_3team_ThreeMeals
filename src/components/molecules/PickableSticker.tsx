@@ -9,12 +9,7 @@ export interface StickerInfo {
 
 const PickableSticker: FC<StickerInfo> = (props) => {
   return (
-    <img
-      alt="stickerImg"
-      src={props.imgUrl}
-      width={props.width}
-      draggable={true}
-    />
+    <img alt="stickerImg" src={props.imgUrl} width={140} draggable={true} />
   )
 }
 

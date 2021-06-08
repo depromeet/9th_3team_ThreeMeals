@@ -6,9 +6,17 @@ import ContentTemplate from '../templates/ContentTemplate'
 import Modal from '../molecules/Modal'
 import { getMyAccountInfo, GET_MY_PROFILE } from '../../lib/queries/meQueries'
 import { useQuery } from '@apollo/client'
+import {
+  getPost,
+  getPostParams,
+  GET_POST,
+} from '../../lib/queries/getPostQueries'
 
 const ContentPage: React.FC = () => {
   const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
+  const getPost = useQuery<getPost, getPostParams>(GET_POST, {
+    variables: { first: 10, accountId: myAccount.data?.getMyAccountInfo.id },
+  })
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const onClickAnswerCard = useCallback(
@@ -33,6 +41,7 @@ const ContentPage: React.FC = () => {
   return (
     <AppContainer>
       <ContentTemplate
+        getPost={getPost.data}
         myAccount={myAccount.data}
         isProfile={true}
         profileImage={IMAGES.background}
