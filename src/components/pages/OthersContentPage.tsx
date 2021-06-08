@@ -3,11 +3,14 @@ import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
-import { getMyAccountInfo, GET_MY_PROFILE } from '../../lib/queries/meQueries'
+import { getAccountInfo, GET_ACCOUNT_INFO } from '../../lib/queries/userQueries'
 import OthersContentTemplate from '../templates/OthersContentTemplate'
 const OthersContentPage: React.FC = () => {
-  const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
   const router = useRouter()
+  const { id } = router.query
+  const account = useQuery<getAccountInfo>(GET_ACCOUNT_INFO, {
+    variables: { accountId: id },
+  })
 
   const onClickAnswerCard = useCallback(
     (postId) => {
@@ -18,9 +21,9 @@ const OthersContentPage: React.FC = () => {
   return (
     <AppContainer>
       <OthersContentTemplate
-        myAccount={myAccount.data}
+        account={account.data}
         profileImage={IMAGES.background}
-        onClickLeft={router.back}
+        onClickLeft={() => {}}
         onClickSecondRight={() => {
           router.push('/notification')
         }}
