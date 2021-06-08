@@ -9,6 +9,7 @@ import PrivateCardLabel from '../atoms/PrivateCardLabel'
 import AnswerCard from '../organisms/AnswerCard'
 import { getMyAccountInfo } from '../../lib/queries/meQueries'
 import { getPost } from '../../lib/queries/getPostQueries'
+import dayjs from 'dayjs'
 interface Props {
   getPost?: getPost
   myAccount?: getMyAccountInfo
@@ -56,6 +57,7 @@ const ContentTemplate: FC<Props> = (props) => {
 
   console.log('getPost', props.getPost?.getPosts)
   console.log('result', postContent)
+
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:
@@ -145,12 +147,13 @@ const ContentTemplate: FC<Props> = (props) => {
               />
             </NoticeContainer>
             <ContentContainer>
-              {postContent?.answer.map((e, index) => {
+              {postContent?.answer.map((data, index) => {
                 return (
                   <AnswerCard
                     key={index}
                     isContent
                     id={'0'}
+                    time={data.node.createdAt}
                     questionTitle="김덕배님 남자친구는 있으신지요 ????"
                     backColor={'#FF833D'}
                     onClickPost={() => {
@@ -313,7 +316,7 @@ const ContentTemplate: FC<Props> = (props) => {
   )
 }
 
-export default ContentTemplate
+export default React.memo(ContentTemplate)
 
 const AppContainer = styled.div`
   color: #ffffff;

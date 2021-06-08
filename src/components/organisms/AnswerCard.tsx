@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import dayjs from 'dayjs'
 interface Props {
   /** isContent is for only contents without otherContents */
   isContent?: boolean
@@ -20,7 +21,9 @@ const AnswerCard: React.FunctionComponent<Props> = (props) => {
     <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
       <Container backColor={props.backColor}>
         <Header>
-          <TimeContainer>{props.time || '-13:33:33'}</TimeContainer>
+          <TimeContainer>
+            {dayjs(props.time).format('HH:mm:ss') || '-13:33:33'}
+          </TimeContainer>
           <div>
             {props.isContent && props.id && (
               <CopyToClipboard text={props.id}>

@@ -15,6 +15,9 @@ interface getPostEdges {
     content: string
     postType: string
     secretType: string
+    createdAt: string
+    updatedAt: string
+    commentsCount: number
     fromAccount: {
       id: string
     }
@@ -71,6 +74,9 @@ export const GET_POST = gql`
               fileUrl
             }
           }
+          createdAt
+          updatedAt
+          commentsCount
         }
         cursor
       }
