@@ -1,141 +1,142 @@
 import React, { FC, useCallback } from 'react'
 import styled from 'styled-components'
-import PickableSticker, { StickerInfo } from '../molecules/PickableSticker'
+import PickableSticker from '../molecules/PickableSticker'
 import { IMAGES } from '../../constants/images'
+import { StickerInfo } from '../../types/types'
 
 interface Props {
-  updatePickedImgUrl: (imgUrl: string) => void
+  updatePickedfileUrl: (fileUrl: string) => void
   updatePickedImgWidth: (imgWidth: number) => void
   addToPanelByClicking: () => void
   onClickOpenStickerList: () => void
 }
 const dummyStickersData: StickerInfo[] = [
   {
-    imgUrl: IMAGES.sticker_food_apple,
+    fileUrl: IMAGES.sticker_food_apple,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_bread,
+    fileUrl: IMAGES.sticker_food_bread,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_watermelon,
+    fileUrl: IMAGES.sticker_food_watermelon,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_apple,
+    fileUrl: IMAGES.sticker_food_apple,
     width: 80,
   },
   {
-    imgUrl: IMAGES.sticker_food_bread,
+    fileUrl: IMAGES.sticker_food_bread,
     width: 160,
   },
   {
-    imgUrl: IMAGES.sticker_food_watermelon,
+    fileUrl: IMAGES.sticker_food_watermelon,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_apple,
+    fileUrl: IMAGES.sticker_food_apple,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_bread,
+    fileUrl: IMAGES.sticker_food_bread,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_watermelon,
+    fileUrl: IMAGES.sticker_food_watermelon,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_apple,
+    fileUrl: IMAGES.sticker_food_apple,
     width: 80,
   },
   {
-    imgUrl: IMAGES.sticker_food_bread,
+    fileUrl: IMAGES.sticker_food_bread,
     width: 160,
   },
   {
-    imgUrl: IMAGES.sticker_food_watermelon,
+    fileUrl: IMAGES.sticker_food_watermelon,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_apple,
+    fileUrl: IMAGES.sticker_food_apple,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_bread,
+    fileUrl: IMAGES.sticker_food_bread,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_watermelon,
+    fileUrl: IMAGES.sticker_food_watermelon,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_apple,
+    fileUrl: IMAGES.sticker_food_apple,
     width: 80,
   },
   {
-    imgUrl: IMAGES.sticker_food_bread,
+    fileUrl: IMAGES.sticker_food_bread,
     width: 160,
   },
   {
-    imgUrl: IMAGES.sticker_food_watermelon,
+    fileUrl: IMAGES.sticker_food_watermelon,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_apple,
+    fileUrl: IMAGES.sticker_food_apple,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_bread,
+    fileUrl: IMAGES.sticker_food_bread,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_watermelon,
+    fileUrl: IMAGES.sticker_food_watermelon,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_apple,
+    fileUrl: IMAGES.sticker_food_apple,
     width: 80,
   },
   {
-    imgUrl: IMAGES.sticker_food_bread,
+    fileUrl: IMAGES.sticker_food_bread,
     width: 160,
   },
   {
-    imgUrl: IMAGES.sticker_food_watermelon,
+    fileUrl: IMAGES.sticker_food_watermelon,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_apple,
+    fileUrl: IMAGES.sticker_food_apple,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_bread,
+    fileUrl: IMAGES.sticker_food_bread,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_watermelon,
+    fileUrl: IMAGES.sticker_food_watermelon,
     width: 140,
   },
   {
-    imgUrl: IMAGES.sticker_food_apple,
+    fileUrl: IMAGES.sticker_food_apple,
     width: 80,
   },
   {
-    imgUrl: IMAGES.sticker_food_bread,
+    fileUrl: IMAGES.sticker_food_bread,
     width: 160,
   },
   {
-    imgUrl: IMAGES.sticker_food_watermelon,
+    fileUrl: IMAGES.sticker_food_watermelon,
     width: 140,
   },
 ]
 const StickersList: FC<Props> = (props) => {
   const onDragStart = useCallback(
-    (imgUrl: string, width: number) => {
+    (fileUrl: string, width: number) => {
       props.updatePickedImgWidth(width)
-      props.updatePickedImgUrl(imgUrl)
+      props.updatePickedfileUrl(fileUrl)
       setTimeout(() => {
         props.onClickOpenStickerList()
       }, 100)
@@ -143,9 +144,9 @@ const StickersList: FC<Props> = (props) => {
     [props]
   )
   const onTouchStart = useCallback(
-    (imgUrl: string, width: number) => {
+    (fileUrl: string, width: number) => {
       props.updatePickedImgWidth(width)
-      props.updatePickedImgUrl(imgUrl)
+      props.updatePickedfileUrl(fileUrl)
       props.addToPanelByClicking()
       props.onClickOpenStickerList()
     },
@@ -166,12 +167,12 @@ const StickersList: FC<Props> = (props) => {
           return (
             <div
               key={i}
-              onDragStart={() => onDragStart(sticker.imgUrl, sticker.width)}
-              onClick={() => onTouchStart(sticker.imgUrl, sticker.width)}
+              onDragStart={() => onDragStart(sticker.fileUrl, 140)}
+              onClick={() => onTouchStart(sticker.fileUrl, 140)}
             >
               <PickableSticker
                 key={i}
-                imgUrl={sticker.imgUrl}
+                fileUrl={sticker.fileUrl}
                 width={sticker.width}
                 positions={sticker.positions}
               />

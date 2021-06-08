@@ -1,15 +1,9 @@
 import React, { FC } from 'react'
-import Konva from 'konva'
-
-export interface StickerInfo {
-  imgUrl: string
-  width: number
-  positions?: Konva.Vector2d | null
-}
+import { StickerInfo } from '../../types/types'
 
 const PickableSticker: FC<StickerInfo> = (props) => {
   return (
-    <img alt="stickerImg" src={props.imgUrl} width={140} draggable={true} />
+    <img alt="stickerImg" src={props.fileUrl} width={140} draggable={true} />
   )
 }
 
