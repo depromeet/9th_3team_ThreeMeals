@@ -8,10 +8,10 @@ import QuestionCard from '../organisms/QuestionCard'
 import PrivateCardLabel from '../atoms/PrivateCardLabel'
 import AnswerCard from '../organisms/AnswerCard'
 import { useRouter } from 'next/router'
-import { getMyAccountInfo } from '../../lib/queries/meQueries'
+import { getAccountInfo } from '../../lib/queries/userQueries'
 
 interface Props {
-  myAccount?: getMyAccountInfo
+  account?: getAccountInfo
   profileImage: string
   onClickLeft?: () => void
   onClickAnswerCard: (postId: string) => void
@@ -104,12 +104,13 @@ const OthersContentTemplate: FC<Props> = (props) => {
   }, [props, tabIndex])
 
   const profileImage = useMemo(() => {
-    return props.myAccount?.getMyAccountInfo.image
-  }, [props.myAccount?.getMyAccountInfo.image])
+    return props.account?.getAccountInfo.image
+  }, [props.account?.getAccountInfo.image])
+
   return (
     <AppContainer>
       <Header
-        isLogin={props.myAccount ? true : false}
+        isLogin={props.account ? true : false}
         isProfile={profileImage ? true : false}
         profileImage={profileImage}
         rightIcon={IMAGES.icon_24_drawer}
@@ -119,10 +120,10 @@ const OthersContentTemplate: FC<Props> = (props) => {
       />
       <MainContainer>
         <ProfileContent
-          name="김덕배"
-          desc="관종이라 자주올림.. 아몰랑~ 그냥 써 🍻"
-          urlName="@nijo.s"
-          url="https://google.com"
+          name={props.account?.getAccountInfo.nickname ?? ''}
+          desc={props.account?.getAccountInfo.content ?? ''}
+          urlName={props.account?.getAccountInfo.profileUrl ?? ''}
+          url={props.account?.getAccountInfo.profileUrl ?? ''}
         />
         <TabContainer>
           <Tab
