@@ -123,7 +123,7 @@ const Header: React.FC<Props> = (props: Props) => {
     </>
   )
 }
-export default Header
+export default React.memo(Header)
 
 const Container = styled.div`
   display: flex;
