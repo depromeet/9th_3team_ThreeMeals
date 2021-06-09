@@ -1,9 +1,9 @@
 import React, { FC, useState, useCallback, useEffect } from 'react'
 import useImage from 'use-image'
 import { Image as KonvaImage, Group } from 'react-konva'
-import { StickerInfo } from './PickableSticker'
 import { SVGS } from '../../constants/svgs'
 import Konva from 'konva'
+import { StickerInfo } from '../../types/types'
 interface Props {
   stickerImage: StickerInfo
   onDelete: (evt: Konva.KonvaEventObject<TouchEvent | MouseEvent>) => void
@@ -13,12 +13,12 @@ interface Props {
   idx: number
 }
 const DraggableSticker: FC<Props> = (props) => {
-  const [stickerImage] = useImage(props.stickerImage.imgUrl)
+  const [stickerImage] = useImage(props.stickerImage.fileUrl)
   const [deleteImage] = useImage(SVGS.icon_delete_sticker)
   const [showDeleteBtn, setShowDeleteBtn] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const stickerHeight = stickerImage
-    ? (props.stickerImage.width * stickerImage.height) / stickerImage.width
+    ? (140 * stickerImage.height) / stickerImage.width
     : 0
   const onHovering = useCallback(() => {
     setShowDeleteBtn(true)
@@ -33,8 +33,8 @@ const DraggableSticker: FC<Props> = (props) => {
     (e) => {
       setIsDragging(false)
       if (props.stickerImage.positions) {
-        props.stickerImage.positions.x = e.target.x()
-        props.stickerImage.positions.y = e.target.y()
+        props.stickerImage.positions.positionX = e.target.x()
+        props.stickerImage.positions.positionY = e.target.y()
       }
     },
     [props.stickerImage.positions]
@@ -52,8 +52,8 @@ const DraggableSticker: FC<Props> = (props) => {
   return (
     <Group
       draggable
-      x={props.stickerImage.positions?.x}
-      y={props.stickerImage.positions?.y}
+      x={props.stickerImage.positions?.positionX}
+      y={props.stickerImage.positions?.positionY}
       offsetX={stickerImage ? stickerImage.width / 2 : 0}
       offsetY={stickerImage ? stickerImage.height / 2 : 0}
       onDragStart={onDragStart}
@@ -62,11 +62,7 @@ const DraggableSticker: FC<Props> = (props) => {
       onMouseLeave={outHovering}
       onTouchStart={props.showDeleteBtnByTouching}
     >
-      <KonvaImage
-        width={props.stickerImage.width}
-        height={stickerHeight}
-        image={stickerImage}
-      />
+      <KonvaImage width={140} height={stickerHeight} image={stickerImage} />
       {showDeleteBtn && !isDragging && (
         <KonvaImage
           onTouchStart={props.onDelete}
@@ -74,7 +70,7 @@ const DraggableSticker: FC<Props> = (props) => {
           image={deleteImage}
           width={25}
           height={25}
-          offsetX={-props.stickerImage.width / 2 - 20}
+          offsetX={-140 / 2 - 20}
         />
       )}
     </Group>

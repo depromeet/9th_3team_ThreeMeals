@@ -22,7 +22,7 @@ const ProfileContent: React.FC<Props> = (props: Props) => {
     </Container>
   )
 }
-export default ProfileContent
+export default React.memo(ProfileContent)
 
 const Container = styled.div`
   padding-left: 24px;

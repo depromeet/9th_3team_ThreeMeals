@@ -1,19 +1,24 @@
-import React, { VFC, useRef, useState, useCallback, useEffect } from 'react'
+import React, { FC, useRef, useState, useCallback, useEffect } from 'react'
 import { Stage, Layer } from 'react-konva'
 import styled from 'styled-components'
 import Konva from 'konva'
 import DraggableSticker from './DraggableSticker'
-import { StickerInfo } from './PickableSticker'
 import { useReactiveVar } from '@apollo/client'
 import addToPanelVar from '../../lib/localStore/stickerPanel'
 import { addToWritePostInfo } from '../../lib/localStore/writePost'
+import { StickerInfo } from '../../types/types'
+import PostedSticker from './PostedSticker'
+
+interface Props {
+  postedStickers?: StickerInfo[]
+}
 
 interface OnDragFuncProps {
   e?: Konva.KonvaEventObject<DragEvent>
   i: number
   image: StickerInfo
 }
-const StickerPanel: VFC = () => {
+const StickerPanel: FC<Props> = (props) => {
   const stageRef: React.RefObject<Konva.Stage> | null = useRef(null)
   const addToPanelInfo = useReactiveVar(addToPanelVar)
   const [stickers, setStickers] = useState<StickerInfo[]>([])
@@ -23,9 +28,10 @@ const StickerPanel: VFC = () => {
       e.preventDefault()
       if (stageRef.current && addToPanelInfo.imgUrl && addToPanelInfo.width) {
         stageRef.current.setPointersPositions(e)
+        const positions = stageRef.current.getPointerPosition()
         const droppedImgInfo = {
-          positions: stageRef.current.getPointerPosition(),
-          imgUrl: addToPanelInfo.imgUrl,
+          positions: { positionX: positions?.x, positionY: positions?.y },
+          fileUrl: addToPanelInfo.imgUrl,
           width: addToPanelInfo.width,
         }
         setStickers([...stickers, droppedImgInfo])
@@ -36,8 +42,8 @@ const StickerPanel: VFC = () => {
   const addToPanelByClicking = useCallback(
     (width, imgUrl) => {
       const droppedImgInfo = {
-        positions: { x: 279 / 2, y: 192 / 2 },
-        imgUrl: imgUrl,
+        positions: { positionX: 279 / 2, positionY: 192 / 2 },
+        fileUrl: imgUrl,
         width: width,
       }
       setStickers([...stickers, droppedImgInfo])
@@ -54,8 +60,8 @@ const StickerPanel: VFC = () => {
   )
   const onDragEndImg = useCallback((dragProps: OnDragFuncProps) => {
     if (dragProps.image.positions && dragProps.e?.target) {
-      dragProps.image.positions.x = dragProps.e.target.x()
-      dragProps.image.positions.y = dragProps.e.target.y()
+      dragProps.image.positions.positionX = dragProps.e.target.x()
+      dragProps.image.positions.positionY = dragProps.e.target.y()
     }
   }, [])
   const showDeleteBtnByTouching = useCallback(
@@ -82,6 +88,7 @@ const StickerPanel: VFC = () => {
   useEffect(() => {
     addToWritePostInfo({ emoticons: stickers })
   }, [stickers, onDragEndImg])
+
   return (
     <PanelContainer
       onDrop={onDrop}
@@ -92,19 +99,25 @@ const StickerPanel: VFC = () => {
     >
       <Stage width={279} height={192} ref={stageRef}>
         <Layer>
-          {stickers.map((image, i) => {
-            return (
-              <DraggableSticker
-                key={i}
-                idx={i}
-                stickerImage={image}
-                onDelete={() => onDeleteImg(i)}
-                onDragEnd={() => onDragEndImg({ i: i, image: image })}
-                showDeleteBtnByTouching={(e) => showDeleteBtnByTouching(e, i)}
-                showDeleteBtnIdx={showDeleteBtn}
-              />
-            )
-          })}
+          {props.postedStickers
+            ? props.postedStickers.map((sticker, i) => {
+                return <PostedSticker stickerImage={sticker} key={i} />
+              })
+            : stickers.map((image, i) => {
+                return (
+                  <DraggableSticker
+                    key={i}
+                    idx={i}
+                    stickerImage={image}
+                    onDelete={() => onDeleteImg(i)}
+                    onDragEnd={() => onDragEndImg({ i: i, image: image })}
+                    showDeleteBtnByTouching={(e) =>
+                      showDeleteBtnByTouching(e, i)
+                    }
+                    showDeleteBtnIdx={showDeleteBtn}
+                  />
+                )
+              })}
         </Layer>
       </Stage>
     </PanelContainer>

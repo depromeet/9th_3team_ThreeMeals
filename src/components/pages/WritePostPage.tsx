@@ -99,7 +99,7 @@ const WritePostPage: VFC = () => {
       />
       {openStickerList ? (
         <StickersList
-          updatePickedImgUrl={updatePickedImgUrl}
+          updatePickedfileUrl={updatePickedImgUrl}
           updatePickedImgWidth={updatePickedImgWidth}
           addToPanelByClicking={addToPanelByClicking}
           onClickOpenStickerList={onClickOpenStickerList}
