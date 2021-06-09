@@ -1,48 +1,18 @@
 import React, { FC, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { AnswerContactType } from '../pages/AnswerDetailPage'
+import {
+  ChildrenComments,
+  ParentComments,
+} from '../../lib/queries/getCommentsQueries'
 interface Props {
   isMine: boolean
   profileImg: string
-  commentsInfo: CommentInfo[]
-  childrenCommentInfo: ChildrenCommentInfo[]
+  commentsInfo: ParentComments
+  childrenCommentInfo: ChildrenComments
   onClickRemove?: (type: AnswerContactType, id: string) => void
 }
 
-export interface CommentInfo {
-  id: string // parent or postId
-  content: string
-  secretType: string
-  account: Account
-  childrenCount: number
-  pageInfo: {
-    endCursor: string
-    hasNextPage: boolean
-  }
-}
-
-export interface ChildrenCommentInfo {
-  id: string
-  content: string
-  secretType: string
-  commentState: string
-  createdAt: string
-  updatedAt: string
-  account: Account
-  postId: string
-  parentId: string
-}
-interface Account {
-  id: string
-  nickname: string
-  providerId: string
-  status: string
-  image: string
-  content: string
-  profileUrl: string
-  createdAt: string
-  updatedAt: string
-}
 const PostComment: FC<Props> = (props) => {
   const [writeOpen, setWriteOpen] = useState(false)
   const handleWriteComment = useCallback(() => {

@@ -18,17 +18,17 @@ interface getPostEdges {
     createdAt: string
     updatedAt: string
     commentsCount: number
+    color: string
     fromAccount: {
       id: string
     }
     usedEmoticons: {
       id: string
-      positionX: number
-      positionY: number
-      emoticon: {
-        id: string
-        fileUrl: string
+      position: {
+        positionX: number
+        positionY: number
       }
+      fileUrl: string
     }[]
   }
   cursor: string
@@ -67,12 +67,12 @@ export const GET_POST = gql`
           }
           usedEmoticons {
             id
-            positionX
-            positionY
-            emoticon {
-              id
-              fileUrl
+            position {
+              positionX
+              positionY
             }
+            fileUrl
+            name
           }
           createdAt
           updatedAt
