@@ -4,9 +4,8 @@ export interface getPostParams {
   first: number
   accountId?: string
 }
-export interface postCount {
-  count: number
-  postType: string
+export interface getMyNewPostCountParams {
+  postType?: string
 }
 
 interface getPostEdges {
@@ -34,10 +33,17 @@ interface getPostEdges {
   cursor: string
 }
 
-export interface getPost {
+export interface postCount {
+  count: number
+  postType: string
+}
+
+export interface getMyNewPostCount {
   getMyNewPostCount: {
     postCount: postCount[]
   }
+}
+export interface getPost {
   getPosts: {
     edges: getPostEdges[]
     pageInfo: {
@@ -46,16 +52,20 @@ export interface getPost {
     }
   }
 }
-
-export const GET_POST = gql`
-  query {
-    getMyNewPostCount(postType: Answer) {
+export const GET_MY_NEW_POST_COUNT = gql`
+  query GetMyNewPostCount($postType: PostType!) {
+    getMyNewPostCount(postType: $postType) {
       postCount {
         count
         postType
       }
     }
-    getPosts(first: 10, accountId: "5") {
+  }
+`
+
+export const GET_POST = gql`
+  query getPosts($first: Float!, $accountId: String!) {
+    getPosts(first: $first, accountId: $accountId) {
       edges {
         node {
           id

@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useMemo, useState } from 'react'
+import React, { FC, ReactElement, useMemo } from 'react'
 import Header from '../molecules/Header'
 import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
@@ -11,10 +11,13 @@ import { getMyAccountInfo } from '../../lib/queries/meQueries'
 import { getPost } from '../../lib/queries/getPostQueries'
 
 interface Props {
+  tabIndex: number
+  newPostCount: number
   getPost?: getPost
   myAccount?: getMyAccountInfo
   isProfile: boolean
   profileImage: string
+  onClickTabIndex: (index: number) => void
   onClickLeft?: () => void
   onClickSecondRight?: () => void
   onClickNewSecretCard?: () => void
@@ -25,21 +28,6 @@ interface Props {
 }
 
 const ContentTemplate: FC<Props> = (props) => {
-  const [tabIndex, setTabIndex] = useState<number>(0)
-
-  const newPostCount = useMemo(() => {
-    const postCount = props.getPost?.getMyNewPostCount.postCount
-    const ask = postCount?.find((e) => e.postType === 'Ask')
-    const answer = postCount?.find((e) => e.postType === 'Answer')
-    const quiz = postCount?.find((e) => e.postType === 'Quiz')
-
-    return {
-      ask: ask ? ask.count : 0,
-      answer: answer ? answer.count : 0,
-      quiz: quiz ? quiz.count : 0,
-    }
-  }, [props.getPost?.getMyNewPostCount.postCount])
-
   const postContent = useMemo(() => {
     if (props.getPost?.getPosts.edges) {
       const edges = props.getPost?.getPosts.edges
@@ -55,11 +43,8 @@ const ContentTemplate: FC<Props> = (props) => {
     }
   }, [props.getPost?.getPosts.edges])
 
-  console.log('getPost', props.getPost?.getPosts)
-  console.log('result', postContent)
-
   const ContentView = useMemo((): ReactElement | undefined => {
-    switch (tabIndex) {
+    switch (props.tabIndex) {
       case 0:
         return (
           <>
@@ -75,9 +60,7 @@ const ContentTemplate: FC<Props> = (props) => {
                   style={{ marginTop: 1, cursor: 'pointer' }}
                   onClick={props.onClickNewSecretCard}
                 >
-                  {`${
-                    (newPostCount.ask && newPostCount.ask) || 0
-                  }개의 비밀카드 도착`}
+                  {`${props.newPostCount || 0}개의 비밀카드 도착`}
                 </span>
                 <img
                   onClick={props.onClickNewSecretCard}
@@ -103,10 +86,10 @@ const ContentTemplate: FC<Props> = (props) => {
                     questionTitle="김덕배님 남자친구는 있으신지요 ????"
                     backColor={'#FF833D'}
                     onClickOption={() => {
-                      props.onClickRemove('0', tabIndex)
+                      props.onClickRemove('0', props.tabIndex)
                     }}
                     onClickLike={() => {
-                      props.onClickLike('0', tabIndex)
+                      props.onClickLike('0', props.tabIndex)
                     }}
                   />
                 )
@@ -129,9 +112,7 @@ const ContentTemplate: FC<Props> = (props) => {
                   style={{ marginTop: 1, cursor: 'pointer' }}
                   onClick={props.onClickNewSecretCard}
                 >
-                  {`${
-                    (newPostCount.answer && newPostCount.answer) || 0
-                  }개의 비밀카드 도착`}
+                  {`${props.newPostCount || 0}개의 비밀카드 도착`}
                 </span>
                 <img
                   onClick={props.onClickNewSecretCard}
@@ -161,7 +142,7 @@ const ContentTemplate: FC<Props> = (props) => {
                       props.onClickAnswerCard(data.node.id, true)
                     }}
                     onClickOption={() => {
-                      props.onClickRemove(data.node.id, tabIndex)
+                      props.onClickRemove(data.node.id, props.tabIndex)
                     }}
                   />
                 )
@@ -184,9 +165,7 @@ const ContentTemplate: FC<Props> = (props) => {
                   style={{ marginTop: 1 }}
                   onClick={props.onClickNewSecretCard}
                 >
-                  {`${
-                    (newPostCount.quiz && newPostCount.quiz) || 0
-                  }개의 비밀카드 도착`}
+                  {`${props.newPostCount || 0}개의 비밀카드 도착`}
                 </span>
                 <img
                   onClick={props.onClickNewSecretCard}
@@ -220,16 +199,7 @@ const ContentTemplate: FC<Props> = (props) => {
       default:
         break
     }
-  }, [
-    newPostCount.answer,
-    newPostCount.ask,
-    newPostCount.quiz,
-    postContent?.answer,
-    postContent?.ask,
-    postContent?.quiz,
-    props,
-    tabIndex,
-  ])
+  }, [postContent?.answer, postContent?.ask, postContent?.quiz, props])
 
   const profileImage = useMemo(() => {
     return props.myAccount?.getMyAccountInfo.image
@@ -256,7 +226,7 @@ const ContentTemplate: FC<Props> = (props) => {
         <TabContainer>
           <Tab
             style={
-              tabIndex === 0
+              props.tabIndex === 0
                 ? {
                     borderBottom: 1,
                     borderColor: 'white',
@@ -265,14 +235,14 @@ const ContentTemplate: FC<Props> = (props) => {
                 : undefined
             }
             onClick={() => {
-              setTabIndex(0)
+              props.onClickTabIndex(0)
             }}
           >
             물어봐
           </Tab>
           <Tab
             style={
-              tabIndex === 1
+              props.tabIndex === 1
                 ? {
                     borderBottom: 1,
                     borderColor: 'white',
@@ -281,14 +251,14 @@ const ContentTemplate: FC<Props> = (props) => {
                 : undefined
             }
             onClick={() => {
-              setTabIndex(1)
+              props.onClickTabIndex(1)
             }}
           >
             답해줘
           </Tab>
           <Tab
             style={
-              tabIndex === 2
+              props.tabIndex === 2
                 ? {
                     borderBottom: 1,
                     borderColor: 'white',
@@ -297,7 +267,7 @@ const ContentTemplate: FC<Props> = (props) => {
                 : undefined
             }
             onClick={() => {
-              setTabIndex(2)
+              props.onClickTabIndex(2)
             }}
           >
             OX퀴즈
@@ -308,7 +278,7 @@ const ContentTemplate: FC<Props> = (props) => {
         />
         {ContentView}
       </MainContainer>
-      {tabIndex === 1 && (
+      {props.tabIndex === 1 && (
         <WriteButton>
           <img onClick={props.onClickWrite} src={IMAGES.write} width={88} />
         </WriteButton>

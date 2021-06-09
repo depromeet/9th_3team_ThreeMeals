@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import ContentTemplate from '../templates/ContentTemplate'
@@ -7,8 +7,11 @@ import Modal from '../molecules/Modal'
 import { getMyAccountInfo, GET_MY_PROFILE } from '../../lib/queries/meQueries'
 import { useQuery } from '@apollo/client'
 import {
+  getMyNewPostCount,
+  getMyNewPostCountParams,
   getPost,
   getPostParams,
+  GET_MY_NEW_POST_COUNT,
   GET_POST,
 } from '../../lib/queries/getPostQueries'
 
@@ -17,8 +20,26 @@ const ContentPage: React.FC = () => {
   const getPost = useQuery<getPost, getPostParams>(GET_POST, {
     variables: { first: 10, accountId: myAccount.data?.getMyAccountInfo.id },
   })
+
+  const getMyNewPostCount = useQuery<
+    getMyNewPostCount,
+    getMyNewPostCountParams
+  >(GET_MY_NEW_POST_COUNT, {
+    variables: { postType: 'Ask' },
+  })
+
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [tabIndex, setTabIndex] = useState<number>(0)
+
+  const newPostCount = useMemo(() => {
+    if (getMyNewPostCount.data) {
+      return getMyNewPostCount.data?.getMyNewPostCount.postCount[0].count
+    } else {
+      return 0
+    }
+  }, [getMyNewPostCount])
+
   const onClickAnswerCard = useCallback(
     (postId, isMine) => {
       router.push({ pathname: '/answerDetail', query: { postId, isMine } })
@@ -38,13 +59,37 @@ const ContentPage: React.FC = () => {
     console.log('onClickLike id', id, tabIndex)
   }, [])
 
+  const onClickTabIndex = useCallback(
+    async (index: number) => {
+      setTabIndex(index)
+
+      switch (index) {
+        case 0:
+          await getMyNewPostCount.refetch({ postType: 'Ask' })
+          break
+        case 1:
+          await getMyNewPostCount.refetch({ postType: 'Answer' })
+          break
+        case 2:
+          await getMyNewPostCount.refetch({ postType: 'Quiz' })
+          break
+        default:
+          break
+      }
+    },
+    [getMyNewPostCount]
+  )
+
   return (
     <AppContainer>
       <ContentTemplate
+        tabIndex={tabIndex}
+        newPostCount={newPostCount}
         getPost={getPost.data}
         myAccount={myAccount.data}
         isProfile={true}
         profileImage={IMAGES.background}
+        onClickTabIndex={onClickTabIndex}
         onClickLeft={router.back}
         onClickSecondRight={() => {
           router.push('/notification')
