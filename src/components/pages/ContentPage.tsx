@@ -5,7 +5,11 @@ import { IMAGES } from '../../constants/images'
 import ContentTemplate from '../templates/ContentTemplate'
 import Modal from '../molecules/Modal'
 import { getMyAccountInfo, GET_MY_PROFILE } from '../../lib/queries/meQueries'
-import { useQuery } from '@apollo/client'
+import {
+  deletePostParams,
+  deletePostResponse,
+} from '../../lib/queries/deleteQueries'
+import { useMutation, useQuery } from '@apollo/client'
 import {
   getMyNewPostCount,
   getMyNewPostCountParams,
@@ -14,13 +18,21 @@ import {
   GET_MY_NEW_POST_COUNT,
   GET_POST,
 } from '../../lib/queries/getPostQueries'
+import { DELETE_POST } from '../../lib/queries/deleteQueries'
 
 const ContentPage: React.FC = () => {
   const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
   const getPost = useQuery<getPost, getPostParams>(GET_POST, {
     variables: { first: 10, accountId: myAccount.data?.getMyAccountInfo.id },
   })
-
+  const [deletePostMutation] = useMutation<
+    deletePostResponse,
+    deletePostParams
+  >(DELETE_POST, {
+    onCompleted: () => {
+      getPost.refetch()
+    },
+  })
   const getMyNewPostCount = useQuery<
     getMyNewPostCount,
     getMyNewPostCountParams
@@ -31,7 +43,7 @@ const ContentPage: React.FC = () => {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [tabIndex, setTabIndex] = useState<number>(0)
-
+  const [selectedPostId, setSelectedPostId] = useState<string>()
   const newPostCount = useMemo(() => {
     if (getMyNewPostCount.data) {
       return getMyNewPostCount.data?.getMyNewPostCount.postCount[0].count
@@ -51,7 +63,7 @@ const ContentPage: React.FC = () => {
   }, [router])
 
   const onClickRemove = useCallback((id: string, tabIndex: number) => {
-    console.log('onClickRemove id', id, tabIndex)
+    setSelectedPostId(id)
     setIsOpen(true)
   }, [])
 
@@ -59,6 +71,17 @@ const ContentPage: React.FC = () => {
     console.log('onClickLike id', id, tabIndex)
   }, [])
 
+  const onClickConfirmModal = useCallback(() => {
+    if (selectedPostId) {
+      deletePostMutation({
+        variables: {
+          postId: selectedPostId,
+        },
+      }).then(() => {
+        setIsOpen(false)
+      })
+    }
+  }, [deletePostMutation, selectedPostId])
   const onClickTabIndex = useCallback(
     async (index: number) => {
       setTabIndex(index)
@@ -108,9 +131,7 @@ const ContentPage: React.FC = () => {
         titleEmojiTextType="💬"
         confirmText={'삭제하기'}
         cancelText={'취소'}
-        onClickConfirm={() => {
-          console.log('onClickMOdal')
-        }}
+        onClickConfirm={onClickConfirmModal}
         onClickCancel={() => {
           setIsOpen(false)
         }}

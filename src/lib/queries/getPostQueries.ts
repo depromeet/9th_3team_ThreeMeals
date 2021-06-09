@@ -13,13 +13,21 @@ interface getPostEdges {
     id: string
     content: string
     postType: string
+    postState: string
+    color: string
     secretType: string
     createdAt: string
     updatedAt: string
     commentsCount: number
-    color: string
     fromAccount: {
       id: string
+    }
+    toAccount: {
+      id: string
+    }
+    likedPosts: {
+      id: string
+      createAt: string
     }
     usedEmoticons: {
       id: string
@@ -71,10 +79,22 @@ export const GET_POST = gql`
           id
           content
           postType
+          postState
+          color
           secretType
+          createdAt
+          updatedAt
+          commentsCount
           fromAccount {
             id
           }
+          toAccount {
+            id
+          }
+          # likedPosts {
+          #   id
+          #   createdAt
+          # },
           usedEmoticons {
             id
             position {

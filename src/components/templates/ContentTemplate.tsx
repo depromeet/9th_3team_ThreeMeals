@@ -9,6 +9,7 @@ import PrivateCardLabel from '../atoms/PrivateCardLabel'
 import AnswerCard from '../organisms/AnswerCard'
 import { getMyAccountInfo } from '../../lib/queries/meQueries'
 import { getPost } from '../../lib/queries/getPostQueries'
+import CardLabel from '../atoms/CardLabel'
 
 interface Props {
   tabIndex: number
@@ -43,6 +44,7 @@ const ContentTemplate: FC<Props> = (props) => {
     }
   }, [props.getPost?.getPosts.edges])
 
+  console.log('postContent', postContent)
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (props.tabIndex) {
       case 0:
@@ -76,20 +78,26 @@ const ContentTemplate: FC<Props> = (props) => {
               />
             </NoticeContainer>
             <ContentContainer>
-              {postContent?.ask.map((e, index) => {
+              {postContent?.ask.map((data, index) => {
                 return (
                   <QuestionCard
                     key={index}
+                    id={data.node.id}
                     labelComponent={
-                      <PrivateCardLabel text="BONG IN" active={false} />
+                      data.node.secretType === 'Forever' ? (
+                        <PrivateCardLabel text="BONG IN" active={false} />
+                      ) : (
+                        <CardLabel text={data.node.createdAt} active />
+                      )
                     }
-                    questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                    questionTitle={data.node.content}
                     backColor={'#FF833D'}
+                    stickers={data.node.usedEmoticons}
                     onClickOption={() => {
-                      props.onClickRemove('0', props.tabIndex)
+                      props.onClickRemove(data.node.id, props.tabIndex)
                     }}
                     onClickLike={() => {
-                      props.onClickLike('0', props.tabIndex)
+                      props.onClickLike(data.node.id, props.tabIndex)
                     }}
                   />
                 )
