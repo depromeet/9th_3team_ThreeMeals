@@ -5,12 +5,19 @@ import LabelCardHeader from '../molecules/LabelCardHeader'
 import CardLabel from '../atoms/CardLabel'
 import { SVGS } from '../../constants/svgs'
 import { IMAGES } from '../../constants/images'
-
+import { StickerInfo } from '../../types/types'
+import dynamic from 'next/dynamic'
+const StickerPanelWithNoSSR = dynamic(
+  () => import('../molecules/StickerPanel'),
+  { ssr: false }
+)
 interface Props {
+  id?: string
   questionTitle: string
   backColor: string
   labelComponent?: ReactNode
   isInput?: boolean
+  stickers?: StickerInfo[]
   onClickSend?: (text: string) => void
   onClickLike?: () => void
   onClickOption?: () => void
@@ -80,6 +87,12 @@ const StyledLabelCardHeader = styled(LabelCardHeader)`
   width: 100%;
   top: 16px;
   left: -14px;
+`
+
+const StickerContainer = styled.div`
+  margin-top: 16px;
+  width: 100%;
+  height: 192px;
 `
 
 const BottomContainer = styled.div`
@@ -163,6 +176,9 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
           onClickOption={props.onClickOption}
         />
         <p>{props.questionTitle}</p>
+        <StickerContainer>
+          <StickerPanelWithNoSSR postedStickers={props.stickers} />
+        </StickerContainer>
         <BottomContainer>
           <img
             src={SVGS.icon_left_arrow_wh}
