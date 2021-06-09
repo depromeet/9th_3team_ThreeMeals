@@ -9,7 +9,7 @@ import PrivateCardLabel from '../atoms/PrivateCardLabel'
 import AnswerCard from '../organisms/AnswerCard'
 import { getMyAccountInfo } from '../../lib/queries/meQueries'
 import { getPost } from '../../lib/queries/getPostQueries'
-import dayjs from 'dayjs'
+
 interface Props {
   getPost?: getPost
   myAccount?: getMyAccountInfo
@@ -18,7 +18,7 @@ interface Props {
   onClickLeft?: () => void
   onClickSecondRight?: () => void
   onClickNewSecretCard?: () => void
-  onClickAnswerCard: (postId: string) => void
+  onClickAnswerCard: (postId: string, isMine: boolean) => void
   onClickWrite?: () => void
   onClickRemove: (id: string, tabIndex: number) => void
   onClickLike: (id: string, tabIndex: number) => void
@@ -152,15 +152,16 @@ const ContentTemplate: FC<Props> = (props) => {
                   <AnswerCard
                     key={index}
                     isContent
-                    id={'0'}
+                    id={data.node.id}
                     time={data.node.createdAt}
-                    questionTitle="김덕배님 남자친구는 있으신지요 ????"
+                    questionTitle={data.node.content}
                     backColor={'#FF833D'}
+                    stickers={data.node.usedEmoticons}
                     onClickPost={() => {
-                      props.onClickAnswerCard('0')
+                      props.onClickAnswerCard(data.node.id, true)
                     }}
                     onClickOption={() => {
-                      props.onClickRemove('0', tabIndex)
+                      props.onClickRemove(data.node.id, tabIndex)
                     }}
                   />
                 )

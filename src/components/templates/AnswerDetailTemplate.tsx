@@ -10,8 +10,10 @@ import Header from '../molecules/Header'
 import PostComment from '../molecules/PostComment'
 import AnswerCard from '../organisms/AnswerCard'
 import { AnswerContactType } from '../pages/AnswerDetailPage'
+import { ParentComments } from '../../lib/queries/getCommentsQueries'
 
 interface Props {
+  parentComments: ParentComments
   isMine: boolean
   onClickLeft?: () => void
   onClickRight?: () => void
@@ -31,6 +33,7 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
     }, 1000)
   }, [])
   console.log('propssss:', props.isMine, props.onClickRemove)
+  console.log(props.parentComments)
   return (
     <Container>
       <Header

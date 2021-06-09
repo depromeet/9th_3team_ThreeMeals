@@ -20,8 +20,8 @@ const ContentPage: React.FC = () => {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const onClickAnswerCard = useCallback(
-    (postId) => {
-      router.push({ pathname: '/answerDetail', query: { postId } })
+    (postId, isMine) => {
+      router.push({ pathname: '/answerDetail', query: { postId, isMine } })
     },
     [router]
   )
