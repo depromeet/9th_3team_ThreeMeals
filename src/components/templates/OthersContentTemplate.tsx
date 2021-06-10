@@ -9,8 +9,11 @@ import PrivateCardLabel from '../atoms/PrivateCardLabel'
 import AnswerCard from '../organisms/AnswerCard'
 import { useRouter } from 'next/router'
 import { getAccountInfo } from '../../lib/queries/userQueries'
+import { getPost } from '../../lib/queries/getPostQueries'
+import QuizAnswerCard from '../organisms/QuizAnswerCard'
 
 interface Props {
+  getPost?: getPost
   account?: getAccountInfo
   profileImage: string
   onClickLeft?: () => void
@@ -21,13 +24,28 @@ interface Props {
 const OthersContentTemplate: FC<Props> = (props) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
   const router = useRouter()
+  const postContent = useMemo(() => {
+    if (props.getPost?.getPosts.edges) {
+      const edges = props.getPost?.getPosts.edges
+      const ask = edges?.filter((e) => e.node.postType === 'Ask')
+      const answer = edges?.filter((e) => e.node.postType === 'Answer')
+      const quiz = edges?.filter((e) => e.node.postType === 'Quiz')
+
+      return {
+        ask,
+        answer,
+        quiz,
+      }
+    }
+  }, [props.getPost?.getPosts.edges])
   const onClickWrite = useCallback(() => {
     if (tabIndex === 0) {
-      router.push('/writePost/Q')
+      router.push(`/writePost/Q?otherId=${props.account?.getAccountInfo.id}`)
     } else {
-      router.push('/writePost/OX')
+      router.push(`/writePost/OX?otherId=${props.account?.getAccountInfo.id}`)
     }
-  }, [router, tabIndex])
+  }, [props.account?.getAccountInfo.id, router, tabIndex])
+  console.log('postContent:', postContent)
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:
@@ -54,27 +72,22 @@ const OthersContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <ContentContainer>
-              <AnswerCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#FF833D'}
-                onClickPost={() => {
-                  props.onClickAnswerCard('0')
-                }}
-              />
-              <AnswerCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#67D585'}
-                onClickPost={() => {
-                  props.onClickAnswerCard('1')
-                }}
-              />
-              <AnswerCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#67D585'}
-                onClickPost={() => {
-                  props.onClickAnswerCard('2')
-                }}
-              />
+              {postContent?.answer.map((data, index) => {
+                return (
+                  <AnswerCard
+                    key={index}
+                    isContent
+                    id={data.node.id}
+                    time={data.node.createdAt}
+                    questionTitle={data.node.content}
+                    backColor={'#FF833D'}
+                    stickers={data.node.usedEmoticons}
+                    onClickPost={() => {
+                      props.onClickAnswerCard(data.node.id)
+                    }}
+                  />
+                )
+              })}
             </ContentContainer>
           </>
         )
@@ -82,26 +95,25 @@ const OthersContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <ContentContainer>
-              <QuestionCard
-                labelComponent={<PrivateCardLabel text="BONG IN" active />}
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#FF833D'}
-              />
-              <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#67D585'}
-              />
-              <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#67D585'}
-              />
+              {postContent?.quiz.map((content, index) => {
+                return (
+                  <QuizAnswerCardContainer key={index}>
+                    <QuizAnswerCard
+                      content={content.node.content}
+                      backColor={content.node.color}
+                      answerType={true}
+                      isMyFeed={false}
+                    />
+                  </QuizAnswerCardContainer>
+                )
+              })}
             </ContentContainer>
           </>
         )
       default:
         break
     }
-  }, [props, tabIndex])
+  }, [postContent?.answer, postContent?.quiz, props, tabIndex])
 
   const profileImage = useMemo(() => {
     return props.account?.getAccountInfo.image
@@ -180,11 +192,17 @@ const OthersContentTemplate: FC<Props> = (props) => {
         />
         {ContentView}
       </MainContainer>
-      {tabIndex !== 1 && (
-        <WriteButton>
-          <img onClick={onClickWrite} src={IMAGES.write} width={88} />
-        </WriteButton>
-      )}
+      {(postContent && tabIndex === 0) || (postContent && tabIndex === 2) ? (
+        postContent.answer.length > 0 ? (
+          <WriteButton>
+            <img onClick={onClickWrite} src={IMAGES.write} width={88} />
+          </WriteButton>
+        ) : (
+          <WriteButton>
+            <img onClick={onClickWrite} src={IMAGES.icon_write_gr} width={88} />
+          </WriteButton>
+        )
+      ) : null}
     </AppContainer>
   )
 }
@@ -247,4 +265,9 @@ const WriteButton = styled.div`
     margin-right: -moz-calc((7%) / 2);
     margin-right: calc((7%) / 2);
   }
+`
+const QuizAnswerCardContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `
