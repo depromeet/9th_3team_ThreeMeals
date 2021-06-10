@@ -68,3 +68,23 @@ export const GET_WRITE_POST_INFO = gql`
     getWritePostInfo @client
   }
 `
+
+export const GET_NOTIFICATIONS = gql`
+  query {
+    getNotifications {
+      id
+      createdAt
+      updatedAt
+      account {
+        id
+      }
+      otherAccount {
+        id
+      }
+      relatedPost {
+        id
+      }
+      notificationType
+    }
+  }
+`

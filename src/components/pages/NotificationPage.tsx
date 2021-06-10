@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import { getMyAccountInfo, GET_MY_PROFILE } from '../../lib/queries/meQueries'
+import { GET_NOTIFICATIONS } from '../../lib/queries/getQueries'
 import NotificationTemplate from '../templates/NotificationTemplate'
 
 export interface NoticeData {
@@ -14,7 +15,10 @@ export interface NoticeData {
 const NotificationPage: React.FC = () => {
   const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
   const router = useRouter()
-
+  const {
+    data: { getNotifications },
+    refetch,
+  } = useQuery(GET_NOTIFICATIONS)
   const dummyData: NoticeData[] = [
     {
       content: '12개의 새로운 카드가 작성되었습니다.',
