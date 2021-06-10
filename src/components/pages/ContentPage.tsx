@@ -59,7 +59,7 @@ const ContentPage: React.FC = () => {
     [router]
   )
   const onClickWrite = useCallback(() => {
-    router.push('/writePost')
+    router.push('/writePost/A')
   }, [router])
 
   const onClickRemove = useCallback((id: string, tabIndex: number) => {
@@ -117,8 +117,12 @@ const ContentPage: React.FC = () => {
         onClickSecondRight={() => {
           router.push('/notification')
         }}
-        onClickNewSecretCard={() => {
-          router.push('/newSecretCard')
+        onClickNewSecretCard={(tabName: string) => {
+          if (tabName === 'ask') {
+            router.push('/newSecretCard')
+          } else {
+            router.push('/answerNewOX')
+          }
         }}
         onClickAnswerCard={onClickAnswerCard}
         onClickWrite={onClickWrite}

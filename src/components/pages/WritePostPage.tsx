@@ -26,7 +26,7 @@ const WritePostPage: VFC = () => {
   const allEmoticons = emoticonsData?.getAllEmoticons
   const profile = profileData?.getMyAccountInfo
   const router = useRouter()
-  const { id: postType } = router.query
+  const { id: postType, otherId } = router.query
   const writePostInfo = useReactiveVar(writePostInfoVar)
   const [createPostMutation] =
     useMutation<CreatePostRes, CreatePostParams>(CREATE_POST)
@@ -103,15 +103,26 @@ const WritePostPage: VFC = () => {
     }
   }
   useEffect(() => {
-    if (typeof postType === 'string' && profile) {
+    if (typeof postType === 'string' && profile && !otherId) {
       addToWritePostInfo({
         color: backColor,
         postType: postType,
         secretType: 'Temp',
         toAccountId: profile.id,
       })
+    } else if (
+      typeof postType === 'string' &&
+      profile &&
+      typeof otherId === 'string'
+    ) {
+      addToWritePostInfo({
+        color: backColor,
+        postType: postType,
+        secretType: 'Temp',
+        toAccountId: otherId,
+      })
     }
-  }, [backColor, postType, profile])
+  }, [backColor, otherId, postType, profile])
   console.log(writePostInfo)
   return (
     <AppContainer>

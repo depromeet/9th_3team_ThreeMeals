@@ -137,6 +137,8 @@ export const ContextContainer = styled.div<StyledProps>`
     flex: 1;
     padding-top: 30px;
     font-size: 25px;
+    font-family: Apple SD Gothic Neo;
+    color: black;
   }
   .bottomArea {
     width: 100%;

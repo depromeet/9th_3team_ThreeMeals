@@ -1,13 +1,14 @@
 import React, { FC } from 'react'
 import { ContextContainer, StyledQuizCardHeader } from '../molecules/QuizCard'
-import { CardHeaderProps } from '../molecules/QuizCardHeader'
 import { IMAGES } from '../../constants/images'
 import CardContainer from '../atoms/CardContainer'
+import { BackColor } from '../../types/types'
 
 interface Props {
-  cardHeader: CardHeaderProps
-  backColor: string
+  backColor: BackColor
   answerType: boolean
+  content: string
+  isMyFeed: boolean
 }
 const getImage = (backColor: string, answerType: boolean) => {
   switch (backColor) {
@@ -28,7 +29,7 @@ const getImage = (backColor: string, answerType: boolean) => {
     case !answerType && '#FF823D':
       return IMAGES.img_x_bl
     default:
-      break
+      return IMAGES.img_o_bl
   }
 }
 const QuizAnswerCard: FC<Props> = (props) => {
@@ -36,12 +37,12 @@ const QuizAnswerCard: FC<Props> = (props) => {
     <CardContainer backColor={props.backColor}>
       <ContextContainer bottomHeight="none">
         <StyledQuizCardHeader
-          isLikeActive={props.cardHeader.isLikeActive}
-          className={props.cardHeader.className}
-          color={props.cardHeader.color}
-          isMyFeed={props.cardHeader.isMyFeed}
+          // isLikeActive={props.cardHeader.isLikeActive}
+          // className={props.cardHeader.className}
+          color={props.backColor}
+          isMyFeed={props.isMyFeed}
         />
-        <div className="textArea">{props.children}</div>
+        <div className="textArea">{props.content}</div>
         <div className="bottomArea">
           <img
             src={getImage(props.backColor, props.answerType)}

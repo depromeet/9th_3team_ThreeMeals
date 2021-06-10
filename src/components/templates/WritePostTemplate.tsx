@@ -7,6 +7,7 @@ import OptionAlarmField, { OptionType } from '../molecules/OptionAlarmField'
 import { IMAGES } from '../../constants/images'
 import { SVGS } from '../../constants/svgs'
 import { BackColor } from '../../types/types'
+import { useRouter } from 'next/router'
 interface Props {
   TempType: string | string[]
   optionActiveState: OptionType
@@ -20,6 +21,7 @@ interface Props {
 }
 
 const WritePostTemplate: FC<Props> = (props) => {
+  const router = useRouter()
   const [withSticker, setWithSticker] = useState(false)
   useEffect(() => {
     if (props.TempType === 'Q' || props.TempType === 'A') {
@@ -29,7 +31,11 @@ const WritePostTemplate: FC<Props> = (props) => {
   return (
     <TempContainer onTouchStart={props.closeDeleteBtnByTouching}>
       <Header>
-        <img src={IMAGES.icon_32_close} alt="closeIcon" />
+        <img
+          src={IMAGES.icon_32_close}
+          alt="closeIcon"
+          onClick={() => router.back()}
+        />
         <span onClick={props.onClickSaveBtn}>저장</span>
       </Header>
       <MainContainer>

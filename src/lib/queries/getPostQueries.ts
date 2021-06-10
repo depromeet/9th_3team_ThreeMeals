@@ -1,3 +1,4 @@
+import { BackColor } from './../../types/types'
 import { gql } from '@apollo/client'
 
 export interface getPostParams {
@@ -14,7 +15,7 @@ interface getPostEdges {
     content: string
     postType: string
     postState: string
-    color: string
+    color: BackColor
     secretType: string
     createdAt: string
     updatedAt: string
