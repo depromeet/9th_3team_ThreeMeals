@@ -30,7 +30,7 @@ const StickerPanel: FC<Props> = (props) => {
         stageRef.current.setPointersPositions(e)
         const positions = stageRef.current.getPointerPosition()
         const droppedImgInfo = {
-          positions: { positionX: positions?.x, positionY: positions?.y },
+          position: { positionX: positions?.x, positionY: positions?.y },
           fileUrl: addToPanelInfo.imgUrl,
           width: addToPanelInfo.width,
         }
@@ -42,7 +42,7 @@ const StickerPanel: FC<Props> = (props) => {
   const addToPanelByClicking = useCallback(
     (width, imgUrl) => {
       const droppedImgInfo = {
-        positions: { positionX: 279 / 2, positionY: 192 / 2 },
+        position: { positionX: 279 / 2, positionY: 192 / 2 },
         fileUrl: imgUrl,
         width: width,
       }
@@ -59,9 +59,9 @@ const StickerPanel: FC<Props> = (props) => {
     [stickers]
   )
   const onDragEndImg = useCallback((dragProps: OnDragFuncProps) => {
-    if (dragProps.image.positions && dragProps.e?.target) {
-      dragProps.image.positions.positionX = dragProps.e.target.x()
-      dragProps.image.positions.positionY = dragProps.e.target.y()
+    if (dragProps.image.position && dragProps.e?.target) {
+      dragProps.image.position.positionX = dragProps.e.target.x()
+      dragProps.image.position.positionY = dragProps.e.target.y()
     }
   }, [])
   const showDeleteBtnByTouching = useCallback(

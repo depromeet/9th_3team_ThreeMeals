@@ -1,10 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
-import {
-  dummyChildrenCommentData,
-  dummyCommentData,
-} from '../../stories/molecules/PostComment.stories'
 import DefaultInput from '../atoms/DefaultInput'
 import Header from '../molecules/Header'
 import PostComment from '../molecules/PostComment'
@@ -55,8 +51,7 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
         <PostComment
           isMine={props.isMine}
           profileImg={IMAGES.background}
-          commentsInfo={dummyCommentData}
-          childrenCommentInfo={dummyChildrenCommentData}
+          commentsInfo={props.parentComments}
           onClickRemove={props.onClickRemove}
         />
       </PostContainer>

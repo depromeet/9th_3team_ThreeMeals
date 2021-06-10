@@ -5,133 +5,13 @@ import { IMAGES } from '../../constants/images'
 import { StickerInfo } from '../../types/types'
 
 interface Props {
+  stickers: StickerInfo[]
   updatePickedfileUrl: (fileUrl: string) => void
   updatePickedImgWidth: (imgWidth: number) => void
   addToPanelByClicking: () => void
   onClickOpenStickerList: () => void
 }
-const dummyStickersData: StickerInfo[] = [
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 80,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 160,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 80,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 160,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 80,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 160,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 80,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 160,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 80,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 160,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-]
+
 const StickersList: FC<Props> = (props) => {
   const onDragStart = useCallback(
     (fileUrl: string, width: number) => {
@@ -163,7 +43,7 @@ const StickersList: FC<Props> = (props) => {
         <span>Stickers</span>
       </Header>
       <GridContainer>
-        {dummyStickersData.map((sticker, i) => {
+        {props.stickers.map((sticker, i) => {
           return (
             <div
               key={i}
@@ -174,7 +54,7 @@ const StickersList: FC<Props> = (props) => {
                 key={i}
                 fileUrl={sticker.fileUrl}
                 width={sticker.width}
-                positions={sticker.positions}
+                position={sticker.position}
               />
             </div>
           )

@@ -34,6 +34,7 @@ const WriteQACard: FC<Props> = (props) => {
     [addContentToWritePost]
   )
   const addToPanelInfo = useReactiveVar(addToPanelVar)
+
   return (
     <CardContainer backColor={props.backColor}>
       <ContentContainer>

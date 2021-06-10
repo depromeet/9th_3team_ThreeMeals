@@ -13,36 +13,56 @@ interface Account {
 }
 
 interface ParentCommentInfo {
-  id: string
-  content: string
-  secretType: string
-  commentState: string
-  createdAt: string
-  updatedAt: string
-  account: Account
-  postId: string
-  childrenCount: number
-  parentId: string
-  pageInfo: {
-    endCursor: string
-    hasNextPage: boolean
+  node: {
+    id: string
+    content: string
+    secretType: string
+    commentState: string
+    createdAt: string
+    updatedAt: string
+    account: Account
+    postId: string
+    childrenCount: number
+    parentId: string
+    pageInfo: {
+      endCursor: string
+      hasNextPage: boolean
+    }
   }
 }
 
 interface ChildrenCommentInfo {
-  id: string
-  content: string
-  secretType: string
-  commentState: string
-  createdAt: string
-  updatedAt: string
-  account: Account
-  postId: string
-  parentId: string
+  node: {
+    id: string
+    content: string
+    secretType: string
+    commentState: string
+    createdAt: string
+    updatedAt: string
+    account: Account
+    postId: string
+    parentId: string
+  }
 }
 
-export type ParentComments = ParentCommentInfo[]
-export type ChildrenComments = ChildrenCommentInfo[]
+export interface ParentComments {
+  getParentComments: {
+    edges: ParentCommentInfo[]
+    pageInfo: {
+      endCursor: string
+      hasNextPage: boolean
+    }
+  }
+}
+export interface ChildrenComments {
+  getChildrenComments: {
+    edges: ChildrenCommentInfo[]
+    pageInfo: {
+      endCursor: string
+      hasNextPage: boolean
+    }
+  }
+}
 
 export const GET_PARENT_COMMENTS = gql`
   query getParentComments($first: Float!, $postId: String!) {
@@ -52,10 +72,12 @@ export const GET_PARENT_COMMENTS = gql`
           id
           content
           secretType
+          postId
           account {
             id
           }
           childrenCount
+          createdAt
         }
         cursor
       }
@@ -69,16 +91,10 @@ export const GET_PARENT_COMMENTS = gql`
 export const GET_CHILDREN_COMMENTS = gql`
   query getChildrenComments(
     $first: Float!
-    $after: string
-    $postId: string!
-    $parentId: string!
+    $parentId: String!
+    $postId: String!
   ) {
-    getChildrenComments(
-      first: $first
-      after: $after
-      postId: $postId
-      parentId: $parentId
-    ) {
+    getChildrenComments(first: $first, parentId: $parentId, postId: $postId) {
       edges {
         node {
           id
@@ -87,7 +103,11 @@ export const GET_CHILDREN_COMMENTS = gql`
           commentState
           createdAt
           updatedAt
-          account
+          account {
+            id
+            nickname
+            profileUrl
+          }
           postId
           parentId
         }

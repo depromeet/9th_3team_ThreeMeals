@@ -32,12 +32,12 @@ const DraggableSticker: FC<Props> = (props) => {
   const onDragEndImg = useCallback(
     (e) => {
       setIsDragging(false)
-      if (props.stickerImage.positions) {
-        props.stickerImage.positions.positionX = e.target.x()
-        props.stickerImage.positions.positionY = e.target.y()
+      if (props.stickerImage.position) {
+        props.stickerImage.position.positionX = e.target.x()
+        props.stickerImage.position.positionY = e.target.y()
       }
     },
-    [props.stickerImage.positions]
+    [props.stickerImage.position]
   )
   const onDragStart = useCallback(() => {
     setIsDragging(true)
@@ -52,8 +52,8 @@ const DraggableSticker: FC<Props> = (props) => {
   return (
     <Group
       draggable
-      x={props.stickerImage.positions?.positionX}
-      y={props.stickerImage.positions?.positionY}
+      x={props.stickerImage.position?.positionX}
+      y={props.stickerImage.position?.positionY}
       offsetX={stickerImage ? stickerImage.width / 2 : 0}
       offsetY={stickerImage ? stickerImage.height / 2 : 0}
       onDragStart={onDragStart}

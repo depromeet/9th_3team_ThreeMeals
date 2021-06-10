@@ -1,18 +1,23 @@
 import { useRouter } from 'next/router'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Modal from '../molecules/Modal'
 import AnswerDetailTemplate from '../templates/AnswerDetailTemplate'
-import { ParentComments } from '../../lib/queries/getCommentsQueries'
+import {
+  ParentComments,
+  GET_PARENT_COMMENTS,
+} from '../../lib/queries/getCommentsQueries'
+import { useQuery } from '@apollo/client'
 
 export type AnswerContactType = 'parent' | 'children'
-interface Props {
-  data: ParentComments
-}
 
-const AnswerDetailPage: React.FC<Props> = (props) => {
+const AnswerDetailPage: React.FC = () => {
   const router = useRouter()
-  const { isMine: queryIsMine } = router.query
+  const { postId, isMine: queryIsMine } = router.query
+  const { data: parentCommentsData } = useQuery<ParentComments>(
+    GET_PARENT_COMMENTS,
+    { variables: { first: 10, postId: postId } }
+  )
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [modalTitle, setModalTitle] = useState<string>()
   const onSendComment = useCallback((comment: string) => {
@@ -39,7 +44,14 @@ const AnswerDetailPage: React.FC<Props> = (props) => {
     }
     return false
   }, [queryIsMine])
-
+  useEffect(() => {
+    if (!parentCommentsData) {
+      router.back()
+    }
+  }, [parentCommentsData, router])
+  if (!parentCommentsData) {
+    return <></>
+  }
   return (
     <AppContainer>
       <AnswerDetailTemplate
@@ -48,7 +60,7 @@ const AnswerDetailPage: React.FC<Props> = (props) => {
         onSendComment={onSendComment}
         onClickRemove={onClickRemove}
         isMine={isMine}
-        parentComments={props.data}
+        parentComments={parentCommentsData}
       />
       <Modal
         open={isOpen}

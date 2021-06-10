@@ -3,17 +3,33 @@ import WritePostTemplate from '../templates/WritePostTemplate'
 import { useRouter } from 'next/router'
 import { BackColor } from '../../types/types'
 import styled from 'styled-components'
-import { useReactiveVar } from '@apollo/client'
+import { useReactiveVar, useMutation, useQuery } from '@apollo/client'
 import writePostInfoVar, {
   addToWritePostInfo,
 } from '../../lib/localStore/writePost'
 import { addToPanel } from '../../lib/localStore/stickerPanel'
 import StickersList from '../organisms/StickersList'
 import Modal from '../molecules/Modal'
+import {
+  CREATE_POST,
+  CreatePostRes,
+  CreatePostParams,
+} from '../../lib/queries/createQueries'
+import {
+  GET_ALL_EMOTICONS,
+  GetAllEmoticons,
+} from '../../lib/queries/getQueries'
+import { GET_MY_PROFILE, getMyAccountInfo } from '../../lib/queries/meQueries'
 const WritePostPage: VFC = () => {
+  const { data: emoticonsData } = useQuery<GetAllEmoticons>(GET_ALL_EMOTICONS)
+  const { data: profileData } = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
+  const allEmoticons = emoticonsData?.getAllEmoticons
+  const profile = profileData?.getMyAccountInfo
   const router = useRouter()
   const { id: postType } = router.query
   const writePostInfo = useReactiveVar(writePostInfoVar)
+  const [createPostMutation] =
+    useMutation<CreatePostRes, CreatePostParams>(CREATE_POST)
   const [backColor, setBackColor] = useState<BackColor>('#67D585')
   const [optionActiveState, setOptionActiveState] = useState({
     Temp: true,
@@ -44,7 +60,7 @@ const WritePostPage: VFC = () => {
     (e) => {
       const { id } = e.currentTarget
       setBackColor(id)
-      addToWritePostInfo({ backColor: backColor })
+      addToWritePostInfo({ color: backColor })
     },
     [backColor]
   )
@@ -70,20 +86,33 @@ const WritePostPage: VFC = () => {
     }, 500)
   }, [])
   const onClickSaveBtn = useCallback(() => {
+    if (!writePostInfo?.content) {
+      return
+    }
     setOpenSaveModal(true)
-  }, [])
-  const onClickConfirm = () => {
+  }, [writePostInfo?.content])
+  const onClickConfirm = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.preventDefault()
     console.log('send:', writePostInfo)
-  }
-  useEffect(() => {
-    if (typeof postType === 'string') {
-      addToWritePostInfo({
-        backColor: backColor,
-        postType: postType,
-        secretType: 'Temp',
+    if (writePostInfo && typeof writePostInfo !== undefined) {
+      createPostMutation({ variables: writePostInfo }).then(() => {
+        router.push('/content')
       })
     }
-  }, [backColor, postType])
+  }
+  useEffect(() => {
+    if (typeof postType === 'string' && profile) {
+      addToWritePostInfo({
+        color: backColor,
+        postType: postType,
+        secretType: 'Temp',
+        toAccountId: profile.id,
+      })
+    }
+  }, [backColor, postType, profile])
+  console.log(writePostInfo)
   return (
     <AppContainer>
       <WritePostTemplate
@@ -97,8 +126,9 @@ const WritePostPage: VFC = () => {
         closeDeleteBtnByTouching={closeDeleteBtnByTouching}
         onClickSaveBtn={onClickSaveBtn}
       />
-      {openStickerList ? (
+      {allEmoticons && openStickerList ? (
         <StickersList
+          stickers={allEmoticons}
           updatePickedfileUrl={updatePickedImgUrl}
           updatePickedImgWidth={updatePickedImgWidth}
           addToPanelByClicking={addToPanelByClicking}

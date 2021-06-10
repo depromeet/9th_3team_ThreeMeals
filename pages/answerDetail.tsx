@@ -4,8 +4,8 @@ import cookies from 'next-cookies'
 import { initializeApollo } from '../src/lib/apollo'
 import _isEmpty from 'lodash-es/isEmpty'
 import { GET_PARENT_COMMENTS } from '../src/lib/queries/getCommentsQueries'
-const AnswerDetail: React.FC = (initialApolloState) => {
-  return <AnswerDetailPage data={initialApolloState} />
+const AnswerDetail: React.FC = () => {
+  return <AnswerDetailPage />
 }
 
 export default AnswerDetail
