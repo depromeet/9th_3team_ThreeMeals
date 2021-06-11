@@ -20,6 +20,8 @@ const Container = styled.span<ContainerProps>`
   letter-spacing: 0.04em;
   height: 48px;
   padding: 0 31px;
+  position: relative;
+  right: 13%;
   ${({ active }) =>
     active ? `color:white;` : `color:rgba(255, 255, 255, 0.5);`}
   @media screen and (max-width: 360px) {

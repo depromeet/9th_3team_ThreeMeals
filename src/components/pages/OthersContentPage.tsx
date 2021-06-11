@@ -31,7 +31,9 @@ const OthersContentPage: React.FC = () => {
         getPost={getPost.data}
         account={account.data}
         profileImage={IMAGES.background}
-        onClickLeft={() => {}}
+        onClickLeft={() => {
+          console.log('onClickLeft')
+        }}
         onClickSecondRight={() => {
           router.push('/notification')
         }}

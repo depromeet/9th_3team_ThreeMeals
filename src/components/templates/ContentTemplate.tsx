@@ -84,16 +84,13 @@ const ContentTemplate: FC<Props> = (props) => {
                   <QuestionCard
                     key={index}
                     id={data.node.id}
-                    labelComponent={
-                      data.node.secretType === 'Forever' ? (
-                        <PrivateCardLabel text="BONG IN" active={false} />
-                      ) : (
-                        <CardLabel text={data.node.createdAt} active />
-                      )
-                    }
                     questionTitle={data.node.content}
-                    backColor={'#FF833D'}
+                    backColor={data.node.color}
                     stickers={data.node.usedEmoticons}
+                    comments={data.node.comments}
+                    createdAt={data.node.createdAt}
+                    updatedAt={data.node.updatedAt}
+                    secretType={data.node.secretType}
                     onClickOption={() => {
                       props.onClickRemove(data.node.id, props.tabIndex)
                     }}
@@ -118,7 +115,7 @@ const ContentTemplate: FC<Props> = (props) => {
                     id={data.node.id}
                     time={data.node.createdAt}
                     questionTitle={data.node.content}
-                    backColor={'#FF833D'}
+                    backColor={data.node.color}
                     stickers={data.node.usedEmoticons}
                     onClickPost={() => {
                       props.onClickAnswerCard(data.node.id, true)

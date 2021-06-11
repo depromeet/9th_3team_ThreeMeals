@@ -38,6 +38,14 @@ interface getPostEdges {
       }
       fileUrl: string
     }[]
+    comments: {
+      id: string
+      content: string
+      secretType: string
+      commentState: string
+      createdAt: string
+      updatedAt: string
+    }[]
   }
   cursor: string
 }
@@ -104,6 +112,14 @@ export const GET_POST = gql`
             }
             fileUrl
             name
+          }
+          comments {
+            id
+            content
+            secretType
+            commentState
+            createdAt
+            updatedAt
           }
           createdAt
           updatedAt

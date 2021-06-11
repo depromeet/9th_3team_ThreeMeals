@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import ContentTemplate from '../templates/ContentTemplate'
@@ -62,7 +62,7 @@ const ContentPage: React.FC = () => {
     router.push('/writePost/Answer')
   }, [router])
 
-  const onClickRemove = useCallback((id: string, tabIndex: number) => {
+  const onClickRemove = useCallback((id: string) => {
     setSelectedPostId(id)
     setIsOpen(true)
   }, [])
