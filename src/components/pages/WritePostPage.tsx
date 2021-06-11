@@ -95,11 +95,18 @@ const WritePostPage: VFC = () => {
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     event.preventDefault()
-    console.log('send:', writePostInfo)
-    if (writePostInfo && typeof writePostInfo !== undefined) {
-      createPostMutation({ variables: writePostInfo }).then(() => {
-        router.push('/content')
-      })
+    if (postType === 'Q') {
+      if (writePostInfo && typeof writePostInfo !== undefined) {
+        createPostMutation({ variables: writePostInfo }).then(() => {
+          router.back()
+        })
+      }
+    } else {
+      if (writePostInfo && typeof writePostInfo !== undefined) {
+        createPostMutation({ variables: writePostInfo }).then(() => {
+          router.push('/content')
+        })
+      }
     }
   }
   useEffect(() => {

@@ -21,7 +21,11 @@ const Container = styled.span<ContainerProps>`
   line-height: 48px;
   letter-spacing: 0.04em;
   height: 48px;
-  padding: 0 12px;
+  padding-left: 5px;
+  padding-right: 12px;
+  width: 60%;
+  position: relative;
+  right: 13%;
   ${({ active }) =>
     active ? `color:white;` : `color:rgba(255, 255, 255, 0.5);`}
   img {

@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
 import { getAccountInfo } from '../../lib/queries/userQueries'
 import { getPost } from '../../lib/queries/getPostQueries'
 import QuizAnswerCard from '../organisms/QuizAnswerCard'
+import CardLabel from '../atoms/CardLabel'
 
 interface Props {
   getPost?: getPost
@@ -52,19 +53,25 @@ const OthersContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <ContentContainer>
-              <QuestionCard
-                labelComponent={<PrivateCardLabel text="BONG IN" active />}
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#FF833D'}
-              />
-              <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????ㅋㅋ"
-                backColor={'#67D585'}
-              />
-              <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????ㅋㅋ"
-                backColor={'#67D585'}
-              />
+              {postContent?.ask.map((data, index) => {
+                return (
+                  <QuestionCard
+                    key={index}
+                    id={data.node.id}
+                    labelComponent={
+                      data.node.secretType === 'Forever' ? (
+                        <PrivateCardLabel text="BONG IN" active={false} />
+                      ) : (
+                        <CardLabel text={data.node.createdAt} active />
+                      )
+                    }
+                    questionTitle={data.node.content}
+                    backColor={data.node.color}
+                    stickers={data.node.usedEmoticons}
+                    comments={data.node.comments}
+                  />
+                )
+              })}
             </ContentContainer>
           </>
         )
@@ -80,7 +87,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
                     id={data.node.id}
                     time={data.node.createdAt}
                     questionTitle={data.node.content}
-                    backColor={'#FF833D'}
+                    backColor={data.node.color}
                     stickers={data.node.usedEmoticons}
                     onClickPost={() => {
                       props.onClickAnswerCard(data.node.id)
@@ -113,7 +120,13 @@ const OthersContentTemplate: FC<Props> = (props) => {
       default:
         break
     }
-  }, [postContent?.answer, postContent?.quiz, props, tabIndex])
+  }, [
+    postContent?.answer,
+    postContent?.ask,
+    postContent?.quiz,
+    props,
+    tabIndex,
+  ])
 
   const profileImage = useMemo(() => {
     return props.account?.getAccountInfo.image
