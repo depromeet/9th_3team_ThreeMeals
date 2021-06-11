@@ -260,7 +260,7 @@ const ContentTemplate: FC<Props> = (props) => {
         {ContentView}
       </MainContainer>
       {postContent && props.tabIndex === 1 ? (
-        postContent.answer.length > 0 ? (
+        postContent.answer.length > 1 ? (
           <WriteButton>
             <img onClick={props.onClickWrite} src={IMAGES.write} width={88} />
           </WriteButton>

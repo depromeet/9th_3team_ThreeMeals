@@ -193,7 +193,8 @@ const OthersContentTemplate: FC<Props> = (props) => {
         {ContentView}
       </MainContainer>
       {(postContent && tabIndex === 0) || (postContent && tabIndex === 2) ? (
-        postContent.answer.length > 0 ? (
+        (tabIndex === 0 && postContent.ask.length > 1) ||
+        (tabIndex === 2 && postContent.quiz.length > 1) ? (
           <WriteButton>
             <img onClick={onClickWrite} src={IMAGES.write} width={88} />
           </WriteButton>

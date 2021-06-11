@@ -1,5 +1,6 @@
 import * as React from 'react'
 import styled, { CSSProperties } from 'styled-components'
+import { useCallback } from 'react'
 
 interface Props {
   containerStyle?: CSSProperties
@@ -14,9 +15,12 @@ const DefaultInput: React.FC<Props> = (props: Props) => {
     <Container
       style={props.containerStyle}
       placeholder={props.placeholder}
-      onChange={(e) => {
-        props.onChange(e.target.value)
-      }}
+      onChange={useCallback(
+        (e) => {
+          props.onChange(e.target.value)
+        },
+        [props]
+      )}
       onFocus={props.onFocus}
       onBlur={props.onBlur}
     />
