@@ -376,11 +376,11 @@ const NoticeText = styled.div`
 
 const ContentContainer = styled.div``
 
-const WriteButton = styled.div`
+const WriteButton = styled.button.attrs({ type: 'button' })`
   bottom: 0;
   right: 0;
   position: fixed;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 
   @media all and (min-width: 515px) {
