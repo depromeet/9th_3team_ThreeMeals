@@ -7,7 +7,12 @@ import {
   ParentComments,
   GET_PARENT_COMMENTS,
 } from '../../lib/queries/getCommentsQueries'
-import { useQuery } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
+import {
+  CreateCommentRes,
+  CreateCommentParams,
+  CREATE_COMMENT,
+} from '../../lib/queries/createQueries'
 
 export type AnswerContactType = 'parent' | 'children'
 
@@ -18,11 +23,25 @@ const AnswerDetailPage: React.FC = () => {
     GET_PARENT_COMMENTS,
     { variables: { first: 10, postId: postId } }
   )
+  const [createCommentMutation] =
+    useMutation<CreateCommentRes, CreateCommentParams>(CREATE_COMMENT)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [modalTitle, setModalTitle] = useState<string>()
-  const onSendComment = useCallback((comment: string) => {
-    console.log('comment:', comment)
-  }, [])
+  const onSendComment = useCallback(
+    (comment: string) => {
+      console.log('comment:', comment)
+      if (typeof postId === 'string') {
+        createCommentMutation({
+          variables: {
+            postId: postId,
+            content: comment,
+            secretType: 'Forever',
+          },
+        })
+      }
+    },
+    [createCommentMutation, postId]
+  )
 
   const onClickRemove = useCallback((type: AnswerContactType, id: string) => {
     const modalData: string =

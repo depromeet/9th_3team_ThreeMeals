@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 export type CreatePostParams = WritePostInfo
 
 export interface CreatePostRes {
-  content: string
+  message: string
 }
 
 export const GET_WRITE_POST_INFO = gql`
@@ -29,6 +29,35 @@ export const CREATE_POST = gql`
       secretType: $secretType
       postType: $postType
       emoticons: $emoticons
+    ) {
+      message
+    }
+  }
+`
+
+export interface CreateCommentParams {
+  postId: string
+  parentId?: string
+  content: string
+  secretType: string
+}
+
+export interface CreateCommentRes {
+  content: string
+}
+
+export const CREATE_COMMENT = gql`
+  mutation createComment(
+    $postId: String!
+    $parentId: String
+    $content: String!
+    $secretType: String!
+  ) {
+    createComment(
+      postId: $postId
+      parentId: $parentId
+      content: $content
+      secretType: $secretType
     ) {
       content
     }
