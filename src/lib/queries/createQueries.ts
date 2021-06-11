@@ -1,7 +1,21 @@
 import { WritePostInfo } from './../localStore/writePost'
 import gql from 'graphql-tag'
+import { BackColor } from '../../types/types'
+import { Vector2d } from 'konva/lib/types'
 
-export type CreatePostParams = WritePostInfo
+interface createPostEmoticonInfo {
+  emoticonId: string | undefined
+  position: Vector2d | null | undefined
+}
+
+export interface CreatePostParams {
+  content?: string
+  toAccountId?: string
+  color?: BackColor
+  secretType?: string
+  postType?: string
+  emoticons?: createPostEmoticonInfo[]
+}
 
 export interface CreatePostRes {
   message: string

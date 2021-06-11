@@ -67,12 +67,6 @@ const WritePostPage: VFC = () => {
   const onClickOpenStickerList = useCallback(() => {
     setOpenStickerList(!openStickerList)
   }, [openStickerList])
-  const updatePickedImgUrl = useCallback((imgUrl: string) => {
-    addToPanel({ imgUrl: imgUrl })
-  }, [])
-  const updatePickedImgWidth = useCallback((width: number) => {
-    addToPanel({ width: width })
-  }, [])
   const addToPanelByClicking = useCallback(() => {
     addToPanel({ clickedSticker: true })
     setTimeout(() => {
@@ -97,9 +91,36 @@ const WritePostPage: VFC = () => {
     event.preventDefault()
     console.log('send:', writePostInfo)
     if (writePostInfo && typeof writePostInfo !== undefined) {
-      createPostMutation({ variables: writePostInfo }).then(() => {
-        router.push('/content')
+      const emoticons = writePostInfo.emoticons?.map((emoticon) => {
+        return { emoticonId: emoticon.emoticonId, position: emoticon.position }
       })
+      if (emoticons) {
+        createPostMutation({
+          variables: {
+            content: writePostInfo.content,
+            toAccountId: writePostInfo.toAccountId,
+            color: writePostInfo.color,
+            secretType: writePostInfo.secretType,
+            postType: writePostInfo.postType,
+            emoticons: emoticons,
+          },
+        }).then(() => {
+          router.push('/content')
+        })
+      } else {
+        createPostMutation({
+          variables: {
+            content: writePostInfo.content,
+            toAccountId: writePostInfo.toAccountId,
+            color: writePostInfo.color,
+            secretType: writePostInfo.secretType,
+            postType: writePostInfo.postType,
+            emoticons: [],
+          },
+        }).then(() => {
+          router.push('/content')
+        })
+      }
     }
   }
   useEffect(() => {
@@ -140,8 +161,6 @@ const WritePostPage: VFC = () => {
       {allEmoticons && openStickerList ? (
         <StickersList
           stickers={allEmoticons}
-          updatePickedfileUrl={updatePickedImgUrl}
-          updatePickedImgWidth={updatePickedImgWidth}
           addToPanelByClicking={addToPanelByClicking}
           onClickOpenStickerList={onClickOpenStickerList}
         />
