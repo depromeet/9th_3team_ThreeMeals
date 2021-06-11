@@ -12,7 +12,7 @@ export default AnswerDetail
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const token = cookies(ctx).token
-  const param = ctx.params
+  const query = ctx.query
   if (_isEmpty(token)) {
     ctx.res.writeHead(302, { Location: '/' })
     ctx.res.end()
@@ -21,7 +21,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const apolloClient = initializeApollo({}, ctx)
   await apolloClient.query({
     query: GET_PARENT_COMMENTS,
-    variables: { first: 10, postId: '1' },
+    variables: { first: 10, postId: query?.postId },
   })
   return {
     props: { initialApolloState: apolloClient.cache.extract() },

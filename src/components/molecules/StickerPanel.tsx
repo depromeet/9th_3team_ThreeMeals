@@ -26,25 +26,37 @@ const StickerPanel: FC<Props> = (props) => {
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault()
-      if (stageRef.current && addToPanelInfo.imgUrl && addToPanelInfo.width) {
+      if (
+        stageRef.current &&
+        addToPanelInfo.imgUrl &&
+        addToPanelInfo.width &&
+        addToPanelInfo.emoticonId
+      ) {
         stageRef.current.setPointersPositions(e)
         const positions = stageRef.current.getPointerPosition()
         const droppedImgInfo = {
           position: { positionX: positions?.x, positionY: positions?.y },
           fileUrl: addToPanelInfo.imgUrl,
           width: addToPanelInfo.width,
+          emoticonId: addToPanelInfo.emoticonId,
         }
         setStickers([...stickers, droppedImgInfo])
       }
     },
-    [addToPanelInfo.imgUrl, addToPanelInfo.width, stickers]
+    [
+      addToPanelInfo.emoticonId,
+      addToPanelInfo.imgUrl,
+      addToPanelInfo.width,
+      stickers,
+    ]
   )
   const addToPanelByClicking = useCallback(
-    (width, imgUrl) => {
+    (width, imgUrl, id) => {
       const droppedImgInfo = {
         position: { positionX: 279 / 2, positionY: 192 / 2 },
         fileUrl: imgUrl,
         width: width,
+        emoticonId: id,
       }
       setStickers([...stickers, droppedImgInfo])
     },
@@ -72,7 +84,11 @@ const StickerPanel: FC<Props> = (props) => {
   )
   useEffect(() => {
     if (addToPanelInfo.clickedSticker) {
-      addToPanelByClicking(addToPanelInfo.width, addToPanelInfo.imgUrl)
+      addToPanelByClicking(
+        addToPanelInfo.width,
+        addToPanelInfo.imgUrl,
+        addToPanelInfo.emoticonId
+      )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

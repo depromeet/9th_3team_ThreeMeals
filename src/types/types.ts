@@ -18,6 +18,6 @@ export interface StickerInfo {
   fileUrl: string
   width?: 140 | number
   position?: Konva.Vector2d | null
-  id?: string
+  emoticonId?: string
   name?: string
 }

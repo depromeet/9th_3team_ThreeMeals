@@ -59,7 +59,7 @@ const ContentPage: React.FC = () => {
     [router]
   )
   const onClickWrite = useCallback(() => {
-    router.push('/writePost/A')
+    router.push('/writePost/Answer')
   }, [router])
 
   const onClickRemove = useCallback((id: string, tabIndex: number) => {

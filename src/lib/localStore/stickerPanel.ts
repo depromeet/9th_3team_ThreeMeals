@@ -5,6 +5,7 @@ export interface StickerPanelPropsInfo {
   width?: number
   clickedSticker?: boolean
   closeDeleteBtn?: boolean
+  emoticonId?: string
 }
 
 const addToPanelVar = makeVar<StickerPanelPropsInfo>({
@@ -12,6 +13,7 @@ const addToPanelVar = makeVar<StickerPanelPropsInfo>({
   width: 0,
   clickedSticker: false,
   closeDeleteBtn: false,
+  emoticonId: '',
 })
 
 export const addToPanel = (info: StickerPanelPropsInfo) => {
@@ -23,6 +25,7 @@ export const addToPanel = (info: StickerPanelPropsInfo) => {
       ...curPanelInfo,
       [newValueArr[0][0]]: newValueArr[0][1],
       [newValueArr[1][0]]: newValueArr[1][1],
+      [newValueArr[2][0]]: newValueArr[2][1],
     })
   } else {
     addToPanelVar({

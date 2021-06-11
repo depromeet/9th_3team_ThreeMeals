@@ -24,7 +24,7 @@ const WritePostTemplate: FC<Props> = (props) => {
   const router = useRouter()
   const [withSticker, setWithSticker] = useState(false)
   useEffect(() => {
-    if (props.TempType === 'Q' || props.TempType === 'A') {
+    if (props.TempType === 'Ask' || props.TempType === 'Answer') {
       setWithSticker(true)
     }
   }, [props.TempType])
@@ -42,7 +42,7 @@ const WritePostTemplate: FC<Props> = (props) => {
         <WriteQACard backColor={props.backColor} isWithSticker={withSticker} />
       </MainContainer>
       <BottomContainer>
-        {props.TempType === 'Q' ? (
+        {props.TempType === 'Ask' ? (
           <OptionContainer buttonActive={props.optionActiveState}>
             {props.optionActiveState.Forever && (
               <OptionAlarmField optionType={props.optionActiveState} />
@@ -102,7 +102,7 @@ const WritePostTemplate: FC<Props> = (props) => {
               onClick={props.onClickBackColor}
             />
           </BackColorList>
-          {props.TempType === 'OX' ? null : (
+          {props.TempType === 'Quiz' ? null : (
             <button
               className="stickerButton"
               onClick={props.onClickOpenStickerList}

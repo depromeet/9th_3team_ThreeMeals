@@ -3,20 +3,20 @@ import styled from 'styled-components'
 import PickableSticker from '../molecules/PickableSticker'
 import { IMAGES } from '../../constants/images'
 import { StickerInfo } from '../../types/types'
+import { addToPanel } from '../../lib/localStore/stickerPanel'
+import { GetEmoticonInfo } from '../../lib/queries/getQueries'
 
 interface Props {
-  stickers: StickerInfo[]
-  updatePickedfileUrl: (fileUrl: string) => void
-  updatePickedImgWidth: (imgWidth: number) => void
+  stickers: GetEmoticonInfo[]
   addToPanelByClicking: () => void
   onClickOpenStickerList: () => void
 }
 
 const StickersList: FC<Props> = (props) => {
   const onDragStart = useCallback(
-    (fileUrl: string, width: number) => {
-      props.updatePickedImgWidth(width)
-      props.updatePickedfileUrl(fileUrl)
+    (fileUrl: string, width: number, id?: string) => {
+      addToPanel({ imgUrl: fileUrl, width: width, emoticonId: id })
+
       setTimeout(() => {
         props.onClickOpenStickerList()
       }, 100)
@@ -24,9 +24,9 @@ const StickersList: FC<Props> = (props) => {
     [props]
   )
   const onTouchStart = useCallback(
-    (fileUrl: string, width: number) => {
-      props.updatePickedImgWidth(width)
-      props.updatePickedfileUrl(fileUrl)
+    (fileUrl: string, width: number, id?: string) => {
+      addToPanel({ imgUrl: fileUrl, width: width, emoticonId: id })
+
       props.addToPanelByClicking()
       props.onClickOpenStickerList()
     },
@@ -47,14 +47,15 @@ const StickersList: FC<Props> = (props) => {
           return (
             <div
               key={i}
-              onDragStart={() => onDragStart(sticker.fileUrl, 140)}
-              onClick={() => onTouchStart(sticker.fileUrl, 140)}
+              onDragStart={() => onDragStart(sticker.fileUrl, 140, sticker.id)}
+              onClick={() => onTouchStart(sticker.fileUrl, 140, sticker.id)}
             >
               <PickableSticker
                 key={i}
                 fileUrl={sticker.fileUrl}
-                width={sticker.width}
+                width={140}
                 position={sticker.position}
+                emoticonId={sticker.id}
               />
             </div>
           )

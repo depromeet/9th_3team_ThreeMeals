@@ -40,9 +40,9 @@ const OthersContentTemplate: FC<Props> = (props) => {
   }, [props.getPost?.getPosts.edges])
   const onClickWrite = useCallback(() => {
     if (tabIndex === 0) {
-      router.push(`/writePost/Q?otherId=${props.account?.getAccountInfo.id}`)
+      router.push(`/writePost/Ask?otherId=${props.account?.getAccountInfo.id}`)
     } else {
-      router.push(`/writePost/OX?otherId=${props.account?.getAccountInfo.id}`)
+      router.push(`/writePost/Quiz?otherId=${props.account?.getAccountInfo.id}`)
     }
   }, [props.account?.getAccountInfo.id, router, tabIndex])
   console.log('postContent:', postContent)
@@ -82,6 +82,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
                     questionTitle={data.node.content}
                     backColor={'#FF833D'}
                     stickers={data.node.usedEmoticons}
+                    count={data.node.commentsCount}
                     onClickPost={() => {
                       props.onClickAnswerCard(data.node.id)
                     }}
@@ -271,4 +272,5 @@ const QuizAnswerCardContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+  margin-bottom: 20px;
 `

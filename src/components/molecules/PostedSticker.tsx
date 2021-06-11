@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Image as KonvaImage } from 'react-konva'
+import { Image as KonvaImage, Group } from 'react-konva'
 import useImage from 'use-image'
 import { StickerInfo } from '../../types/types'
 interface Props {
@@ -8,17 +8,22 @@ interface Props {
 
 const PostedSticker: FC<Props> = (props) => {
   const [stickerImage] = useImage(props.stickerImage.fileUrl)
+  console.log(
+    props.stickerImage.position?.positionX,
+    props.stickerImage.position?.positionY
+  )
   const stickerHeight = stickerImage
     ? (140 * stickerImage.height) / stickerImage.width
     : 0
   return (
-    <KonvaImage
-      width={props.stickerImage.width}
-      height={stickerHeight}
-      image={stickerImage}
-      x={50}
-      y={50}
-    />
+    <Group
+      x={props.stickerImage.position?.positionX}
+      y={props.stickerImage.position?.positionY}
+      offsetX={stickerImage ? stickerImage.width / 2 : 0}
+      offsetY={stickerImage ? stickerImage.height / 2 : 0}
+    >
+      <KonvaImage width={140} height={stickerHeight} image={stickerImage} />
+    </Group>
   )
 }
 

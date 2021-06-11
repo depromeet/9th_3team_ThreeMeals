@@ -7,8 +7,17 @@ export const GET_WRITE_POST_INFO = gql`
   }
 `
 
+export interface GetEmoticonInfo {
+  id: string
+  position: {
+    positionX: number
+    positionY: number
+  }
+  fileUrl: string
+}
+
 export interface GetAllEmoticons {
-  getAllEmoticons: StickerInfo[]
+  getAllEmoticons: GetEmoticonInfo[]
 }
 
 export const GET_ALL_EMOTICONS = gql`
