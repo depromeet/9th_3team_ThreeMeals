@@ -11,7 +11,7 @@ import dayjs from 'dayjs'
 interface Props {
   isMine: boolean
   profileImg: string
-  commentsInfo: ParentComments
+  commentsInfo: ParentComments | undefined
   onClickRemove?: (type: AnswerContactType, id: string) => void
 }
 
@@ -20,7 +20,7 @@ const PostComment: FC<Props> = (props) => {
     useLazyQuery<ChildrenComments>(GET_CHILDREN_COMMENTS, {
       variables: { first: 10, postId: '1' },
     })
-  const postCommentData = props.commentsInfo.getParentComments.edges
+  const postCommentData = props.commentsInfo?.getParentComments.edges
   const childrenCommentData = childrenComments?.getChildrenComments.edges
   const [writeOpen, setWriteOpen] = useState(false)
   const [childrenOpen, setChildrenOpen] = useState(false)
@@ -41,7 +41,7 @@ const PostComment: FC<Props> = (props) => {
   )
   return (
     <AppContainer>
-      {postCommentData.map((comment, i) => {
+      {postCommentData?.map((comment, i) => {
         return (
           <CommentContainer key={i}>
             <CommentHeader>

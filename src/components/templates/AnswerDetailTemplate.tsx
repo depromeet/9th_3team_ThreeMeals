@@ -9,7 +9,7 @@ import { AnswerContactType } from '../pages/AnswerDetailPage'
 import { ParentComments } from '../../lib/queries/getCommentsQueries'
 
 interface Props {
-  parentComments: ParentComments
+  parentComments: ParentComments | undefined
   isMine: boolean
   onClickLeft?: () => void
   onClickRight?: () => void

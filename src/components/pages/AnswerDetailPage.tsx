@@ -63,14 +63,7 @@ const AnswerDetailPage: React.FC = () => {
     }
     return false
   }, [queryIsMine])
-  useEffect(() => {
-    if (!parentCommentsData) {
-      router.back()
-    }
-  }, [parentCommentsData, router])
-  if (!parentCommentsData) {
-    return <></>
-  }
+  console.log(parentCommentsData)
   return (
     <AppContainer>
       <AnswerDetailTemplate
