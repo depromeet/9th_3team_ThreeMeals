@@ -1,0 +1,26 @@
+Sitemap: https://d3egwu5gw26rxc.cloudfront.net//sitemap.xml    
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+disallow: /about
+
+User-agent: msnbot
+Allow: /
+
+User-agent: Naverbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: baiduspider
+Allow: /
+
+User-agent: *
+Disallow: /

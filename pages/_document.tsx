@@ -43,6 +43,11 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap"
             rel="stylesheet"
           />
+          <link
+            rel="shortcut icon"
+            type="image/x-icon"
+            href="/favicon.ico"
+          ></link>
         </Head>
         <body>
           <Main />
