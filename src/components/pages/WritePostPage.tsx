@@ -94,33 +94,23 @@ const WritePostPage: VFC = () => {
       const emoticons = writePostInfo.emoticons?.map((emoticon) => {
         return { emoticonId: emoticon.emoticonId, position: emoticon.position }
       })
-      if (emoticons) {
-        createPostMutation({
-          variables: {
-            content: writePostInfo.content,
-            toAccountId: writePostInfo.toAccountId,
-            color: writePostInfo.color,
-            secretType: writePostInfo.secretType,
-            postType: writePostInfo.postType,
-            emoticons: emoticons,
-          },
-        }).then(() => {
+
+      createPostMutation({
+        variables: {
+          content: writePostInfo.content,
+          toAccountId: writePostInfo.toAccountId,
+          color: writePostInfo.color,
+          secretType: writePostInfo.secretType,
+          postType: writePostInfo.postType,
+          emoticons: emoticons ? emoticons : [],
+        },
+      }).then(() => {
+        if (postType === 'Ask') {
+          router.push(`/otherscontent/${otherId}`)
+        } else {
           router.push('/content')
-        })
-      } else {
-        createPostMutation({
-          variables: {
-            content: writePostInfo.content,
-            toAccountId: writePostInfo.toAccountId,
-            color: writePostInfo.color,
-            secretType: writePostInfo.secretType,
-            postType: writePostInfo.postType,
-            emoticons: [],
-          },
-        }).then(() => {
-          router.push('/content')
-        })
-      }
+        }
+      })
     }
   }
   useEffect(() => {
