@@ -70,6 +70,7 @@ export const IMAGES = {
   sticker_food_apple: require('../assets/images/sticker_food_apple.png'),
   sticker_food_bread: require('../assets/images/sticker_food_bread.png'),
   sticker_food_watermelon: require('../assets/images/sticker_food_watermelon.png'),
+  open_label: require('../assets/images/open_label.png'),
 
   // notification //
   tape_notification: require('../assets/images/tape_notification.png'),

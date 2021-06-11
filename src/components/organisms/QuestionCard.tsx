@@ -89,7 +89,11 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
             timeStatus === 'bong-in' ? (
               <PrivateCardLabel text="BONG IN" active={false} />
             ) : timeStatus === 'show' ? (
-              <div>보이기</div>
+              <ShowProfile>
+                <ProfileImg src={IMAGES.background} />
+                <ProfileName>hi</ProfileName>
+                <ProfileImgSticker src={IMAGES.open_label} />
+              </ShowProfile>
             ) : (
               <CardLabel text={timerValue || '00:00:00'} active />
             )
@@ -283,4 +287,43 @@ const SaveButton = styled.img`
   position: absolute;
   right: 0;
   bottom: 0px;
+`
+
+const ShowProfile = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  min-width: 100px;
+  height: 40px;
+
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  border-radius: 24px;
+  padding: 8px;
+`
+
+const ProfileImgSticker = styled.img`
+  width: 76px;
+  height: 69.5px;
+  position: absolute;
+  left: -15px;
+`
+const ProfileImg = styled.img`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 8px;
+`
+const ProfileName = styled.span`
+  font-family: Apple SD Gothic Neo;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 32px;
+  /* identical to box height, or 188% */
+
+  letter-spacing: -0.02em;
+
+  color: #000000;
 `
