@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useMemo, useState } from 'react'
+import React, { FC, ReactElement, useMemo } from 'react'
 import Header from '../molecules/Header'
 import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
@@ -9,37 +9,27 @@ import PrivateCardLabel from '../atoms/PrivateCardLabel'
 import AnswerCard from '../organisms/AnswerCard'
 import { getMyAccountInfo } from '../../lib/queries/meQueries'
 import { getPost } from '../../lib/queries/getPostQueries'
-import dayjs from 'dayjs'
+import CardLabel from '../atoms/CardLabel'
+import QuizAnswerCard from '../organisms/QuizAnswerCard'
+
 interface Props {
+  tabIndex: number
+  newPostCount: number
   getPost?: getPost
   myAccount?: getMyAccountInfo
   isProfile: boolean
   profileImage: string
+  onClickTabIndex: (index: number) => void
   onClickLeft?: () => void
   onClickSecondRight?: () => void
-  onClickNewSecretCard?: () => void
-  onClickAnswerCard: (postId: string) => void
+  onClickNewSecretCard: (tabName: string) => void
+  onClickAnswerCard: (postId: string, isMine: boolean) => void
   onClickWrite?: () => void
   onClickRemove: (id: string, tabIndex: number) => void
   onClickLike: (id: string, tabIndex: number) => void
 }
 
 const ContentTemplate: FC<Props> = (props) => {
-  const [tabIndex, setTabIndex] = useState<number>(0)
-
-  const newPostCount = useMemo(() => {
-    const postCount = props.getPost?.getMyNewPostCount.postCount
-    const ask = postCount?.find((e) => e.postType === 'Ask')
-    const answer = postCount?.find((e) => e.postType === 'Answer')
-    const quiz = postCount?.find((e) => e.postType === 'Quiz')
-
-    return {
-      ask: ask ? ask.count : 0,
-      answer: answer ? answer.count : 0,
-      quiz: quiz ? quiz.count : 0,
-    }
-  }, [props.getPost?.getMyNewPostCount.postCount])
-
   const postContent = useMemo(() => {
     if (props.getPost?.getPosts.edges) {
       const edges = props.getPost?.getPosts.edges
@@ -55,11 +45,9 @@ const ContentTemplate: FC<Props> = (props) => {
     }
   }, [props.getPost?.getPosts.edges])
 
-  console.log('getPost', props.getPost?.getPosts)
-  console.log('result', postContent)
-
+  console.log('postContent', postContent)
   const ContentView = useMemo((): ReactElement | undefined => {
-    switch (tabIndex) {
+    switch (props.tabIndex) {
       case 0:
         return (
           <>
@@ -73,14 +61,12 @@ const ContentTemplate: FC<Props> = (props) => {
                 />
                 <span
                   style={{ marginTop: 1, cursor: 'pointer' }}
-                  onClick={props.onClickNewSecretCard}
+                  onClick={() => props.onClickNewSecretCard('ask')}
                 >
-                  {`${
-                    (newPostCount.ask && newPostCount.ask) || 0
-                  }개의 비밀카드 도착`}
+                  {`${props.newPostCount || 0}개의 비밀카드 도착`}
                 </span>
                 <img
-                  onClick={props.onClickNewSecretCard}
+                  onClick={() => props.onClickNewSecretCard('ask')}
                   src={IMAGES.rightButton}
                   width={22}
                   height={22}
@@ -93,20 +79,23 @@ const ContentTemplate: FC<Props> = (props) => {
               />
             </NoticeContainer>
             <ContentContainer>
-              {postContent?.ask.map((e, index) => {
+              {postContent?.ask.map((data, index) => {
                 return (
                   <QuestionCard
                     key={index}
-                    labelComponent={
-                      <PrivateCardLabel text="BONG IN" active={false} />
-                    }
-                    questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                    backColor={'#FF833D'}
+                    id={data.node.id}
+                    questionTitle={data.node.content}
+                    backColor={data.node.color}
+                    stickers={data.node.usedEmoticons}
+                    comments={data.node.comments}
+                    createdAt={data.node.createdAt}
+                    updatedAt={data.node.updatedAt}
+                    secretType={data.node.secretType}
                     onClickOption={() => {
-                      props.onClickRemove('0', tabIndex)
+                      props.onClickRemove(data.node.id, props.tabIndex)
                     }}
                     onClickLike={() => {
-                      props.onClickLike('0', tabIndex)
+                      props.onClickLike(data.node.id, props.tabIndex)
                     }}
                   />
                 )
@@ -117,50 +106,22 @@ const ContentTemplate: FC<Props> = (props) => {
       case 1:
         return (
           <>
-            <NoticeContainer>
-              <NoticeText>
-                <img
-                  style={{ position: 'relative', bottom: 15 }}
-                  src={IMAGES.img_newq_1}
-                  width={106}
-                  height={72}
-                />
-                <span
-                  style={{ marginTop: 1, cursor: 'pointer' }}
-                  onClick={props.onClickNewSecretCard}
-                >
-                  {`${
-                    (newPostCount.answer && newPostCount.answer) || 0
-                  }개의 비밀카드 도착`}
-                </span>
-                <img
-                  onClick={props.onClickNewSecretCard}
-                  src={IMAGES.rightButton}
-                  width={22}
-                  height={22}
-                />
-              </NoticeText>
-              <img
-                style={{ position: 'relative', bottom: 65, zIndex: -1 }}
-                src={IMAGES.img_tape_newq}
-                width={'100%'}
-              />
-            </NoticeContainer>
             <ContentContainer>
               {postContent?.answer.map((data, index) => {
                 return (
                   <AnswerCard
                     key={index}
                     isContent
-                    id={'0'}
+                    id={data.node.id}
                     time={data.node.createdAt}
-                    questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                    backColor={'#FF833D'}
+                    questionTitle={data.node.content}
+                    backColor={data.node.color}
+                    stickers={data.node.usedEmoticons}
                     onClickPost={() => {
-                      props.onClickAnswerCard('0')
+                      props.onClickAnswerCard(data.node.id, true)
                     }}
                     onClickOption={() => {
-                      props.onClickRemove('0', tabIndex)
+                      props.onClickRemove(data.node.id, props.tabIndex)
                     }}
                   />
                 )
@@ -180,15 +141,13 @@ const ContentTemplate: FC<Props> = (props) => {
                   height={72}
                 />
                 <span
-                  style={{ marginTop: 1 }}
-                  onClick={props.onClickNewSecretCard}
+                  style={{ marginTop: 1, cursor: 'pointer' }}
+                  onClick={() => props.onClickNewSecretCard('OX')}
                 >
-                  {`${
-                    (newPostCount.quiz && newPostCount.quiz) || 0
-                  }개의 비밀카드 도착`}
+                  {`${props.newPostCount || 0}개의 OX퀴즈 도착`}
                 </span>
                 <img
-                  onClick={props.onClickNewSecretCard}
+                  onClick={() => props.onClickNewSecretCard('OX')}
                   src={IMAGES.rightButton}
                   width={22}
                   height={22}
@@ -201,16 +160,16 @@ const ContentTemplate: FC<Props> = (props) => {
               />
             </NoticeContainer>
             <ContentContainer>
-              {postContent?.quiz.map((e, index) => {
+              {postContent?.quiz.map((content, index) => {
                 return (
-                  <QuestionCard
-                    key={index}
-                    labelComponent={
-                      <PrivateCardLabel text="BONG IN" active={false} />
-                    }
-                    questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                    backColor={'#FF833D'}
-                  />
+                  <QuizAnswerCardContainer key={index}>
+                    <QuizAnswerCard
+                      content={content.node.content}
+                      backColor={content.node.color}
+                      answerType={true}
+                      isMyFeed={true}
+                    />
+                  </QuizAnswerCardContainer>
                 )
               })}
             </ContentContainer>
@@ -219,16 +178,7 @@ const ContentTemplate: FC<Props> = (props) => {
       default:
         break
     }
-  }, [
-    newPostCount.answer,
-    newPostCount.ask,
-    newPostCount.quiz,
-    postContent?.answer,
-    postContent?.ask,
-    postContent?.quiz,
-    props,
-    tabIndex,
-  ])
+  }, [postContent?.answer, postContent?.ask, postContent?.quiz, props])
 
   const profileImage = useMemo(() => {
     return props.myAccount?.getMyAccountInfo.image
@@ -255,7 +205,7 @@ const ContentTemplate: FC<Props> = (props) => {
         <TabContainer>
           <Tab
             style={
-              tabIndex === 0
+              props.tabIndex === 0
                 ? {
                     borderBottom: 1,
                     borderColor: 'white',
@@ -264,14 +214,14 @@ const ContentTemplate: FC<Props> = (props) => {
                 : undefined
             }
             onClick={() => {
-              setTabIndex(0)
+              props.onClickTabIndex(0)
             }}
           >
             물어봐
           </Tab>
           <Tab
             style={
-              tabIndex === 1
+              props.tabIndex === 1
                 ? {
                     borderBottom: 1,
                     borderColor: 'white',
@@ -280,14 +230,14 @@ const ContentTemplate: FC<Props> = (props) => {
                 : undefined
             }
             onClick={() => {
-              setTabIndex(1)
+              props.onClickTabIndex(1)
             }}
           >
             답해줘
           </Tab>
           <Tab
             style={
-              tabIndex === 2
+              props.tabIndex === 2
                 ? {
                     borderBottom: 1,
                     borderColor: 'white',
@@ -296,7 +246,7 @@ const ContentTemplate: FC<Props> = (props) => {
                 : undefined
             }
             onClick={() => {
-              setTabIndex(2)
+              props.onClickTabIndex(2)
             }}
           >
             OX퀴즈
@@ -307,15 +257,24 @@ const ContentTemplate: FC<Props> = (props) => {
         />
         {ContentView}
       </MainContainer>
-      {tabIndex === 1 && (
-        <WriteButton>
-          <img onClick={props.onClickWrite} src={IMAGES.write} width={88} />
-        </WriteButton>
-      )}
+      {postContent && props.tabIndex === 1 ? (
+        postContent.answer.length > 1 ? (
+          <WriteButton>
+            <img onClick={props.onClickWrite} src={IMAGES.write} width={88} />
+          </WriteButton>
+        ) : (
+          <WriteButton>
+            <img
+              onClick={props.onClickWrite}
+              src={IMAGES.icon_write_gr}
+              width={88}
+            />
+          </WriteButton>
+        )
+      ) : null}
     </AppContainer>
   )
 }
-
 export default React.memo(ContentTemplate)
 
 const AppContainer = styled.div`
@@ -393,4 +352,11 @@ const WriteButton = styled.div`
     margin-right: -moz-calc((7%) / 2);
     margin-right: calc((7%) / 2);
   }
+`
+
+const QuizAnswerCardContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 `

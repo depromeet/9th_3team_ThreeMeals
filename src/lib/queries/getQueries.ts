@@ -1,70 +1,31 @@
+import { StickerInfo } from './../../types/types'
 import { gql } from '@apollo/client'
-
-export const GET_MY_NEW_POST_COUNT = gql`
-  query {
-    getMyNewPostCount {
-      postCount {
-        count
-        postType
-      }
-    }
-  }
-`
-
-export const GET_PARENT_COMMENTS = gql`
-  query getParentComments($first: number, $postId: string) {
-    getParentComments(first: $first, postId: $postId) {
-      edges {
-        node {
-          id
-          content
-          secretType
-          account {
-            id
-          }
-          childrenCount
-        }
-        cursor
-      }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-    }
-  }
-`
-export const GET_CHILDREN_COMMENTS = gql`
-  query getChildrenComments(
-    $first: Float!
-    $after: string
-    $postId: string!
-    $parentId: string!
-  ) {
-    getChildrenComments(
-      first: $first
-      after: $after
-      postId: $postId
-      parentId: $parentId
-    ) {
-      edges {
-        node {
-          id
-          content
-          secretType
-          commentState
-          createdAt
-          updatedAt
-          account
-          postId
-          parentId
-        }
-      }
-    }
-  }
-`
 
 export const GET_WRITE_POST_INFO = gql`
   query {
     getWritePostInfo @client
+  }
+`
+
+export interface GetEmoticonInfo {
+  id: string
+  position: {
+    positionX: number
+    positionY: number
+  }
+  fileUrl: string
+}
+
+export interface GetAllEmoticons {
+  getAllEmoticons: GetEmoticonInfo[]
+}
+
+export const GET_ALL_EMOTICONS = gql`
+  query {
+    getAllEmoticons {
+      id
+      fileUrl
+      name
+    }
   }
 `

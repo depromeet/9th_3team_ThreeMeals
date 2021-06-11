@@ -17,5 +17,7 @@ export type BackColor =
 export interface StickerInfo {
   fileUrl: string
   width?: 140 | number
-  positions?: Konva.Vector2d | null
+  position?: Konva.Vector2d | null
+  emoticonId?: string
+  name?: string
 }

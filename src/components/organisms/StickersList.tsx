@@ -3,140 +3,20 @@ import styled from 'styled-components'
 import PickableSticker from '../molecules/PickableSticker'
 import { IMAGES } from '../../constants/images'
 import { StickerInfo } from '../../types/types'
+import { addToPanel } from '../../lib/localStore/stickerPanel'
+import { GetEmoticonInfo } from '../../lib/queries/getQueries'
 
 interface Props {
-  updatePickedfileUrl: (fileUrl: string) => void
-  updatePickedImgWidth: (imgWidth: number) => void
+  stickers: GetEmoticonInfo[]
   addToPanelByClicking: () => void
   onClickOpenStickerList: () => void
 }
-const dummyStickersData: StickerInfo[] = [
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 80,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 160,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 80,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 160,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 80,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 160,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 80,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 160,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_apple,
-    width: 80,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_bread,
-    width: 160,
-  },
-  {
-    fileUrl: IMAGES.sticker_food_watermelon,
-    width: 140,
-  },
-]
+
 const StickersList: FC<Props> = (props) => {
   const onDragStart = useCallback(
-    (fileUrl: string, width: number) => {
-      props.updatePickedImgWidth(width)
-      props.updatePickedfileUrl(fileUrl)
+    (fileUrl: string, width: number, id?: string) => {
+      addToPanel({ imgUrl: fileUrl, width: width, emoticonId: id })
+
       setTimeout(() => {
         props.onClickOpenStickerList()
       }, 100)
@@ -144,9 +24,9 @@ const StickersList: FC<Props> = (props) => {
     [props]
   )
   const onTouchStart = useCallback(
-    (fileUrl: string, width: number) => {
-      props.updatePickedImgWidth(width)
-      props.updatePickedfileUrl(fileUrl)
+    (fileUrl: string, width: number, id?: string) => {
+      addToPanel({ imgUrl: fileUrl, width: width, emoticonId: id })
+
       props.addToPanelByClicking()
       props.onClickOpenStickerList()
     },
@@ -163,18 +43,19 @@ const StickersList: FC<Props> = (props) => {
         <span>Stickers</span>
       </Header>
       <GridContainer>
-        {dummyStickersData.map((sticker, i) => {
+        {props.stickers.map((sticker, i) => {
           return (
             <div
               key={i}
-              onDragStart={() => onDragStart(sticker.fileUrl, 140)}
-              onClick={() => onTouchStart(sticker.fileUrl, 140)}
+              onDragStart={() => onDragStart(sticker.fileUrl, 140, sticker.id)}
+              onClick={() => onTouchStart(sticker.fileUrl, 140, sticker.id)}
             >
               <PickableSticker
                 key={i}
                 fileUrl={sticker.fileUrl}
-                width={sticker.width}
-                positions={sticker.positions}
+                width={140}
+                position={sticker.position}
+                emoticonId={sticker.id}
               />
             </div>
           )
@@ -215,7 +96,7 @@ const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 123px);
   justify-content: flex-start;
-  @media screen and (max-width: 320px) {
+  @media screen and (max-width: 360px) {
     justify-content: center;
   }
 `

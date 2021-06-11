@@ -6,14 +6,20 @@ import { CardHeaderProps } from '../molecules/QuizCardHeader'
 import { BackColor } from '../../types/types'
 import { SVGS } from '../../constants/svgs'
 import styled from 'styled-components'
-import { useReactiveVar } from '@apollo/client'
+import { useReactiveVar, useMutation } from '@apollo/client'
 import handleQuizDataVar, {
   handleQuizData,
 } from '../../lib/localStore/quizAnswer'
+import { useRouter } from 'next/router'
+import {
+  CreateCommentRes,
+  CreateCommentParams,
+  CREATE_COMMENT,
+} from '../../lib/queries/createQueries'
 
 interface Props {
   cardHeader?: CardHeaderProps
-  cardData: Array<{ id: number; content: string }>
+  cardData: Array<{ id: string; content: string }>
   backColors: BackColor[]
 }
 
@@ -30,9 +36,12 @@ const trans = (r: number, s: number) =>
     r / 10
   }deg) rotateZ(${r}deg) scale(${s})`
 const QuizDeck: FC<Props> = (deckProps) => {
+  const router = useRouter()
+  const [createCommentMutation] =
+    useMutation<CreateCommentRes, CreateCommentParams>(CREATE_COMMENT)
   const quizData = useReactiveVar(handleQuizDataVar)
   const [renderQuizData, setRenderQuizData] = useState(false)
-  const [curQuizDataId, setCurQuizDataId] = useState<number>(0)
+  const [curQuizDataCnt, setCurQuizDataCnt] = useState<number>(0)
   const [gone] = useState(() => new Set())
   const [props, set] = useSprings(quizData.length, (i) => ({
     ...toD(i),
@@ -51,11 +60,27 @@ const QuizDeck: FC<Props> = (deckProps) => {
         const rot = mx / 100 + (isGone ? dir * 10 * velocity : 0)
         const scale = down ? 1.1 : 1
         if (isGone) {
-          setCurQuizDataId(curQuizDataId - 1)
-          console.log('request query(type: each answer data) value:', dir)
+          setCurQuizDataCnt(curQuizDataCnt - 1)
           gone.delete(index)
+          if (dir === 1) {
+            createCommentMutation({
+              variables: {
+                postId: quizData[quizData.length - 1].id,
+                content: 'X',
+                secretType: 'Forever',
+              },
+            })
+          } else {
+            createCommentMutation({
+              variables: {
+                postId: quizData[quizData.length - 1].id,
+                content: 'O',
+                secretType: 'Forever',
+              },
+            })
+          }
           setTimeout(() => {
-            handleQuizData(curQuizDataId)
+            handleQuizData()
           }, 100)
         }
         return {
@@ -70,16 +95,16 @@ const QuizDeck: FC<Props> = (deckProps) => {
     }
   )
   const handleToPrev = useCallback(() => {
-    handleQuizData(curQuizDataId, deckProps.cardData[curQuizDataId + 1])
-    setCurQuizDataId(curQuizDataId + 1)
-  }, [curQuizDataId, deckProps.cardData])
+    handleQuizData(deckProps.cardData[curQuizDataCnt + 1])
+    setCurQuizDataCnt(curQuizDataCnt + 1)
+  }, [curQuizDataCnt, deckProps.cardData])
   const handleToNext = useCallback(() => {
-    handleQuizData(curQuizDataId)
-    setCurQuizDataId(curQuizDataId - 1)
-  }, [curQuizDataId])
+    handleQuizData()
+    setCurQuizDataCnt(curQuizDataCnt - 1)
+  }, [curQuizDataCnt])
   useEffect(() => {
     if (quizData && renderQuizData) {
-      setCurQuizDataId(quizData.length - 1)
+      setCurQuizDataCnt(quizData.length - 1)
       setRenderQuizData(false)
     }
   }, [quizData, renderQuizData])
@@ -88,20 +113,25 @@ const QuizDeck: FC<Props> = (deckProps) => {
   }, [])
   useEffect(() => {
     setTimeout(() => {
-      if (quizData.length === 0 && curQuizDataId === -1) {
+      if (quizData.length === 0 && curQuizDataCnt === -1) {
         alert('제출 완료 : request query(type:answers data in userData)')
+        router.back()
       }
     }, 500)
-  }, [curQuizDataId, quizData.length])
+  }, [curQuizDataCnt, quizData.length, router])
   return (
     <>
       <SkipCardHandlerContainer>
-        <img
-          src={SVGS.icon_24_prev_wh}
-          alt="prevIcon"
-          onClick={handleToPrev}
-          className="left"
-        />
+        {quizData.length !== deckProps.cardData?.length ? (
+          <img
+            src={SVGS.icon_24_prev_wh}
+            alt="prevIcon"
+            onClick={handleToPrev}
+            className="left"
+          />
+        ) : (
+          <div className="leftEmpty"></div>
+        )}
         <span>
           {quizData.length}/{deckProps.cardData?.length}
         </span>
@@ -143,11 +173,15 @@ const SkipCardHandlerContainer = styled.div`
   color: white;
   align-items: center;
   font-size: 17px;
+  margin-right: 10px;
   img {
     cursor: pointer;
   }
   .left {
     margin-right: 23px;
+  }
+  .leftEmpty {
+    margin-right: 47px;
   }
   .right {
     margin-left: 23px;

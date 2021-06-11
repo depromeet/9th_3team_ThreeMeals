@@ -11,7 +11,7 @@ export interface ModalDataProps {
   confirmSecondText?: string
   cancelText: string
   open?: boolean
-  onClickConfirm?: () => void
+  onClickConfirm?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   onClickConfirmSecond?: () => void
   onClickCancel?: () => void
 }

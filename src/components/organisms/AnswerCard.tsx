@@ -3,6 +3,12 @@ import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import dayjs from 'dayjs'
+import { StickerInfo } from '../../types/types'
+import dynamic from 'next/dynamic'
+const StickerPanelWithNoSSR = dynamic(
+  () => import('../molecules/StickerPanel'),
+  { ssr: false }
+)
 interface Props {
   /** isContent is for only contents without otherContents */
   isContent?: boolean
@@ -11,6 +17,7 @@ interface Props {
   backColor: string
   time?: string
   count?: number
+  stickers?: StickerInfo[]
   onClickShare?: () => void
   onClickOption?: () => void
   onClickPost?: () => void
@@ -42,7 +49,9 @@ const AnswerCard: React.FunctionComponent<Props> = (props) => {
           </div>
         </Header>
         <p>{props.questionTitle}</p>
-        <StickerContainer>스티커</StickerContainer>
+        <StickerContainer>
+          <StickerPanelWithNoSSR postedStickers={props.stickers} />
+        </StickerContainer>
         <BottomContainer onClick={props.onClickPost}>
           <CommentImage
             src={IMAGES.icon_24_comment}
@@ -111,7 +120,6 @@ const StickerContainer = styled.div`
   margin-top: 16px;
   width: 100%;
   height: 192px;
-  border: 1px solid red;
 `
 const BottomContainer = styled.div`
   position: absolute;

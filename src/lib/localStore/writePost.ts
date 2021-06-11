@@ -1,11 +1,10 @@
-import { BackColor } from './../../types/types'
+import { BackColor, StickerInfo } from './../../types/types'
 import { makeVar } from '@apollo/client'
-import { StickerInfo } from '../../components/molecules/PickableSticker'
 
 export interface WritePostInfo {
   content?: string
   toAccountId?: string
-  backColor?: BackColor
+  color?: BackColor
   secretType?: string
   postType?: string
   emoticons?: StickerInfo[]
@@ -23,6 +22,7 @@ export const addToWritePostInfo = (info: WritePostInfo) => {
       [newValueArr[0][0]]: newValueArr[0][1],
       [newValueArr[1][0]]: newValueArr[1][1],
       [newValueArr[2][0]]: newValueArr[2][1],
+      [newValueArr[3][0]]: newValueArr[3][1],
     })
   } else {
     writePostInfoVar({
