@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useCallback, useMemo, useState, useEffect } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import Modal from '../molecules/Modal'
 import AnswerDetailTemplate from '../templates/AnswerDetailTemplate'

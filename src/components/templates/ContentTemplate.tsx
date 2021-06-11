@@ -162,13 +162,14 @@ const ContentTemplate: FC<Props> = (props) => {
             <ContentContainer>
               {postContent?.quiz.map((content, index) => {
                 return (
-                  <QuizAnswerCard
-                    key={index}
-                    content={content.node.content}
-                    backColor={content.node.color}
-                    answerType={true}
-                    isMyFeed={true}
-                  />
+                  <QuizAnswerCardContainer key={index}>
+                    <QuizAnswerCard
+                      content={content.node.content}
+                      backColor={content.node.color}
+                      answerType={true}
+                      isMyFeed={true}
+                    />
+                  </QuizAnswerCardContainer>
                 )
               })}
             </ContentContainer>
@@ -351,4 +352,11 @@ const WriteButton = styled.div`
     margin-right: -moz-calc((7%) / 2);
     margin-right: calc((7%) / 2);
   }
+`
+
+const QuizAnswerCardContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 `

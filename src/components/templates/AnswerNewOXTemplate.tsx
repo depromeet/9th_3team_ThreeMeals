@@ -5,7 +5,7 @@ import { IMAGES } from '../../constants/images'
 import QuizDeck from '../organisms/QuizDeck'
 import { BackColor } from '../../types/types'
 interface Props {
-  cardData: Array<{ id: number; content: string }>
+  cardData: Array<{ id: string; content: string }>
   backColors: Array<BackColor>
   onClickHeaderLeft: () => void
 }

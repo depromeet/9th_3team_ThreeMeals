@@ -121,6 +121,9 @@ const ContentPage: React.FC = () => {
           if (tabName === 'ask') {
             router.push('/newSecretCard')
           } else {
+            if (newPostCount === 0) {
+              return
+            }
             router.push('/answerNewOX')
           }
         }}

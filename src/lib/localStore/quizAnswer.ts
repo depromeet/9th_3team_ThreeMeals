@@ -1,7 +1,7 @@
 import { makeVar } from '@apollo/client'
 
 interface QuizDataInfo {
-  id: number
+  id: string
   content: string
 }
 
@@ -13,14 +13,13 @@ export const addQuizData = (quizData: QuizDataInfo[]) => {
   handleQuizDataVar(quizData)
 }
 
-export const handleQuizData = (curDataId: number, prevData?: QuizDataInfo) => {
+export const handleQuizData = (prevData?: QuizDataInfo) => {
   const curQuizData = [...handleQuizDataVar()]
-  const pickedDataIdx = curQuizData.findIndex((data) => data.id === curDataId)
   if (prevData !== undefined) {
-    curQuizData.splice(pickedDataIdx + 1, 0, prevData)
+    curQuizData.push(prevData)
     handleQuizDataVar(curQuizData)
   } else {
-    curQuizData.splice(pickedDataIdx, 1)
+    curQuizData.splice(-1, 1)
     handleQuizDataVar(curQuizData)
   }
 }

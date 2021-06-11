@@ -13,19 +13,19 @@ interface Props {
 const getImage = (backColor: string, answerType: boolean) => {
   switch (backColor) {
     case answerType && '#6799FE':
-      return IMAGES.img_o_gr
+      return IMAGES.img_o_yl
     case answerType && '#67D585':
       return IMAGES.img_o_yr
     case answerType && '#F1D75F':
-      return IMAGES.img_o_yl
+      return IMAGES.img_o_gr
     case answerType && '#FF823D':
       return IMAGES.img_o_bl
     case !answerType && '#6799FE':
-      return IMAGES.img_x_gr
+      return IMAGES.img_x_yl
     case !answerType && '#67D585':
       return IMAGES.img_x_yr
     case !answerType && '#F1D75F':
-      return IMAGES.img_x_yl
+      return IMAGES.img_x_gr
     case !answerType && '#FF823D':
       return IMAGES.img_x_bl
     default:
