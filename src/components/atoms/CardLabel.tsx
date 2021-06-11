@@ -23,7 +23,6 @@ const Container = styled.span<ContainerProps>`
   height: 48px;
   padding-left: 5px;
   padding-right: 12px;
-
   ${({ active }) =>
     active ? `color:white;` : `color:rgba(255, 255, 255, 0.5);`}
   img {

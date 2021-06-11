@@ -288,6 +288,7 @@ const SaveButton = styled.img`
   right: 0;
   bottom: 0px;
 `
+<<<<<<< HEAD
 
 const ShowProfile = styled.div`
   display: flex;
@@ -327,3 +328,5 @@ const ProfileName = styled.span`
 
   color: #000000;
 `
+=======
+>>>>>>> 2a75ac6... feat: create the commentAPI & refactoring
