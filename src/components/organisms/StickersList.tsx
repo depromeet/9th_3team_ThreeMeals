@@ -95,7 +95,7 @@ const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 123px);
   justify-content: flex-start;
-  @media screen and (max-width: 320px) {
+  @media screen and (max-width: 360px) {
     justify-content: center;
   }
 `

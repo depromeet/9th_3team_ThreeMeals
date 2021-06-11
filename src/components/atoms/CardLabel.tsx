@@ -27,7 +27,7 @@ const Container = styled.span<ContainerProps>`
   img {
     margin-right: 8px;
   }
-  @media screen and (max-width: 320px) {
+  @media screen and (max-width: 360px) {
     span {
       font-size: 14px;
     }
