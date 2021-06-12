@@ -64,7 +64,7 @@ const NewSecretCardTemplate: FC<Props> = (props) => {
                   )
                 }
                 questionTitle={data.node.content}
-                backColor={'#FF833D'}
+                backColor={data.node.color}
                 stickers={data.node.usedEmoticons}
                 comments={data.node.comments}
                 onClickOption={() => {

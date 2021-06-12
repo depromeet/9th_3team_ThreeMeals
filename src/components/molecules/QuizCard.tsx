@@ -41,8 +41,10 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
           return IMAGES.img_quiz_o_bl
         case '#F1D75F':
           return IMAGES.img_quiz_o_bl
+        case '#CC4349':
+          return IMAGES.img_quiz_o_yr
         default:
-          break
+          return IMAGES.img_quiz_o_bl
       }
     },
     []
@@ -58,8 +60,10 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
           return IMAGES.img_quiz_x_gr
         case '#F1D75F':
           return IMAGES.img_quiz_x_yr
+        case '#CC4349':
+          return IMAGES.img_quiz_x_yl
         default:
-          break
+          return IMAGES.img_quiz_x_bl
       }
     },
     []

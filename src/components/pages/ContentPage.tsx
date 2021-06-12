@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import ContentTemplate from '../templates/ContentTemplate'
@@ -40,6 +40,10 @@ const ContentPage: React.FC = () => {
     variables: { postType: 'Ask' },
   })
 
+  useEffect(() => {
+    getPost.refetch()
+  }, [])
+
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [tabIndex, setTabIndex] = useState<number>(0)
@@ -52,6 +56,9 @@ const ContentPage: React.FC = () => {
     }
   }, [getMyNewPostCount])
 
+  // router.events.on('routeChangeComplete', () => {
+  //   console.log('hello change the route')
+  // })
   const onClickAnswerCard = useCallback(
     (postId, isMine) => {
       router.push({ pathname: '/answerDetail', query: { postId, isMine } })

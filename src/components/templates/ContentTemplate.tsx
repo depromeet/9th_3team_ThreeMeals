@@ -161,7 +161,8 @@ const ContentTemplate: FC<Props> = (props) => {
             </NoticeContainer>
             <ContentContainer>
               {postContent?.quiz.map((content, index) => {
-                return (
+                return content.node.comments &&
+                  content.node.comments.length > 0 ? (
                   <QuizAnswerCardContainer key={index}>
                     <QuizAnswerCard
                       content={content.node.content}
@@ -170,7 +171,7 @@ const ContentTemplate: FC<Props> = (props) => {
                       isMyFeed={true}
                     />
                   </QuizAnswerCardContainer>
-                )
+                ) : null
               })}
             </ContentContainer>
           </>
