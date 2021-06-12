@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import ContentTemplate from '../templates/ContentTemplate'
@@ -39,6 +39,10 @@ const ContentPage: React.FC = () => {
   >(GET_MY_NEW_POST_COUNT, {
     variables: { postType: 'Ask' },
   })
+
+  useEffect(() => {
+    getPost.refetch()
+  }, [])
 
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)

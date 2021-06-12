@@ -19,10 +19,9 @@ export type AnswerContactType = 'parent' | 'children'
 const AnswerDetailPage: React.FC = () => {
   const router = useRouter()
   const { postId, isMine: queryIsMine } = router.query
-  const { data: parentCommentsData } = useQuery<ParentComments>(
-    GET_PARENT_COMMENTS,
-    { variables: { first: 10, postId: postId } }
-  )
+  const parentCommentsData = useQuery<ParentComments>(GET_PARENT_COMMENTS, {
+    variables: { first: 10, postId: postId },
+  })
   const [createCommentMutation] =
     useMutation<CreateCommentRes, CreateCommentParams>(CREATE_COMMENT)
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -37,10 +36,12 @@ const AnswerDetailPage: React.FC = () => {
             content: comment,
             secretType: 'Forever',
           },
+        }).then(() => {
+          parentCommentsData.refetch()
         })
       }
     },
-    [createCommentMutation, postId]
+    [createCommentMutation, parentCommentsData, postId]
   )
 
   const onClickRemove = useCallback((type: AnswerContactType, id: string) => {
@@ -72,7 +73,7 @@ const AnswerDetailPage: React.FC = () => {
         onSendComment={onSendComment}
         onClickRemove={onClickRemove}
         isMine={isMine}
-        parentComments={parentCommentsData}
+        parentComments={parentCommentsData.data}
       />
       <Modal
         open={isOpen}

@@ -38,7 +38,7 @@ const Auth: React.FC = () => {
           })
             .then((token) => {
               jsCookies.set('token', token.data.signIn.token, { path: '/' })
-              router.replace('/profile')
+              router.replace('/content')
             })
             .catch((error) => {
               console.log('error:', error)
