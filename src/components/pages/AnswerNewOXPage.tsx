@@ -1,35 +1,44 @@
 import React, { VFC, useEffect } from 'react'
 import AnswerNewOXTemplate from '../templates/AnswerNewOXTemplate'
 import { useRouter } from 'next/router'
-import { BackColor } from '../../types/types'
 import { addQuizData } from '../../lib/localStore/quizAnswer'
-
-const dummyCardData = [
-  { id: 0, content: '1 김덕배님은 남자친구가 있으신지요 ???' },
-  { id: 1, content: '2 초록매실이 좋으면 o 보리차가 좋으면 x' },
-  { id: 2, content: '3 김덕배님은 남자친구가 있으신지 ???' },
-  { id: 3, content: '4 초록매실이 좋으면 o 보리차가 좋으면 x' },
-  { id: 4, content: '5 김덕배님은 남자친구가 있지요 ???' },
-]
-const dummyCardColors: BackColor[] = [
-  '#FF823D',
-  '#6799FE',
-  '#67D585',
-  '#6799FE',
-  '#FF823D',
-]
+import { useQuery } from '@apollo/client'
+import {
+  getPostParams,
+  GET_POST,
+  getPost,
+} from '../../lib/queries/getPostQueries'
+import { getMyAccountInfo, GET_MY_PROFILE } from '../../lib/queries/meQueries'
 
 const AnswerNewOXPage: VFC = () => {
   const router = useRouter()
+  const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
+  const { data: postData } = useQuery<getPost, getPostParams>(GET_POST, {
+    variables: { first: 10, accountId: myAccount.data?.getMyAccountInfo.id },
+  })
+  const quizPostData = postData?.getPosts.edges.filter(
+    (content) => content.node.postType === 'Quiz'
+  )
+  const cardData = quizPostData?.map((content) => {
+    return { id: content.node.id, content: content.node.content }
+  })
+  const cardDataColors = quizPostData?.map((content) => {
+    return content.node.color
+  })
   useEffect(() => {
-    addQuizData(dummyCardData)
-  }, [])
+    if (cardData) {
+      addQuizData(cardData)
+    }
+  }, [cardData])
+  if (!cardData || !cardDataColors) {
+    return <></>
+  }
   return (
     <>
       <AnswerNewOXTemplate
         onClickHeaderLeft={router.back}
-        cardData={dummyCardData}
-        backColors={dummyCardColors}
+        cardData={cardData}
+        backColors={cardDataColors}
       />
     </>
   )

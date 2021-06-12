@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
+import ReactGA from 'react-ga'
 
 import { ApolloProvider } from '@apollo/client'
 
@@ -24,12 +25,21 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
       document.body.append(js)
     }
+
+    const env = process.env.NODE_ENV
+
+    if (env === 'production') {
+      ReactGA.initialize(process.env.NEXT_PUBLIC_GA_TRACK_ID ?? '')
+    }
   }, [])
 
   return (
     <ApolloProvider client={apolloClient}>
       <Head>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
       </Head>
       <GlobalStyle />
       <Component {...pageProps} />

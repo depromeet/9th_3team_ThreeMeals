@@ -1,8 +1,18 @@
 import { gql } from '@apollo/client'
 
+export interface getMyAccountInfo {
+  getMyAccountInfo: {
+    id: string
+    nickname: string
+    status: string
+    image: string
+    content: string
+    profileUrl: string
+  }
+}
 export const GET_MY_PROFILE = gql`
   query {
-    getAccountInfo {
+    getMyAccountInfo {
       id
       nickname
       status

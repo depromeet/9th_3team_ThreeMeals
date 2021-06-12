@@ -1,42 +1,131 @@
 import { useRouter } from 'next/router'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import ContentTemplate from '../templates/ContentTemplate'
 import Modal from '../molecules/Modal'
+import { getMyAccountInfo, GET_MY_PROFILE } from '../../lib/queries/meQueries'
+import {
+  deletePostParams,
+  deletePostResponse,
+} from '../../lib/queries/deleteQueries'
+import { useMutation, useQuery } from '@apollo/client'
+import {
+  getMyNewPostCount,
+  getMyNewPostCountParams,
+  getPost,
+  getPostParams,
+  GET_MY_NEW_POST_COUNT,
+  GET_POST,
+} from '../../lib/queries/getPostQueries'
+import { DELETE_POST } from '../../lib/queries/deleteQueries'
 
 const ContentPage: React.FC = () => {
+  const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
+  const getPost = useQuery<getPost, getPostParams>(GET_POST, {
+    variables: { first: 10, accountId: myAccount.data?.getMyAccountInfo.id },
+  })
+  const [deletePostMutation] = useMutation<
+    deletePostResponse,
+    deletePostParams
+  >(DELETE_POST, {
+    onCompleted: () => {
+      getPost.refetch()
+    },
+  })
+  const getMyNewPostCount = useQuery<
+    getMyNewPostCount,
+    getMyNewPostCountParams
+  >(GET_MY_NEW_POST_COUNT, {
+    variables: { postType: 'Ask' },
+  })
+
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [tabIndex, setTabIndex] = useState<number>(0)
+  const [selectedPostId, setSelectedPostId] = useState<string>()
+  const newPostCount = useMemo(() => {
+    if (getMyNewPostCount.data) {
+      return getMyNewPostCount.data?.getMyNewPostCount.postCount[0].count
+    } else {
+      return 0
+    }
+  }, [getMyNewPostCount])
+
   const onClickAnswerCard = useCallback(
-    (postId) => {
-      router.push({ pathname: '/answerDetail', query: { postId } })
+    (postId, isMine) => {
+      router.push({ pathname: '/answerDetail', query: { postId, isMine } })
     },
     [router]
   )
   const onClickWrite = useCallback(() => {
-    router.push('/writePost')
+    router.push('/writePost/Answer')
   }, [router])
 
-  const onClickRemove = useCallback((id: string, tabIndex: number) => {
-    console.log('onClickRemove id', id, tabIndex)
+  const onClickRemove = useCallback((id: string) => {
+    setSelectedPostId(id)
     setIsOpen(true)
   }, [])
 
   const onClickLike = useCallback((id: string, tabIndex: number) => {
     console.log('onClickLike id', id, tabIndex)
   }, [])
+
+  const onClickConfirmModal = useCallback(() => {
+    if (selectedPostId) {
+      deletePostMutation({
+        variables: {
+          postId: selectedPostId,
+        },
+      }).then(() => {
+        setIsOpen(false)
+      })
+    }
+  }, [deletePostMutation, selectedPostId])
+  const onClickTabIndex = useCallback(
+    async (index: number) => {
+      setTabIndex(index)
+
+      switch (index) {
+        case 0:
+          await getMyNewPostCount.refetch({ postType: 'Ask' })
+          break
+        case 1:
+          await getMyNewPostCount.refetch({ postType: 'Answer' })
+          break
+        case 2:
+          await getMyNewPostCount.refetch({ postType: 'Quiz' })
+          break
+        default:
+          break
+      }
+    },
+    [getMyNewPostCount]
+  )
+
   return (
     <AppContainer>
       <ContentTemplate
+        tabIndex={tabIndex}
+        newPostCount={newPostCount}
+        getPost={getPost.data}
+        myAccount={myAccount.data}
         isProfile={true}
         profileImage={IMAGES.background}
+        onClickTabIndex={onClickTabIndex}
         onClickLeft={router.back}
         onClickSecondRight={() => {
           router.push('/notification')
         }}
-        onClickNewSecretCard={() => {
-          router.push('/newSecretCard')
+        onClickNewSecretCard={(tabName: string) => {
+          if (tabName === 'ask') {
+            router.push('/newSecretCard')
+          } else {
+            if (newPostCount === 0) {
+              return
+            }
+            router.push('/answerNewOX')
+          }
         }}
         onClickAnswerCard={onClickAnswerCard}
         onClickWrite={onClickWrite}
@@ -45,12 +134,11 @@ const ContentPage: React.FC = () => {
       />
       <Modal
         open={isOpen}
-        title={'💬 이 질문을 삭제하시겠습니까?'}
+        title={'이 질문을 삭제하시겠습니까?'}
+        titleEmojiTextType="💬"
         confirmText={'삭제하기'}
         cancelText={'취소'}
-        onClickConfirm={() => {
-          console.log('onClickMOdal')
-        }}
+        onClickConfirm={onClickConfirmModal}
         onClickCancel={() => {
           setIsOpen(false)
         }}

@@ -17,7 +17,6 @@ interface Props {
   onClickLeft?: () => void
   onClickRight?: () => void
   onClickSecondRight?: () => void
-  onClickMyFeed?: () => void
   onClickHowToUse?: () => void
   onClickContect?: () => void
 }
@@ -36,6 +35,13 @@ const Header: React.FC<Props> = (props: Props) => {
     setIsOpen(false)
   }, [])
 
+  const onClickMyFeed = React.useCallback(() => {
+    if (props.isLogin) {
+      router.push('/content')
+    } else {
+      router.push('/')
+    }
+  }, [props.isLogin, router])
   return (
     <>
       <Container>
@@ -77,7 +83,7 @@ const Header: React.FC<Props> = (props: Props) => {
                 <BurgerContent>
                   <BurgerText
                     style={{ marginBottom: '4rem' }}
-                    onClick={props.onClickMyFeed}
+                    onClick={onClickMyFeed}
                   >
                     {props.isLogin ? 'My feed' : 'Log in'}
                   </BurgerText>
@@ -85,12 +91,11 @@ const Header: React.FC<Props> = (props: Props) => {
                     How to use
                   </BurgerText>
                 </BurgerContent>
-                {props.isProfile ||
-                  (props.isLogin && (
-                    <BurgerSmallText onClick={() => router.push('/contactUs')}>
-                      Context us
-                    </BurgerSmallText>
-                  ))}
+                {props.isLogin && (
+                  <BurgerSmallText onClick={() => router.push('/contactUs')}>
+                    Context us
+                  </BurgerSmallText>
+                )}
                 <BurgerExitContent onClick={props.onClickContect}>
                   <BurgerExitIcon
                     src={IMAGES.icon_24_close_wh}
@@ -118,7 +123,7 @@ const Header: React.FC<Props> = (props: Props) => {
     </>
   )
 }
-export default Header
+export default React.memo(Header)
 
 const Container = styled.div`
   display: flex;

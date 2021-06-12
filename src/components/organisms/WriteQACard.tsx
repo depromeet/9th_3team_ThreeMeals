@@ -1,12 +1,12 @@
 import React, { FC, useState, useCallback } from 'react'
 import styled from 'styled-components'
-import { StickerInfo } from '../molecules/PickableSticker'
 import CardContainer from '../atoms/CardContainer'
 import dynamic from 'next/dynamic'
 import addToPanelVar from '../../lib/localStore/stickerPanel'
 import { useReactiveVar } from '@apollo/client'
 import { addToWritePostInfo } from '../../lib/localStore/writePost'
 import { debounce } from 'lodash'
+import { StickerInfo } from '../../types/types'
 const StickerPanelWithNoSSR = dynamic(
   () => import('../molecules/StickerPanel'),
   { ssr: false }
@@ -34,6 +34,7 @@ const WriteQACard: FC<Props> = (props) => {
     [addContentToWritePost]
   )
   const addToPanelInfo = useReactiveVar(addToPanelVar)
+
   return (
     <CardContainer backColor={props.backColor}>
       <ContentContainer>

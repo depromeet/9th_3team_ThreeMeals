@@ -43,7 +43,7 @@ const QuizCardHeader: React.FunctionComponent<CardHeaderProps> = (props) => {
         case '#F1D75F':
           return IMAGES.img_quiz_yr
         default:
-          break
+          return IMAGES.img_quiz_or
       }
     },
     []
@@ -66,13 +66,7 @@ const QuizCardHeader: React.FunctionComponent<CardHeaderProps> = (props) => {
             <img src={SVGS.icon_32_option} alt="option" />
           </button>
         </span>
-      ) : (
-        <span className="writeContainer">
-          <button type="button">
-            <img src={IMAGES.icon_write_gr} alt="icon_write" />
-          </button>
-        </span>
-      )}
+      ) : null}
     </Container>
   )
 }

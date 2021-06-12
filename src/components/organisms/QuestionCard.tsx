@@ -1,29 +1,174 @@
-import React, { ReactNode, useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import Slick from 'react-slick'
 import LabelCardHeader from '../molecules/LabelCardHeader'
 import CardLabel from '../atoms/CardLabel'
 import { SVGS } from '../../constants/svgs'
 import { IMAGES } from '../../constants/images'
+import { StickerInfo } from '../../types/types'
+import dynamic from 'next/dynamic'
+import {
+  hourDiffCalc,
+  timeDiffCalc,
+  dateDiffToTimer,
+} from '../../utils/TimeDiffCalc'
+import PrivateCardLabel from '../atoms/PrivateCardLabel'
+const StickerPanelWithNoSSR = dynamic(
+  () => import('../molecules/StickerPanel'),
+  { ssr: false }
+)
 
+type TimeStatus = 'timer' | 'show' | 'bong-in'
 interface Props {
+  id?: string
   questionTitle: string
   backColor: string
-  labelComponent?: ReactNode
   isInput?: boolean
-  onClickSend?: (text: string) => void
+  stickers?: StickerInfo[]
+  secretType?: string
+  createdAt: string
+  updatedAt: string
+  comments?: {
+    id: string
+    content: string
+    secretType: string
+    commentState: string
+    createdAt: string
+    updatedAt: string
+  }[]
+  onClickSend?: (text: string, postId: string, secretType: string) => void
   onClickLike?: () => void
   onClickOption?: () => void
 }
+
+const QuestionCard: React.FunctionComponent<Props> = (props) => {
+  const [currentValue, setCurrentValue] = useState('')
+  const [timerValue, setTimerValue] = useState<string>()
+  const onClickSend = useCallback(() => {
+    props.onClickSend &&
+      props.id &&
+      props.secretType &&
+      props.onClickSend(currentValue, props.id, props.secretType)
+  }, [currentValue, props])
+
+  const timeStatus = useMemo((): TimeStatus => {
+    const hourDiff = hourDiffCalc(new Date(), new Date(props.createdAt))
+
+    if (props.secretType === 'Forever') {
+      return 'bong-in'
+    } else {
+      if (hourDiff < 24) {
+        return 'timer'
+      } else if (hourDiff < 49) {
+        return 'show'
+      } else {
+        return 'bong-in'
+      }
+    }
+  }, [props.createdAt, props.secretType])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const postDate = new Date(props.createdAt)
+      postDate.setHours(postDate.getHours() + 24)
+      setTimerValue(dateDiffToTimer(new Date(postDate), new Date()))
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [props.createdAt])
+  return (
+    <Slick
+      dots={false}
+      arrows={undefined}
+      infinite={false}
+      variableWidth={false}
+      css={{ textAlign: 'center' }}
+    >
+      <Container backColor={props.backColor}>
+        <StyledLabelCardHeader
+          labelComponent={
+            timeStatus === 'bong-in' ? (
+              <PrivateCardLabel text="BONG IN" active={false} />
+            ) : timeStatus === 'show' ? (
+              <ShowProfile>
+                <ProfileImg src={IMAGES.background} />
+                <ProfileName>hi</ProfileName>
+                <ProfileImgSticker src={IMAGES.open_label} />
+              </ShowProfile>
+            ) : (
+              <CardLabel text={timerValue || '00:00:00'} active />
+            )
+          }
+          onClickLike={props.onClickLike}
+          onClickOption={props.onClickOption}
+        />
+        <p>{props.questionTitle}</p>
+        <StickerContainer>
+          <StickerPanelWithNoSSR postedStickers={props.stickers} />
+        </StickerContainer>
+        <BottomContainer>
+          <img
+            src={SVGS.icon_left_arrow_wh}
+            alt="arrow-left"
+            width={45}
+            height={37}
+          />
+          밀어서 답장보기
+        </BottomContainer>
+      </Container>
+      <SecondContainer backColor={props.backColor} style={{ opacity: 0.05 }}>
+        {props.isInput ? (
+          <>
+            <TextArea
+              value={currentValue}
+              onChange={(e) => {
+                setCurrentValue(e.target.value)
+              }}
+            />
+            {currentValue === '' ? (
+              <SaveButton
+                src={IMAGES.button_floating_save_disabled}
+                width={80}
+              />
+            ) : (
+              props.onClickSend && (
+                <SaveButton
+                  onClick={onClickSend}
+                  src={IMAGES.button_floating_save_active}
+                  width={80}
+                />
+              )
+            )}
+          </>
+        ) : (
+          <>
+            {props.comments && props.comments?.length > 0 ? (
+              <>
+                <SecondTimeText>
+                  {timeDiffCalc(
+                    new Date(props.comments[0].createdAt),
+                    new Date()
+                  )}
+                </SecondTimeText>
+                <p>{props.comments[0].content}</p>
+              </>
+            ) : null}
+          </>
+        )}
+      </SecondContainer>
+    </Slick>
+  )
+}
+
+export default QuestionCard
 
 const Container = styled.div<{ backColor: string }>`
   position: relative;
   display: flex;
   flex-direction: column;
   background-color: ${({ backColor }) => backColor};
-  height: 360px;
+  height: 392px;
   border-radius: 24px;
-  padding: 96px 24px 24px;
+  padding: 24px;
 
   p {
     text-align: initial;
@@ -38,7 +183,7 @@ const Container = styled.div<{ backColor: string }>`
   margin-bottom: 16px;
   margin-left: 5%;
   margin-right: 5%;
-  width: initial !important;
+  width: 90% !important;
   max-width: 396px;
   *:focus {
     outline: 0;
@@ -50,7 +195,7 @@ const SecondContainer = styled.div<{ backColor: string }>`
   display: flex;
   flex-direction: column;
   background-color: ${({ backColor }) => backColor + '0D'};
-  height: 360px;
+  height: 392px;
   border-radius: 24px;
   padding: 24px;
   border: ${({ backColor }) => backColor};
@@ -76,10 +221,15 @@ const SecondContainer = styled.div<{ backColor: string }>`
 `
 
 const StyledLabelCardHeader = styled(LabelCardHeader)`
-  position: absolute;
   width: 100%;
   top: 16px;
   left: -14px;
+  margin-bottom: 20px;
+`
+
+const StickerContainer = styled.div`
+  width: 100%;
+  height: 192px;
 `
 
 const BottomContainer = styled.div`
@@ -138,74 +288,42 @@ const SaveButton = styled.img`
   right: 0;
   bottom: 0px;
 `
-const QuestionCard: React.FunctionComponent<Props> = (props) => {
-  const [currentValue, setCurrentValue] = useState('')
 
-  const onClickSend = useCallback(() => {
-    props.onClickSend && props.onClickSend(currentValue)
-  }, [currentValue, props])
-  return (
-    <Slick
-      dots={false}
-      arrows={undefined}
-      infinite={false}
-      variableWidth={false}
-      css={{ textAlign: 'center' }}
-    >
-      <Container backColor={props.backColor}>
-        <StyledLabelCardHeader
-          labelComponent={
-            props.labelComponent || (
-              <CardLabel text={'-13:33:33'} active={true} />
-            )
-          }
-          onClickLike={props.onClickLike}
-          onClickOption={props.onClickOption}
-        />
-        <p>{props.questionTitle}</p>
-        <BottomContainer>
-          <img
-            src={SVGS.icon_left_arrow_wh}
-            alt="arrow-left"
-            width={45}
-            height={37}
-          />
-          밀어서 답장보기
-        </BottomContainer>
-      </Container>
-      <SecondContainer backColor={props.backColor} style={{ opacity: 0.05 }}>
-        {props.isInput ? (
-          <>
-            <TextArea
-              value={currentValue}
-              onChange={(e) => {
-                setCurrentValue(e.target.value)
-              }}
-            />
-            {currentValue === '' ? (
-              <SaveButton
-                src={IMAGES.button_floating_save_disabled}
-                width={80}
-              />
-            ) : (
-              props.onClickSend && (
-                <SaveButton
-                  onClick={onClickSend}
-                  src={IMAGES.button_floating_save_active}
-                  width={80}
-                />
-              )
-            )}
-          </>
-        ) : (
-          <>
-            <SecondTimeText>{'10분전'}</SecondTimeText>
-            <p>{props.questionTitle}</p>
-          </>
-        )}
-      </SecondContainer>
-    </Slick>
-  )
-}
+const ShowProfile = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  min-width: 100px;
+  height: 40px;
 
-export default QuestionCard
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  border-radius: 24px;
+  padding: 8px;
+`
+
+const ProfileImgSticker = styled.img`
+  width: 76px;
+  height: 69.5px;
+  position: absolute;
+  left: -15px;
+`
+const ProfileImg = styled.img`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 8px;
+`
+const ProfileName = styled.span`
+  font-family: Apple SD Gothic Neo;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 32px;
+  /* identical to box height, or 188% */
+
+  letter-spacing: -0.02em;
+
+  color: #000000;
+`

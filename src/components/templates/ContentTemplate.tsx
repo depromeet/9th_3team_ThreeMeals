@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useMemo, useState } from 'react'
+import React, { FC, ReactElement, useMemo } from 'react'
 import Header from '../molecules/Header'
 import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
@@ -7,23 +7,47 @@ import DefaultLine from '../atoms/DefaultLine'
 import QuestionCard from '../organisms/QuestionCard'
 import PrivateCardLabel from '../atoms/PrivateCardLabel'
 import AnswerCard from '../organisms/AnswerCard'
+import { getMyAccountInfo } from '../../lib/queries/meQueries'
+import { getPost } from '../../lib/queries/getPostQueries'
+import CardLabel from '../atoms/CardLabel'
+import QuizAnswerCard from '../organisms/QuizAnswerCard'
+
 interface Props {
+  tabIndex: number
+  newPostCount: number
+  getPost?: getPost
+  myAccount?: getMyAccountInfo
   isProfile: boolean
   profileImage: string
+  onClickTabIndex: (index: number) => void
   onClickLeft?: () => void
   onClickSecondRight?: () => void
-  onClickNewSecretCard?: () => void
-  onClickAnswerCard: (postId: string) => void
+  onClickNewSecretCard: (tabName: string) => void
+  onClickAnswerCard: (postId: string, isMine: boolean) => void
   onClickWrite?: () => void
   onClickRemove: (id: string, tabIndex: number) => void
   onClickLike: (id: string, tabIndex: number) => void
 }
 
 const ContentTemplate: FC<Props> = (props) => {
-  const [tabIndex, setTabIndex] = useState<number>(0)
+  const postContent = useMemo(() => {
+    if (props.getPost?.getPosts.edges) {
+      const edges = props.getPost?.getPosts.edges
+      const ask = edges?.filter((e) => e.node.postType === 'Ask')
+      const answer = edges?.filter((e) => e.node.postType === 'Answer')
+      const quiz = edges?.filter((e) => e.node.postType === 'Quiz')
 
+      return {
+        ask,
+        answer,
+        quiz,
+      }
+    }
+  }, [props.getPost?.getPosts.edges])
+
+  console.log('postContent', postContent)
   const ContentView = useMemo((): ReactElement | undefined => {
-    switch (tabIndex) {
+    switch (props.tabIndex) {
       case 0:
         return (
           <>
@@ -37,12 +61,12 @@ const ContentTemplate: FC<Props> = (props) => {
                 />
                 <span
                   style={{ marginTop: 1, cursor: 'pointer' }}
-                  onClick={props.onClickNewSecretCard}
+                  onClick={() => props.onClickNewSecretCard('ask')}
                 >
-                  {'12개의 비밀카드 도착'}
+                  {`${props.newPostCount || 0}개의 비밀카드 도착`}
                 </span>
                 <img
-                  onClick={props.onClickNewSecretCard}
+                  onClick={() => props.onClickNewSecretCard('ask')}
                   src={IMAGES.rightButton}
                   width={22}
                   height={22}
@@ -55,39 +79,27 @@ const ContentTemplate: FC<Props> = (props) => {
               />
             </NoticeContainer>
             <ContentContainer>
-              <QuestionCard
-                labelComponent={
-                  <PrivateCardLabel text="BONG IN" active={false} />
-                }
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#FF833D'}
-                onClickOption={() => {
-                  props.onClickRemove('0', tabIndex)
-                }}
-                onClickLike={() => {
-                  props.onClickLike('0', tabIndex)
-                }}
-              />
-              <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????ㅋㅋ"
-                backColor={'#67D585'}
-                onClickOption={() => {
-                  props.onClickRemove('1', tabIndex)
-                }}
-                onClickLike={() => {
-                  props.onClickLike('1', tabIndex)
-                }}
-              />
-              <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????ㅋㅋ"
-                backColor={'#67D585'}
-                onClickOption={() => {
-                  props.onClickRemove('2', tabIndex)
-                }}
-                onClickLike={() => {
-                  props.onClickLike('2', tabIndex)
-                }}
-              />
+              {postContent?.ask.map((data, index) => {
+                return (
+                  <QuestionCard
+                    key={index}
+                    id={data.node.id}
+                    questionTitle={data.node.content}
+                    backColor={data.node.color}
+                    stickers={data.node.usedEmoticons}
+                    comments={data.node.comments}
+                    createdAt={data.node.createdAt}
+                    updatedAt={data.node.updatedAt}
+                    secretType={data.node.secretType}
+                    onClickOption={() => {
+                      props.onClickRemove(data.node.id, props.tabIndex)
+                    }}
+                    onClickLike={() => {
+                      props.onClickLike(data.node.id, props.tabIndex)
+                    }}
+                  />
+                )
+              })}
             </ContentContainer>
           </>
         )
@@ -95,42 +107,25 @@ const ContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <ContentContainer>
-              <AnswerCard
-                isContent
-                id={'0'}
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#FF833D'}
-                onClickPost={() => {
-                  props.onClickAnswerCard('0')
-                }}
-                onClickOption={() => {
-                  props.onClickRemove('0', tabIndex)
-                }}
-              />
-              <AnswerCard
-                isContent
-                id={'1'}
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#67D585'}
-                onClickPost={() => {
-                  props.onClickAnswerCard('1')
-                }}
-                onClickOption={() => {
-                  props.onClickRemove('1', tabIndex)
-                }}
-              />
-              <AnswerCard
-                isContent
-                id={'2'}
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#67D585'}
-                onClickPost={() => {
-                  props.onClickAnswerCard('2')
-                }}
-                onClickOption={() => {
-                  props.onClickRemove('2', tabIndex)
-                }}
-              />
+              {postContent?.answer.map((data, index) => {
+                return (
+                  <AnswerCard
+                    key={index}
+                    isContent
+                    id={data.node.id}
+                    time={data.node.createdAt}
+                    questionTitle={data.node.content}
+                    backColor={data.node.color}
+                    stickers={data.node.usedEmoticons}
+                    onClickPost={() => {
+                      props.onClickAnswerCard(data.node.id, true)
+                    }}
+                    onClickOption={() => {
+                      props.onClickRemove(data.node.id, props.tabIndex)
+                    }}
+                  />
+                )
+              })}
             </ContentContainer>
           </>
         )
@@ -146,13 +141,13 @@ const ContentTemplate: FC<Props> = (props) => {
                   height={72}
                 />
                 <span
-                  style={{ marginTop: 1 }}
-                  onClick={props.onClickNewSecretCard}
+                  style={{ marginTop: 1, cursor: 'pointer' }}
+                  onClick={() => props.onClickNewSecretCard('OX')}
                 >
-                  {'12개의 OX퀴즈 도착'}
+                  {`${props.newPostCount || 0}개의 OX퀴즈 도착`}
                 </span>
                 <img
-                  onClick={props.onClickNewSecretCard}
+                  onClick={() => props.onClickNewSecretCard('OX')}
                   src={IMAGES.rightButton}
                   width={22}
                   height={22}
@@ -165,33 +160,36 @@ const ContentTemplate: FC<Props> = (props) => {
               />
             </NoticeContainer>
             <ContentContainer>
-              <QuestionCard
-                labelComponent={
-                  <PrivateCardLabel text="BONG IN" active={false} />
-                }
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#FF833D'}
-              />
-              <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#67D585'}
-              />
-              <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#67D585'}
-              />
+              {postContent?.quiz.map((content, index) => {
+                return (
+                  <QuizAnswerCardContainer key={index}>
+                    <QuizAnswerCard
+                      content={content.node.content}
+                      backColor={content.node.color}
+                      answerType={true}
+                      isMyFeed={true}
+                    />
+                  </QuizAnswerCardContainer>
+                )
+              })}
             </ContentContainer>
           </>
         )
       default:
         break
     }
-  }, [props, tabIndex])
+  }, [postContent?.answer, postContent?.ask, postContent?.quiz, props])
+
+  const profileImage = useMemo(() => {
+    return props.myAccount?.getMyAccountInfo.image
+  }, [props.myAccount?.getMyAccountInfo.image])
+
   return (
     <AppContainer>
       <Header
-        isProfile={props.isProfile}
-        profileImage={props.profileImage}
+        isLogin={props.myAccount ? true : false}
+        isProfile={profileImage ? true : false}
+        profileImage={profileImage}
         rightIcon={IMAGES.icon_24_drawer}
         rightSecondIcon={IMAGES.icon_24_alram2_wh}
         onClickSecondRight={props.onClickSecondRight}
@@ -207,7 +205,7 @@ const ContentTemplate: FC<Props> = (props) => {
         <TabContainer>
           <Tab
             style={
-              tabIndex === 0
+              props.tabIndex === 0
                 ? {
                     borderBottom: 1,
                     borderColor: 'white',
@@ -216,14 +214,14 @@ const ContentTemplate: FC<Props> = (props) => {
                 : undefined
             }
             onClick={() => {
-              setTabIndex(0)
+              props.onClickTabIndex(0)
             }}
           >
             물어봐
           </Tab>
           <Tab
             style={
-              tabIndex === 1
+              props.tabIndex === 1
                 ? {
                     borderBottom: 1,
                     borderColor: 'white',
@@ -232,14 +230,14 @@ const ContentTemplate: FC<Props> = (props) => {
                 : undefined
             }
             onClick={() => {
-              setTabIndex(1)
+              props.onClickTabIndex(1)
             }}
           >
             답해줘
           </Tab>
           <Tab
             style={
-              tabIndex === 2
+              props.tabIndex === 2
                 ? {
                     borderBottom: 1,
                     borderColor: 'white',
@@ -248,7 +246,7 @@ const ContentTemplate: FC<Props> = (props) => {
                 : undefined
             }
             onClick={() => {
-              setTabIndex(2)
+              props.onClickTabIndex(2)
             }}
           >
             OX퀴즈
@@ -259,16 +257,25 @@ const ContentTemplate: FC<Props> = (props) => {
         />
         {ContentView}
       </MainContainer>
-      {tabIndex === 1 && (
-        <WriteButton>
-          <img onClick={props.onClickWrite} src={IMAGES.write} width={88} />
-        </WriteButton>
-      )}
+      {postContent && props.tabIndex === 1 ? (
+        postContent.answer.length > 1 ? (
+          <WriteButton>
+            <img onClick={props.onClickWrite} src={IMAGES.write} width={88} />
+          </WriteButton>
+        ) : (
+          <WriteButton>
+            <img
+              onClick={props.onClickWrite}
+              src={IMAGES.icon_write_gr}
+              width={88}
+            />
+          </WriteButton>
+        )
+      ) : null}
     </AppContainer>
   )
 }
-
-export default ContentTemplate
+export default React.memo(ContentTemplate)
 
 const AppContainer = styled.div`
   color: #ffffff;
@@ -334,4 +341,22 @@ const WriteButton = styled.div`
   position: fixed;
   overflow-y: scroll;
   overflow-x: hidden;
+
+  @media all and (min-width: 515px) {
+    margin-right: -webkit-calc((100% - 400px) / 2);
+    margin-right: -moz-calc((100% - 400px) / 2);
+    margin-right: calc((100% - 400px) / 2);
+  }
+  @media all and (max-width: 515px) {
+    margin-right: -webkit-calc((7%) / 2);
+    margin-right: -moz-calc((7%) / 2);
+    margin-right: calc((7%) / 2);
+  }
+`
+
+const QuizAnswerCardContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 `

@@ -3,17 +3,33 @@ import WritePostTemplate from '../templates/WritePostTemplate'
 import { useRouter } from 'next/router'
 import { BackColor } from '../../types/types'
 import styled from 'styled-components'
-import { useReactiveVar } from '@apollo/client'
+import { useReactiveVar, useMutation, useQuery } from '@apollo/client'
 import writePostInfoVar, {
   addToWritePostInfo,
 } from '../../lib/localStore/writePost'
 import { addToPanel } from '../../lib/localStore/stickerPanel'
 import StickersList from '../organisms/StickersList'
 import Modal from '../molecules/Modal'
+import {
+  CREATE_POST,
+  CreatePostRes,
+  CreatePostParams,
+} from '../../lib/queries/createQueries'
+import {
+  GET_ALL_EMOTICONS,
+  GetAllEmoticons,
+} from '../../lib/queries/getQueries'
+import { GET_MY_PROFILE, getMyAccountInfo } from '../../lib/queries/meQueries'
 const WritePostPage: VFC = () => {
+  const { data: emoticonsData } = useQuery<GetAllEmoticons>(GET_ALL_EMOTICONS)
+  const { data: profileData } = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
+  const allEmoticons = emoticonsData?.getAllEmoticons
+  const profile = profileData?.getMyAccountInfo
   const router = useRouter()
-  const { id: postType } = router.query
+  const { id: postType, otherId } = router.query
   const writePostInfo = useReactiveVar(writePostInfoVar)
+  const [createPostMutation] =
+    useMutation<CreatePostRes, CreatePostParams>(CREATE_POST)
   const [backColor, setBackColor] = useState<BackColor>('#67D585')
   const [optionActiveState, setOptionActiveState] = useState({
     Temp: true,
@@ -44,19 +60,13 @@ const WritePostPage: VFC = () => {
     (e) => {
       const { id } = e.currentTarget
       setBackColor(id)
-      addToWritePostInfo({ backColor: backColor })
+      addToWritePostInfo({ color: backColor })
     },
     [backColor]
   )
   const onClickOpenStickerList = useCallback(() => {
     setOpenStickerList(!openStickerList)
   }, [openStickerList])
-  const updatePickedImgUrl = useCallback((imgUrl: string) => {
-    addToPanel({ imgUrl: imgUrl })
-  }, [])
-  const updatePickedImgWidth = useCallback((width: number) => {
-    addToPanel({ width: width })
-  }, [])
   const addToPanelByClicking = useCallback(() => {
     addToPanel({ clickedSticker: true })
     setTimeout(() => {
@@ -70,20 +80,61 @@ const WritePostPage: VFC = () => {
     }, 500)
   }, [])
   const onClickSaveBtn = useCallback(() => {
+    if (!writePostInfo?.content) {
+      return
+    }
     setOpenSaveModal(true)
-  }, [])
-  const onClickConfirm = () => {
+  }, [writePostInfo?.content])
+  const onClickConfirm = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.preventDefault()
     console.log('send:', writePostInfo)
-  }
-  useEffect(() => {
-    if (typeof postType === 'string') {
-      addToWritePostInfo({
-        backColor: backColor,
-        postType: postType,
-        secretType: 'Temp',
+    if (writePostInfo && typeof writePostInfo !== undefined) {
+      const emoticons = writePostInfo.emoticons?.map((emoticon) => {
+        return { emoticonId: emoticon.emoticonId, position: emoticon.position }
+      })
+
+      createPostMutation({
+        variables: {
+          content: writePostInfo.content,
+          toAccountId: writePostInfo.toAccountId,
+          color: writePostInfo.color,
+          secretType: writePostInfo.secretType,
+          postType: writePostInfo.postType,
+          emoticons: emoticons ? emoticons : [],
+        },
+      }).then(() => {
+        if (postType === 'Ask') {
+          router.push(`/otherscontent/${otherId}`)
+        } else {
+          router.push('/content')
+        }
       })
     }
-  }, [backColor, postType])
+  }
+  useEffect(() => {
+    if (typeof postType === 'string' && profile && !otherId) {
+      addToWritePostInfo({
+        color: backColor,
+        postType: postType,
+        secretType: 'Temp',
+        toAccountId: profile.id,
+      })
+    } else if (
+      typeof postType === 'string' &&
+      profile &&
+      typeof otherId === 'string'
+    ) {
+      addToWritePostInfo({
+        color: backColor,
+        postType: postType,
+        secretType: 'Temp',
+        toAccountId: otherId,
+      })
+    }
+  }, [backColor, otherId, postType, profile])
+  console.log(writePostInfo)
   return (
     <AppContainer>
       <WritePostTemplate
@@ -97,10 +148,9 @@ const WritePostPage: VFC = () => {
         closeDeleteBtnByTouching={closeDeleteBtnByTouching}
         onClickSaveBtn={onClickSaveBtn}
       />
-      {openStickerList ? (
+      {allEmoticons && openStickerList ? (
         <StickersList
-          updatePickedImgUrl={updatePickedImgUrl}
-          updatePickedImgWidth={updatePickedImgWidth}
+          stickers={allEmoticons}
           addToPanelByClicking={addToPanelByClicking}
           onClickOpenStickerList={onClickOpenStickerList}
         />
@@ -108,6 +158,7 @@ const WritePostPage: VFC = () => {
       <Modal
         open={openSaveModal}
         title="작성을 완료하시겠습니까?"
+        titleEmojiTextType="✏️"
         description="욕설 및 비방은 신고의 대상이 될 수 있습니다."
         confirmText="작성완료"
         cancelText="취소"

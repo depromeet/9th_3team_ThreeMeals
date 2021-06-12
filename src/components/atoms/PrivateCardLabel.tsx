@@ -20,9 +20,10 @@ const Container = styled.span<ContainerProps>`
   letter-spacing: 0.04em;
   height: 48px;
   padding: 0 31px;
+
   ${({ active }) =>
     active ? `color:white;` : `color:rgba(255, 255, 255, 0.5);`}
-  @media screen and (max-width: 320px) {
+  @media screen and (max-width: 360px) {
     span {
       font-size: 14px;
     }

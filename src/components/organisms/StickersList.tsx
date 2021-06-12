@@ -1,44 +1,22 @@
 import React, { FC, useCallback } from 'react'
 import styled from 'styled-components'
-import PickableSticker, { StickerInfo } from '../molecules/PickableSticker'
+import PickableSticker from '../molecules/PickableSticker'
 import { IMAGES } from '../../constants/images'
+import { StickerInfo } from '../../types/types'
+import { addToPanel } from '../../lib/localStore/stickerPanel'
+import { GetEmoticonInfo } from '../../lib/queries/getQueries'
+
 interface Props {
-  updatePickedImgUrl: (imgUrl: string) => void
-  updatePickedImgWidth: (imgWidth: number) => void
+  stickers: GetEmoticonInfo[]
   addToPanelByClicking: () => void
   onClickOpenStickerList: () => void
 }
-const dummyStickersData: StickerInfo[] = [
-  {
-    imgUrl: IMAGES.sticker_food_apple,
-    width: 125,
-  },
-  {
-    imgUrl: IMAGES.sticker_food_bread,
-    width: 125,
-  },
-  {
-    imgUrl: IMAGES.sticker_food_watermelon,
-    width: 125,
-  },
-  {
-    imgUrl: IMAGES.sticker_food_apple,
-    width: 125,
-  },
-  {
-    imgUrl: IMAGES.sticker_food_bread,
-    width: 125,
-  },
-  {
-    imgUrl: IMAGES.sticker_food_watermelon,
-    width: 125,
-  },
-]
+
 const StickersList: FC<Props> = (props) => {
   const onDragStart = useCallback(
-    (imgUrl: string, width: number) => {
-      props.updatePickedImgWidth(width)
-      props.updatePickedImgUrl(imgUrl)
+    (fileUrl: string, width: number, id?: string) => {
+      addToPanel({ imgUrl: fileUrl, width: width, emoticonId: id })
+
       setTimeout(() => {
         props.onClickOpenStickerList()
       }, 100)
@@ -46,9 +24,9 @@ const StickersList: FC<Props> = (props) => {
     [props]
   )
   const onTouchStart = useCallback(
-    (imgUrl: string, width: number) => {
-      props.updatePickedImgWidth(width)
-      props.updatePickedImgUrl(imgUrl)
+    (fileUrl: string, width: number, id?: string) => {
+      addToPanel({ imgUrl: fileUrl, width: width, emoticonId: id })
+
       props.addToPanelByClicking()
       props.onClickOpenStickerList()
     },
@@ -65,18 +43,19 @@ const StickersList: FC<Props> = (props) => {
         <span>Stickers</span>
       </Header>
       <GridContainer>
-        {dummyStickersData.map((sticker, i) => {
+        {props.stickers.map((sticker, i) => {
           return (
             <div
               key={i}
-              onDragStart={() => onDragStart(sticker.imgUrl, sticker.width)}
-              onTouchStart={() => onTouchStart(sticker.imgUrl, sticker.width)}
+              onDragStart={() => onDragStart(sticker.fileUrl, 140, sticker.id)}
+              onClick={() => onTouchStart(sticker.fileUrl, 140, sticker.id)}
             >
               <PickableSticker
                 key={i}
-                imgUrl={sticker.imgUrl}
-                width={sticker.width}
-                positions={sticker.positions}
+                fileUrl={sticker.fileUrl}
+                width={140}
+                position={sticker.position}
+                emoticonId={sticker.id}
               />
             </div>
           )
@@ -91,21 +70,33 @@ export default React.memo(StickersList)
 const ListContainer = styled.div`
   position: fixed;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   background: #000000;
   max-width: 500px;
+  top: 0;
+  bottom: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
   @media screen and (max-width: 375px) {
     top: 0;
     left: 0;
+  }
+  ::-webkit-scrollbar {
+    width: 1px;
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #adb5bd;
+    opacity: 0.1;
   }
 `
 
 const GridContainer = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 125px);
+  grid-template-columns: repeat(auto-fill, 123px);
   justify-content: flex-start;
-  @media screen and (max-width: 320px) {
+  @media screen and (max-width: 360px) {
     justify-content: center;
   }
 `

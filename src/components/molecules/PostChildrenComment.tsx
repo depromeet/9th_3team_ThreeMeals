@@ -2,36 +2,12 @@ import React, { FC, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import DefaultLine from '../atoms/DefaultLine'
 import { useLazyQuery } from '@apollo/client'
-import { GET_CHILDREN_COMMENTS } from '../../lib/queries/getQueries'
+import { ChildrenComments } from '../../lib/queries/getCommentsQueries'
 interface Props {
   profileImg: string
-  commentsInfo: CommentInfo[]
+  commentsInfo: ChildrenComments
 }
 
-interface CommentInfo {
-  id: string
-  content: String
-  secretType: string
-  commentState: string
-  createdAt: string
-  updatedAt: string
-  account: Account
-  postId: String
-  parentId: String
-}
-
-interface Account {
-  id: string
-  nickname: String
-  //   provider: !Provider
-  providerId: String
-  status: String
-  image: String
-  content: String
-  profileUrl: String
-  createdAt: string
-  updatedAt: string
-}
 const PostChildrenComment: FC<Props> = (props) => {
   // const [getChildrenComments,{ loading, error, data }] = useLazyQuery(GET_CHILDREN_COMMENTS)
   const [writeOpen, setWriteOpen] = useState(false)

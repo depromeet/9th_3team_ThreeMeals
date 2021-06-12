@@ -3,22 +3,51 @@ import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import Modal from '../molecules/Modal'
 import AnswerDetailTemplate from '../templates/AnswerDetailTemplate'
+import {
+  ParentComments,
+  GET_PARENT_COMMENTS,
+} from '../../lib/queries/getCommentsQueries'
+import { useQuery, useMutation } from '@apollo/client'
+import {
+  CreateCommentRes,
+  CreateCommentParams,
+  CREATE_COMMENT,
+} from '../../lib/queries/createQueries'
 
 export type AnswerContactType = 'parent' | 'children'
+
 const AnswerDetailPage: React.FC = () => {
   const router = useRouter()
-
+  const { postId, isMine: queryIsMine } = router.query
+  const { data: parentCommentsData } = useQuery<ParentComments>(
+    GET_PARENT_COMMENTS,
+    { variables: { first: 10, postId: postId } }
+  )
+  const [createCommentMutation] =
+    useMutation<CreateCommentRes, CreateCommentParams>(CREATE_COMMENT)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [modalTitle, setModalTitle] = useState<string>()
-  const onSendComment = useCallback((comment: string) => {
-    console.log('comment:', comment)
-  }, [])
+  const onSendComment = useCallback(
+    (comment: string) => {
+      console.log('comment:', comment)
+      if (typeof postId === 'string') {
+        createCommentMutation({
+          variables: {
+            postId: postId,
+            content: comment,
+            secretType: 'Forever',
+          },
+        })
+      }
+    },
+    [createCommentMutation, postId]
+  )
 
   const onClickRemove = useCallback((type: AnswerContactType, id: string) => {
     const modalData: string =
       type === 'parent'
-        ? '💬 이 질문을 삭제하시겠습니까?'
-        : '💬 이 댓글을 삭제하시겠습니까?'
+        ? '이 질문을 삭제하시겠습니까?'
+        : '이 댓글을 삭제하시겠습니까?'
 
     setModalTitle(modalData)
     setIsOpen(true)
@@ -29,9 +58,12 @@ const AnswerDetailPage: React.FC = () => {
      * 내피드 - 좋아요 / 답글보기 / 옵션 노출 > true
      * 타인피드 - 좋아요 / 답글보기 / 옵션 미 노출 > false
      */
+    if (queryIsMine) {
+      return true
+    }
     return false
-  }, [])
-
+  }, [queryIsMine])
+  console.log(parentCommentsData)
   return (
     <AppContainer>
       <AnswerDetailTemplate
@@ -40,10 +72,12 @@ const AnswerDetailPage: React.FC = () => {
         onSendComment={onSendComment}
         onClickRemove={onClickRemove}
         isMine={isMine}
+        parentComments={parentCommentsData}
       />
       <Modal
         open={isOpen}
         title={modalTitle || ''}
+        titleEmojiTextType="💬"
         confirmText={'삭제하기'}
         cancelText={'취소'}
         onClickConfirm={() => {

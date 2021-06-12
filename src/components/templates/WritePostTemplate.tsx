@@ -7,6 +7,7 @@ import OptionAlarmField, { OptionType } from '../molecules/OptionAlarmField'
 import { IMAGES } from '../../constants/images'
 import { SVGS } from '../../constants/svgs'
 import { BackColor } from '../../types/types'
+import { useRouter } from 'next/router'
 interface Props {
   TempType: string | string[]
   optionActiveState: OptionType
@@ -20,23 +21,28 @@ interface Props {
 }
 
 const WritePostTemplate: FC<Props> = (props) => {
+  const router = useRouter()
   const [withSticker, setWithSticker] = useState(false)
   useEffect(() => {
-    if (props.TempType === 'Q' || props.TempType === 'A') {
+    if (props.TempType === 'Ask' || props.TempType === 'Answer') {
       setWithSticker(true)
     }
   }, [props.TempType])
   return (
     <TempContainer onTouchStart={props.closeDeleteBtnByTouching}>
       <Header>
-        <img src={IMAGES.icon_32_close} alt="closeIcon" />
+        <img
+          src={IMAGES.icon_32_close}
+          alt="closeIcon"
+          onClick={() => router.back()}
+        />
         <span onClick={props.onClickSaveBtn}>저장</span>
       </Header>
       <MainContainer>
         <WriteQACard backColor={props.backColor} isWithSticker={withSticker} />
       </MainContainer>
       <BottomContainer>
-        {props.TempType === 'Q' ? (
+        {props.TempType === 'Ask' ? (
           <OptionContainer buttonActive={props.optionActiveState}>
             {props.optionActiveState.Forever && (
               <OptionAlarmField optionType={props.optionActiveState} />
@@ -96,7 +102,7 @@ const WritePostTemplate: FC<Props> = (props) => {
               onClick={props.onClickBackColor}
             />
           </BackColorList>
-          {props.TempType === 'OX' ? null : (
+          {props.TempType === 'Quiz' ? null : (
             <button
               className="stickerButton"
               onClick={props.onClickOpenStickerList}
@@ -167,7 +173,7 @@ const OptionContainer = styled.div<OptionProps>`
   width: 90%;
   flex-direction: column;
   align-items: center;
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 500px) {
     width: 100%;
   }
   .LabelContainer {
@@ -196,7 +202,7 @@ const Footer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 500px) {
     width: 100%;
   }
 `

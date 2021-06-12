@@ -7,9 +7,15 @@ import DefaultLine from '../atoms/DefaultLine'
 import QuestionCard from '../organisms/QuestionCard'
 import PrivateCardLabel from '../atoms/PrivateCardLabel'
 import AnswerCard from '../organisms/AnswerCard'
-import { NextRouter } from 'next/router'
+import { useRouter } from 'next/router'
+import { getAccountInfo } from '../../lib/queries/userQueries'
+import { getPost } from '../../lib/queries/getPostQueries'
+import QuizAnswerCard from '../organisms/QuizAnswerCard'
+import CardLabel from '../atoms/CardLabel'
+
 interface Props {
-  router: NextRouter
+  getPost?: getPost
+  account?: getAccountInfo
   profileImage: string
   onClickLeft?: () => void
   onClickAnswerCard: (postId: string) => void
@@ -18,33 +24,54 @@ interface Props {
 
 const OthersContentTemplate: FC<Props> = (props) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
+  const router = useRouter()
+  const postContent = useMemo(() => {
+    if (props.getPost?.getPosts.edges) {
+      const edges = props.getPost?.getPosts.edges
+      const ask = edges?.filter((e) => e.node.postType === 'Ask')
+      const answer = edges?.filter((e) => e.node.postType === 'Answer')
+      const quiz = edges?.filter((e) => e.node.postType === 'Quiz')
 
+      return {
+        ask,
+        answer,
+        quiz,
+      }
+    }
+  }, [props.getPost?.getPosts.edges])
   const onClickWrite = useCallback(() => {
     if (tabIndex === 0) {
-      props.router.push('writePost/Q')
+      router.push(`/writePost/Ask?otherId=${props.account?.getAccountInfo.id}`)
     } else {
-      props.router.push('writePost/OX')
+      router.push(`/writePost/Quiz?otherId=${props.account?.getAccountInfo.id}`)
     }
-  }, [props.router, tabIndex])
+  }, [props.account?.getAccountInfo.id, router, tabIndex])
+  console.log('postContent:', postContent)
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:
         return (
           <>
             <ContentContainer>
-              <QuestionCard
-                labelComponent={<PrivateCardLabel text="BONG IN" active />}
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#FF833D'}
-              />
-              <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????ㅋㅋ"
-                backColor={'#67D585'}
-              />
-              <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????ㅋㅋ"
-                backColor={'#67D585'}
-              />
+              {postContent?.ask.map((data, index) => {
+                return (
+                  <QuestionCard
+                    key={index}
+                    id={data.node.id}
+                    labelComponent={
+                      data.node.secretType === 'Forever' ? (
+                        <PrivateCardLabel text="BONG IN" active={false} />
+                      ) : (
+                        <CardLabel text={data.node.createdAt} active />
+                      )
+                    }
+                    questionTitle={data.node.content}
+                    backColor={data.node.color}
+                    stickers={data.node.usedEmoticons}
+                    comments={data.node.comments}
+                  />
+                )
+              })}
             </ContentContainer>
           </>
         )
@@ -52,27 +79,23 @@ const OthersContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <ContentContainer>
-              <AnswerCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#FF833D'}
-                onClickPost={() => {
-                  props.onClickAnswerCard('0')
-                }}
-              />
-              <AnswerCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#67D585'}
-                onClickPost={() => {
-                  props.onClickAnswerCard('1')
-                }}
-              />
-              <AnswerCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#67D585'}
-                onClickPost={() => {
-                  props.onClickAnswerCard('2')
-                }}
-              />
+              {postContent?.answer.map((data, index) => {
+                return (
+                  <AnswerCard
+                    key={index}
+                    isContent
+                    id={data.node.id}
+                    time={data.node.createdAt}
+                    questionTitle={data.node.content}
+                    backColor={data.node.color}
+                    stickers={data.node.usedEmoticons}
+                    count={data.node.commentsCount}
+                    onClickPost={() => {
+                      props.onClickAnswerCard(data.node.id)
+                    }}
+                  />
+                )
+              })}
             </ContentContainer>
           </>
         )
@@ -80,32 +103,42 @@ const OthersContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <ContentContainer>
-              <QuestionCard
-                labelComponent={<PrivateCardLabel text="BONG IN" active />}
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#FF833D'}
-              />
-              <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#67D585'}
-              />
-              <QuestionCard
-                questionTitle="김덕배님 남자친구는 있으신지요 ????"
-                backColor={'#67D585'}
-              />
+              {postContent?.quiz.map((content, index) => {
+                return (
+                  <QuizAnswerCardContainer key={index}>
+                    <QuizAnswerCard
+                      content={content.node.content}
+                      backColor={content.node.color}
+                      answerType={true}
+                      isMyFeed={false}
+                    />
+                  </QuizAnswerCardContainer>
+                )
+              })}
             </ContentContainer>
           </>
         )
       default:
         break
     }
-  }, [props, tabIndex])
+  }, [
+    postContent?.answer,
+    postContent?.ask,
+    postContent?.quiz,
+    props,
+    tabIndex,
+  ])
+
+  const profileImage = useMemo(() => {
+    return props.account?.getAccountInfo.image
+  }, [props.account?.getAccountInfo.image])
 
   return (
     <AppContainer>
       <Header
-        isProfile
-        profileImage={props.profileImage}
+        isLogin={props.account ? true : false}
+        isProfile={profileImage ? true : false}
+        profileImage={profileImage}
         rightIcon={IMAGES.icon_24_drawer}
         rightSecondIcon={IMAGES.icon_24_alram2_wh}
         onClickSecondRight={props.onClickSecondRight}
@@ -113,10 +146,10 @@ const OthersContentTemplate: FC<Props> = (props) => {
       />
       <MainContainer>
         <ProfileContent
-          name="김덕배"
-          desc="관종이라 자주올림.. 아몰랑~ 그냥 써 🍻"
-          urlName="@nijo.s"
-          url="https://google.com"
+          name={props.account?.getAccountInfo.nickname ?? ''}
+          desc={props.account?.getAccountInfo.content ?? ''}
+          urlName={props.account?.getAccountInfo.profileUrl ?? ''}
+          url={props.account?.getAccountInfo.profileUrl ?? ''}
         />
         <TabContainer>
           <Tab
@@ -173,11 +206,18 @@ const OthersContentTemplate: FC<Props> = (props) => {
         />
         {ContentView}
       </MainContainer>
-      {tabIndex !== 1 && (
-        <WriteButton>
-          <img onClick={onClickWrite} src={IMAGES.write} width={88} />
-        </WriteButton>
-      )}
+      {(postContent && tabIndex === 0) || (postContent && tabIndex === 2) ? (
+        (tabIndex === 0 && postContent.ask.length > 1) ||
+        (tabIndex === 2 && postContent.quiz.length > 1) ? (
+          <WriteButton>
+            <img onClick={onClickWrite} src={IMAGES.write} width={88} />
+          </WriteButton>
+        ) : (
+          <WriteButton>
+            <img onClick={onClickWrite} src={IMAGES.icon_write_gr} width={88} />
+          </WriteButton>
+        )
+      ) : null}
     </AppContainer>
   )
 }
@@ -229,4 +269,21 @@ const WriteButton = styled.div`
   position: fixed;
   overflow-y: scroll;
   overflow-x: hidden;
+
+  @media all and (min-width: 515px) {
+    margin-right: -webkit-calc((100% - 400px) / 2);
+    margin-right: -moz-calc((100% - 400px) / 2);
+    margin-right: calc((100% - 400px) / 2);
+  }
+  @media all and (max-width: 515px) {
+    margin-right: -webkit-calc((7%) / 2);
+    margin-right: -moz-calc((7%) / 2);
+    margin-right: calc((7%) / 2);
+  }
+`
+const QuizAnswerCardContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 `

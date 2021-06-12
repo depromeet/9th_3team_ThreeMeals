@@ -1,76 +1,65 @@
 import React, { FC, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { AnswerContactType } from '../pages/AnswerDetailPage'
+import {
+  ChildrenComments,
+  ParentComments,
+  GET_CHILDREN_COMMENTS,
+} from '../../lib/queries/getCommentsQueries'
+import { useLazyQuery } from '@apollo/client'
+import dayjs from 'dayjs'
 interface Props {
   isMine: boolean
   profileImg: string
-  commentsInfo: CommentInfo[]
-  childrenCommentInfo: ChildrenCommentInfo[]
+  commentsInfo: ParentComments | undefined
   onClickRemove?: (type: AnswerContactType, id: string) => void
 }
 
-export interface CommentInfo {
-  id: string // parent or postId
-  content: string
-  secretType: string
-  account: Account
-  childrenCount: number
-  pageInfo: {
-    endCursor: string
-    hasNextPage: boolean
-  }
-}
-
-export interface ChildrenCommentInfo {
-  id: string
-  content: string
-  secretType: string
-  commentState: string
-  createdAt: string
-  updatedAt: string
-  account: Account
-  postId: string
-  parentId: string
-}
-interface Account {
-  id: string
-  nickname: string
-  providerId: string
-  status: string
-  image: string
-  content: string
-  profileUrl: string
-  createdAt: string
-  updatedAt: string
-}
 const PostComment: FC<Props> = (props) => {
+  const [getChildrenComment, { data: childrenComments }] =
+    useLazyQuery<ChildrenComments>(GET_CHILDREN_COMMENTS, {
+      variables: { first: 10, postId: '1' },
+    })
+  const postCommentData = props.commentsInfo?.getParentComments.edges
+  const childrenCommentData = childrenComments?.getChildrenComments.edges
   const [writeOpen, setWriteOpen] = useState(false)
+  const [childrenOpen, setChildrenOpen] = useState(false)
   const handleWriteComment = useCallback(() => {
     setWriteOpen(!writeOpen)
   }, [writeOpen])
   const handleLikeActive = useCallback(() => {
     // mutation : createLikeChildrenComment
   }, [])
-
+  const handleChildrenComment = useCallback(
+    (commentId: string, postId: string) => {
+      getChildrenComment({
+        variables: { first: 10, parentId: commentId, postId: postId },
+      })
+      setChildrenOpen(!childrenOpen)
+    },
+    [childrenOpen, getChildrenComment]
+  )
   return (
     <AppContainer>
-      {props.commentsInfo.map((comment, i) => {
+      {postCommentData?.map((comment, i) => {
         return (
           <CommentContainer key={i}>
             <CommentHeader>
-              <CommentId>{comment.id}</CommentId>
+              <CommentDate>
+                {dayjs(comment.node.createdAt).format('HH:mm:ss')}
+              </CommentDate>
               {props.isMine && (
                 <DropMenu
                   onClick={() => {
                     props.onClickRemove &&
-                      props.onClickRemove('children', comment.id)
+                      props.onClickRemove('children', comment.node.id)
                   }}
                 >
                   •••
                 </DropMenu>
               )}
             </CommentHeader>
-            <CommentContent>{comment.content}</CommentContent>
+            <CommentContent>{comment.node.content}</CommentContent>
             {props.isMine && (
               <CommentFooter>
                 <>
@@ -80,55 +69,70 @@ const PostComment: FC<Props> = (props) => {
                   <LikeAction className="likeActive" onClick={handleLikeActive}>
                     좋아요
                   </LikeAction>
+                  <ChildrenCommentCnt
+                    onClick={() =>
+                      handleChildrenComment(
+                        comment.node.id,
+                        comment.node.postId
+                      )
+                    }
+                  >
+                    답글 {comment.node.childrenCount}개
+                  </ChildrenCommentCnt>
                 </>
               </CommentFooter>
             )}
-            {props.childrenCommentInfo.map((childrenComment, i) => {
-              if (comment.account.id === childrenComment.postId) {
-                return (
-                  <ChildrenContainer key={i}>
-                    <ProfileContainer>
-                      <img
-                        className="profileImg"
-                        src={props.profileImg}
-                        alt="profileImg"
-                      />
-                      <ChildrenHeader>
-                        <CommentId>
-                          {childrenComment.account.nickname}
-                        </CommentId>
-                      </ChildrenHeader>
-                      {props.isMine && (
-                        <DropMenu
-                          onClick={() => {
-                            props.onClickRemove &&
-                              props.onClickRemove(
-                                'children',
-                                childrenComment.id
-                              )
-                          }}
-                        >
-                          •••
-                        </DropMenu>
-                      )}
-                    </ProfileContainer>
-                    <BodyContainer>
-                      <ContentsContainer>
-                        <CommentContent>{comment.content}</CommentContent>
+            {childrenOpen &&
+              childrenCommentData?.map((childrenComment, i) => {
+                if (comment.node.id === childrenComment.node.parentId) {
+                  return (
+                    <ChildrenContainer key={i}>
+                      <ProfileContainer>
+                        <img
+                          className="profileImg"
+                          src={childrenComment.node.account?.profileUrl}
+                          alt="profileImg"
+                        />
+                        <ChildrenHeader>
+                          <CommentId>
+                            {childrenComment.node.account?.nickname}
+                          </CommentId>
+                        </ChildrenHeader>
                         {props.isMine && (
-                          <ChildrenFooter>
-                            <Write onClick={handleWriteComment}>답글쓰기</Write>
-                            <LikeAction onClick={handleLikeActive}>
-                              좋아요
-                            </LikeAction>
-                          </ChildrenFooter>
+                          <DropMenu
+                            onClick={() => {
+                              props.onClickRemove &&
+                                props.onClickRemove(
+                                  'children',
+                                  childrenComment.node.id
+                                )
+                            }}
+                          >
+                            •••
+                          </DropMenu>
                         )}
-                      </ContentsContainer>
-                    </BodyContainer>
-                  </ChildrenContainer>
-                )
-              }
-            })}
+                      </ProfileContainer>
+                      <BodyContainer>
+                        <ContentsContainer>
+                          <CommentContent>
+                            {comment.node.content}
+                          </CommentContent>
+                          {props.isMine && (
+                            <ChildrenFooter>
+                              <Write onClick={handleWriteComment}>
+                                답글쓰기
+                              </Write>
+                              <LikeAction onClick={handleLikeActive}>
+                                좋아요
+                              </LikeAction>
+                            </ChildrenFooter>
+                          )}
+                        </ContentsContainer>
+                      </BodyContainer>
+                    </ChildrenContainer>
+                  )
+                }
+              })}
           </CommentContainer>
         )
       })}
@@ -171,7 +175,7 @@ const CommentHeader = styled.div`
 
   color: #ffffff;
 `
-
+const CommentDate = styled.div``
 const CommentId = styled.div``
 const CommentContent = styled.div`
   margin-top: 8px;
@@ -250,5 +254,9 @@ const Write = styled.span`
   margin-right: 15px;
 `
 const LikeAction = styled.span`
+  cursor: pointer;
+  margin-right: 15px;
+`
+const ChildrenCommentCnt = styled.span`
   cursor: pointer;
 `

@@ -1,19 +1,24 @@
-import React, { VFC, useRef, useState, useCallback, useEffect } from 'react'
+import React, { FC, useRef, useState, useCallback, useEffect } from 'react'
 import { Stage, Layer } from 'react-konva'
 import styled from 'styled-components'
 import Konva from 'konva'
 import DraggableSticker from './DraggableSticker'
-import { StickerInfo } from './PickableSticker'
 import { useReactiveVar } from '@apollo/client'
 import addToPanelVar from '../../lib/localStore/stickerPanel'
 import { addToWritePostInfo } from '../../lib/localStore/writePost'
+import { StickerInfo } from '../../types/types'
+import PostedSticker from './PostedSticker'
+
+interface Props {
+  postedStickers?: StickerInfo[]
+}
 
 interface OnDragFuncProps {
   e?: Konva.KonvaEventObject<DragEvent>
   i: number
   image: StickerInfo
 }
-const StickerPanel: VFC = () => {
+const StickerPanel: FC<Props> = (props) => {
   const stageRef: React.RefObject<Konva.Stage> | null = useRef(null)
   const addToPanelInfo = useReactiveVar(addToPanelVar)
   const [stickers, setStickers] = useState<StickerInfo[]>([])
@@ -21,24 +26,37 @@ const StickerPanel: VFC = () => {
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault()
-      if (stageRef.current && addToPanelInfo.imgUrl && addToPanelInfo.width) {
+      if (
+        stageRef.current &&
+        addToPanelInfo.imgUrl &&
+        addToPanelInfo.width &&
+        addToPanelInfo.emoticonId
+      ) {
         stageRef.current.setPointersPositions(e)
+        const positions = stageRef.current.getPointerPosition()
         const droppedImgInfo = {
-          positions: stageRef.current.getPointerPosition(),
-          imgUrl: addToPanelInfo.imgUrl,
+          position: { positionX: positions?.x, positionY: positions?.y },
+          fileUrl: addToPanelInfo.imgUrl,
           width: addToPanelInfo.width,
+          emoticonId: addToPanelInfo.emoticonId,
         }
         setStickers([...stickers, droppedImgInfo])
       }
     },
-    [addToPanelInfo.imgUrl, addToPanelInfo.width, stickers]
+    [
+      addToPanelInfo.emoticonId,
+      addToPanelInfo.imgUrl,
+      addToPanelInfo.width,
+      stickers,
+    ]
   )
   const addToPanelByClicking = useCallback(
-    (width, imgUrl) => {
+    (width, imgUrl, id) => {
       const droppedImgInfo = {
-        positions: { x: 279 / 2, y: 192 / 2 },
-        imgUrl: imgUrl,
+        position: { positionX: 279 / 2, positionY: 192 / 2 },
+        fileUrl: imgUrl,
         width: width,
+        emoticonId: id,
       }
       setStickers([...stickers, droppedImgInfo])
     },
@@ -53,9 +71,9 @@ const StickerPanel: VFC = () => {
     [stickers]
   )
   const onDragEndImg = useCallback((dragProps: OnDragFuncProps) => {
-    if (dragProps.image.positions && dragProps.e?.target) {
-      dragProps.image.positions.x = dragProps.e.target.x()
-      dragProps.image.positions.y = dragProps.e.target.y()
+    if (dragProps.image.position && dragProps.e?.target) {
+      dragProps.image.position.positionX = dragProps.e.target.x()
+      dragProps.image.position.positionY = dragProps.e.target.y()
     }
   }, [])
   const showDeleteBtnByTouching = useCallback(
@@ -66,7 +84,11 @@ const StickerPanel: VFC = () => {
   )
   useEffect(() => {
     if (addToPanelInfo.clickedSticker) {
-      addToPanelByClicking(addToPanelInfo.width, addToPanelInfo.imgUrl)
+      addToPanelByClicking(
+        addToPanelInfo.width,
+        addToPanelInfo.imgUrl,
+        addToPanelInfo.emoticonId
+      )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -82,6 +104,7 @@ const StickerPanel: VFC = () => {
   useEffect(() => {
     addToWritePostInfo({ emoticons: stickers })
   }, [stickers, onDragEndImg])
+
   return (
     <PanelContainer
       onDrop={onDrop}
@@ -92,19 +115,25 @@ const StickerPanel: VFC = () => {
     >
       <Stage width={279} height={192} ref={stageRef}>
         <Layer>
-          {stickers.map((image, i) => {
-            return (
-              <DraggableSticker
-                key={i}
-                idx={i}
-                stickerImage={image}
-                onDelete={() => onDeleteImg(i)}
-                onDragEnd={() => onDragEndImg({ i: i, image: image })}
-                showDeleteBtnByTouching={(e) => showDeleteBtnByTouching(e, i)}
-                showDeleteBtnIdx={showDeleteBtn}
-              />
-            )
-          })}
+          {props.postedStickers
+            ? props.postedStickers.map((sticker, i) => {
+                return <PostedSticker stickerImage={sticker} key={i} />
+              })
+            : stickers.map((image, i) => {
+                return (
+                  <DraggableSticker
+                    key={i}
+                    idx={i}
+                    stickerImage={image}
+                    onDelete={() => onDeleteImg(i)}
+                    onDragEnd={() => onDragEndImg({ i: i, image: image })}
+                    showDeleteBtnByTouching={(e) =>
+                      showDeleteBtnByTouching(e, i)
+                    }
+                    showDeleteBtnIdx={showDeleteBtn}
+                  />
+                )
+              })}
         </Layer>
       </Stage>
     </PanelContainer>
