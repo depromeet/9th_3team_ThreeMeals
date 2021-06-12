@@ -56,9 +56,6 @@ const ContentPage: React.FC = () => {
     }
   }, [getMyNewPostCount])
 
-  // router.events.on('routeChangeComplete', () => {
-  //   console.log('hello change the route')
-  // })
   const onClickAnswerCard = useCallback(
     (postId, isMine) => {
       router.push({ pathname: '/answerDetail', query: { postId, isMine } })
