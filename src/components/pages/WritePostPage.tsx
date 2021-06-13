@@ -105,7 +105,7 @@ const WritePostPage: VFC = () => {
           emoticons: emoticons ? emoticons : [],
         },
       }).then(() => {
-        if (postType === 'Ask') {
+        if (postType === 'Ask' || postType === 'Quiz') {
           router.push(`/otherscontent/${otherId}`)
         } else {
           router.push('/content')

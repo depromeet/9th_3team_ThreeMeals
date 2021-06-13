@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import { getAccountInfo, GET_ACCOUNT_INFO } from '../../lib/queries/userQueries'
@@ -25,6 +25,11 @@ const OthersContentPage: React.FC = () => {
     },
     [router]
   )
+
+  useEffect(() => {
+    getPost.refetch()
+  }, [])
+
   return (
     <AppContainer>
       <OthersContentTemplate
