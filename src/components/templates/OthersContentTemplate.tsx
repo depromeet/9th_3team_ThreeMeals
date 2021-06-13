@@ -65,6 +65,8 @@ const OthersContentTemplate: FC<Props> = (props) => {
                         <CardLabel text={data.node.createdAt} active />
                       )
                     }
+                    createdAt={data.node.createdAt}
+                    secretType={data.node.secretType}
                     questionTitle={data.node.content}
                     backColor={data.node.color}
                     stickers={data.node.usedEmoticons}
