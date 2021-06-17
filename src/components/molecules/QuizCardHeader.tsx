@@ -10,6 +10,9 @@ export interface CardHeaderProps {
   className?: string
   color: BackColor
   isMyFeed: boolean
+  onClickOption?: () => void
+  onClickCreateLikePosts: () => void
+  onClickDeleteLikePosts: () => void
 }
 
 const Container = styled.div`
@@ -54,15 +57,15 @@ const QuizCardHeader: React.FunctionComponent<CardHeaderProps> = (props) => {
       {props.isMyFeed ? (
         <span>
           {props.isLikeActive ? (
-            <button type="button">
+            <button type="button" onClick={props.onClickDeleteLikePosts}>
               <img src={SVGS.icon_32_like_active} alt="active" />
             </button>
           ) : (
-            <button type="button">
+            <button type="button" onClick={props.onClickCreateLikePosts}>
               <img src={SVGS.icon_32_like} alt="inactive" />
             </button>
           )}
-          <button type="button">
+          <button type="button" onClick={props.onClickOption}>
             <img src={SVGS.icon_32_option} alt="option" />
           </button>
         </span>
