@@ -6,20 +6,31 @@ import { CardHeaderProps } from '../molecules/QuizCardHeader'
 import { BackColor } from '../../types/types'
 import { SVGS } from '../../constants/svgs'
 import styled from 'styled-components'
-import { useReactiveVar, useMutation } from '@apollo/client'
+import { useReactiveVar, useMutation, useQuery } from '@apollo/client'
 import handleQuizDataVar, {
   handleQuizData,
 } from '../../lib/localStore/quizAnswer'
 import { useRouter } from 'next/router'
 import {
+  getPost,
+  getPostParams,
+  GET_POST,
+} from '../../lib/queries/getPostQueries'
+import {
   CreateCommentRes,
   CreateCommentParams,
   CREATE_COMMENT,
 } from '../../lib/queries/createQueries'
+import {
+  deleteCommentResponse,
+  deleteCommentParams,
+  DELETE_COMMENT,
+} from '../../lib/queries/deleteQueries'
+import { getMyAccountInfo, GET_MY_PROFILE } from '../../lib/queries/meQueries'
 
 interface Props {
   cardHeader?: CardHeaderProps
-  cardData: Array<{ id: string; content: string }>
+  cardData: Array<{ id: string; content: string; commentId: string }>
   backColors: BackColor[]
 }
 
@@ -37,8 +48,20 @@ const trans = (r: number, s: number) =>
   }deg) rotateZ(${r}deg) scale(${s})`
 const QuizDeck: FC<Props> = (deckProps) => {
   const router = useRouter()
+  const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
+  const getPost = useQuery<getPost, getPostParams>(GET_POST, {
+    variables: { first: 10, accountId: myAccount.data?.getMyAccountInfo.id },
+  })
   const [createCommentMutation] =
     useMutation<CreateCommentRes, CreateCommentParams>(CREATE_COMMENT)
+  const [deleteCommentMutation] = useMutation<
+    deleteCommentResponse,
+    deleteCommentParams
+  >(DELETE_COMMENT, {
+    onCompleted: () => {
+      getPost.refetch()
+    },
+  })
   const quizData = useReactiveVar(handleQuizDataVar)
   const [renderQuizData, setRenderQuizData] = useState(false)
   const [curQuizDataCnt, setCurQuizDataCnt] = useState<number>(0)
@@ -97,7 +120,12 @@ const QuizDeck: FC<Props> = (deckProps) => {
   const handleToPrev = useCallback(() => {
     handleQuizData(deckProps.cardData[curQuizDataCnt + 1])
     setCurQuizDataCnt(curQuizDataCnt + 1)
-  }, [curQuizDataCnt, deckProps.cardData])
+    deleteCommentMutation({
+      variables: {
+        commentId: deckProps.cardData[curQuizDataCnt + 1].commentId,
+      },
+    })
+  }, [curQuizDataCnt, deckProps.cardData, deleteCommentMutation])
   const handleToNext = useCallback(() => {
     handleQuizData()
     setCurQuizDataCnt(curQuizDataCnt - 1)
@@ -114,7 +142,7 @@ const QuizDeck: FC<Props> = (deckProps) => {
   useEffect(() => {
     setTimeout(() => {
       if (quizData.length === 0 && curQuizDataCnt === -1) {
-        alert('제출 완료 : request query(type:answers data in userData)')
+        alert('제출 완료')
         router.back()
       }
     }, 500)

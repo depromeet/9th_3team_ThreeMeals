@@ -27,6 +27,7 @@ interface Props {
   onClickWrite?: () => void
   onClickRemove: (id: string, tabIndex: number) => void
   onClickLike: (id: string, tabIndex: number) => void
+  onClickLikeDelete:(id: string, tabIndex: number) => void
 }
 
 const ContentTemplate: FC<Props> = (props) => {
@@ -97,6 +98,7 @@ const ContentTemplate: FC<Props> = (props) => {
                     onClickLike={() => {
                       props.onClickLike(data.node.id, props.tabIndex)
                     }}
+                    onClickLikeDelete={() => {props.onClickLikeDelete(data.node.id,props.tabIndex)}}
                   />
                 )
               })}
@@ -167,8 +169,17 @@ const ContentTemplate: FC<Props> = (props) => {
                     <QuizAnswerCard
                       content={content.node.content}
                       backColor={content.node.color}
-                      answerType={true}
+                      answerType={content.node.comments[0].content}
                       isMyFeed={true}
+                      onClickOption={() => {
+                        props.onClickRemove(content.node.id, props.tabIndex)
+                      }}
+                      onClickLike={() => {
+                        props.onClickLike(content.node.id, props.tabIndex)
+                      }}
+                      onClickLikeDelete={() => {
+                        props.onClickLikeDelete(content.node.id, props.tabIndex)
+                      }}
                     />
                   </QuizAnswerCardContainer>
                 ) : null

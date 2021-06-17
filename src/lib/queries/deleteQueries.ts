@@ -14,3 +14,18 @@ export const DELETE_POST = gql`
     }
   }
 `
+
+export interface deleteCommentParams {
+  commentId: string
+}
+
+export interface deleteCommentResponse {
+  message: string
+}
+export const DELETE_COMMENT = gql`
+  mutation deleteComment($commentId: String!) {
+    deleteComment(commentId: $commentId) {
+      message
+    }
+  }
+`

@@ -6,27 +6,30 @@ import { BackColor } from '../../types/types'
 
 interface Props {
   backColor: BackColor
-  answerType: boolean
+  answerType: string
   content: string
   isMyFeed: boolean
+  onClickOption?: () => void
+  onClickLike: () => void
+  onClickLikeDelete: () => void
 }
-const getImage = (backColor: string, answerType: boolean) => {
+const getImage = (backColor: string, answerType: string) => {
   switch (backColor) {
-    case answerType && '#6799FE':
+    case answerType === 'O' && '#6799FE':
       return IMAGES.img_o_yl
-    case answerType && '#67D585':
+    case answerType === 'O' && '#67D585':
       return IMAGES.img_o_yr
-    case answerType && '#F1D75F':
+    case answerType === 'O' && '#F1D75F':
       return IMAGES.img_o_gr
-    case answerType && '#FF823D':
+    case answerType === 'O' && '#FF823D':
       return IMAGES.img_o_bl
-    case !answerType && '#6799FE':
+    case answerType === 'X' && '#6799FE':
       return IMAGES.img_x_yl
-    case !answerType && '#67D585':
+    case answerType === 'X' && '#67D585':
       return IMAGES.img_x_yr
-    case !answerType && '#F1D75F':
+    case answerType === 'X' && '#F1D75F':
       return IMAGES.img_x_gr
-    case !answerType && '#FF823D':
+    case answerType === 'X' && '#FF823D':
       return IMAGES.img_x_bl
     default:
       return IMAGES.img_o_bl
@@ -41,6 +44,9 @@ const QuizAnswerCard: FC<Props> = (props) => {
           // className={props.cardHeader.className}
           color={props.backColor}
           isMyFeed={props.isMyFeed}
+          onClickOption={props.onClickOption}
+          onClickCreateLikePosts={props.onClickLike}
+          onClickDeleteLikePosts={props.onClickLikeDelete}
         />
         <div className="textArea">{props.content}</div>
         <div className="bottomArea">
