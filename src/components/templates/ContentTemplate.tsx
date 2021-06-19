@@ -52,54 +52,69 @@ const ContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <NoticeContainer>
-              <NoticeText>
+              {props.newPostCount === 0 ? (
                 <img
-                  style={{ position: 'relative', bottom: 15 }}
-                  src={IMAGES.img_newq_1}
-                  width={106}
-                  height={72}
+                  style={{ position: 'relative', bottom: 15, zIndex: -1 }}
+                  src={IMAGES.img_tape_empty}
+                  width={'100%'}
                 />
-                <span
-                  style={{ marginTop: 1, cursor: 'pointer' }}
-                  onClick={() => props.onClickNewSecretCard('ask')}
-                >
-                  {`${props.newPostCount || 0}개의 비밀카드 도착`}
-                </span>
-                <img
-                  onClick={() => props.onClickNewSecretCard('ask')}
-                  src={IMAGES.rightButton}
-                  width={22}
-                  height={22}
-                />
-              </NoticeText>
-              <img
-                style={{ position: 'relative', bottom: 65, zIndex: -1 }}
-                src={IMAGES.img_tape_newq}
-                width={'100%'}
-              />
+              ) : (
+                <>
+                  <NoticeText>
+                    <img
+                      style={{ position: 'relative', bottom: 15 }}
+                      src={IMAGES.img_newq_1}
+                      width={106}
+                      height={72}
+                    />
+                    <span
+                      style={{ marginTop: 1, cursor: 'pointer' }}
+                      onClick={() => props.onClickNewSecretCard('ask')}
+                    >
+                      {`${props.newPostCount || 0}개의 비밀카드 도착`}
+                    </span>
+                    <img
+                      onClick={() => props.onClickNewSecretCard('ask')}
+                      src={IMAGES.rightButton}
+                      width={22}
+                      height={22}
+                    />
+                  </NoticeText>
+                  <img
+                    style={{ position: 'relative', bottom: 65, zIndex: -1 }}
+                    src={IMAGES.img_tape_newq}
+                    width={'100%'}
+                  />
+                </>
+              )}
             </NoticeContainer>
             <ContentContainer>
-              {postContent?.ask.map((data, index) => {
-                return (
-                  <QuestionCard
-                    key={index}
-                    id={data.node.id}
-                    questionTitle={data.node.content}
-                    backColor={data.node.color}
-                    stickers={data.node.usedEmoticons}
-                    comments={data.node.comments}
-                    createdAt={data.node.createdAt}
-                    updatedAt={data.node.updatedAt}
-                    secretType={data.node.secretType}
-                    onClickOption={() => {
-                      props.onClickRemove(data.node.id, props.tabIndex)
-                    }}
-                    onClickLike={() => {
-                      props.onClickLike(data.node.id, props.tabIndex)
-                    }}
-                  />
-                )
-              })}
+              {postContent && postContent.ask.length > 0 ? (
+                postContent?.ask.map((data, index) => {
+                  return (
+                    <QuestionCard
+                      key={index}
+                      id={data.node.id}
+                      questionTitle={data.node.content}
+                      backColor={data.node.color}
+                      stickers={data.node.usedEmoticons}
+                      comments={data.node.comments}
+                      createdAt={data.node.createdAt}
+                      updatedAt={data.node.updatedAt}
+                      secretType={data.node.secretType}
+                      onClickOption={() => {
+                        props.onClickRemove(data.node.id, props.tabIndex)
+                      }}
+                      onClickLike={() => {
+                        props.onClickLike(data.node.id, props.tabIndex)
+                      }}
+                    />
+                  )
+                })
+              ) : (
+                <BackgroundSticker src={IMAGES.backgroundSticker} />
+              )}
+              {}
             </ContentContainer>
           </>
         )
@@ -133,46 +148,60 @@ const ContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <NoticeContainer>
-              <NoticeText>
+              {props.newPostCount === 0 ? (
                 <img
-                  style={{ position: 'relative', bottom: 15 }}
-                  src={IMAGES.img_newq_1}
-                  width={106}
-                  height={72}
+                  style={{ position: 'relative', bottom: 15, zIndex: -1 }}
+                  src={IMAGES.img_tape_empty}
+                  width={'100%'}
                 />
-                <span
-                  style={{ marginTop: 1, cursor: 'pointer' }}
-                  onClick={() => props.onClickNewSecretCard('OX')}
-                >
-                  {`${props.newPostCount || 0}개의 OX퀴즈 도착`}
-                </span>
-                <img
-                  onClick={() => props.onClickNewSecretCard('OX')}
-                  src={IMAGES.rightButton}
-                  width={22}
-                  height={22}
-                />
-              </NoticeText>
-              <img
-                style={{ position: 'relative', bottom: 65, zIndex: -1 }}
-                src={IMAGES.img_tape_newq}
-                width={'100%'}
-              />
+              ) : (
+                <>
+                  <NoticeText>
+                    <img
+                      style={{ position: 'relative', bottom: 15 }}
+                      src={IMAGES.img_newq_1}
+                      width={106}
+                      height={72}
+                    />
+                    <span
+                      style={{ marginTop: 1, cursor: 'pointer' }}
+                      onClick={() => props.onClickNewSecretCard('OX')}
+                    >
+                      {`${props.newPostCount || 0}개의 OX퀴즈 도착`}
+                    </span>
+                    <img
+                      onClick={() => props.onClickNewSecretCard('OX')}
+                      src={IMAGES.rightButton}
+                      width={22}
+                      height={22}
+                    />
+                  </NoticeText>
+                  <img
+                    style={{ position: 'relative', bottom: 65, zIndex: -1 }}
+                    src={IMAGES.img_tape_newq}
+                    width={'100%'}
+                  />
+                </>
+              )}
             </NoticeContainer>
             <ContentContainer>
-              {postContent?.quiz.map((content, index) => {
-                return content.node.comments &&
-                  content.node.comments.length > 0 ? (
-                  <QuizAnswerCardContainer key={index}>
-                    <QuizAnswerCard
-                      content={content.node.content}
-                      backColor={content.node.color}
-                      answerType={true}
-                      isMyFeed={true}
-                    />
-                  </QuizAnswerCardContainer>
-                ) : null
-              })}
+              {postContent && postContent.quiz.length > 0 ? (
+                postContent?.quiz.map((content, index) => {
+                  return content.node.comments &&
+                    content.node.comments.length > 0 ? (
+                    <QuizAnswerCardContainer key={index}>
+                      <QuizAnswerCard
+                        content={content.node.content}
+                        backColor={content.node.color}
+                        answerType={true}
+                        isMyFeed={true}
+                      />
+                    </QuizAnswerCardContainer>
+                  ) : null
+                })
+              ) : (
+                <BackgroundSticker src={IMAGES.backgroundSticker} />
+              )}
             </ContentContainer>
           </>
         )
@@ -360,4 +389,11 @@ const QuizAnswerCardContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
+`
+const BackgroundSticker = styled.img`
+  position: fixed;
+  width: 214px;
+  height: 191px;
+  bottom: 15px;
+  right: 15px;
 `
