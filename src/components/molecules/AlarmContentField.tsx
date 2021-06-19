@@ -1,6 +1,8 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
+import { timeDiffCalc } from '../../utils/TimeDiffCalc'
 interface Props {
+  nickname: string
   content: string
   contentType: string
   time: string
@@ -38,11 +40,23 @@ const FieldContainer = styled.div`
 `
 
 const AlarmContentField: FC<Props> = (props) => {
+  const contentType = useMemo(() => {
+    if (props.contentType === 'Ask') {
+      return '물어봐'
+    } else if (props.contentType === 'Answer') {
+      return '답해줘'
+    } else if (props.contentType === 'Quiz') {
+      return 'OX퀴즈'
+    } else undefined
+  }, [props.contentType])
+
   return (
     <FieldContainer>
       <div className="header">
-        <span>{props.contentType}</span>
-        <span className="time">{props.time}</span>
+        <span>{props.nickname + '님의 ' + contentType}</span>
+        <span className="time">
+          {timeDiffCalc(new Date(props.time), new Date())}
+        </span>
       </div>
       <div className="content">{props.content}</div>
     </FieldContainer>

@@ -1,5 +1,6 @@
 export const IMAGES = {
   background: require('../assets/images/background.png'),
+  backgroundSticker: require('../assets/images/backgroundSticker.png'),
 
   /**
    * for Header icons
