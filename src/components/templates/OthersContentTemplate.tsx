@@ -167,8 +167,10 @@ const OthersContentTemplate: FC<Props> = (props) => {
       />
       <MainContainer>
         <ProfileContent
-          name={props.account?.getAccountInfo.nickname ?? ''}
-          desc={props.account?.getAccountInfo.content ?? ''}
+          name={
+            props.account?.getAccountInfo.nickname || '닉네임을 입력해주세요.'
+          }
+          desc={props.account?.getAccountInfo.content || '소개를 입력해주세요.'}
           urlName="프로필"
           url={
             windowObjet !== undefined

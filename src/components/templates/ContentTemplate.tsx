@@ -251,8 +251,13 @@ const ContentTemplate: FC<Props> = (props) => {
       />
       <MainContainer>
         <ProfileContent
-          name={props.myAccount?.getMyAccountInfo.nickname || ''}
-          desc={props.myAccount?.getMyAccountInfo.content || ''}
+          name={
+            props.myAccount?.getMyAccountInfo.nickname ||
+            '닉네임을 입력해주세요.'
+          }
+          desc={
+            props.myAccount?.getMyAccountInfo.content || '소개를 입력해주세요.'
+          }
           urlName="프로필"
           url={
             windowObjet !== undefined
