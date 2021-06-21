@@ -74,6 +74,9 @@ const ContentPage: React.FC = () => {
   const onClickLike = useCallback((id: string, tabIndex: number) => {
     console.log('onClickLike id', id, tabIndex)
   }, [])
+  const onClickLikeDelete = useCallback((id: string, tabIndex: number) => {
+    console.log('onClickLike id', id, tabIndex)
+  }, [])
 
   const onClickConfirmModal = useCallback(() => {
     if (selectedPostId) {
@@ -135,6 +138,7 @@ const ContentPage: React.FC = () => {
         onClickWrite={onClickWrite}
         onClickRemove={onClickRemove}
         onClickLike={onClickLike}
+        onClickLikeDelete={onClickLikeDelete}
       />
       <Modal
         open={isOpen}
