@@ -5,15 +5,14 @@ import styled from 'styled-components'
 import ProfileContent from '../molecules/ProfileContent'
 import DefaultLine from '../atoms/DefaultLine'
 import QuestionCard from '../organisms/QuestionCard'
-import PrivateCardLabel from '../atoms/PrivateCardLabel'
 import AnswerCard from '../organisms/AnswerCard'
 import { getMyAccountInfo } from '../../lib/queries/meQueries'
 import { getPost } from '../../lib/queries/getPostQueries'
-import CardLabel from '../atoms/CardLabel'
 import QuizAnswerCard from '../organisms/QuizAnswerCard'
 
 interface Props {
   tabIndex: number
+  getUnreadNotiCount?: number
   newPostCount: number
   getPost?: getPost
   myAccount?: getMyAccountInfo
@@ -236,7 +235,11 @@ const ContentTemplate: FC<Props> = (props) => {
         isProfile={profileImage ? true : false}
         profileImage={profileImage}
         rightIcon={IMAGES.icon_24_drawer}
-        rightSecondIcon={IMAGES.icon_24_alram2_wh}
+        rightSecondIcon={
+          props.getUnreadNotiCount && props.getUnreadNotiCount > 0
+            ? IMAGES.icon_24_alram2_wh
+            : IMAGES.icon_24_alram_wh
+        }
         onClickSecondRight={props.onClickSecondRight}
         onClickLeft={props.onClickLeft}
       />

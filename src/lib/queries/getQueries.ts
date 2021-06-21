@@ -39,6 +39,11 @@ export interface GetNotification {
 export interface GetAllNotification {
   getNotifications: GetNotification[]
 }
+export interface getUnreadNotiCount {
+  getUnreadNotiCount: {
+    count: number
+  }
+}
 
 export const GET_ALL_EMOTICONS = gql`
   query {
@@ -66,6 +71,13 @@ export const GET_NOTIFICATIONS = gql`
       otherAccount {
         nickname
       }
+    }
+  }
+`
+export const GET_UNREAD_NOTI_COUNT = gql`
+  query {
+    getUnreadNotiCount {
+      count
     }
   }
 `
