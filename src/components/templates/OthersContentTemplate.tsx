@@ -67,14 +67,8 @@ const OthersContentTemplate: FC<Props> = (props) => {
                   <QuestionCard
                     key={index}
                     id={data.node.id}
-                    labelComponent={
-                      data.node.secretType === 'Forever' ? (
-                        <PrivateCardLabel text="BONG IN" active={false} />
-                      ) : (
-                        <CardLabel text={data.node.createdAt} active />
-                      )
-                    }
                     createdAt={data.node.createdAt}
+                    updatedAt={data.node.updatedAt}
                     secretType={data.node.secretType}
                     questionTitle={data.node.content}
                     backColor={data.node.color}
