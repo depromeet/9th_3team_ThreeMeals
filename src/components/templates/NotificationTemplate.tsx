@@ -38,17 +38,20 @@ const NotificationTemplate: FC<Props> = (props) => {
           />
           <ContentContainer>
             {props.notification ? (
-              props.notification.map((value, index) => {
-                return (
-                  <AlarmContentField
-                    key={index}
-                    nickname={value.otherAccount.nickname}
-                    content={value.relatedPost.content}
-                    contentType={value.relatedPost.postType}
-                    time={value.createdAt}
-                  />
-                )
-              })
+              props.notification
+                .slice()
+                .reverse()
+                .map((value, index) => {
+                  return (
+                    <AlarmContentField
+                      key={index}
+                      nickname={value.otherAccount.nickname}
+                      content={value.relatedPost.content}
+                      contentType={value.relatedPost.postType}
+                      time={value.createdAt}
+                    />
+                  )
+                })
             ) : (
               <EmptyContainer>
                 <EmptyText>
