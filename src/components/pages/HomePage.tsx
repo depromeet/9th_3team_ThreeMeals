@@ -1,6 +1,5 @@
-import React, { VFC } from 'react'
+import React, { useEffect, useState, VFC } from 'react'
 import styled from 'styled-components'
-import { useRouter } from 'next/router'
 
 import HomeTemplate from '../templates/HomeTemplate'
 const AppContainer = styled.div`
@@ -10,9 +9,14 @@ const AppContainer = styled.div`
 `
 
 const HomePage: VFC = () => {
+  const [randomIndex, setRandomIndex] = useState<number>(0)
+
+  useEffect(() => {
+    setRandomIndex(Math.floor(Math.random() * 12))
+  }, [])
   return (
     <AppContainer>
-      <HomeTemplate isProfile={false} />
+      <HomeTemplate isProfile={false} randomIndex={randomIndex} />
     </AppContainer>
   )
 }

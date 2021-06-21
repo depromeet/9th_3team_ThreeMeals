@@ -3,12 +3,13 @@ import Header from '../molecules/Header'
 import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
 import AlarmContentField from '../molecules/AlarmContentField'
-import { NoticeData } from '../pages/NotificationPage'
 import { getMyAccountInfo } from '../../lib/queries/meQueries'
+import { GetNotification } from '../../lib/queries/getQueries'
+import { SpacingText } from '../../utils/SpacingText'
 interface Props {
   myAccount?: getMyAccountInfo
   profileImage?: string
-  noticeData?: NoticeData[]
+  notification?: GetNotification[]
   onClickLeft?: () => void
 }
 
@@ -24,9 +25,10 @@ const NotificationTemplate: FC<Props> = (props) => {
         profileImage={profileImage}
         leftIcon={IMAGES.icon_24_back_wh}
         rightIcon={IMAGES.icon_24_drawer}
-        rightSecondIcon={IMAGES.icon_24_alram2_wh}
+        rightSecondIcon={IMAGES.icon_24_alram_wh}
         onClickLeft={props.onClickLeft}
       />
+
       <MainContainer>
         <TapesContainer>
           <img
@@ -35,17 +37,28 @@ const NotificationTemplate: FC<Props> = (props) => {
             width={'100%'}
           />
           <ContentContainer>
-            {props.noticeData &&
-              props.noticeData.map((value, index) => {
+            {props.notification ? (
+              props.notification.map((value, index) => {
                 return (
                   <AlarmContentField
                     key={index}
-                    content={value.content}
-                    contentType={value.contentType}
-                    time={value.time}
+                    nickname={value.otherAccount.nickname}
+                    content={value.relatedPost.content}
+                    contentType={value.relatedPost.postType}
+                    time={value.createdAt}
                   />
                 )
-              })}
+              })
+            ) : (
+              <EmptyContainer>
+                <EmptyText>
+                  {SpacingText(
+                    '아직 알림이 없어요! \\n소식이 오면 바로 알려드릴게요!'
+                  )}
+                </EmptyText>
+                <BackgroundSticker src={IMAGES.backgroundSticker} />
+              </EmptyContainer>
+            )}
           </ContentContainer>
         </TapesContainer>
       </MainContainer>
@@ -64,18 +77,50 @@ const AppContainer = styled.div`
 
 const MainContainer = styled.div`
   width: 100%;
+  height: 100%;
   height: calc(100vh - 64px);
 `
 
 const TapesContainer = styled.div`
   width: 100%;
+  height: 100%;
 `
 
 const ContentContainer = styled.div`
   padding: 0 10px;
   margin-top: 10px;
-
+  height: 100%;
   div {
     margin-bottom: 12px;
   }
+`
+const EmptyContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+`
+
+const EmptyText = styled.div`
+  flex: 1;
+  height: 50%;
+  font-family: Apple SD Gothic Neo;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 22px;
+  /* or 169% */
+
+  text-align: center;
+  letter-spacing: -0.02em;
+
+  color: rgba(255, 255, 255, 0.7);
+`
+
+const BackgroundSticker = styled.img`
+  position: fixed;
+  width: 214px;
+  height: 191px;
+  bottom: 15px;
+  right: 15px;
 `

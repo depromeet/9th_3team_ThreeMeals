@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import ContentTemplate from '../templates/ContentTemplate'
@@ -19,6 +19,10 @@ import {
   GET_POST,
 } from '../../lib/queries/getPostQueries'
 import { DELETE_POST } from '../../lib/queries/deleteQueries'
+import {
+  getUnreadNotiCount,
+  GET_UNREAD_NOTI_COUNT,
+} from '../../lib/queries/getQueries'
 
 const ContentPage: React.FC = () => {
   const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
@@ -39,6 +43,11 @@ const ContentPage: React.FC = () => {
   >(GET_MY_NEW_POST_COUNT, {
     variables: { postType: 'Ask' },
   })
+  const getUnreadNotiCount = useQuery<getUnreadNotiCount>(GET_UNREAD_NOTI_COUNT)
+
+  useEffect(() => {
+    getPost.refetch()
+  }, [])
 
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -107,13 +116,16 @@ const ContentPage: React.FC = () => {
     <AppContainer>
       <ContentTemplate
         tabIndex={tabIndex}
+        getUnreadNotiCount={getUnreadNotiCount.data?.getUnreadNotiCount.count}
         newPostCount={newPostCount}
         getPost={getPost.data}
         myAccount={myAccount.data}
         isProfile={true}
         profileImage={IMAGES.background}
         onClickTabIndex={onClickTabIndex}
-        onClickLeft={router.back}
+        onClickLeft={() => {
+          router.push('/profile')
+        }}
         onClickSecondRight={() => {
           router.push('/notification')
         }}
