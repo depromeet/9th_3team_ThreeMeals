@@ -10,6 +10,10 @@ import {
   GET_POST,
   getPost,
 } from '../../lib/queries/getPostQueries'
+import {
+  getUnreadNotiCount,
+  GET_UNREAD_NOTI_COUNT,
+} from '../../lib/queries/getQueries'
 const OthersContentPage: React.FC = () => {
   const router = useRouter()
   const { id } = router.query
@@ -19,6 +23,7 @@ const OthersContentPage: React.FC = () => {
   const getPost = useQuery<getPost, getPostParams>(GET_POST, {
     variables: { first: 10, accountId: account.data?.getAccountInfo.id },
   })
+  const getUnreadNotiCount = useQuery<getUnreadNotiCount>(GET_UNREAD_NOTI_COUNT)
   const onClickAnswerCard = useCallback(
     (postId) => {
       router.push({ pathname: '/answerDetail', query: { postId } })
@@ -35,6 +40,7 @@ const OthersContentPage: React.FC = () => {
       <OthersContentTemplate
         getPost={getPost.data}
         account={account.data}
+        getUnreadNotiCount={getUnreadNotiCount.data?.getUnreadNotiCount.count}
         profileImage={IMAGES.background}
         onClickLeft={() => {
           console.log('onClickLeft')

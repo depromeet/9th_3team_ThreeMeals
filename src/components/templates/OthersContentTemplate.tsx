@@ -15,6 +15,7 @@ import CardLabel from '../atoms/CardLabel'
 
 interface Props {
   getPost?: getPost
+  getUnreadNotiCount?: number
   account?: getAccountInfo
   profileImage: string
   onClickLeft?: () => void
@@ -142,7 +143,11 @@ const OthersContentTemplate: FC<Props> = (props) => {
         isProfile={profileImage ? true : false}
         profileImage={profileImage}
         rightIcon={IMAGES.icon_24_drawer}
-        rightSecondIcon={IMAGES.icon_24_alram2_wh}
+        rightSecondIcon={
+          props.getUnreadNotiCount && props.getUnreadNotiCount > 0
+            ? IMAGES.icon_24_alram2_wh
+            : IMAGES.icon_24_alram_wh
+        }
         onClickSecondRight={props.onClickSecondRight}
         onClickLeft={props.onClickLeft}
       />
