@@ -30,6 +30,14 @@ interface Props {
 }
 
 const ContentTemplate: FC<Props> = (props) => {
+  const {
+    tabIndex,
+    newPostCount,
+    onClickNewSecretCard,
+    onClickRemove,
+    onClickAnswerCard,
+    onClickLike,
+  } = props
   const postContent = useMemo(() => {
     if (props.getPost?.getPosts.edges) {
       const edges = props.getPost?.getPosts.edges
@@ -47,12 +55,12 @@ const ContentTemplate: FC<Props> = (props) => {
 
   console.log('postContent', postContent)
   const ContentView = useMemo((): ReactElement | undefined => {
-    switch (props.tabIndex) {
+    switch (tabIndex) {
       case 0:
         return (
           <>
             <NoticeContainer>
-              {props.newPostCount === 0 ? (
+              {newPostCount === 0 ? (
                 <img
                   style={{ position: 'relative', bottom: 15, zIndex: -1 }}
                   src={IMAGES.img_tape_empty}
@@ -69,12 +77,12 @@ const ContentTemplate: FC<Props> = (props) => {
                     />
                     <span
                       style={{ marginTop: 1, cursor: 'pointer' }}
-                      onClick={() => props.onClickNewSecretCard('ask')}
+                      onClick={() => onClickNewSecretCard('ask')}
                     >
-                      {`${props.newPostCount || 0}개의 비밀카드 도착`}
+                      {`${newPostCount || 0}개의 비밀카드 도착`}
                     </span>
                     <img
-                      onClick={() => props.onClickNewSecretCard('ask')}
+                      onClick={() => onClickNewSecretCard('ask')}
                       src={IMAGES.rightButton}
                       width={22}
                       height={22}
@@ -103,10 +111,10 @@ const ContentTemplate: FC<Props> = (props) => {
                       updatedAt={data.node.updatedAt}
                       secretType={data.node.secretType}
                       onClickOption={() => {
-                        props.onClickRemove(data.node.id, props.tabIndex)
+                        onClickRemove(data.node.id, tabIndex)
                       }}
                       onClickLike={() => {
-                        props.onClickLike(data.node.id, props.tabIndex)
+                        onClickLike(data.node.id, tabIndex)
                       }}
                     />
                   )
@@ -114,7 +122,6 @@ const ContentTemplate: FC<Props> = (props) => {
               ) : (
                 <BackgroundSticker src={IMAGES.backgroundSticker} />
               )}
-              {}
             </ContentContainer>
           </>
         )
@@ -133,10 +140,10 @@ const ContentTemplate: FC<Props> = (props) => {
                     backColor={data.node.color}
                     stickers={data.node.usedEmoticons}
                     onClickPost={() => {
-                      props.onClickAnswerCard(data.node.id, true)
+                      onClickAnswerCard(data.node.id, true)
                     }}
                     onClickOption={() => {
-                      props.onClickRemove(data.node.id, props.tabIndex)
+                      onClickRemove(data.node.id, tabIndex)
                     }}
                   />
                 )
@@ -148,7 +155,7 @@ const ContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <NoticeContainer>
-              {props.newPostCount === 0 ? (
+              {newPostCount === 0 ? (
                 <img
                   style={{ position: 'relative', bottom: 15, zIndex: -1 }}
                   src={IMAGES.img_tape_empty}
@@ -165,12 +172,12 @@ const ContentTemplate: FC<Props> = (props) => {
                     />
                     <span
                       style={{ marginTop: 1, cursor: 'pointer' }}
-                      onClick={() => props.onClickNewSecretCard('OX')}
+                      onClick={() => onClickNewSecretCard('OX')}
                     >
-                      {`${props.newPostCount || 0}개의 OX퀴즈 도착`}
+                      {`${newPostCount || 0}개의 OX퀴즈 도착`}
                     </span>
                     <img
-                      onClick={() => props.onClickNewSecretCard('OX')}
+                      onClick={() => onClickNewSecretCard('OX')}
                       src={IMAGES.rightButton}
                       width={22}
                       height={22}
@@ -208,7 +215,15 @@ const ContentTemplate: FC<Props> = (props) => {
       default:
         break
     }
-  }, [postContent?.answer, postContent?.ask, postContent?.quiz, props])
+  }, [
+    tabIndex,
+    newPostCount,
+    postContent,
+    onClickNewSecretCard,
+    onClickRemove,
+    onClickLike,
+    onClickAnswerCard,
+  ])
 
   const profileImage = useMemo(() => {
     return props.myAccount?.getMyAccountInfo.image
