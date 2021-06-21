@@ -43,7 +43,7 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
       <AnswerCard
         questionTitle={props.postData.getPost.content}
         backColor={props.postData.getPost.color}
-        commentCount={props.parentComments?.getParentComments.edges.length}
+        count={props.parentComments?.getParentComments.edges.length}
         time={props.postData.getPost.createdAt}
         stickers={props.postData.getPost.usedEmoticons}
         onClickOption={

@@ -203,7 +203,7 @@ const ContentTemplate: FC<Props> = (props) => {
                       answerType={content.node.comments[0].content}
                       isMyFeed={true}
                       onClickOption={() => {
-                        props.onClickRemove(content.node.id, props.tabIndex)
+                        props.onClickRemove(content.node.id)
                       }}
                       onClickLike={() => {
                         props.onClickLike(content.node.id, props.tabIndex)
@@ -228,7 +228,7 @@ const ContentTemplate: FC<Props> = (props) => {
     onClickNewSecretCard,
     onClickRemove,
     onClickLike,
-    props.myAccount?.getMyAccountInfo.id,
+    props,
     onClickAnswerCard,
   ])
 

@@ -42,6 +42,7 @@ export interface CreatePostRes {
 
 export interface CreateCommentRes {
   content: string
+  id: string
 }
 
 export interface CreatLikePostsRes {
@@ -93,22 +94,7 @@ export const CREATE_COMMENT = gql`
       secretType: $secretType
     ) {
       content
-    }
-  }
-`
-
-export const CREATE_LIKE_POSTS = gql`
-  mutation createLikePosts($postId: String!) {
-    createLikePosts(postId: $postId) {
       id
-      createdAt
-    }
-  }
-`
-export const DELETE_LIKE_POSTS = gql`
-  mutation deleteLikePosts($postId: String!) {
-    deleteLikePosts(postId: $postId) {
-      
     }
   }
 `
