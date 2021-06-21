@@ -6,7 +6,7 @@ import styled from 'styled-components'
 storiesOf('templates/Home', module).add('homeTemplate', () => {
   return (
     <AppContainer>
-      <HomeTemplate isProfile={false} />
+      <HomeTemplate isProfile={false} randomIndex={0} />
     </AppContainer>
   )
 })
