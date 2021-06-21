@@ -1,13 +1,13 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 import Header from '../molecules/Header'
-import { IMAGES } from '../../constants/images'
+import { HOME_ICONS, IMAGES } from '../../constants/images'
 import styled from 'styled-components'
 import CrossedTapesLabel from '../atoms/CrossedTapesLabel'
 import KakaoButton from '../atoms/KakaoButton'
 import HomeTextCard from '../molecules/HomeTextCard'
 interface Props {
-  data?: string
   isProfile: boolean
+  randomIndex: number
   profileImage?: string
 }
 
@@ -18,12 +18,10 @@ const HomeTemplate: FC<Props> = (props) => {
         isProfile={props.isProfile}
         profileImage={props.profileImage}
         rightIcon={IMAGES.icon_24_drawer}
-        //   onClickLeft={}
-        //   onClickRight={}
       />
       <MainContainer>
         <CharIconContainer>
-          <span className="icon">🤫</span>
+          <HomeIcon src={HOME_ICONS[props.randomIndex]} />
         </CharIconContainer>
         <PhraseContainer>
           <StyledText className="text1">쉿!</StyledText>
@@ -92,14 +90,14 @@ const CharIconContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 10%;
-  max-height: 80px;
+  height: 100px;
   font-size: 50px;
-  .icon {
-    padding-top: 10px;
-  }
+  margin-bottom: 10px;
 `
-
+const HomeIcon = styled.img`
+  width: 100px;
+  height: 100px;
+`
 const PhraseContainer = styled.div`
   width: 100%;
   height: 10%;

@@ -1,4 +1,11 @@
-import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react'
+import React, {
+  FC,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import Header from '../molecules/Header'
 import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
@@ -15,6 +22,7 @@ import CardLabel from '../atoms/CardLabel'
 
 interface Props {
   getPost?: getPost
+  getUnreadNotiCount?: number
   account?: getAccountInfo
   profileImage: string
   onClickLeft?: () => void
@@ -24,6 +32,7 @@ interface Props {
 
 const OthersContentTemplate: FC<Props> = (props) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
+  const [windowObjet, setWindowObjet] = useState<Window | undefined>()
   const router = useRouter()
   const postContent = useMemo(() => {
     if (props.getPost?.getPosts.edges) {
@@ -58,13 +67,9 @@ const OthersContentTemplate: FC<Props> = (props) => {
                   <QuestionCard
                     key={index}
                     id={data.node.id}
-                    labelComponent={
-                      data.node.secretType === 'Forever' ? (
-                        <PrivateCardLabel text="BONG IN" active={false} />
-                      ) : (
-                        <CardLabel text={data.node.createdAt} active />
-                      )
-                    }
+                    createdAt={data.node.createdAt}
+                    updatedAt={data.node.updatedAt}
+                    secretType={data.node.secretType}
                     questionTitle={data.node.content}
                     backColor={data.node.color}
                     stickers={data.node.usedEmoticons}
@@ -133,6 +138,12 @@ const OthersContentTemplate: FC<Props> = (props) => {
     return props.account?.getAccountInfo.image
   }, [props.account?.getAccountInfo.image])
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setWindowObjet(window)
+    }
+  }, [])
+
   return (
     <AppContainer>
       <Header
@@ -140,16 +151,28 @@ const OthersContentTemplate: FC<Props> = (props) => {
         isProfile={profileImage ? true : false}
         profileImage={profileImage}
         rightIcon={IMAGES.icon_24_drawer}
-        rightSecondIcon={IMAGES.icon_24_alram2_wh}
+        rightSecondIcon={
+          props.getUnreadNotiCount && props.getUnreadNotiCount > 0
+            ? IMAGES.icon_24_alram2_wh
+            : IMAGES.icon_24_alram_wh
+        }
         onClickSecondRight={props.onClickSecondRight}
         onClickLeft={props.onClickLeft}
       />
       <MainContainer>
         <ProfileContent
-          name={props.account?.getAccountInfo.nickname ?? ''}
-          desc={props.account?.getAccountInfo.content ?? ''}
-          urlName={props.account?.getAccountInfo.profileUrl ?? ''}
-          url={props.account?.getAccountInfo.profileUrl ?? ''}
+          name={
+            props.account?.getAccountInfo.nickname || '닉네임을 입력해주세요.'
+          }
+          desc={props.account?.getAccountInfo.content || '소개를 입력해주세요.'}
+          urlName="프로필"
+          url={
+            windowObjet !== undefined
+              ? windowObjet.location.origin +
+                '/otherscontent/' +
+                props.account?.getAccountInfo.id
+              : ''
+          }
         />
         <TabContainer>
           <Tab

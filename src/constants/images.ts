@@ -1,10 +1,12 @@
 export const IMAGES = {
   background: require('../assets/images/background.png'),
+  backgroundSticker: require('../assets/images/backgroundSticker.png'),
 
   /**
    * for Header icons
    */
   btn_20_revise: require('../assets/images/btn_20_revise.png'),
+  icon_24_alram_wh: require('../assets/images/icon_24_alram_wh.png'),
   icon_24_alram2_wh: require('../assets/images/icon_24_alram2_wh.png'),
   icon_24_close_wh: require('../assets/images/icon_24_close_wh.png'),
   icon_24_close_green_wh: require('../assets/images/icon_24_close_green_wh.png'),
@@ -58,6 +60,7 @@ export const IMAGES = {
 
   // content img //
   img_newq_1: require('../assets/images/img_newq_1.png'),
+  img_tape_empty: require('../assets/images/img_tape_empty.png'),
   img_tape_newq: require('../assets/images/img_tape_newq.png'),
   rightButton: require('../assets/images/rightButton.png'),
   icon_floating_wr: require('../assets/images/icon_floating_wr.png'),
@@ -81,4 +84,22 @@ export const IMAGES = {
   icon_24_comment: require('../assets/images/icon_24_comment.png'),
 
   inputSend: require('../assets/images/inputSend.png'),
+}
+
+export const HOME_ICONS: Record<number, string> = {
+  /**
+   * Home icons
+   */
+
+  0: require('../assets/images/1.png'),
+  1: require('../assets/images/2.png'),
+  2: require('../assets/images/3.png'),
+  3: require('../assets/images/4.png'),
+  4: require('../assets/images/5.png'),
+  5: require('../assets/images/6.png'),
+  6: require('../assets/images/7.png'),
+  7: require('../assets/images/8.png'),
+  8: require('../assets/images/9.png'),
+  9: require('../assets/images/10.png'),
+  10: require('../assets/images/11.png'),
 }
