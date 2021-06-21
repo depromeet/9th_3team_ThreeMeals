@@ -25,7 +25,7 @@ const NotificationTemplate: FC<Props> = (props) => {
         profileImage={profileImage}
         leftIcon={IMAGES.icon_24_back_wh}
         rightIcon={IMAGES.icon_24_drawer}
-        rightSecondIcon={IMAGES.icon_24_alram2_wh}
+        rightSecondIcon={IMAGES.icon_24_alram_wh}
         onClickLeft={props.onClickLeft}
       />
 
