@@ -15,9 +15,7 @@ const ProfileContent: React.FC<Props> = (props: Props) => {
       <NameText>{props.name}</NameText>
       <DescText>{props.desc}</DescText>
       <div style={{ display: 'flex' }}>
-        <Tag text={props.urlName} isNonClose>
-          {props.url}
-        </Tag>
+        <Tag text={props.urlName} isNonClose url={props.url} />
       </div>
     </Container>
   )
