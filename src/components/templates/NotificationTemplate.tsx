@@ -18,6 +18,28 @@ const NotificationTemplate: FC<Props> = (props) => {
     return props.myAccount?.getMyAccountInfo.image
   }, [props.myAccount?.getMyAccountInfo.image])
 
+  const notificationData = useMemo(() => {
+    return (
+      props.notification &&
+      props.notification
+        .slice()
+        .reverse()
+        .map((value, index) => {
+          return value.read !== true ? (
+            <AlarmContentField
+              key={index}
+              nickname={value.otherAccount.nickname}
+              content={value.relatedPost.content}
+              contentType={value.relatedPost.postType}
+              time={value.createdAt}
+            />
+          ) : undefined
+        })
+        .filter((item) => item)
+    )
+  }, [props.notification])
+
+  console.log('notificationData', notificationData)
   return (
     <AppContainer>
       <Header
@@ -37,18 +59,8 @@ const NotificationTemplate: FC<Props> = (props) => {
             width={'100%'}
           />
           <ContentContainer>
-            {props.notification ? (
-              props.notification.map((value, index) => {
-                return (
-                  <AlarmContentField
-                    key={index}
-                    nickname={value.otherAccount.nickname}
-                    content={value.relatedPost.content}
-                    contentType={value.relatedPost.postType}
-                    time={value.createdAt}
-                  />
-                )
-              })
+            {notificationData && notificationData.length > 0 ? (
+              notificationData
             ) : (
               <EmptyContainer>
                 <EmptyText>

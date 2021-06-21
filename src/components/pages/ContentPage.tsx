@@ -8,6 +8,9 @@ import { getMyAccountInfo, GET_MY_PROFILE } from '../../lib/queries/meQueries'
 import {
   deletePostParams,
   deletePostResponse,
+  deleteLikeRes,
+  deleteLikeParams,
+  DELETE_LIKE,
 } from '../../lib/queries/deleteQueries'
 import { useMutation, useQuery } from '@apollo/client'
 import {
@@ -23,12 +26,34 @@ import {
   getUnreadNotiCount,
   GET_UNREAD_NOTI_COUNT,
 } from '../../lib/queries/getQueries'
+import {
+  createLikeRes,
+  createLikeParams,
+  CREATE_LIKE,
+} from '../../lib/queries/createQueries'
 
 const ContentPage: React.FC = () => {
   const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
   const getPost = useQuery<getPost, getPostParams>(GET_POST, {
     variables: { first: 10, accountId: myAccount.data?.getMyAccountInfo.id },
   })
+
+  const [createLike] = useMutation<createLikeRes, createLikeParams>(
+    CREATE_LIKE,
+    {
+      onCompleted: () => {
+        getPost.refetch()
+      },
+    }
+  )
+  const [deleteLike] = useMutation<deleteLikeRes, deleteLikeParams>(
+    DELETE_LIKE,
+    {
+      onCompleted: () => {
+        getPost.refetch()
+      },
+    }
+  )
   const [deletePostMutation] = useMutation<
     deletePostResponse,
     deletePostParams
@@ -76,12 +101,16 @@ const ContentPage: React.FC = () => {
     setIsOpen(true)
   }, [])
 
-  const onClickLike = useCallback((id: string, tabIndex: number) => {
-    console.log('onClickLike id', id, tabIndex)
-  }, [])
-  const onClickLikeDelete = useCallback((id: string, tabIndex: number) => {
-    console.log('onClickLike id', id, tabIndex)
-  }, [])
+  const onClickLike = useCallback(
+    (id: string, isLikeActive: boolean) => {
+      if (!isLikeActive) {
+        createLike({ variables: { postId: id } })
+      } else {
+        deleteLike({ variables: { postId: id } })
+      }
+    },
+    [createLike, deleteLike]
+  )
 
   const onClickConfirmModal = useCallback(() => {
     if (selectedPostId) {
@@ -146,7 +175,6 @@ const ContentPage: React.FC = () => {
         onClickWrite={onClickWrite}
         onClickRemove={onClickRemove}
         onClickLike={onClickLike}
-        onClickLikeDelete={onClickLikeDelete}
       />
       <Modal
         open={isOpen}

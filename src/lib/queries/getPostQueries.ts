@@ -33,7 +33,7 @@ interface getPostEdges {
     likedPosts: {
       id: string
       createAt: string
-    }
+    }[]
     usedEmoticons: {
       id: string
       position: {
@@ -143,10 +143,10 @@ export const GET_POST = gql`
           toAccount {
             id
           }
-          # likedPosts {
-          #   id
-          #   createdAt
-          # },
+          likedPosts {
+            id
+            createdAt
+          }
           usedEmoticons {
             id
             position {

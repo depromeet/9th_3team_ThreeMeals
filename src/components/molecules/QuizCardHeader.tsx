@@ -10,9 +10,8 @@ export interface CardHeaderProps {
   className?: string
   color: BackColor
   isMyFeed: boolean
+  onClickLike?: () => void
   onClickOption?: () => void
-  onClickCreateLikePosts: () => void
-  onClickDeleteLikePosts: () => void
 }
 
 const Container = styled.div`
@@ -56,18 +55,22 @@ const QuizCardHeader: React.FunctionComponent<CardHeaderProps> = (props) => {
       <img src={getImage(props.color)} alt={'quiz'} width="89" height="39" />
       {props.isMyFeed ? (
         <span>
-          {props.isLikeActive ? (
-            <button type="button" onClick={props.onClickDeleteLikePosts}>
-              <img src={SVGS.icon_32_like_active} alt="active" />
-            </button>
-          ) : (
-            <button type="button" onClick={props.onClickCreateLikePosts}>
-              <img src={SVGS.icon_32_like} alt="inactive" />
+          {props.onClickLike ? (
+            props.isLikeActive ? (
+              <button type="button" onClick={props.onClickLike}>
+                <img src={SVGS.icon_32_like_active} alt="active" />
+              </button>
+            ) : (
+              <button type="button" onClick={props.onClickLike}>
+                <img src={SVGS.icon_32_like} alt="inactive" />
+              </button>
+            )
+          ) : null}
+          {props.onClickOption && (
+            <button type="button" onClick={props.onClickOption}>
+              <img src={SVGS.icon_32_option} alt="option" />
             </button>
           )}
-          <button type="button" onClick={props.onClickOption}>
-            <img src={SVGS.icon_32_option} alt="option" />
-          </button>
         </span>
       ) : null}
     </Container>

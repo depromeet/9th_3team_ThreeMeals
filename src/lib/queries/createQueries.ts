@@ -1,4 +1,3 @@
-import { WritePostInfo } from './../localStore/writePost'
 import gql from 'graphql-tag'
 import { BackColor } from '../../types/types'
 import { Vector2d } from 'konva/lib/types'
@@ -95,6 +94,24 @@ export const CREATE_COMMENT = gql`
     ) {
       content
       id
+    }
+  }
+`
+
+export interface createLikeParams {
+  postId: string
+}
+
+export interface createLikeRes {
+  id: string
+  createAt: string
+}
+
+export const CREATE_LIKE = gql`
+  mutation createLikePosts($postId: String!) {
+    createLikePosts(postId: $postId) {
+      id
+      createdAt
     }
   }
 `

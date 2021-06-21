@@ -26,6 +26,7 @@ interface Props {
   isInput?: boolean
   stickers?: StickerInfo[]
   secretType?: string
+  isLikeActive?: boolean
   createdAt: string
   updatedAt: string
   comments?: {
@@ -75,6 +76,7 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
     }, 1000)
     return () => clearInterval(interval)
   }, [props.createdAt])
+
   return (
     <Slick
       dots={false}
@@ -100,6 +102,7 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
           }
           onClickLike={props.onClickLike}
           onClickOption={props.onClickOption}
+          isLikeActive={props.isLikeActive}
         />
         <p>{props.questionTitle}</p>
         <StickerContainer>
