@@ -42,7 +42,7 @@ const NotificationTemplate: FC<Props> = (props) => {
                 .slice()
                 .reverse()
                 .map((value, index) => {
-                  return (
+                  return value.read !== true ? (
                     <AlarmContentField
                       key={index}
                       nickname={value.otherAccount.nickname}
@@ -50,7 +50,7 @@ const NotificationTemplate: FC<Props> = (props) => {
                       contentType={value.relatedPost.postType}
                       time={value.createdAt}
                     />
-                  )
+                  ) : null
                 })
             ) : (
               <EmptyContainer>
