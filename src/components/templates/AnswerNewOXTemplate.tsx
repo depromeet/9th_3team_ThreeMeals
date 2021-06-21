@@ -11,6 +11,7 @@ interface Props {
 }
 
 const AnswerNewOXTemplate: FC<Props> = (props) => {
+  console.log('cardData', props.cardData)
   return (
     <TempContainer>
       <Header
