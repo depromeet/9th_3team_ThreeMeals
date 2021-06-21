@@ -117,7 +117,9 @@ const ContentPage: React.FC = () => {
         isProfile={true}
         profileImage={IMAGES.background}
         onClickTabIndex={onClickTabIndex}
-        onClickLeft={router.back}
+        onClickLeft={() => {
+          router.push('/profile')
+        }}
         onClickSecondRight={() => {
           router.push('/notification')
         }}

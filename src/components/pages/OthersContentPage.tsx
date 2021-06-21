@@ -37,7 +37,7 @@ const OthersContentPage: React.FC = () => {
         account={account.data}
         profileImage={IMAGES.background}
         onClickLeft={() => {
-          console.log('onClickLeft')
+          router.push('/profile')
         }}
         onClickSecondRight={() => {
           router.push('/notification')
