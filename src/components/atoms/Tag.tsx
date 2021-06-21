@@ -6,6 +6,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 interface Props {
   id?: string
   text: string
+  url: string
   icon?: string
   onClickClose?: (id: string) => void
   isNonClose?: boolean
@@ -28,16 +29,18 @@ const StyledTag = styled(CopyToClipboard)`
   justify-content: center;
   align-items: center;
   height: 22px;
-  padding-right: 8px;
 `
-const Icon = styled.img`
+
+const IconContainer = styled.div`
   margin-top: 4px;
-  width: 16px;
-  height: 16px;
   margin-right: 2px;
   position: relative;
   color: #ffffffb2;
   float: left;
+`
+const Icon = styled.img`
+  width: 16px;
+  height: 16px;
 `
 
 const CloseIcon = styled.img`
@@ -54,9 +57,11 @@ const Text = styled.span`
 const Tag: React.FunctionComponent<Props> = (props) => {
   return (
     <Container>
-      <Icon src={props.icon} />
-      <StyledTag text={props.text}>
-        <Text>{props.text}</Text>
+      <IconContainer>{props.icon && <Icon src={props.icon} />}</IconContainer>
+      <StyledTag text={props.url}>
+        <Text style={{ paddingRight: props.icon ? '8px' : '2px' }}>
+          {props.text}
+        </Text>
       </StyledTag>
       {!props.isNonClose && (
         <CloseIcon

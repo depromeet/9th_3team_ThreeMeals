@@ -1,4 +1,11 @@
-import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react'
+import React, {
+  FC,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import Header from '../molecules/Header'
 import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
@@ -24,6 +31,7 @@ interface Props {
 
 const OthersContentTemplate: FC<Props> = (props) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
+  const [windowObjet, setWindowObjet] = useState<Window | undefined>()
   const router = useRouter()
   const postContent = useMemo(() => {
     if (props.getPost?.getPosts.edges) {
@@ -135,6 +143,12 @@ const OthersContentTemplate: FC<Props> = (props) => {
     return props.account?.getAccountInfo.image
   }, [props.account?.getAccountInfo.image])
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setWindowObjet(window)
+    }
+  }, [])
+
   return (
     <AppContainer>
       <Header
@@ -150,8 +164,14 @@ const OthersContentTemplate: FC<Props> = (props) => {
         <ProfileContent
           name={props.account?.getAccountInfo.nickname ?? ''}
           desc={props.account?.getAccountInfo.content ?? ''}
-          urlName={props.account?.getAccountInfo.profileUrl ?? ''}
-          url={props.account?.getAccountInfo.profileUrl ?? ''}
+          urlName="프로필"
+          url={
+            windowObjet !== undefined
+              ? windowObjet.location.origin +
+                '/otherscontent/' +
+                props.account?.getAccountInfo.id
+              : ''
+          }
         />
         <TabContainer>
           <Tab

@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useMemo } from 'react'
+import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react'
 import Header from '../molecules/Header'
 import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
@@ -30,6 +30,7 @@ interface Props {
 }
 
 const ContentTemplate: FC<Props> = (props) => {
+  const [windowObjet, setWindowObjet] = useState<Window | undefined>()
   const {
     tabIndex,
     newPostCount,
@@ -53,7 +54,6 @@ const ContentTemplate: FC<Props> = (props) => {
     }
   }, [props.getPost?.getPosts.edges])
 
-  console.log('postContent', postContent)
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:
@@ -229,6 +229,12 @@ const ContentTemplate: FC<Props> = (props) => {
     return props.myAccount?.getMyAccountInfo.image
   }, [props.myAccount?.getMyAccountInfo.image])
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setWindowObjet(window)
+    }
+  }, [])
+
   return (
     <AppContainer>
       <Header
@@ -242,10 +248,16 @@ const ContentTemplate: FC<Props> = (props) => {
       />
       <MainContainer>
         <ProfileContent
-          name="김덕배"
-          desc="관종이라 자주올림.. 아몰랑~ 그냥 써 🍻"
-          urlName="@nijo.s"
-          url="https://google.com"
+          name={props.myAccount?.getMyAccountInfo.nickname || ''}
+          desc={props.myAccount?.getMyAccountInfo.content || ''}
+          urlName="프로필"
+          url={
+            windowObjet !== undefined
+              ? windowObjet.location.origin +
+                '/otherscontent/' +
+                props.myAccount?.getMyAccountInfo.id
+              : ''
+          }
         />
         <TabContainer>
           <Tab
