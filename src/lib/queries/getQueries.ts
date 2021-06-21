@@ -24,7 +24,7 @@ export interface GetNotification {
   id: string
   createdAt: string
   updatedAt: string
-  read: string
+  read: boolean
   notificationType: string
   relatedPost: {
     id: string
