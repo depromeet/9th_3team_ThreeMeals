@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
@@ -12,6 +12,7 @@ const StickerPanelWithNoSSR = dynamic(
 interface Props {
   /** isContent is for only contents without otherContents */
   isContent?: boolean
+  userId?: string
   id?: string
   questionTitle: string
   backColor: string
@@ -24,6 +25,12 @@ interface Props {
 }
 
 const AnswerCard: React.FunctionComponent<Props> = (props) => {
+  const [windowObjet, setWindowObjet] = useState<Window | undefined>()
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setWindowObjet(window)
+    }
+  }, [])
   return (
     <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
       <Container backColor={props.backColor}>
@@ -33,7 +40,15 @@ const AnswerCard: React.FunctionComponent<Props> = (props) => {
           </TimeContainer>
           <div>
             {props.isContent && props.id && (
-              <CopyToClipboard text={props.id}>
+              <CopyToClipboard
+                text={
+                  windowObjet !== undefined
+                    ? windowObjet.location.origin +
+                      '/otherscontent/' +
+                      props.userId
+                    : ''
+                }
+              >
                 <Image
                   src={IMAGES.icon_32_share}
                   onClick={props.onClickShare}

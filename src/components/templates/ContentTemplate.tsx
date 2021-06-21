@@ -24,7 +24,7 @@ interface Props {
   onClickNewSecretCard: (tabName: string) => void
   onClickAnswerCard: (postId: string, isMine: boolean) => void
   onClickWrite?: () => void
-  onClickRemove: (id: string, tabIndex: number) => void
+  onClickRemove: (id: string) => void
   onClickLike: (id: string, tabIndex: number) => void
 }
 
@@ -110,7 +110,7 @@ const ContentTemplate: FC<Props> = (props) => {
                       updatedAt={data.node.updatedAt}
                       secretType={data.node.secretType}
                       onClickOption={() => {
-                        onClickRemove(data.node.id, tabIndex)
+                        onClickRemove(data.node.id)
                       }}
                       onClickLike={() => {
                         onClickLike(data.node.id, tabIndex)
@@ -133,6 +133,7 @@ const ContentTemplate: FC<Props> = (props) => {
                   <AnswerCard
                     key={index}
                     isContent
+                    userId={props.myAccount?.getMyAccountInfo.id}
                     id={data.node.id}
                     time={data.node.createdAt}
                     questionTitle={data.node.content}
@@ -142,7 +143,7 @@ const ContentTemplate: FC<Props> = (props) => {
                       onClickAnswerCard(data.node.id, true)
                     }}
                     onClickOption={() => {
-                      onClickRemove(data.node.id, tabIndex)
+                      onClickRemove(data.node.id)
                     }}
                   />
                 )
@@ -221,6 +222,7 @@ const ContentTemplate: FC<Props> = (props) => {
     onClickNewSecretCard,
     onClickRemove,
     onClickLike,
+    props.myAccount?.getMyAccountInfo.id,
     onClickAnswerCard,
   ])
 
@@ -323,7 +325,7 @@ const ContentTemplate: FC<Props> = (props) => {
         {ContentView}
       </MainContainer>
       {postContent && props.tabIndex === 1 ? (
-        postContent.answer.length > 1 ? (
+        postContent.answer.length > 0 ? (
           <WriteButton>
             <img onClick={props.onClickWrite} src={IMAGES.write} width={88} />
           </WriteButton>

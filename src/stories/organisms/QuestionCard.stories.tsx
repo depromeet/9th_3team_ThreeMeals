@@ -7,6 +7,8 @@ storiesOf('organisms/QuestionCard', module).add('with #FF833D', () => {
     <QuestionCard
       questionTitle="김덕배님 남자친구는 있으신지요 ????"
       backColor={'#FF833D'}
+      createdAt={'createdAt'}
+      updatedAt={'updatedAt'}
     />
   )
 })
@@ -16,6 +18,8 @@ storiesOf('organisms/QuestionCard', module).add('with input #67D585', () => {
     <QuestionCard
       questionTitle="김덕배님 남자친구는 있으신지요 ????"
       backColor={'#67D585'}
+      createdAt={'createdAt'}
+      updatedAt={'updatedAt'}
       isInput
     />
   )
