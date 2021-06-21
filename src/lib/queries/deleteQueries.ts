@@ -14,3 +14,16 @@ export const DELETE_POST = gql`
     }
   }
 `
+
+export interface deleteLikeRes {
+  postId: string
+}
+export interface deleteLikeParams {
+  postId: string
+}
+
+export const DELETE_LIKE = gql`
+  mutation deleteLikePosts($postId: String!) {
+    deleteLikePosts(postId: $postId)
+  }
+`

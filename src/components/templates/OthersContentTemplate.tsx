@@ -67,14 +67,8 @@ const OthersContentTemplate: FC<Props> = (props) => {
                   <QuestionCard
                     key={index}
                     id={data.node.id}
-                    labelComponent={
-                      data.node.secretType === 'Forever' ? (
-                        <PrivateCardLabel text="BONG IN" active={false} />
-                      ) : (
-                        <CardLabel text={data.node.createdAt} active />
-                      )
-                    }
                     createdAt={data.node.createdAt}
+                    updatedAt={data.node.updatedAt}
                     secretType={data.node.secretType}
                     questionTitle={data.node.content}
                     backColor={data.node.color}
@@ -167,8 +161,10 @@ const OthersContentTemplate: FC<Props> = (props) => {
       />
       <MainContainer>
         <ProfileContent
-          name={props.account?.getAccountInfo.nickname ?? ''}
-          desc={props.account?.getAccountInfo.content ?? ''}
+          name={
+            props.account?.getAccountInfo.nickname || '닉네임을 입력해주세요.'
+          }
+          desc={props.account?.getAccountInfo.content || '소개를 입력해주세요.'}
           urlName="프로필"
           url={
             windowObjet !== undefined

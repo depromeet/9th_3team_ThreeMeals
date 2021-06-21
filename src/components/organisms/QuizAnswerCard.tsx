@@ -9,6 +9,9 @@ interface Props {
   answerType: boolean
   content: string
   isMyFeed: boolean
+  isLikeActive?: boolean
+  onClickLike?: () => void
+  onClickOption?: () => void
 }
 const getImage = (backColor: string, answerType: boolean) => {
   switch (backColor) {
@@ -37,8 +40,9 @@ const QuizAnswerCard: FC<Props> = (props) => {
     <CardContainer backColor={props.backColor}>
       <ContextContainer bottomHeight="none">
         <StyledQuizCardHeader
-          // isLikeActive={props.cardHeader.isLikeActive}
-          // className={props.cardHeader.className}
+          onClickLike={props.onClickLike}
+          onClickOption={props.onClickOption}
+          isLikeActive={props.isLikeActive}
           color={props.backColor}
           isMyFeed={props.isMyFeed}
         />
