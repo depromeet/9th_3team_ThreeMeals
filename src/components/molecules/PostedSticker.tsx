@@ -8,10 +8,7 @@ interface Props {
 
 const PostedSticker: FC<Props> = (props) => {
   const [stickerImage] = useImage(props.stickerImage.fileUrl)
-  console.log(
-    props.stickerImage.position?.positionX,
-    props.stickerImage.position?.positionY
-  )
+
   const stickerHeight = stickerImage
     ? (140 * stickerImage.height) / stickerImage.width
     : 0

@@ -25,7 +25,7 @@ interface Props {
   onClickAnswerCard: (postId: string, isMine: boolean) => void
   onClickWrite?: () => void
   onClickRemove: (id: string) => void
-  onClickLike: (id: string, tabIndex: number) => void
+  onClickLike: (id: string, isLikeActive: boolean) => void
 }
 
 const ContentTemplate: FC<Props> = (props) => {
@@ -109,11 +109,15 @@ const ContentTemplate: FC<Props> = (props) => {
                       createdAt={data.node.createdAt}
                       updatedAt={data.node.updatedAt}
                       secretType={data.node.secretType}
+                      isLikeActive={data.node.likedPosts.length > 0}
                       onClickOption={() => {
                         onClickRemove(data.node.id)
                       }}
                       onClickLike={() => {
-                        onClickLike(data.node.id, tabIndex)
+                        onClickLike(
+                          data.node.id,
+                          data.node.likedPosts.length > 0
+                        )
                       }}
                     />
                   )
@@ -202,6 +206,16 @@ const ContentTemplate: FC<Props> = (props) => {
                         backColor={content.node.color}
                         answerType={true}
                         isMyFeed={true}
+                        isLikeActive={content.node.likedPosts.length > 0}
+                        onClickOption={() => {
+                          onClickRemove(content.node.id)
+                        }}
+                        onClickLike={() => {
+                          onClickLike(
+                            content.node.id,
+                            content.node.likedPosts.length > 0
+                          )
+                        }}
                       />
                     </QuizAnswerCardContainer>
                   ) : null

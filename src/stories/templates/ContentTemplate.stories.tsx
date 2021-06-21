@@ -11,7 +11,13 @@ storiesOf('templates/Content', module).add('ContentTemplate', () => {
       <ContentTemplate
         profileImage={IMAGES.background}
         isProfile={false}
+        newPostCount={0}
+        tabIndex={0}
         onClickAnswerCard={action('onClickAnswerCard')}
+        onClickLike={action('onClickLike')}
+        onClickNewSecretCard={action('onClickNewSecretCard')}
+        onClickRemove={action('onClickRemove')}
+        onClickTabIndex={action('onClickTabIndex')}
       />
     </AppContainer>
   )
