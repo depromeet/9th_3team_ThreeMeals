@@ -143,6 +143,7 @@ const ContentTemplate: FC<Props> = (props) => {
                     questionTitle={data.node.content}
                     backColor={data.node.color}
                     stickers={data.node.usedEmoticons}
+                    count={data.node.commentsCount}
                     onClickPost={() => {
                       onClickAnswerCard(data.node.id, true)
                     }}
@@ -204,7 +205,7 @@ const ContentTemplate: FC<Props> = (props) => {
                       <QuizAnswerCard
                         content={content.node.content}
                         backColor={content.node.color}
-                        answerType={true}
+                        answerType={content.node.comments[0].content}
                         isMyFeed={true}
                         isLikeActive={content.node.likedPosts.length > 0}
                         onClickOption={() => {

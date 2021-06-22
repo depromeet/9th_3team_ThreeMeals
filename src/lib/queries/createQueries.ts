@@ -40,8 +40,10 @@ export interface CreatePostRes {
 }
 
 export interface CreateCommentRes {
-  content: string
-  id: string
+  createComment: {
+    content: string
+    id: string
+  }
 }
 
 export interface CreatLikePostsRes {
