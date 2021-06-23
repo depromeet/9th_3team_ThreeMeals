@@ -50,10 +50,10 @@ const PostComment: FC<Props> = (props) => {
       setChildrenOpen(!childrenOpen)
       setCurParentCommentId(commentId)
       setCurPostId(postId)
+      props.setParentCommentId(commentId)
     },
-    [childrenOpen, getChildrenComment]
+    [childrenOpen, getChildrenComment, props]
   )
-  console.log(childrenCommentData, curPostId, curParentCommentId)
   return (
     <AppContainer>
       {postCommentData?.map((comment, i) => {
