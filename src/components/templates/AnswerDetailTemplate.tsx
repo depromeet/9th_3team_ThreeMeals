@@ -15,6 +15,7 @@ interface Props {
   onClickRight?: () => void
   onSendComment: (comment: string) => void
   onClickRemove?: (type: AnswerContactType, id: string) => void
+  setParentCommentId: (commentId: string) => void
 }
 
 const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
@@ -28,8 +29,14 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
       setIsFocus(false)
     }, 1000)
   }, [])
-  console.log('propssss:', props.isMine, props.onClickRemove)
-  console.log(props.parentComments)
+  const onSubmitPostImg = useCallback(
+    (e) => {
+      e.preventDefault()
+      props.onSendComment(comment)
+      setComment('')
+    },
+    [comment, props]
+  )
   return (
     <Container>
       <Header
@@ -53,23 +60,22 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
           profileImg={IMAGES.background}
           commentsInfo={props.parentComments}
           onClickRemove={props.onClickRemove}
+          setParentCommentId={props.setParentCommentId}
         />
       </PostContainer>
       <BottomContainer style={{ paddingBottom: 30 }}>
-        <InputContainer>
+        <InputContainer onSubmit={onSubmitPostImg}>
           <DefaultInput
             placeholder="댓글을 입력하세요."
             onChange={(e) => setComment(e)}
             onFocus={onFocus}
             onBlur={onBlur}
             containerStyle={{ width: isFocus ? '80%' : '85%', height: '100%' }}
+            value={comment}
           />
           <Postimg
             src={IMAGES.inputSend}
-            onClick={(e) => {
-              e.preventDefault()
-              props.onSendComment(comment)
-            }}
+            onClick={onSubmitPostImg}
             style={{ visibility: isFocus ? 'initial' : 'hidden' }}
           />
         </InputContainer>
@@ -100,7 +106,7 @@ const BottomContainer = styled.div`
   display: flex;
   justify-content: center;
 `
-const InputContainer = styled.div`
+const InputContainer = styled.form`
   height: 78px;
   margin-left: 5%;
   padding-bottom: 30px;

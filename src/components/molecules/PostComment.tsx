@@ -8,25 +8,37 @@ import {
 } from '../../lib/queries/getCommentsQueries'
 import { useLazyQuery } from '@apollo/client'
 import dayjs from 'dayjs'
+import { SVGS } from '../../constants/svgs'
 interface Props {
   isMine: boolean
   profileImg: string
   commentsInfo: ParentComments | undefined
+  setParentCommentId: (commentId: string) => void
   onClickRemove?: (type: AnswerContactType, id: string) => void
 }
 
 const PostComment: FC<Props> = (props) => {
+  const [writeOpen, setWriteOpen] = useState(false)
+  const [childrenOpen, setChildrenOpen] = useState(false)
+  const [curPostId, setCurPostId] = useState('')
+  const [curParentCommentId, setCurParentCommentId] = useState('')
   const [getChildrenComment, { data: childrenComments }] =
     useLazyQuery<ChildrenComments>(GET_CHILDREN_COMMENTS, {
-      variables: { first: 10, postId: '1' },
+      variables: {
+        first: 10,
+        postId: curPostId,
+        parentId: curParentCommentId,
+      },
     })
   const postCommentData = props.commentsInfo?.getParentComments.edges
   const childrenCommentData = childrenComments?.getChildrenComments.edges
-  const [writeOpen, setWriteOpen] = useState(false)
-  const [childrenOpen, setChildrenOpen] = useState(false)
-  const handleWriteComment = useCallback(() => {
-    setWriteOpen(!writeOpen)
-  }, [writeOpen])
+  const handleWriteComment = useCallback(
+    (commentId: string) => {
+      setWriteOpen(!writeOpen)
+      props.setParentCommentId(commentId)
+    },
+    [props, writeOpen]
+  )
   const handleLikeActive = useCallback(() => {
     // mutation : createLikeChildrenComment
   }, [])
@@ -36,9 +48,12 @@ const PostComment: FC<Props> = (props) => {
         variables: { first: 10, parentId: commentId, postId: postId },
       })
       setChildrenOpen(!childrenOpen)
+      setCurParentCommentId(commentId)
+      setCurPostId(postId)
     },
     [childrenOpen, getChildrenComment]
   )
+  console.log(childrenCommentData, curPostId, curParentCommentId)
   return (
     <AppContainer>
       {postCommentData?.map((comment, i) => {
@@ -63,7 +78,10 @@ const PostComment: FC<Props> = (props) => {
             {props.isMine && (
               <CommentFooter>
                 <>
-                  <Write className="write" onClick={handleWriteComment}>
+                  <Write
+                    className="write"
+                    onClick={() => handleWriteComment(comment.node.id)}
+                  >
                     답글쓰기
                   </Write>
                   <LikeAction className="likeActive" onClick={handleLikeActive}>
@@ -90,7 +108,10 @@ const PostComment: FC<Props> = (props) => {
                       <ProfileContainer>
                         <img
                           className="profileImg"
-                          src={childrenComment.node.account?.profileUrl}
+                          src={
+                            childrenComment.node.account?.profileUrl ||
+                            SVGS.icon_profileAltImg
+                          }
                           alt="profileImg"
                         />
                         <ChildrenHeader>
@@ -103,7 +124,7 @@ const PostComment: FC<Props> = (props) => {
                             onClick={() => {
                               props.onClickRemove &&
                                 props.onClickRemove(
-                                  'children',
+                                  'grandChildren',
                                   childrenComment.node.id
                                 )
                             }}
@@ -115,11 +136,15 @@ const PostComment: FC<Props> = (props) => {
                       <BodyContainer>
                         <ContentsContainer>
                           <CommentContent>
-                            {comment.node.content}
+                            {childrenComment.node.content}
                           </CommentContent>
                           {props.isMine && (
                             <ChildrenFooter>
-                              <Write onClick={handleWriteComment}>
+                              <Write
+                                onClick={() =>
+                                  handleWriteComment(childrenComment.node.id)
+                                }
+                              >
                                 답글쓰기
                               </Write>
                               <LikeAction onClick={handleLikeActive}>
@@ -140,7 +165,7 @@ const PostComment: FC<Props> = (props) => {
   )
 }
 
-export default PostComment
+export default React.memo(PostComment)
 
 const AppContainer = styled.div`
   padding: 0 24px;

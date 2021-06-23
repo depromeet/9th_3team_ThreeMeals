@@ -42,6 +42,7 @@ interface ChildrenCommentInfo {
     account: Account
     postId: string
     parentId: string
+    profileUrl: string
   }
 }
 

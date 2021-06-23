@@ -6,6 +6,8 @@ import AnswerDetailTemplate from '../templates/AnswerDetailTemplate'
 import {
   ParentComments,
   GET_PARENT_COMMENTS,
+  ChildrenComments,
+  GET_CHILDREN_COMMENTS,
 } from '../../lib/queries/getCommentsQueries'
 import { useQuery, useMutation } from '@apollo/client'
 import {
@@ -14,42 +16,69 @@ import {
   CREATE_COMMENT,
 } from '../../lib/queries/createQueries'
 
-export type AnswerContactType = 'parent' | 'children'
+export type AnswerContactType = 'parent' | 'children' | 'grandChildren'
 
 const AnswerDetailPage: React.FC = () => {
   const router = useRouter()
   const { postId, isMine: queryIsMine } = router.query
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [modalTitle, setModalTitle] = useState<string>()
+  const [curCommentId, setCurCommentId] = useState('')
   const parentCommentsData = useQuery<ParentComments>(GET_PARENT_COMMENTS, {
     variables: { first: 10, postId: postId },
   })
+  const childrenCommentsData = useQuery<ChildrenComments>(
+    GET_CHILDREN_COMMENTS,
+    {
+      variables: { first: 10, postId: postId, parentId: curCommentId },
+    }
+  )
   const [createCommentMutation] =
     useMutation<CreateCommentRes, CreateCommentParams>(CREATE_COMMENT)
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [modalTitle, setModalTitle] = useState<string>()
   const onSendComment = useCallback(
     (comment: string) => {
-      console.log('comment:', comment)
       if (typeof postId === 'string') {
-        createCommentMutation({
-          variables: {
-            postId: postId,
-            content: comment,
-            secretType: 'Forever',
-          },
-        }).then(() => {
-          parentCommentsData.refetch()
-        })
+        if (curCommentId) {
+          createCommentMutation({
+            variables: {
+              postId: postId,
+              parentId: curCommentId,
+              content: comment,
+              secretType: 'Forever',
+            },
+          }).then(() => {
+            childrenCommentsData.refetch()
+            parentCommentsData.refetch()
+          })
+        } else {
+          createCommentMutation({
+            variables: {
+              postId: postId,
+              content: comment,
+              secretType: 'Forever',
+            },
+          }).then(() => {
+            parentCommentsData.refetch()
+          })
+        }
       }
     },
-    [createCommentMutation, parentCommentsData, postId]
+    [
+      childrenCommentsData,
+      createCommentMutation,
+      curCommentId,
+      parentCommentsData,
+      postId,
+    ]
   )
 
   const onClickRemove = useCallback((type: AnswerContactType, id: string) => {
     const modalData: string =
       type === 'parent'
         ? '이 질문을 삭제하시겠습니까?'
-        : '이 댓글을 삭제하시겠습니까?'
-
+        : type === 'children'
+        ? '이 댓글을 삭제하시겠습니까?'
+        : '이 답글을 삭제하시겠습니까?'
     setModalTitle(modalData)
     setIsOpen(true)
   }, [])
@@ -64,7 +93,10 @@ const AnswerDetailPage: React.FC = () => {
     }
     return false
   }, [queryIsMine])
-  console.log(parentCommentsData)
+  const setParentCommentId = (commentId: string) => {
+    setCurCommentId(commentId)
+  }
+  console.log(parentCommentsData, 'curComId:', curCommentId)
   return (
     <AppContainer>
       <AnswerDetailTemplate
@@ -74,6 +106,7 @@ const AnswerDetailPage: React.FC = () => {
         onClickRemove={onClickRemove}
         isMine={isMine}
         parentComments={parentCommentsData.data}
+        setParentCommentId={setParentCommentId}
       />
       <Modal
         open={isOpen}

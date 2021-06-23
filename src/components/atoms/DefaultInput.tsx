@@ -5,6 +5,7 @@ import { useCallback } from 'react'
 interface Props {
   containerStyle?: CSSProperties
   placeholder: string
+  value: string
   onChange: (text: string) => void
   onFocus?: () => void
   onBlur?: () => void
@@ -23,11 +24,12 @@ const DefaultInput: React.FC<Props> = (props: Props) => {
       )}
       onFocus={props.onFocus}
       onBlur={props.onBlur}
+      value={props.value}
     />
   )
 }
 
-export default DefaultInput
+export default React.memo(DefaultInput)
 
 const Container = styled.input`
   border-radius: 10px;
