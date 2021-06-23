@@ -42,7 +42,7 @@ interface ChildrenCommentInfo {
     account: Account
     postId: string
     parentId: string
-    profileUrl: string
+    image: string
   }
 }
 
@@ -107,7 +107,7 @@ export const GET_CHILDREN_COMMENTS = gql`
           account {
             id
             nickname
-            profileUrl
+            image
           }
           postId
           parentId

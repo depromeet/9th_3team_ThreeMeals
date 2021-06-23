@@ -109,7 +109,7 @@ const PostComment: FC<Props> = (props) => {
                         <img
                           className="profileImg"
                           src={
-                            childrenComment.node.account?.profileUrl ||
+                            childrenComment.node.account?.image ||
                             SVGS.icon_profileAltImg
                           }
                           alt="profileImg"
@@ -140,13 +140,13 @@ const PostComment: FC<Props> = (props) => {
                           </CommentContent>
                           {props.isMine && (
                             <ChildrenFooter>
-                              <Write
+                              {/* <Write
                                 onClick={() =>
                                   handleWriteComment(childrenComment.node.id)
                                 }
                               >
                                 답글쓰기
-                              </Write>
+                              </Write> */}
                               <LikeAction onClick={handleLikeActive}>
                                 좋아요
                               </LikeAction>
@@ -247,7 +247,7 @@ const ProfileContainer = styled.div`
   margin-top: 24px;
   display: flex;
   .profileImg {
-    width: 32px;
+    width: 40px;
     height: 32px;
     border-radius: 40%;
   }
