@@ -40,8 +40,10 @@ const PostComment: FC<Props> = (props) => {
     [props, writeOpen]
   )
   const handleLikeActive = useCallback(() => {
-    // mutation : createLikeChildrenComment
-  }, [])
+    if (props.isMine) {
+      // mutation : createLikeChildrenComment
+    }
+  }, [props.isMine])
   const handleChildrenComment = useCallback(
     (commentId: string, postId: string) => {
       getChildrenComment({
@@ -75,31 +77,26 @@ const PostComment: FC<Props> = (props) => {
               )}
             </CommentHeader>
             <CommentContent>{comment.node.content}</CommentContent>
-            {props.isMine && (
-              <CommentFooter>
-                <>
-                  <Write
-                    className="write"
-                    onClick={() => handleWriteComment(comment.node.id)}
-                  >
-                    답글쓰기
-                  </Write>
-                  <LikeAction className="likeActive" onClick={handleLikeActive}>
-                    좋아요
-                  </LikeAction>
-                  <ChildrenCommentCnt
-                    onClick={() =>
-                      handleChildrenComment(
-                        comment.node.id,
-                        comment.node.postId
-                      )
-                    }
-                  >
-                    답글 {comment.node.childrenCount}개
-                  </ChildrenCommentCnt>
-                </>
-              </CommentFooter>
-            )}
+            <CommentFooter>
+              <>
+                <Write
+                  className="write"
+                  onClick={() => handleWriteComment(comment.node.id)}
+                >
+                  답글쓰기
+                </Write>
+                <LikeAction className="likeActive" onClick={handleLikeActive}>
+                  좋아요
+                </LikeAction>
+                <ChildrenCommentCnt
+                  onClick={() =>
+                    handleChildrenComment(comment.node.id, comment.node.postId)
+                  }
+                >
+                  답글 {comment.node.childrenCount}개
+                </ChildrenCommentCnt>
+              </>
+            </CommentFooter>
             {childrenOpen &&
               childrenCommentData?.map((childrenComment, i) => {
                 if (comment.node.id === childrenComment.node.parentId) {
@@ -138,20 +135,11 @@ const PostComment: FC<Props> = (props) => {
                           <CommentContent>
                             {childrenComment.node.content}
                           </CommentContent>
-                          {props.isMine && (
-                            <ChildrenFooter>
-                              {/* <Write
-                                onClick={() =>
-                                  handleWriteComment(childrenComment.node.id)
-                                }
-                              >
-                                답글쓰기
-                              </Write> */}
-                              <LikeAction onClick={handleLikeActive}>
-                                좋아요
-                              </LikeAction>
-                            </ChildrenFooter>
-                          )}
+                          <ChildrenFooter>
+                            <LikeAction onClick={handleLikeActive}>
+                              좋아요
+                            </LikeAction>
+                          </ChildrenFooter>
                         </ContentsContainer>
                       </BodyContainer>
                     </ChildrenContainer>
