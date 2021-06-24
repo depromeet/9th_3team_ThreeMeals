@@ -7,6 +7,8 @@ interface createPostEmoticonInfo {
   position: Vector2d | null | undefined
 }
 
+// Params types //
+
 export interface CreatePostParams {
   content?: string
   toAccountId?: string
@@ -16,9 +18,40 @@ export interface CreatePostParams {
   emoticons?: createPostEmoticonInfo[]
 }
 
+export interface CreateCommentParams {
+  postId: string
+  parentId?: string
+  content: string
+  secretType: string
+}
+
+export interface CreateLikePostsParams {
+  postId: string
+}
+
+export interface DeleteLikePostsParams {
+  postId: string
+}
+
+// response Types //
+
 export interface CreatePostRes {
   message: string
 }
+
+export interface CreateCommentRes {
+  createComment: {
+    content: string
+    id: string
+  }
+}
+
+export interface CreatLikePostsRes {
+  id: string
+  createdAt: string
+}
+
+// mutation //
 
 export const GET_WRITE_POST_INFO = gql`
   query {
@@ -48,17 +81,6 @@ export const CREATE_POST = gql`
   }
 `
 
-export interface CreateCommentParams {
-  postId: string
-  parentId?: string
-  content: string
-  secretType: string
-}
-
-export interface CreateCommentRes {
-  content: string
-}
-
 export const CREATE_COMMENT = gql`
   mutation createComment(
     $postId: String!
@@ -73,6 +95,7 @@ export const CREATE_COMMENT = gql`
       secretType: $secretType
     ) {
       content
+      id
     }
   }
 `

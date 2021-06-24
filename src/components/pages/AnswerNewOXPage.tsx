@@ -21,7 +21,11 @@ const AnswerNewOXPage: VFC = () => {
       content.node.postType === 'Quiz' && content.node.comments.length === 0
   )
   const cardData = quizPostData?.map((content) => {
-    return { id: content.node.id, content: content.node.content }
+    return {
+      id: content.node.id,
+      content: content.node.content,
+      commentId: content.node.comments[0]?.id,
+    }
   })
   const cardDataColors = quizPostData?.map((content) => {
     return content.node.color
