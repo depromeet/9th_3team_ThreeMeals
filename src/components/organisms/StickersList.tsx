@@ -75,19 +75,10 @@ const ListContainer = styled.div`
   max-width: 500px;
   top: 0;
   bottom: 0;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow: auto;
   @media screen and (max-width: 375px) {
     top: 0;
     left: 0;
-  }
-  ::-webkit-scrollbar {
-    width: 1px;
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #adb5bd;
-    opacity: 0.1;
   }
 `
 

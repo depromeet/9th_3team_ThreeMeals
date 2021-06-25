@@ -69,13 +69,15 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
   }, [props.createdAt, props.secretType])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const postDate = new Date(props.createdAt)
-      postDate.setHours(postDate.getHours() + 24)
-      setTimerValue(dateDiffToTimer(new Date(postDate), new Date()))
-    }, 1000)
-    return () => clearInterval(interval)
-  }, [props.createdAt])
+    if (timeStatus !== 'bong-in') {
+      const interval = setInterval(() => {
+        const postDate = new Date(props.createdAt)
+        postDate.setHours(postDate.getHours() + 24)
+        setTimerValue(dateDiffToTimer(new Date(postDate), new Date()))
+      }, 1000)
+      return () => clearInterval(interval)
+    }
+  }, [props.createdAt, timeStatus])
 
   return (
     <Slick
@@ -104,7 +106,7 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
           onClickOption={props.onClickOption}
           isLikeActive={props.isLikeActive}
         />
-        <p>{props.questionTitle}</p>
+        <QuestionTitle>{props.questionTitle}</QuestionTitle>
         <StickerContainer>
           <StickerPanelWithNoSSR postedStickers={props.stickers} />
         </StickerContainer>
@@ -162,11 +164,11 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
   )
 }
 
-export default QuestionCard
+export default React.memo(QuestionCard)
 
 const Container = styled.div<{ backColor: string }>`
   position: relative;
-  display: flex;
+  display: inline-flex !important;
   flex-direction: column;
   background-color: ${({ backColor }) => backColor};
   height: 392px;
@@ -230,9 +232,15 @@ const StyledLabelCardHeader = styled(LabelCardHeader)`
   margin-bottom: 20px;
 `
 
+const QuestionTitle = styled.p`
+  overflow: auto;
+`
+
 const StickerContainer = styled.div`
   width: 100%;
   height: 192px;
+  display: flex;
+  justify-content: center;
 `
 
 const BottomContainer = styled.div`
