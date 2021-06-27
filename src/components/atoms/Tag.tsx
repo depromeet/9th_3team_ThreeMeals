@@ -61,7 +61,7 @@ const Tag: React.FunctionComponent<Props> = (props) => {
       <StyledTag
         text={props.url}
         onCopy={() => {
-          alert('클립보드에 복사되었습니다.')
+          window.alert('클립보드에 복사되었습니다.')
         }}
       >
         <Text style={{ paddingRight: props.icon ? '8px' : '2px' }}>
