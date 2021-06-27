@@ -8,6 +8,9 @@ import { getMyAccountInfo, GET_MY_PROFILE } from '../../lib/queries/meQueries'
 import {
   deletePostParams,
   deletePostResponse,
+  deleteLikeRes,
+  deleteLikeParams,
+  DELETE_LIKE,
 } from '../../lib/queries/deleteQueries'
 import { useMutation, useQuery } from '@apollo/client'
 import {
@@ -18,12 +21,7 @@ import {
   GET_MY_NEW_POST_COUNT,
   GET_POST,
 } from '../../lib/queries/getPostQueries'
-import {
-  DELETE_POST,
-  DELETE_LIKE,
-  deleteLikeParams,
-  deleteLikeRes,
-} from '../../lib/queries/deleteQueries'
+import { DELETE_POST } from '../../lib/queries/deleteQueries'
 import {
   getUnreadNotiCount,
   GET_UNREAD_NOTI_COUNT,

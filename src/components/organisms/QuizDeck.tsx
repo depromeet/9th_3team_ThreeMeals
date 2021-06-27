@@ -10,16 +10,20 @@ import { useReactiveVar, useMutation } from '@apollo/client'
 import handleQuizDataVar, {
   handleQuizData,
 } from '../../lib/localStore/quizAnswer'
-import { useRouter } from 'next/router'
 import {
   CreateCommentRes,
   CreateCommentParams,
   CREATE_COMMENT,
 } from '../../lib/queries/createQueries'
+import {
+  deleteCommentResponse,
+  deleteCommentParams,
+  DELETE_COMMENT,
+} from '../../lib/queries/deleteQueries'
 
 interface Props {
   cardHeader?: CardHeaderProps
-  cardData: Array<{ id: string; content: string }>
+  cardData: Array<{ id: string; content: string; commentId: string }>
   backColors: BackColor[]
 }
 
@@ -36,12 +40,37 @@ const trans = (r: number, s: number) =>
     r / 10
   }deg) rotateZ(${r}deg) scale(${s})`
 const QuizDeck: FC<Props> = (deckProps) => {
-  const router = useRouter()
-  const [createCommentMutation] =
-    useMutation<CreateCommentRes, CreateCommentParams>(CREATE_COMMENT)
+  const [createCommentMutation] = useMutation<
+    CreateCommentRes,
+    CreateCommentParams
+  >(CREATE_COMMENT, {
+    onCompleted: ({ createComment }) => {
+      if (createComment) {
+        setPrevQuizCommentIdArr([...prevQuizCommentIdArr, createComment.id])
+      }
+    },
+  })
+  const [deleteCommentMutation] = useMutation<
+    deleteCommentResponse,
+    deleteCommentParams
+  >(DELETE_COMMENT, {
+    onCompleted: () => {
+      setPrevQuizCommentIdArr(
+        prevQuizCommentIdArr.filter(
+          (id) => id !== prevQuizCommentIdArr[prevQuizCommentIdArr.length - 1]
+        )
+      )
+    },
+  })
   const quizData = useReactiveVar(handleQuizDataVar)
   const [renderQuizData, setRenderQuizData] = useState(false)
   const [curQuizDataCnt, setCurQuizDataCnt] = useState<number>(0)
+  const [arrForCheckingSkipToNext, setArrForCheckingSkipToNext] = useState<
+    Array<boolean>
+  >([])
+  const [prevQuizCommentIdArr, setPrevQuizCommentIdArr] = useState<
+    Array<string>
+  >([])
   const [gone] = useState(() => new Set())
   const [props, set] = useSprings(quizData.length, (i) => ({
     ...toD(i),
@@ -97,28 +126,47 @@ const QuizDeck: FC<Props> = (deckProps) => {
   const handleToPrev = useCallback(() => {
     handleQuizData(deckProps.cardData[curQuizDataCnt + 1])
     setCurQuizDataCnt(curQuizDataCnt + 1)
-  }, [curQuizDataCnt, deckProps.cardData])
+    if (arrForCheckingSkipToNext[curQuizDataCnt + 1] === false) {
+      deleteCommentMutation({
+        variables: {
+          commentId: prevQuizCommentIdArr[prevQuizCommentIdArr.length - 1],
+        },
+      })
+    } else {
+      setArrForCheckingSkipToNext(
+        arrForCheckingSkipToNext.map((curQuizDataNextValue, index) =>
+          index === curQuizDataCnt + 1 ? false : curQuizDataNextValue
+        )
+      )
+    }
+  }, [
+    arrForCheckingSkipToNext,
+    curQuizDataCnt,
+    deckProps.cardData,
+    deleteCommentMutation,
+    prevQuizCommentIdArr,
+  ])
   const handleToNext = useCallback(() => {
     handleQuizData()
     setCurQuizDataCnt(curQuizDataCnt - 1)
-  }, [curQuizDataCnt])
+    setArrForCheckingSkipToNext(
+      arrForCheckingSkipToNext.map((curQuizDataNextValue, index) =>
+        index === curQuizDataCnt ? true : curQuizDataNextValue
+      )
+    )
+  }, [arrForCheckingSkipToNext, curQuizDataCnt])
   useEffect(() => {
     if (quizData && renderQuizData) {
+      const newArrForCheckingSkipToNext = new Array(quizData.length).fill(false)
       setCurQuizDataCnt(quizData.length - 1)
       setRenderQuizData(false)
+      setArrForCheckingSkipToNext(newArrForCheckingSkipToNext)
     }
   }, [quizData, renderQuizData])
   useEffect(() => {
     setRenderQuizData(true)
   }, [])
-  useEffect(() => {
-    setTimeout(() => {
-      if (quizData.length === 0 && curQuizDataCnt === -1) {
-        alert('제출 완료 : request query(type:answers data in userData)')
-        router.back()
-      }
-    }, 500)
-  }, [curQuizDataCnt, quizData.length, router])
+
   return (
     <>
       <SkipCardHandlerContainer>

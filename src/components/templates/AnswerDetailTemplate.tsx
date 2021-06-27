@@ -8,11 +8,13 @@ import AnswerCard from '../organisms/AnswerCard'
 import { AnswerContactType } from '../pages/AnswerDetailPage'
 import { ParentComments } from '../../lib/queries/getCommentsQueries'
 import { QueryResult } from '@apollo/client'
+import { getPostById } from '../../lib/queries/getPostQueries'
 
 interface Props {
   parentComments: ParentComments | undefined
   parentCommentsForRefetching: QueryResult<ParentComments, Record<string, any>>
   isMine: boolean
+  postData?: getPostById
   onClickLeft?: () => void
   onClickRight?: () => void
   onSendComment: (comment: string) => void
@@ -39,6 +41,10 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
     },
     [comment, props]
   )
+  if (props.postData === undefined) {
+    return <></>
+  }
+
   return (
     <Container>
       <Header
@@ -46,8 +52,11 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
         onClickLeft={props.onClickLeft}
       />
       <AnswerCard
-        questionTitle="김덕배님 남자친구는 있으신지요 ????"
-        backColor={'#67D585'}
+        questionTitle={props.postData.getPost.content}
+        backColor={props.postData.getPost.color}
+        count={props.parentComments?.getParentComments.edges.length}
+        time={props.postData.getPost.createdAt}
+        stickers={props.postData.getPost.usedEmoticons}
         onClickOption={
           props.isMine
             ? () => {

@@ -16,10 +16,15 @@ import {
   CREATE_COMMENT,
 } from '../../lib/queries/createQueries'
 import {
-  deleteCommentRes,
+  deleteCommentResponse,
   deleteCommentParams,
   DELETE_COMMENT,
 } from '../../lib/queries/deleteQueries'
+import {
+  getPostByIdParams,
+  GET_POST_BY_ID,
+  getPostById,
+} from '../../lib/queries/getPostQueries'
 
 export type AnswerContactType = 'parent' | 'children' | 'grandChildren'
 
@@ -30,6 +35,12 @@ const AnswerDetailPage: React.FC = () => {
   const [modalTitle, setModalTitle] = useState<string>()
   const [curCommentId, setCurCommentId] = useState('')
   const [curParentCommentId, setCurParentCommentId] = useState('')
+  const { data: postData } = useQuery<getPostById, getPostByIdParams>(
+    GET_POST_BY_ID,
+    {
+      variables: { postId: postId },
+    }
+  )
   const parentCommentsData = useQuery<ParentComments>(GET_PARENT_COMMENTS, {
     variables: { first: 10, postId: postId },
   })
@@ -52,7 +63,7 @@ const AnswerDetailPage: React.FC = () => {
   const [createCommentMutation] =
     useMutation<CreateCommentRes, CreateCommentParams>(CREATE_COMMENT)
   const [deleteCommentMutation] =
-    useMutation<deleteCommentRes, deleteCommentParams>(DELETE_COMMENT)
+    useMutation<deleteCommentResponse, deleteCommentParams>(DELETE_COMMENT)
 
   const setParentCommentId = (commentId: string) => {
     setCurParentCommentId(commentId)
@@ -129,6 +140,7 @@ const AnswerDetailPage: React.FC = () => {
         parentCommentsForRefetching={parentCommentsData}
         parentComments={parentCommentsData.data}
         setParentCommentId={setParentCommentId}
+        postData={postData}
       />
       <Modal
         open={isOpen}

@@ -15,6 +15,20 @@ export const DELETE_POST = gql`
   }
 `
 
+export interface deleteCommentParams {
+  commentId: string
+}
+
+export interface deleteCommentResponse {
+  message: string
+}
+export const DELETE_COMMENT = gql`
+  mutation deleteComment($commentId: String!) {
+    deleteComment(commentId: $commentId) {
+      message
+    }
+  }
+`
 export interface deleteLikeRes {
   postId: string
 }
@@ -38,21 +52,6 @@ export interface deleteLikeCommentParams {
 export const DELETE_LIKE_COMMENT = gql`
   mutation deleteLikeComments($postId: String!, $commentId: String!) {
     deleteLikeComments(postId: $postId, commentId: $commentId) {
-      message
-    }
-  }
-`
-
-export interface deleteCommentRes {
-  message: string
-}
-export interface deleteCommentParams {
-  commentId: string
-}
-
-export const DELETE_COMMENT = gql`
-  mutation deleteComment($commentId: String!) {
-    deleteComment(commentId: $commentId) {
       message
     }
   }
