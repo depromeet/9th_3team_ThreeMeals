@@ -75,28 +75,30 @@ const PostComment: FC<Props> = (props) => {
   const handleLikeActive = useCallback(
     (e, postId, commentId, likedComments) => {
       const { id } = e.target
-      if (likedComments.length > 0) {
-        deleteLikeComment({
-          variables: { postId: postId, commentId: commentId },
-        }).then(() => {
-          if (id === 'parent') {
-            props.parentCommentsForRefetching.refetch()
-          }
-          if (id === 'children' && childrenCommentRefetch !== undefined) {
-            return childrenCommentRefetch()
-          }
-        })
-      } else {
-        createLikeComment({
-          variables: { postId: postId, commentId: commentId },
-        }).then(() => {
-          if (id === 'parent') {
-            props.parentCommentsForRefetching.refetch()
-          }
-          if (id === 'children' && childrenCommentRefetch !== undefined) {
-            return childrenCommentRefetch()
-          }
-        })
+      if (props.isMine) {
+        if (likedComments.length > 0) {
+          deleteLikeComment({
+            variables: { postId: postId, commentId: commentId },
+          }).then(() => {
+            if (id === 'parent') {
+              props.parentCommentsForRefetching.refetch()
+            }
+            if (id === 'children' && childrenCommentRefetch !== undefined) {
+              return childrenCommentRefetch()
+            }
+          })
+        } else {
+          createLikeComment({
+            variables: { postId: postId, commentId: commentId },
+          }).then(() => {
+            if (id === 'parent') {
+              props.parentCommentsForRefetching.refetch()
+            }
+            if (id === 'children' && childrenCommentRefetch !== undefined) {
+              return childrenCommentRefetch()
+            }
+          })
+        }
       }
     },
     [
