@@ -7,16 +7,19 @@ import PostComment from '../molecules/PostComment'
 import AnswerCard from '../organisms/AnswerCard'
 import { AnswerContactType } from '../pages/AnswerDetailPage'
 import { ParentComments } from '../../lib/queries/getCommentsQueries'
+import { QueryResult } from '@apollo/client'
 import { getPostById } from '../../lib/queries/getPostQueries'
 
 interface Props {
   parentComments: ParentComments | undefined
+  parentCommentsForRefetching: QueryResult<ParentComments, Record<string, any>>
   isMine: boolean
   postData?: getPostById
   onClickLeft?: () => void
   onClickRight?: () => void
   onSendComment: (comment: string) => void
   onClickRemove?: (type: AnswerContactType, id: string) => void
+  setParentCommentId: (commentId: string) => void
 }
 
 const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
@@ -30,8 +33,16 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
       setIsFocus(false)
     }, 1000)
   }, [])
+  const onSubmitPostImg = useCallback(
+    (e) => {
+      e.preventDefault()
+      props.onSendComment(comment)
+      setComment('')
+    },
+    [comment, props]
+  )
   if (props.postData === undefined) {
-    return <></>
+    return null
   }
 
   return (
@@ -57,26 +68,26 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
       <PostContainer>
         <PostComment
           isMine={props.isMine}
+          parentCommentsForRefetching={props.parentCommentsForRefetching}
           profileImg={IMAGES.background}
           commentsInfo={props.parentComments}
           onClickRemove={props.onClickRemove}
+          setParentCommentId={props.setParentCommentId}
         />
       </PostContainer>
       <BottomContainer style={{ paddingBottom: 30 }}>
-        <InputContainer>
+        <InputContainer onSubmit={onSubmitPostImg}>
           <DefaultInput
             placeholder="댓글을 입력하세요."
             onChange={(e) => setComment(e)}
             onFocus={onFocus}
             onBlur={onBlur}
             containerStyle={{ width: isFocus ? '80%' : '85%', height: '100%' }}
+            value={comment}
           />
           <Postimg
             src={IMAGES.inputSend}
-            onClick={(e) => {
-              e.preventDefault()
-              props.onSendComment(comment)
-            }}
+            onClick={onSubmitPostImg}
             style={{ visibility: isFocus ? 'initial' : 'hidden' }}
           />
         </InputContainer>
@@ -107,7 +118,7 @@ const BottomContainer = styled.div`
   display: flex;
   justify-content: center;
 `
-const InputContainer = styled.div`
+const InputContainer = styled.form`
   height: 78px;
   margin-left: 5%;
   padding-bottom: 30px;

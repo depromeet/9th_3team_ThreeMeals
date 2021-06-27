@@ -117,3 +117,19 @@ export const CREATE_LIKE = gql`
     }
   }
 `
+export interface createLikeCommentParams {
+  postId: string
+  commentId: string
+}
+
+export interface createLikeCommentRes {
+  message: string
+}
+
+export const CREATE_LIKE_COMMENT = gql`
+  mutation createLikeComments($postId: String!, $commentId: String!) {
+    createLikeComments(postId: $postId, commentId: $commentId) {
+      message
+    }
+  }
+`

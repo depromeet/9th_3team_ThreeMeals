@@ -41,3 +41,18 @@ export const DELETE_LIKE = gql`
     deleteLikePosts(postId: $postId)
   }
 `
+export interface deleteLikeCommentRes {
+  message: string
+}
+export interface deleteLikeCommentParams {
+  postId: string
+  commentId: string
+}
+
+export const DELETE_LIKE_COMMENT = gql`
+  mutation deleteLikeComments($postId: String!, $commentId: String!) {
+    deleteLikeComments(postId: $postId, commentId: $commentId) {
+      message
+    }
+  }
+`
