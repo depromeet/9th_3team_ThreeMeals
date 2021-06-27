@@ -48,6 +48,9 @@ const AnswerCard: React.FunctionComponent<Props> = (props) => {
                       props.userId
                     : ''
                 }
+                onCopy={() => {
+                  alert('클립보드에 복사되었습니다.')
+                }}
               >
                 <Image
                   src={IMAGES.icon_32_share}

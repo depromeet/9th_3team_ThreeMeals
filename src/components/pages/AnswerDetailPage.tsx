@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Modal from '../molecules/Modal'
 import AnswerDetailTemplate from '../templates/AnswerDetailTemplate'
@@ -13,12 +13,23 @@ import {
   CreateCommentParams,
   CREATE_COMMENT,
 } from '../../lib/queries/createQueries'
+import {
+  getPostByIdParams,
+  GET_POST_BY_ID,
+  getPostById,
+} from '../../lib/queries/getPostQueries'
 
 export type AnswerContactType = 'parent' | 'children'
 
 const AnswerDetailPage: React.FC = () => {
   const router = useRouter()
   const { postId, isMine: queryIsMine } = router.query
+  const { data: postData } = useQuery<getPostById, getPostByIdParams>(
+    GET_POST_BY_ID,
+    {
+      variables: { postId: postId },
+    }
+  )
   const parentCommentsData = useQuery<ParentComments>(GET_PARENT_COMMENTS, {
     variables: { first: 10, postId: postId },
   })
@@ -64,7 +75,6 @@ const AnswerDetailPage: React.FC = () => {
     }
     return false
   }, [queryIsMine])
-  console.log(parentCommentsData)
   return (
     <AppContainer>
       <AnswerDetailTemplate
@@ -74,6 +84,7 @@ const AnswerDetailPage: React.FC = () => {
         onClickRemove={onClickRemove}
         isMine={isMine}
         parentComments={parentCommentsData.data}
+        postData={postData}
       />
       <Modal
         open={isOpen}

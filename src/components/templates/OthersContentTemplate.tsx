@@ -109,16 +109,18 @@ const OthersContentTemplate: FC<Props> = (props) => {
           <>
             <ContentContainer>
               {postContent?.quiz.map((content, index) => {
-                return (
+                return content.node.comments &&
+                  content.node.comments.length > 0 ? (
                   <QuizAnswerCardContainer key={index}>
                     <QuizAnswerCard
                       content={content.node.content}
                       backColor={content.node.color}
-                      answerType={true}
+                      answerType={content.node.comments[0].content}
                       isMyFeed={false}
+                      isLikeActive={content.node.likedPosts.length > 0}
                     />
                   </QuizAnswerCardContainer>
-                )
+                ) : null
               })}
             </ContentContainer>
           </>

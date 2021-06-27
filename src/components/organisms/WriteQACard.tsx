@@ -69,6 +69,7 @@ const ContentContainer = styled.div`
   flex-direction: column;
   textarea {
     flex: 1;
+    overflow: auto;
     width: 100%;
     border: none;
     background: none;
@@ -80,14 +81,6 @@ const ContentContainer = styled.div`
     resize: none;
     &:focus {
       outline: none;
-    }
-    ::-webkit-scrollbar {
-      width: 2px;
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #adb5bd;
-      opacity: 0.1;
     }
   }
 `
