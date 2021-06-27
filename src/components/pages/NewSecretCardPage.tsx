@@ -59,10 +59,10 @@ const NewSecretCardPage: React.FC = () => {
             router.replace('/content')
           })
           .catch(() => {
-            alert('네트워크를 확인해주세요. :)')
+            window.alert('네트워크를 확인해주세요. :)')
           })
       } else {
-        alert('내용을 입력해주세요. :)')
+        window.alert('내용을 입력해주세요. :)')
       }
     },
     [create_comment, router]
