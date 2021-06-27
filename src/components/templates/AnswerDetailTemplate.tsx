@@ -7,9 +7,11 @@ import PostComment from '../molecules/PostComment'
 import AnswerCard from '../organisms/AnswerCard'
 import { AnswerContactType } from '../pages/AnswerDetailPage'
 import { ParentComments } from '../../lib/queries/getCommentsQueries'
+import { QueryResult } from '@apollo/client'
 
 interface Props {
   parentComments: ParentComments | undefined
+  parentCommentsForRefetching: QueryResult<ParentComments, Record<string, any>>
   isMine: boolean
   onClickLeft?: () => void
   onClickRight?: () => void
@@ -57,6 +59,7 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
       <PostContainer>
         <PostComment
           isMine={props.isMine}
+          parentCommentsForRefetching={props.parentCommentsForRefetching}
           profileImg={IMAGES.background}
           commentsInfo={props.parentComments}
           onClickRemove={props.onClickRemove}

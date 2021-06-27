@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC, useCallback, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { AnswerContactType } from '../pages/AnswerDetailPage'
 import {
@@ -6,13 +6,24 @@ import {
   ParentComments,
   GET_CHILDREN_COMMENTS,
 } from '../../lib/queries/getCommentsQueries'
-import { useLazyQuery } from '@apollo/client'
+import { useLazyQuery, useMutation, QueryResult } from '@apollo/client'
 import dayjs from 'dayjs'
 import { SVGS } from '../../constants/svgs'
+import {
+  CREATE_LIKE_COMMENT,
+  createLikeCommentRes,
+  createLikeCommentParams,
+} from '../../lib/queries/createQueries'
+import {
+  deleteLikeCommentRes,
+  deleteLikeCommentParams,
+  DELETE_LIKE_COMMENT,
+} from '../../lib/queries/deleteQueries'
 interface Props {
   isMine: boolean
   profileImg: string
   commentsInfo: ParentComments | undefined
+  parentCommentsForRefetching: QueryResult<ParentComments, Record<string, any>>
   setParentCommentId: (commentId: string) => void
   onClickRemove?: (type: AnswerContactType, id: string) => void
 }
@@ -22,14 +33,16 @@ const PostComment: FC<Props> = (props) => {
   const [childrenOpen, setChildrenOpen] = useState(false)
   const [curPostId, setCurPostId] = useState('')
   const [curParentCommentId, setCurParentCommentId] = useState('')
-  const [getChildrenComment, { data: childrenComments }] =
-    useLazyQuery<ChildrenComments>(GET_CHILDREN_COMMENTS, {
-      variables: {
-        first: 10,
-        postId: curPostId,
-        parentId: curParentCommentId,
-      },
-    })
+  const [
+    getChildrenComment,
+    { data: childrenComments, refetch: childrenCommentRefetch },
+  ] = useLazyQuery<ChildrenComments>(GET_CHILDREN_COMMENTS, {
+    variables: {
+      first: 10,
+      postId: curPostId,
+      parentId: curParentCommentId,
+    },
+  })
   const postCommentData = props.commentsInfo?.getParentComments.edges
   const childrenCommentData = childrenComments?.getChildrenComments.edges
   const handleWriteComment = useCallback(
@@ -39,11 +52,6 @@ const PostComment: FC<Props> = (props) => {
     },
     [props, writeOpen]
   )
-  const handleLikeActive = useCallback(() => {
-    if (props.isMine) {
-      // mutation : createLikeChildrenComment
-    }
-  }, [props.isMine])
   const handleChildrenComment = useCallback(
     (commentId: string, postId: string) => {
       getChildrenComment({
@@ -55,6 +63,48 @@ const PostComment: FC<Props> = (props) => {
       props.setParentCommentId(commentId)
     },
     [childrenOpen, getChildrenComment, props]
+  )
+  const [createLikeComment] =
+    useMutation<createLikeCommentRes, createLikeCommentParams>(
+      CREATE_LIKE_COMMENT
+    )
+  const [deleteLikeComment] =
+    useMutation<deleteLikeCommentRes, deleteLikeCommentParams>(
+      DELETE_LIKE_COMMENT
+    )
+  const handleLikeActive = useCallback(
+    (e, postId, commentId, likedComments) => {
+      const { id } = e.target
+      if (likedComments.length > 0) {
+        deleteLikeComment({
+          variables: { postId: postId, commentId: commentId },
+        }).then(() => {
+          if (id === 'parent') {
+            props.parentCommentsForRefetching.refetch()
+          }
+          if (id === 'children' && childrenCommentRefetch !== undefined) {
+            return childrenCommentRefetch()
+          }
+        })
+      } else {
+        createLikeComment({
+          variables: { postId: postId, commentId: commentId },
+        }).then(() => {
+          if (id === 'parent') {
+            props.parentCommentsForRefetching.refetch()
+          }
+          if (id === 'children' && childrenCommentRefetch !== undefined) {
+            return childrenCommentRefetch()
+          }
+        })
+      }
+    },
+    [
+      childrenCommentRefetch,
+      createLikeComment,
+      deleteLikeComment,
+      props.parentCommentsForRefetching,
+    ]
   )
   return (
     <AppContainer>
@@ -85,7 +135,19 @@ const PostComment: FC<Props> = (props) => {
                 >
                   답글쓰기
                 </Write>
-                <LikeAction className="likeActive" onClick={handleLikeActive}>
+                <LikeAction
+                  className="likeActive"
+                  onClick={(e) =>
+                    handleLikeActive(
+                      e,
+                      comment.node.postId,
+                      comment.node.id,
+                      comment.node.likedComments
+                    )
+                  }
+                  id="parent"
+                  active={comment.node.likedComments.length > 0}
+                >
                   좋아요
                 </LikeAction>
                 <ChildrenCommentCnt
@@ -136,7 +198,20 @@ const PostComment: FC<Props> = (props) => {
                             {childrenComment.node.content}
                           </CommentContent>
                           <ChildrenFooter>
-                            <LikeAction onClick={handleLikeActive}>
+                            <LikeAction
+                              onClick={(e) =>
+                                handleLikeActive(
+                                  e,
+                                  childrenComment.node.postId,
+                                  childrenComment.node.id,
+                                  childrenComment.node.likedComments
+                                )
+                              }
+                              id="children"
+                              active={
+                                childrenComment.node.likedComments.length > 0
+                              }
+                            >
                               좋아요
                             </LikeAction>
                           </ChildrenFooter>
@@ -154,6 +229,10 @@ const PostComment: FC<Props> = (props) => {
 }
 
 export default React.memo(PostComment)
+
+interface LikeActionProps {
+  active: boolean
+}
 
 const AppContainer = styled.div`
   padding: 0 24px;
@@ -266,9 +345,10 @@ const Write = styled.span`
   cursor: pointer;
   margin-right: 15px;
 `
-const LikeAction = styled.span`
+const LikeAction = styled.span<LikeActionProps>`
   cursor: pointer;
   margin-right: 15px;
+  ${({ active }) => active && `color:#6799FE`}
 `
 const ChildrenCommentCnt = styled.span`
   cursor: pointer;

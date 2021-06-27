@@ -11,6 +11,9 @@ interface Account {
   createdAt: string
   updatedAt: string
 }
+interface LikeComment {
+  id: string
+}
 
 interface ParentCommentInfo {
   node: {
@@ -24,6 +27,7 @@ interface ParentCommentInfo {
     postId: string
     childrenCount: number
     parentId: string
+    likedComments: LikeComment[]
     pageInfo: {
       endCursor: string
       hasNextPage: boolean
@@ -43,6 +47,7 @@ interface ChildrenCommentInfo {
     postId: string
     parentId: string
     image: string
+    likedComments: LikeComment[]
   }
 }
 
@@ -74,6 +79,9 @@ export const GET_PARENT_COMMENTS = gql`
           content
           secretType
           postId
+          likedComments {
+            id
+          }
           account {
             id
           }
@@ -102,6 +110,9 @@ export const GET_CHILDREN_COMMENTS = gql`
           content
           secretType
           commentState
+          likedComments {
+            id
+          }
           createdAt
           updatedAt
           account {
