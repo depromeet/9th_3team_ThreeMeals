@@ -42,7 +42,7 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
     [comment, props]
   )
   if (props.postData === undefined) {
-    return <></>
+    return null
   }
 
   return (

@@ -80,22 +80,30 @@ const PostComment: FC<Props> = (props) => {
           deleteLikeComment({
             variables: { postId: postId, commentId: commentId },
           }).then(() => {
-            if (id === 'parent') {
-              props.parentCommentsForRefetching.refetch()
-            }
-            if (id === 'children' && childrenCommentRefetch !== undefined) {
-              return childrenCommentRefetch()
+            try {
+              if (id === 'parent') {
+                props.parentCommentsForRefetching.refetch()
+              }
+              if (id === 'children' && childrenCommentRefetch !== undefined) {
+                return childrenCommentRefetch()
+              }
+            } catch (err) {
+              console.log(err)
             }
           })
         } else {
           createLikeComment({
             variables: { postId: postId, commentId: commentId },
           }).then(() => {
-            if (id === 'parent') {
-              props.parentCommentsForRefetching.refetch()
-            }
-            if (id === 'children' && childrenCommentRefetch !== undefined) {
-              return childrenCommentRefetch()
+            try {
+              if (id === 'parent') {
+                props.parentCommentsForRefetching.refetch()
+              }
+              if (id === 'children' && childrenCommentRefetch !== undefined) {
+                return childrenCommentRefetch()
+              }
+            } catch (err) {
+              console.log(err)
             }
           })
         }
@@ -105,6 +113,7 @@ const PostComment: FC<Props> = (props) => {
       childrenCommentRefetch,
       createLikeComment,
       deleteLikeComment,
+      props.isMine,
       props.parentCommentsForRefetching,
     ]
   )
