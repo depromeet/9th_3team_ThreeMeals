@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import type { AppProps } from 'next/app'
-import Head from 'next/head'
 import ReactGA from 'react-ga'
 
 import { ApolloProvider } from '@apollo/client'
 
+import NextHead from '../src/components/NextHead'
 import { GlobalStyle } from '../src/utils/GlobalStyle'
 import { useApollo } from '../src/lib/apollo'
 
@@ -35,12 +35,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   return (
     <ApolloProvider client={apolloClient}>
-      <Head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-        />
-      </Head>
+      <NextHead />
       <GlobalStyle />
       <Component {...pageProps} />
     </ApolloProvider>
