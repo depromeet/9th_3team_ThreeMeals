@@ -93,7 +93,7 @@ const Header: React.FC<Props> = (props: Props) => {
                 </BurgerContent>
                 {props.isLogin && (
                   <BurgerSmallText onClick={() => router.push('/contactUs')}>
-                    Context us
+                    contact us
                   </BurgerSmallText>
                 )}
                 <BurgerExitContent onClick={props.onClickContect}>

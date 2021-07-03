@@ -113,7 +113,6 @@ const TextArea = styled.textarea`
   resize: none;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 24px;
-  font-family: Apple SD Gothic Neo;
   font-weight: 500;
   font-size: 20px;
   line-height: 32px;
@@ -147,7 +146,6 @@ const FinishContainer = styled.div`
 
 const FinishText = styled.div`
   margin-top: 20px;
-  font-family: Apple SD Gothic Neo;
   font-style: normal;
   font-weight: 500;
   font-size: 18px;

@@ -116,7 +116,6 @@ const EmptyContainer = styled.div`
 const EmptyText = styled.div`
   flex: 1;
   height: 50%;
-  font-family: Apple SD Gothic Neo;
   font-style: normal;
   font-weight: normal;
   font-size: 13px;

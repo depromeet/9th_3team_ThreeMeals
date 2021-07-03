@@ -283,7 +283,7 @@ const CommentId = styled.div``
 const CommentContent = styled.div`
   margin-top: 8px;
   margin-bottom: 12px;
-  font-family: Apple SD Gothic Neo;
+  font-family: system-ui;
   font-style: normal;
   font-size: 15px;
   font-weight: normal;

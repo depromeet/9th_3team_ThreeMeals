@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useQuery, useMutation } from '@apollo/client'
 import { useCallback, useRef, useState } from 'react'
 import styled from 'styled-components'
-
+import jsCookies from 'js-cookie'
 import ProfileTemplate from '../templates/ProfileTemplate'
 import Modal from '../molecules/Modal'
 import { IMAGES } from '../../constants/images'
@@ -81,6 +81,7 @@ const ProfilePage: React.FC = () => {
         }
         onClickName={() => router.push('/profile/[edit]', '/profile/nameEdit')}
         onClickLogout={() => {
+          jsCookies.remove('token')
           router.push('/')
         }}
         nickName={getMyAccountInfo.nickname}

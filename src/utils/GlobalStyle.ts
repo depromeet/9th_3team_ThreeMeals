@@ -1,15 +1,14 @@
 import { createGlobalStyle } from 'styled-components'
 import reset from 'styled-reset'
-import '../../node_modules/slick-carousel/slick/slick.css'
-import '../../node_modules/slick-carousel/slick/slick-theme.css'
-
+import 'react-responsive-carousel/lib/styles/carousel.min.css' // requires a loader
 export const GlobalStyle = createGlobalStyle`
   ${reset};
 
-  html {height: 100%}
+  html {height: 100%;}
   body {
     background: #191919;
     height: 100%;
+    font-family: system-ui;
   }
   body > div:first-child,
   div#__next,
