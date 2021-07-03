@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import Slick from 'react-slick'
 import LabelCardHeader from '../molecules/LabelCardHeader'
 import CardLabel from '../atoms/CardLabel'
+import { Carousel } from 'react-responsive-carousel'
 import { SVGS } from '../../constants/svgs'
 import { IMAGES } from '../../constants/images'
 import { StickerInfo } from '../../types/types'
@@ -80,87 +80,93 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
   }, [props.createdAt, timeStatus])
 
   return (
-    <Slick
-      dots={false}
-      arrows={undefined}
-      infinite={false}
-      variableWidth={false}
-      css={{ textAlign: 'center' }}
-    >
-      <Container backColor={props.backColor}>
-        <StyledLabelCardHeader
-          labelComponent={
-            timeStatus === 'bong-in' ? (
-              <PrivateCardLabel text="BONG IN" active={false} />
-            ) : timeStatus === 'show' ? (
-              <ShowProfile>
-                <ProfileImg src={IMAGES.background} />
-                <ProfileName>hi</ProfileName>
-                <ProfileImgSticker src={IMAGES.open_label} />
-              </ShowProfile>
-            ) : (
-              <CardLabel text={timerValue || '00:00:00'} active />
-            )
-          }
-          onClickLike={props.onClickLike}
-          onClickOption={props.onClickOption}
-          isLikeActive={props.isLikeActive}
-        />
-        <QuestionTitle>{props.questionTitle}</QuestionTitle>
-        <StickerContainer>
-          <StickerPanelWithNoSSR postedStickers={props.stickers} />
-        </StickerContainer>
-        <BottomContainer>
-          <img
-            src={SVGS.icon_left_arrow_wh}
-            alt="arrow-left"
-            width={45}
-            height={37}
+    <>
+      <Carousel
+        emulateTouch={true}
+        showArrows={false}
+        showStatus={false}
+        showIndicators={false}
+        showThumbs={false}
+        infiniteLoop={false}
+        autoPlay={false}
+        interval={1e11}
+      >
+        <Container backColor={props.backColor}>
+          <StyledLabelCardHeader
+            labelComponent={
+              timeStatus === 'bong-in' ? (
+                <PrivateCardLabel text="BONG IN" active={false} />
+              ) : timeStatus === 'show' ? (
+                <ShowProfile>
+                  <ProfileImg src={IMAGES.background} />
+                  <ProfileName>hi</ProfileName>
+                  <ProfileImgSticker src={IMAGES.open_label} />
+                </ShowProfile>
+              ) : (
+                <CardLabel text={timerValue || '00:00:00'} active />
+              )
+            }
+            onClickLike={props.onClickLike}
+            onClickOption={props.onClickOption}
+            isLikeActive={props.isLikeActive}
           />
-          밀어서 답장보기
-        </BottomContainer>
-      </Container>
-      <SecondContainer backColor={props.backColor} style={{ opacity: 0.05 }}>
-        {props.isInput ? (
-          <>
-            <TextArea
-              value={currentValue}
-              onChange={(e) => {
-                setCurrentValue(e.target.value)
-              }}
+          <QuestionTitle>{props.questionTitle}</QuestionTitle>
+          <StickerContainer>
+            <StickerPanelWithNoSSR postedStickers={props.stickers} />
+          </StickerContainer>
+          <BottomContainer>
+            <img
+              src={SVGS.icon_left_arrow_wh}
+              alt="arrow-left"
+              width={45}
+              height={37}
+              style={{ width: 45 }}
             />
-            {currentValue === '' ? (
-              <SaveButton
-                src={IMAGES.button_floating_save_disabled}
-                width={80}
+            밀어서 답장보기
+          </BottomContainer>
+        </Container>
+        <SecondContainer backColor={props.backColor} style={{ opacity: 0.05 }}>
+          {props.isInput ? (
+            <>
+              <TextArea
+                value={currentValue}
+                onChange={(e) => {
+                  setCurrentValue(e.target.value)
+                }}
               />
-            ) : (
-              props.onClickSend && (
+              {currentValue === '' ? (
                 <SaveButton
-                  onClick={onClickSend}
-                  src={IMAGES.button_floating_save_active}
+                  src={IMAGES.button_floating_save_disabled}
                   width={80}
                 />
-              )
-            )}
-          </>
-        ) : (
-          <>
-            {props.comments && props.comments?.length > 0 ? (
-              <>
-                <SecondTimeText>
-                  {timeDiffCalc(
-                    new Date(props.comments[0].createdAt),
-                    new Date()
-                  )}
-                </SecondTimeText>
-                <p>{props.comments[0].content}</p>
-              </>
-            ) : null}
-          </>
-        )}
-      </SecondContainer>
-    </Slick>
+              ) : (
+                props.onClickSend && (
+                  <SaveButton
+                    onClick={onClickSend}
+                    src={IMAGES.button_floating_save_active}
+                    width={80}
+                  />
+                )
+              )}
+            </>
+          ) : (
+            <>
+              {props.comments && props.comments?.length > 0 ? (
+                <>
+                  <SecondTimeText>
+                    {timeDiffCalc(
+                      new Date(props.comments[0].createdAt),
+                      new Date()
+                    )}
+                  </SecondTimeText>
+                  <p>{props.comments[0].content}</p>
+                </>
+              ) : null}
+            </>
+          )}
+        </SecondContainer>
+      </Carousel>
+    </>
   )
 }
 
@@ -257,6 +263,7 @@ const BottomContainer = styled.div`
   img {
     margin-right: 7px;
   }
+  width: 100%;
 `
 
 const SecondTimeText = styled.div`

@@ -1,8 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 import reset from 'styled-reset'
-import '../../node_modules/slick-carousel/slick/slick.css'
-import '../../node_modules/slick-carousel/slick/slick-theme.css'
-
+import 'react-responsive-carousel/lib/styles/carousel.min.css' // requires a loader
 export const GlobalStyle = createGlobalStyle`
   ${reset};
 
