@@ -7,13 +7,14 @@ interface Props {
   isProfile?: boolean
   isLogin?: boolean
   profileImage?: string
+  myProfileImage?: string
   leftIcon?: string
   centerText?: string
   rightIcon?: string
   rightSecondIcon?: string
   rightText?: string
   blurRightText?: boolean
-
+  isOthersContent?: boolean
   onClickLeft?: () => void
   onClickRight?: () => void
   onClickSecondRight?: () => void
@@ -77,8 +78,11 @@ const Header: React.FC<Props> = (props: Props) => {
                 isOpen={isOpen}
                 noOverlay
               >
-                {props.profileImage && (
+                {!props.isOthersContent && props.profileImage && (
                   <BurgerProfileImage src={props.profileImage} />
+                )}
+                {props.isOthersContent && props.myProfileImage && (
+                  <BurgerProfileImage src={props.myProfileImage} />
                 )}
                 <BurgerContent>
                   <BurgerText

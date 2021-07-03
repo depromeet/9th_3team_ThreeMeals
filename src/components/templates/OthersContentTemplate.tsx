@@ -12,17 +12,18 @@ import styled from 'styled-components'
 import ProfileContent from '../molecules/ProfileContent'
 import DefaultLine from '../atoms/DefaultLine'
 import QuestionCard from '../organisms/QuestionCard'
-import PrivateCardLabel from '../atoms/PrivateCardLabel'
 import AnswerCard from '../organisms/AnswerCard'
 import { useRouter } from 'next/router'
 import { getAccountInfo } from '../../lib/queries/userQueries'
 import { getPost } from '../../lib/queries/getPostQueries'
 import QuizAnswerCard from '../organisms/QuizAnswerCard'
-import CardLabel from '../atoms/CardLabel'
+import { getMyAccountInfo } from '../../lib/queries/meQueries'
 
 interface Props {
+  token?: string
   getPost?: getPost
   getUnreadNotiCount?: number
+  myAccount?: getMyAccountInfo
   account?: getAccountInfo
   profileImage: string
   onClickLeft?: () => void
@@ -49,13 +50,21 @@ const OthersContentTemplate: FC<Props> = (props) => {
     }
   }, [props.getPost?.getPosts.edges])
   const onClickWrite = useCallback(() => {
-    if (tabIndex === 0) {
-      router.push(`/writePost/Ask?otherId=${props.account?.getAccountInfo.id}`)
+    if (props.token) {
+      if (tabIndex === 0) {
+        router.push(
+          `/writePost/Ask?otherId=${props.account?.getAccountInfo.id}`
+        )
+      } else {
+        router.push(
+          `/writePost/Quiz?otherId=${props.account?.getAccountInfo.id}`
+        )
+      }
     } else {
-      router.push(`/writePost/Quiz?otherId=${props.account?.getAccountInfo.id}`)
+      window.alert('로그인을 해주세요.')
+      router.push('/')
     }
-  }, [props.account?.getAccountInfo.id, router, tabIndex])
-  console.log('postContent:', postContent)
+  }, [props.account?.getAccountInfo.id, props.token, router, tabIndex])
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:
@@ -84,23 +93,27 @@ const OthersContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <ContentContainer>
-              {postContent?.answer.map((data, index) => {
-                return (
-                  <AnswerCard
-                    key={index}
-                    isContent
-                    id={data.node.id}
-                    time={data.node.createdAt}
-                    questionTitle={data.node.content}
-                    backColor={data.node.color}
-                    stickers={data.node.usedEmoticons}
-                    count={data.node.commentsCount}
-                    onClickPost={() => {
-                      props.onClickAnswerCard(data.node.id)
-                    }}
-                  />
-                )
-              })}
+              {postContent && postContent.answer.length > 0 ? (
+                postContent?.answer.map((data, index) => {
+                  return (
+                    <AnswerCard
+                      key={index}
+                      isContent
+                      id={data.node.id}
+                      time={data.node.createdAt}
+                      questionTitle={data.node.content}
+                      backColor={data.node.color}
+                      stickers={data.node.usedEmoticons}
+                      count={data.node.commentsCount}
+                      onClickPost={() => {
+                        props.onClickAnswerCard(data.node.id)
+                      }}
+                    />
+                  )
+                })
+              ) : (
+                <BackgroundSticker src={IMAGES.backgroundSticker} />
+              )}
             </ContentContainer>
           </>
         )
@@ -128,17 +141,14 @@ const OthersContentTemplate: FC<Props> = (props) => {
       default:
         break
     }
-  }, [
-    postContent?.answer,
-    postContent?.ask,
-    postContent?.quiz,
-    props,
-    tabIndex,
-  ])
+  }, [props, tabIndex, postContent])
 
   const profileImage = useMemo(() => {
     return props.account?.getAccountInfo.image
   }, [props.account?.getAccountInfo.image])
+  const myProfileImage = useMemo(() => {
+    return props.myAccount?.getMyAccountInfo.image
+  }, [props.myAccount?.getMyAccountInfo.image])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -149,9 +159,11 @@ const OthersContentTemplate: FC<Props> = (props) => {
   return (
     <AppContainer>
       <Header
-        isLogin={props.account ? true : false}
+        isOthersContent
+        isLogin={props.myAccount ? true : false}
         isProfile={profileImage ? true : false}
         profileImage={profileImage}
+        myProfileImage={myProfileImage}
         rightIcon={IMAGES.icon_24_drawer}
         rightSecondIcon={
           props.getUnreadNotiCount && props.getUnreadNotiCount > 0
@@ -310,4 +322,12 @@ const QuizAnswerCardContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
+`
+
+const BackgroundSticker = styled.img`
+  position: fixed;
+  width: 214px;
+  height: 191px;
+  bottom: 15px;
+  right: 15px;
 `
