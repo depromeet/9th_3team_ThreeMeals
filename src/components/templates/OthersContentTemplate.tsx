@@ -17,11 +17,13 @@ import { useRouter } from 'next/router'
 import { getAccountInfo } from '../../lib/queries/userQueries'
 import { getPost } from '../../lib/queries/getPostQueries'
 import QuizAnswerCard from '../organisms/QuizAnswerCard'
+import { getMyAccountInfo } from '../../lib/queries/meQueries'
 
 interface Props {
   token?: string
   getPost?: getPost
   getUnreadNotiCount?: number
+  myAccount?: getMyAccountInfo
   account?: getAccountInfo
   profileImage: string
   onClickLeft?: () => void
@@ -144,6 +146,9 @@ const OthersContentTemplate: FC<Props> = (props) => {
   const profileImage = useMemo(() => {
     return props.account?.getAccountInfo.image
   }, [props.account?.getAccountInfo.image])
+  const myProfileImage = useMemo(() => {
+    return props.myAccount?.getMyAccountInfo.image
+  }, [props.myAccount?.getMyAccountInfo.image])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -154,9 +159,11 @@ const OthersContentTemplate: FC<Props> = (props) => {
   return (
     <AppContainer>
       <Header
-        isLogin={props.account ? true : false}
+        isOthersContent
+        isLogin={props.myAccount ? true : false}
         isProfile={profileImage ? true : false}
         profileImage={profileImage}
+        myProfileImage={myProfileImage}
         rightIcon={IMAGES.icon_24_drawer}
         rightSecondIcon={
           props.getUnreadNotiCount && props.getUnreadNotiCount > 0
