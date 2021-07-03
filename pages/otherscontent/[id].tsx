@@ -13,14 +13,7 @@ const OthersContent: React.FC = () => {
 export default OthersContent
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const token = cookies(ctx).token
   const { id } = ctx.query
-
-  if (_isEmpty(token)) {
-    ctx.res.writeHead(302, { Location: '/' })
-    ctx.res.end()
-  }
-
   const apolloClient = initializeApollo({}, ctx)
   await apolloClient.query({
     query: GET_ACCOUNT_INFO,
