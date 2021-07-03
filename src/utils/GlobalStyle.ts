@@ -6,10 +6,11 @@ import '../../node_modules/slick-carousel/slick/slick-theme.css'
 export const GlobalStyle = createGlobalStyle`
   ${reset};
 
-  html {height: 100%}
+  html {height: 100%;}
   body {
     background: #191919;
     height: 100%;
+    font-family: system-ui;
   }
   body > div:first-child,
   div#__next,

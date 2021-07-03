@@ -126,9 +126,7 @@ const PhraseContainer = styled.div`
   }
 `
 
-const StyledText = styled.div`
-  font-family: 'Apple SD Gothic Neo';
-`
+const StyledText = styled.div``
 
 const TapesContainer = styled.div`
   width: 100%;

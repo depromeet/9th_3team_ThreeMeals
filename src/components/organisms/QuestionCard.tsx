@@ -282,7 +282,6 @@ const TextArea = styled.textarea`
   resize: none;
   background: border-box;
   border-radius: 24px;
-  font-family: Apple SD Gothic Neo;
   font-style: normal;
   font-weight: 500;
   font-size: 24px;
@@ -327,7 +326,6 @@ const ProfileImg = styled.img`
   margin-right: 8px;
 `
 const ProfileName = styled.span`
-  font-family: Apple SD Gothic Neo;
   font-style: normal;
   font-weight: 500;
   font-size: 17px;

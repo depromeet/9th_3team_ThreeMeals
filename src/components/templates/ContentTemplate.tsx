@@ -378,7 +378,6 @@ const TabContainer = styled.div`
 `
 
 const Tab = styled.div`
-  font-family: Apple SD Gothic Neo;
   font-style: normal;
   font-weight: normal;
   font-size: 18px;

@@ -10,7 +10,6 @@ const Button = styled.button`
   border-radius: 8px;
   border: 1px solid #fee500;
   background: #ffe812;
-  font-family: 'Apple SD Gothic Neo';
   font-weight: 700;
   cursor: pointer;
 `

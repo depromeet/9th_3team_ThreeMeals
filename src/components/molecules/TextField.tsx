@@ -26,7 +26,6 @@ const Container = styled.div`
   display: flex;
 `
 const Label = styled.div`
-  font-family: 'Apple SD Gothic Neo';
   font-style: normal;
   font-weight: 600;
   font-size: 16px;

@@ -28,7 +28,6 @@ const Container = styled.div`
 `
 
 const NameText = styled.div`
-  font-family: Apple SD Gothic Neo;
   font-style: normal;
   font-weight: normal;
   font-size: 22px;
@@ -38,7 +37,6 @@ const NameText = styled.div`
   margin-bottom: 4px;
 `
 const DescText = styled.div`
-  font-family: Apple SD Gothic Neo;
   font-style: normal;
   font-weight: normal;
   font-size: 13px;

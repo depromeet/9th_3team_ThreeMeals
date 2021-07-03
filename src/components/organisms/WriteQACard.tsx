@@ -75,7 +75,6 @@ const ContentContainer = styled.div`
     background: none;
     font-weight: 500;
     font-size: 20px;
-    font-family: Apple SD Gothic Neo;
     line-height: 32px;
     color: #000000;
     resize: none;
