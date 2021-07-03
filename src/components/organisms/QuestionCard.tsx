@@ -219,7 +219,7 @@ const SecondContainer = styled.div<{ backColor: string }>`
     letter-spacing: -0.02em;
     color: white;
   }
-
+  opacity: initial !important;
   margin-bottom: 16px;
   margin-left: 5%;
   margin-right: 5%;
@@ -301,9 +301,11 @@ const TextArea = styled.textarea`
   }
 `
 const SaveButton = styled.img`
+  width: 80px !important;
   position: absolute;
   right: 0;
   bottom: 0px;
+  pointer-events: initial !important;
 `
 
 const ShowProfile = styled.div`
