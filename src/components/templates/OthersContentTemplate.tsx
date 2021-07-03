@@ -17,8 +17,9 @@ import { useRouter } from 'next/router'
 import { getAccountInfo } from '../../lib/queries/userQueries'
 import { getPost } from '../../lib/queries/getPostQueries'
 import QuizAnswerCard from '../organisms/QuizAnswerCard'
-import jsCookies from 'js-cookie'
+
 interface Props {
+  token?: string
   getPost?: getPost
   getUnreadNotiCount?: number
   account?: getAccountInfo
@@ -47,9 +48,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
     }
   }, [props.getPost?.getPosts.edges])
   const onClickWrite = useCallback(() => {
-    const token = jsCookies.get('token')
-    console.log('token', token)
-    if (token) {
+    if (props.token) {
       if (tabIndex === 0) {
         router.push(
           `/writePost/Ask?otherId=${props.account?.getAccountInfo.id}`
@@ -63,7 +62,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
       window.alert('로그인을 해주세요.')
       router.push('/')
     }
-  }, [props.account?.getAccountInfo.id, router, tabIndex])
+  }, [props.account?.getAccountInfo.id, props.token, router, tabIndex])
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:

@@ -14,9 +14,12 @@ import {
   getUnreadNotiCount,
   GET_UNREAD_NOTI_COUNT,
 } from '../../lib/queries/getQueries'
+import jsCookies from 'js-cookie'
+
 const OthersContentPage: React.FC = () => {
   const router = useRouter()
   const { id } = router.query
+  const token = jsCookies.get('token')
   const account = useQuery<getAccountInfo>(GET_ACCOUNT_INFO, {
     variables: { accountId: id },
   })
@@ -38,6 +41,7 @@ const OthersContentPage: React.FC = () => {
   return (
     <AppContainer>
       <OthersContentTemplate
+        token={token}
         getPost={getPost.data}
         account={account.data}
         getUnreadNotiCount={getUnreadNotiCount.data?.getUnreadNotiCount.count}
