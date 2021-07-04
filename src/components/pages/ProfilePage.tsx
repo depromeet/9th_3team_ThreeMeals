@@ -87,6 +87,7 @@ const ProfilePage: React.FC = () => {
         nickName={getMyAccountInfo.nickname}
         onClickIcon={onClickIcon}
         introduction={getMyAccountInfo.content}
+        myId={getMyAccountInfo.id}
       />
 
       <Modal

@@ -19,11 +19,12 @@ interface Props {
   onClickName?: () => void
   onClickLogout?: () => void
   introduction?: string
+  myId: string
 }
 
 const ProfileTemplate: React.FC<Props> = (props: Props) => {
   const [blurRightText, setBlurRightText] = useState<boolean>(true)
-
+  const [windowObjet, setWindowObjet] = useState<Window | undefined>()
   useEffect(() => {
     setTimeout(() => {
       setBlurRightText(false)
@@ -33,7 +34,11 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
   const onClickClose = useCallback((id: string) => {
     console.log('id:', id)
   }, [])
-
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setWindowObjet(window)
+    }
+  }, [])
   return (
     <Container>
       <Header
@@ -92,8 +97,16 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
           external
           id={'2'}
           icon={IMAGES.share_16}
-          text={'figma.com/duck-bae'}
-          url={'https://google.com'}
+          text={
+            windowObjet !== undefined
+              ? windowObjet.location.origin + '/otherscontent/' + props.myId
+              : ''
+          }
+          url={
+            windowObjet !== undefined
+              ? windowObjet.location.origin + '/otherscontent/' + props.myId
+              : ''
+          }
           onClickClose={onClickClose}
         />
       </TagContainer>
