@@ -89,7 +89,6 @@ const WritePostPage: VFC = () => {
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     event.preventDefault()
-    console.log('send:', writePostInfo)
     if (writePostInfo && typeof writePostInfo !== undefined) {
       const emoticons = writePostInfo.emoticons?.map((emoticon) => {
         return { emoticonId: emoticon.emoticonId, position: emoticon.position }
@@ -106,8 +105,10 @@ const WritePostPage: VFC = () => {
         },
       }).then(() => {
         if (postType === 'Ask' || postType === 'Quiz') {
+          window.alert('질문 작성이 완료되었습니다.')
           router.push(`/otherscontent/${otherId}`)
         } else {
+          window.alert('질문 작성이 완료되었습니다.')
           router.push('/content')
         }
       })
@@ -134,7 +135,7 @@ const WritePostPage: VFC = () => {
       })
     }
   }, [backColor, otherId, postType, profile])
-  console.log(writePostInfo)
+
   return (
     <AppContainer>
       <WritePostTemplate
