@@ -15,6 +15,7 @@ interface Props {
   parentCommentsForRefetching: QueryResult<ParentComments, Record<string, any>>
   isMine: boolean
   postData?: getPostById
+  curParentCommentId: string
   onClickLeft?: () => void
   onClickRight?: () => void
   onSendComment: (comment: string) => void
@@ -64,6 +65,7 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
               }
             : undefined
         }
+        setParentCommentId={props.setParentCommentId}
       />
       <PostContainer>
         <PostComment
@@ -78,7 +80,11 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
       <BottomContainer style={{ paddingBottom: 30 }}>
         <InputContainer onSubmit={onSubmitPostImg}>
           <DefaultInput
-            placeholder="댓글을 입력하세요."
+            placeholder={
+              props.curParentCommentId === ''
+                ? '댓글을 입력해주세요'
+                : '답글을 입력해주세요'
+            }
             onChange={(e) => setComment(e)}
             onFocus={onFocus}
             onBlur={onBlur}

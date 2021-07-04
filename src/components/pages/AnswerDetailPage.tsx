@@ -139,6 +139,7 @@ const AnswerDetailPage: React.FC = () => {
         isMine={isMine}
         parentCommentsForRefetching={parentCommentsData}
         parentComments={parentCommentsData.data}
+        curParentCommentId={curParentCommentId}
         setParentCommentId={setParentCommentId}
         postData={postData}
       />

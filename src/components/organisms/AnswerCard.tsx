@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
@@ -22,15 +22,22 @@ interface Props {
   onClickShare?: () => void
   onClickOption?: () => void
   onClickPost?: () => void
+  setParentCommentId?: (commentId: string) => void
 }
 
 const AnswerCard: React.FunctionComponent<Props> = (props) => {
   const [windowObjet, setWindowObjet] = useState<Window | undefined>()
+  const setCommentType = useCallback(() => {
+    if (props.setParentCommentId !== undefined) {
+      props.setParentCommentId('')
+    }
+  }, [props])
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setWindowObjet(window)
     }
   }, [])
+
   return (
     <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
       <Container backColor={props.backColor}>
@@ -71,10 +78,7 @@ const AnswerCard: React.FunctionComponent<Props> = (props) => {
           <StickerPanelWithNoSSR postedStickers={props.stickers} />
         </StickerContainer>
         <BottomContainer onClick={props.onClickPost}>
-          <CommentImage
-            src={IMAGES.icon_24_comment}
-            onClick={props.onClickOption}
-          />
+          <CommentImage src={IMAGES.icon_24_comment} onClick={setCommentType} />
           <CommentCount>{`${props.count || 0}` + '개'}</CommentCount>
         </BottomContainer>
       </Container>
