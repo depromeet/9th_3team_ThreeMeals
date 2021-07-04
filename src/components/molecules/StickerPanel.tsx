@@ -82,6 +82,11 @@ const StickerPanel: FC<Props> = (props) => {
     },
     []
   )
+  const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (props.postedStickers === undefined) {
+      e.stopPropagation()
+    }
+  }
   useEffect(() => {
     if (addToPanelInfo.clickedSticker) {
       addToPanelByClicking(
@@ -109,9 +114,7 @@ const StickerPanel: FC<Props> = (props) => {
     <PanelContainer
       onDrop={onDrop}
       onDragOver={(e) => e.preventDefault()}
-      onTouchStart={(e) => {
-        e.stopPropagation()
-      }}
+      onTouchStart={(e) => onTouchStart(e)}
     >
       <Stage width={279} height={192} ref={stageRef}>
         <Layer>
