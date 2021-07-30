@@ -40,7 +40,9 @@ const Header: React.FC<Props> = (props: Props) => {
     if (props.isLogin) {
       router.push('/content')
     } else {
-      router.push('/')
+      window.Kakao.Auth.authorize({
+        redirectUri: `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/auth`,
+      })
     }
   }, [props.isLogin, router])
   return (
