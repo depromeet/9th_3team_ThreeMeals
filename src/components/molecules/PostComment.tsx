@@ -30,7 +30,9 @@ interface Props {
 
 const PostComment: FC<Props> = (props) => {
   const [writeOpen, setWriteOpen] = useState(false)
-  const [childrenOpen, setChildrenOpen] = useState(false)
+  const [childrenOpen, setChildrenOpen] = useState<
+    Array<{ index: number; value: boolean }>
+  >([])
   const [curPostId, setCurPostId] = useState('')
   const [curParentCommentId, setCurParentCommentId] = useState('')
   const [
@@ -53,11 +55,23 @@ const PostComment: FC<Props> = (props) => {
     [props, writeOpen]
   )
   const handleChildrenComment = useCallback(
-    (commentId: string, postId: string) => {
+    (commentId: string, postId: string, index: number) => {
       getChildrenComment({
         variables: { first: 10, parentId: commentId, postId: postId },
       })
-      setChildrenOpen(!childrenOpen)
+
+      if (childrenOpen.find((childInfo) => childInfo.index === index)) {
+        const newChildrenOpen = childrenOpen.map((childInfo) => {
+          if (childInfo.index === index) {
+            return { index: index, value: !childInfo.value }
+          } else {
+            return childInfo
+          }
+        })
+        setChildrenOpen(newChildrenOpen)
+      } else {
+        setChildrenOpen([...childrenOpen, { index: index, value: true }])
+      }
       setCurParentCommentId(commentId)
       setCurPostId(postId)
       props.setParentCommentId(commentId)
@@ -163,14 +177,18 @@ const PostComment: FC<Props> = (props) => {
                 </LikeAction>
                 <ChildrenCommentCnt
                   onClick={() =>
-                    handleChildrenComment(comment.node.id, comment.node.postId)
+                    handleChildrenComment(
+                      comment.node.id,
+                      comment.node.postId,
+                      i
+                    )
                   }
                 >
                   답글 {comment.node.childrenCount}개
                 </ChildrenCommentCnt>
               </>
             </CommentFooter>
-            {childrenOpen &&
+            {childrenOpen.find((childInfo) => childInfo.index === i) &&
               childrenCommentData?.map((childrenComment, i) => {
                 if (comment.node.id === childrenComment.node.parentId) {
                   return (
