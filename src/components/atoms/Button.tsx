@@ -1,9 +1,9 @@
-import * as React from 'react';
+import * as React from 'react'
 
 type Props = {
-  text: string;
-};
+  text: string
+}
 
-const Button = ({ text }: Props) => <button>{text}</button>;
+const Button = ({ text }: Props) => <button>{text}</button>
 
-export default Button;
+export default Button
