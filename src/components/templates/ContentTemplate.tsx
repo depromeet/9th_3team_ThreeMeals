@@ -98,7 +98,7 @@ const ContentTemplate: FC<Props> = (props) => {
             <ContentContainer>
               {postContent && postContent.ask.length > 0 ? (
                 postContent?.ask.map((data, index) => {
-                  return (
+                  data.node.comments && data.node.comments.length > 0 ? (
                     <QuestionCard
                       key={index}
                       id={data.node.id}
@@ -120,7 +120,7 @@ const ContentTemplate: FC<Props> = (props) => {
                         )
                       }}
                     />
-                  )
+                  ) : null
                 })
               ) : (
                 <BackgroundSticker src={IMAGES.backgroundSticker} />
