@@ -74,6 +74,7 @@ const ContentPage: React.FC = () => {
     getPost.refetch()
   }, [])
 
+  console.log('getPost', getPost.data)
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [tabIndex, setTabIndex] = useState<number>(0)
