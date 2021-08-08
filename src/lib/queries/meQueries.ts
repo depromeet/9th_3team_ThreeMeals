@@ -44,8 +44,6 @@ export const UPDATE_ACCOUNT_INFO = gql`
     ) {
       id
       nickname
-      provider
-      providerId
       status
       image
       content
