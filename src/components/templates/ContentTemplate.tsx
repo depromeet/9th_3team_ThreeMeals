@@ -59,7 +59,8 @@ const ContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <NoticeContainer>
-              {newPostCount === 0 ? (
+              {newPostCount === 0 &&
+              (postContent === undefined || postContent.ask?.length === 0) ? (
                 <img
                   style={{ position: 'relative', bottom: 15, zIndex: -1 }}
                   src={IMAGES.img_tape_empty}
@@ -160,7 +161,8 @@ const ContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <NoticeContainer>
-              {newPostCount === 0 ? (
+              {newPostCount === 0 &&
+              (postContent === undefined || postContent.quiz?.length === 0) ? (
                 <img
                   style={{ position: 'relative', bottom: 15, zIndex: -1 }}
                   src={IMAGES.img_tape_empty}
