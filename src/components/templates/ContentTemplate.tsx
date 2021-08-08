@@ -52,7 +52,6 @@ const ContentTemplate: FC<Props> = (props) => {
       }
     }
   }, [props.getPost?.getPosts.edges])
-  console.log(postContent?.ask)
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:
