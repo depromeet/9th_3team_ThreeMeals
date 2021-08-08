@@ -52,7 +52,7 @@ const ContentTemplate: FC<Props> = (props) => {
       }
     }
   }, [props.getPost?.getPosts.edges])
-
+  console.log(postContent?.ask)
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:
@@ -98,7 +98,7 @@ const ContentTemplate: FC<Props> = (props) => {
             <ContentContainer>
               {postContent && postContent.ask.length > 0 ? (
                 postContent?.ask.map((data, index) => {
-                  data.node.comments && data.node.comments.length > 0 ? (
+                  return data.node.postState === 'Completed' ? (
                     <QuestionCard
                       key={index}
                       id={data.node.id}
