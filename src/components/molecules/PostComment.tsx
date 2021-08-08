@@ -19,15 +19,16 @@ import {
   deleteLikeCommentParams,
   DELETE_LIKE_COMMENT,
 } from '../../lib/queries/deleteQueries'
+import { getPostById } from '../../lib/queries/getPostQueries'
 interface Props {
   isMine: boolean
   profileImg: string
+  postData: getPostById
   commentsInfo: ParentComments | undefined
   parentCommentsForRefetching: QueryResult<ParentComments, Record<string, any>>
   setParentCommentId: (commentId: string) => void
   onClickRemove?: (type: AnswerContactType, id: string) => void
 }
-
 const PostComment: FC<Props> = (props) => {
   const [writeOpen, setWriteOpen] = useState(false)
   const [childrenOpen, setChildrenOpen] = useState(false)
@@ -175,34 +176,38 @@ const PostComment: FC<Props> = (props) => {
                 if (comment.node.id === childrenComment.node.parentId) {
                   return (
                     <ChildrenContainer key={i}>
-                      <ProfileContainer>
-                        <img
-                          className="profileImg"
-                          src={
-                            childrenComment.node.account?.image ||
-                            SVGS.icon_profileAltImg
-                          }
-                          alt="profileImg"
-                        />
-                        <ChildrenHeader>
-                          <CommentId>
-                            {childrenComment.node.account?.nickname}
-                          </CommentId>
-                        </ChildrenHeader>
-                        {props.isMine && (
-                          <DropMenu
-                            onClick={() => {
-                              props.onClickRemove &&
-                                props.onClickRemove(
-                                  'grandChildren',
-                                  childrenComment.node.id
-                                )
-                            }}
-                          >
-                            •••
-                          </DropMenu>
+                      {childrenComment.node.account &&
+                        props.postData.getPost.fromAccount.id ===
+                          childrenComment.node.account.id && (
+                          <ProfileContainer>
+                            <img
+                              className="profileImg"
+                              src={
+                                childrenComment.node.account?.image ||
+                                SVGS.icon_profileAltImg
+                              }
+                              alt="profileImg"
+                            />
+                            <ChildrenHeader>
+                              <CommentId>
+                                {childrenComment.node.account?.nickname}
+                              </CommentId>
+                            </ChildrenHeader>
+                            {props.isMine && (
+                              <DropMenu
+                                onClick={() => {
+                                  props.onClickRemove &&
+                                    props.onClickRemove(
+                                      'grandChildren',
+                                      childrenComment.node.id
+                                    )
+                                }}
+                              >
+                                •••
+                              </DropMenu>
+                            )}
+                          </ProfileContainer>
                         )}
-                      </ProfileContainer>
                       <BodyContainer>
                         <ContentsContainer>
                           <CommentContent>
