@@ -64,27 +64,32 @@ const WritePostPage: VFC = () => {
     },
     [backColor]
   )
+
   const onClickOpenStickerList = useCallback(() => {
     setOpenStickerList(!openStickerList)
   }, [openStickerList])
+
   const addToPanelByClicking = useCallback(() => {
     addToPanel({ clickedSticker: true })
     setTimeout(() => {
       addToPanel({ clickedSticker: false })
     }, 500)
   }, [])
+
   const closeDeleteBtnByTouching = useCallback(() => {
     addToPanel({ closeDeleteBtn: true })
     setTimeout(() => {
       addToPanel({ closeDeleteBtn: false })
     }, 500)
   }, [])
+
   const onClickSaveBtn = useCallback(() => {
     if (!writePostInfo?.content) {
       return
     }
     setOpenSaveModal(true)
   }, [writePostInfo?.content])
+
   const onClickConfirm = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
@@ -114,6 +119,7 @@ const WritePostPage: VFC = () => {
       })
     }
   }
+
   useEffect(() => {
     if (typeof postType === 'string' && profile && !otherId) {
       addToWritePostInfo({
@@ -134,7 +140,8 @@ const WritePostPage: VFC = () => {
         toAccountId: otherId,
       })
     }
-  }, [backColor, otherId, postType, profile])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [otherId, postType, profile])
 
   return (
     <AppContainer>
