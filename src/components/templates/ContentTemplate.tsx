@@ -99,7 +99,7 @@ const ContentTemplate: FC<Props> = (props) => {
             <ContentContainer>
               {postContent && postContent.ask.length > 0 ? (
                 postContent?.ask.map((data, index) => {
-                  return data.node.comments && data.node.comments.length > 0 ? (
+                  return data.node.postState === 'Completed' ? (
                     <QuestionCard
                       key={index}
                       id={data.node.id}
