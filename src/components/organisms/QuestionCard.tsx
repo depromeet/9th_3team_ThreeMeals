@@ -69,7 +69,11 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
   }, [props.createdAt, props.secretType])
 
   useEffect(() => {
-    if (timeStatus !== 'bong-in') {
+    if (
+      timeStatus !== 'bong-in' &&
+      props.comments &&
+      props.comments?.length > 0
+    ) {
       const interval = setInterval(() => {
         const postDate = new Date(props.createdAt)
         postDate.setHours(postDate.getHours() + 24)
@@ -77,7 +81,7 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
       }, 1000)
       return () => clearInterval(interval)
     }
-  }, [props.createdAt, timeStatus])
+  }, [props.comments, props.createdAt, timeStatus])
 
   return (
     <>

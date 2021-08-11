@@ -20,9 +20,12 @@ import {
   deleteLikeCommentParams,
   DELETE_LIKE_COMMENT,
 } from '../../lib/queries/deleteQueries'
+import { getPostById } from '../../lib/queries/getPostQueries'
 interface Props {
   isMine: boolean
+  postData: getPostById
   profileImg: string
+  postData: getPostById
   commentsInfo: ParentComments | undefined
   parentCommentsForRefetching: QueryResult<ParentComments, Record<string, any>>
   setParentCommentId: (commentId: string) => void
@@ -168,7 +171,7 @@ const PostComment: FC<Props> = (props) => {
     ]
   )
   return (
-    <AppContainer>
+    <AppContainer cardColor={props.postData.getPost.color}>
       {postCommentData?.map((comment, i) => {
         return (
           <CommentContainer key={i}>
@@ -299,16 +302,20 @@ const PostComment: FC<Props> = (props) => {
 
 export default React.memo(PostComment)
 
+interface AppContainerProps {
+  cardColor: string
+}
+
 interface LikeActionProps {
   active: boolean
 }
 
-const AppContainer = styled.div`
+const AppContainer = styled.div<AppContainerProps>`
   padding: 0 24px;
   display: flex;
   flex-direction: column;
   background: rgba(255, 131, 61, 0.05);
-  border: 2px solid #ff833d;
+  ${({ cardColor }) => `border: 2px solid ${cardColor};`}
   border-radius: 24px;
   margin-left: 5%;
   margin-right: 5%;

@@ -47,7 +47,7 @@ const WriteQACard: FC<Props> = (props) => {
           {addToPanelInfo?.imgUrl && addToPanelInfo.width ? (
             <StickerPanelWithNoSSR />
           ) : (
-            <div style={{ padding: '10px', opacity: '0.5' }}>stickers!</div>
+            <div style={{ padding: '10px' }}>stickers!</div>
           )}
         </StickerContainer>
       </ContentContainer>
@@ -81,12 +81,22 @@ const ContentContainer = styled.div`
     &:focus {
       outline: none;
     }
+    ::placeholder,
+    ::-webkit-input-placeholder {
+      opacity: 0.2;
+      color: #000000;
+    }
+    :-ms-input-placeholder {
+      opacity: 0.2;
+      color: #000000;
+    }
   }
 `
 
 const StickerContainer = styled.div<StickerProps>`
   display: ${(props) => (props.isWithSticker ? 'block' : 'none')};
   border: dashed 1px #000000;
+  opacity: 0.3;
   height: 60%;
   img {
     width: 100%;
