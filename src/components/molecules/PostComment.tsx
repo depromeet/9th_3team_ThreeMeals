@@ -29,20 +29,23 @@ interface Props {
   onClickRemove?: (type: AnswerContactType, id: string) => void
 }
 
+type ChildrenCommentArr = Array<{
+  parentId: string
+  contents: Array<ChildrenCommentInfo>
+}>
+
 const PostComment: FC<Props> = (props) => {
   const [writeOpen, setWriteOpen] = useState(false)
   const [childrenOpen, setChildrenOpen] = useState<
     Array<{ index: number; value: boolean }>
   >([])
   const [childrenCommentsArr, setChildrenCommentsArr] =
-    useState<
-      Array<{ parentId: string; contents: Array<ChildrenCommentInfo> }>
-    >()
+    useState<ChildrenCommentArr>()
   const [curPostId, setCurPostId] = useState('')
   const [curParentCommentId, setCurParentCommentId] = useState('')
   const [
     getChildrenComments,
-    { data: childrenCommentss, refetch: childrenCommentsRefetch },
+    { data: childrenComments, refetch: childrenCommentsRefetch },
   ] = useLazyQuery<ChildrenComments>(GET_CHILDREN_COMMENTS, {
     variables: {
       first: 10,
@@ -52,10 +55,10 @@ const PostComment: FC<Props> = (props) => {
     onCompleted: (data) => checkChildrenCommentsArr(data),
   })
   const postCommentData = props.commentsInfo?.getParentComments.edges
-  const childrenCommentsData = childrenCommentss?.getChildrenComments.edges
+  const childrenCommentsData = childrenComments?.getChildrenComments.edges
   const checkChildrenCommentsArr = useCallback(
     (data: ChildrenComments) => {
-      if (typeof childrenCommentsArr === 'undefined') {
+      if (childrenCommentsArr === undefined) {
         return setChildrenCommentsArr([
           {
             parentId: curParentCommentId,
@@ -63,13 +66,10 @@ const PostComment: FC<Props> = (props) => {
           },
         ])
       } else {
-        if (
-          !childrenCommentsArr.find(
-            (childrenDataInfo) =>
-              childrenDataInfo.parentId === curParentCommentId
-          ) &&
-          childrenCommentsData
-        ) {
+        const checkTakingCurChildrenCommentsOnArr = childrenCommentsArr.find(
+          (childrenDataInfo) => childrenDataInfo.parentId === curParentCommentId
+        )
+        if (!checkTakingCurChildrenCommentsOnArr && childrenCommentsData) {
           setChildrenCommentsArr([
             ...childrenCommentsArr,
             {
