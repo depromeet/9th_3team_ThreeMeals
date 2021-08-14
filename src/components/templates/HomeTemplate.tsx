@@ -1,10 +1,9 @@
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC } from 'react'
 import Header from '../molecules/Header'
 import { HOME_ICONS, IMAGES } from '../../constants/images'
 import styled from 'styled-components'
 import CrossedTapesLabel from '../atoms/CrossedTapesLabel'
 import KakaoButton from '../atoms/KakaoButton'
-import HomeTextCard from '../molecules/HomeTextCard'
 interface Props {
   isProfile: boolean
   randomIndex: number
@@ -22,6 +21,9 @@ const HomeTemplate: FC<Props> = (props) => {
       <MainContainer>
         <CharIconContainer>
           <HomeIcon src={HOME_ICONS[props.randomIndex]} />
+          <HomeTextIconContainer>
+            <HomeTextIcon src={IMAGES.icon_home_text} />
+          </HomeTextIconContainer>
         </CharIconContainer>
         <PhraseContainer>
           <StyledText className="text1">쉿!</StyledText>
@@ -46,30 +48,8 @@ const HomeTemplate: FC<Props> = (props) => {
           <div className="kakao">
             <KakaoButton />
           </div>
-          <div className="arrowDownContainer">
-            <img
-              src={IMAGES.img_scrolldown}
-              alt="downArrow"
-              className="arrowIcon"
-            />
-            <span className="downText">Scroll down</span>
-          </div>
         </BottomContainer>
       </MainContainer>
-      <ImageIconContainer>
-        <img src={IMAGES.img_homebox} alt="homebox" className="image" />
-        <div className="iconBackground">?</div>
-      </ImageIconContainer>
-      <HomeTextCardContainer>
-        <HomeTextCard text="내 첫인상은 어땠어?" />
-        <HomeTextCard text="지금 여자친구 있어?" />
-        <HomeTextCard text="요즘 좋아하는 노래 뭐야?" />
-        <HomeTextCard
-          text="<- 귀여운 남자 \n 시크한 남자 ->"
-          textStyle={{ flexDirection: 'column' }}
-        />
-        <HomeTextCard text="나랑 영화보러 갈래?" />
-      </HomeTextCardContainer>
     </AppContainer>
   )
 }
@@ -77,6 +57,7 @@ const HomeTemplate: FC<Props> = (props) => {
 export default HomeTemplate
 
 const AppContainer = styled.div`
+  position: relative;
   max-width: 500px;
   width: 100%;
   color: #ffffff;
@@ -86,18 +67,34 @@ const MainContainer = styled.div`
   height: calc(100vh - 64px);
 `
 const CharIconContainer = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100px;
+  height: 150px;
   font-size: 50px;
   margin-bottom: 10px;
+  @media screen and (max-width: 320px) {
+    height: 100px;
+  }
 `
 const HomeIcon = styled.img`
   width: 100px;
   height: 100px;
 `
+const HomeTextIconContainer = styled.div`
+  position: absolute;
+  width: 70px;
+  height: 50px;
+  bottom: 0;
+  margin-left: 10px;
+`
+
+const HomeTextIcon = styled.img`
+  width: 100%;
+`
+
 const PhraseContainer = styled.div`
   width: 100%;
   height: 10%;
@@ -126,7 +123,16 @@ const PhraseContainer = styled.div`
   }
 `
 
-const StyledText = styled.div``
+const StyledText = styled.div`
+  @media screen and (max-width: 375px) {
+    .text1 {
+      font-size: 1rem;
+    }
+    .text2 {
+      font-size: 1.2rem;
+    }
+  }
+`
 
 const TapesContainer = styled.div`
   width: 100%;
@@ -139,13 +145,17 @@ const TapesContainer = styled.div`
     height: 150px;
   }
 `
-
+// char 150 (320): 100    +    tapes 170 (450): 215  (320) 150   +    45  +  64  +    10%   //
 const TextContainer = styled.div`
   width: 100%;
-  height: 25%;
+  height: calc(90% - 474px);
   font-size: 18px;
+  @media screen and (max-width: 450px) {
+    height: calc(90% - 410px);
+  }
   @media screen and (max-width: 320px) {
-    font-size: 15px;
+    height: calc(90% - 295px);
+    font-size: 0.8rem;
   }
   .text1 {
     opacity: 0.6;
@@ -170,71 +180,18 @@ const TextContainer = styled.div`
 `
 
 const BottomContainer = styled.div`
+  position: absolute;
   display: flex;
   width: 100%;
-  height: calc(55% - 170px);
   flex-direction: column;
   align-items: center;
+  bottom: 0;
+  margin: 2rem 0;
+  @media screen and (max-width: 375px) {
+    margin-bottom: 1rem 0;
+  }
   .kakao {
     width: 100%;
-    /* height: 50%; */
     padding: 0 30px;
   }
-  .arrowDownContainer {
-    width: 100%;
-    height: calc(100% - 48px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-  .arrowIcon {
-    width: 100px;
-    padding-left: 30px;
-    @media screen and (min-width: 450px) {
-      margin-bottom: 20px;
-    }
-    @media screen and (max-width: 320px) {
-      width: 80px;
-    }
-  }
-  .downText {
-    color: #ff833d;
-    font-weight: 200;
-    letter-spacing: -0.04em;
-    @media screen and (max-width: 320px) {
-      font-size: 15px;
-    }
-  }
-  @media screen and (min-width: 450px) {
-    height: calc(55% - 205px);
-  }
-  @media screen and (max-width: 320px) {
-    height: calc(55% - 150px);
-  }
-`
-const ImageIconContainer = styled.div`
-  width: 100%;
-  .image {
-    width: 100%;
-    margin-top: 50px;
-  }
-  .iconBackground {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: url(${IMAGES.icon_floating}) no-repeat;
-    color: #67d585;
-    font-weight: bold;
-    height: 180px;
-    background-position: center;
-    font-size: 25px;
-    background-size: 90px;
-  }
-`
-const HomeTextCardContainer = styled.div`
-  width: 100%;
-  justify-content: center;
-  padding: 10px;
 `
