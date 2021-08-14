@@ -116,7 +116,7 @@ const StickerPanel: FC<Props> = (props) => {
       onDragOver={(e) => e.preventDefault()}
       onTouchStart={(e) => onTouchStart(e)}
     >
-      <Stage width={279} height={192} ref={stageRef}>
+      <Stage width={287} height={192} ref={stageRef}>
         <Layer>
           {props.postedStickers
             ? props.postedStickers.map((sticker, i) => {
