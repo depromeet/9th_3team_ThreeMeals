@@ -47,6 +47,7 @@ export const IMAGES = {
   img_scrolldown: require('../assets/images/img_scrolldown.png'),
   icon_floating: require('../assets/images/icon_floating.png'),
   img_homebox: require('../assets/images/img_homebox.png'),
+  icon_home_text: require('../assets/images/icon_home_text.png'),
 
   // Profile img //
   icon_16_insta_wh: require('../assets/images/icon_16_insta_wh.png'),
