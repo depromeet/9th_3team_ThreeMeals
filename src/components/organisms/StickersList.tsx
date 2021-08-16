@@ -2,7 +2,6 @@ import React, { FC, useCallback } from 'react'
 import styled from 'styled-components'
 import PickableSticker from '../molecules/PickableSticker'
 import { IMAGES } from '../../constants/images'
-import { StickerInfo } from '../../types/types'
 import { addToPanel } from '../../lib/localStore/stickerPanel'
 import { GetEmoticonInfo } from '../../lib/queries/getQueries'
 
@@ -76,6 +75,7 @@ const ListContainer = styled.div`
   top: 0;
   bottom: 0;
   overflow: auto;
+  overflow-x: hidden;
   @media screen and (max-width: 375px) {
     top: 0;
     left: 0;
