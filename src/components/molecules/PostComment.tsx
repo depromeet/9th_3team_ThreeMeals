@@ -23,7 +23,6 @@ import {
 import { getPostById } from '../../lib/queries/getPostQueries'
 interface Props {
   isMine: boolean
-  postData: getPostById
   profileImg: string
   postData: getPostById
   commentsInfo: ParentComments | undefined
