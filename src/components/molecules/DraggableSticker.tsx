@@ -4,6 +4,8 @@ import { Image as KonvaImage, Group } from 'react-konva'
 import { SVGS } from '../../constants/svgs'
 import Konva from 'konva'
 import { StickerInfo } from '../../types/types'
+import { Vector2d } from 'konva/lib/types'
+import { NodeConfig } from 'konva/lib/Node'
 interface Props {
   stickerImage: StickerInfo
   onDelete: (evt: Konva.KonvaEventObject<TouchEvent | MouseEvent>) => void
@@ -42,6 +44,28 @@ const DraggableSticker: FC<Props> = (props) => {
   const onDragStart = useCallback(() => {
     setIsDragging(true)
   }, [])
+  const checkDragBound = useCallback((pos: Vector2d) => {
+    let abledXPosition
+    let abledYPosition
+    if (pos.x <= 60) {
+      abledXPosition = 60
+    } else if (pos.x > 210) {
+      abledXPosition = 210
+    } else {
+      abledXPosition = pos.x
+    }
+    if (pos.y <= 50) {
+      abledYPosition = 50
+    } else if (pos.y >= 120) {
+      abledYPosition = 120
+    } else {
+      abledYPosition = pos.y
+    }
+    return {
+      x: abledXPosition,
+      y: abledYPosition,
+    }
+  }, [])
   useEffect(() => {
     if (props.showDeleteBtnIdx === props.idx) {
       showDeleteBtnByTouching(true)
@@ -52,6 +76,7 @@ const DraggableSticker: FC<Props> = (props) => {
   return (
     <Group
       draggable
+      checkDragBoundFunc={checkDragBound}
       x={props.stickerImage.position?.positionX}
       y={props.stickerImage.position?.positionY}
       offsetX={stickerImage ? stickerImage.width / 2 : 0}
@@ -70,7 +95,7 @@ const DraggableSticker: FC<Props> = (props) => {
           image={deleteImage}
           width={25}
           height={25}
-          offsetX={-140 / 2 - 20}
+          offsetX={-140 / 2 - 30}
         />
       )}
     </Group>
