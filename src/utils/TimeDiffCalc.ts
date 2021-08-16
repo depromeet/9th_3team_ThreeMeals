@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 export const timeDiffCalc = (dateFuture: any, dateNow: any): string => {
   let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000
 
@@ -49,4 +51,30 @@ export const dateDiffToTimer = (a: any, b: any) => {
   const hh = h <= 9 && h >= 0 ? `0${h}` : h
 
   return hh + ':' + mm + ':' + ss
+}
+
+export const feedFormat = (date: any, dateNow: any): string => {
+  let diffInMilliSeconds = Math.abs(date - dateNow) / 1000
+
+  // calculate days
+  const days = Math.floor(diffInMilliSeconds / 86400)
+  diffInMilliSeconds -= days * 86400
+
+  // calculate hours
+  const hours = Math.floor(diffInMilliSeconds / 3600) % 24
+  diffInMilliSeconds -= hours * 3600
+
+  // calculate minutes
+  const minutes = Math.floor(diffInMilliSeconds / 60) % 60
+  diffInMilliSeconds -= minutes * 60
+
+  if (days > 0 && days < 4) {
+    return `${days}일전`
+  } else if (days === 0 && hours > 0) {
+    return `${hours}시간 전`
+  } else if (hours === 0 && minutes > 0) {
+    return `${minutes}분전`
+  }
+
+  return dayjs(date).format('YYYY.MM.DD') || '-13:33:33'
 }
