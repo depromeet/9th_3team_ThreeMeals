@@ -47,7 +47,7 @@ const WriteQACard: FC<Props> = (props) => {
           {addToPanelInfo?.imgUrl && addToPanelInfo.width ? (
             <StickerPanelWithNoSSR />
           ) : (
-            <div style={{ padding: '10px' }}>stickers!</div>
+            <div className="placeholder">stickers!</div>
           )}
         </StickerContainer>
       </ContentContainer>
@@ -99,5 +99,9 @@ const StickerContainer = styled.div<StickerProps>`
   height: 60%;
   img {
     width: 100%;
+  }
+  .placeholder {
+    padding: 10px;
+    opacity: 0.3;
   }
 `

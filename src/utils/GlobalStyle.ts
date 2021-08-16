@@ -8,6 +8,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     background: #191919;
     height: 100%;
+    min-height: -webkit-fill-available;
     font-family: system-ui;
   }
   body > div:first-child,
@@ -20,11 +21,17 @@ export const GlobalStyle = createGlobalStyle`
   }
   html {
     box-sizing: border-box;
-    
+    height: -webkit-fill-available;
     * {
       box-sizing: inherit;
     }
   }
+  @supports (-webkit-touch-callout: none) {
+  body {
+    /* The hack for Safari */
+    height: -webkit-fill-available;
+  }
+}
   a, u {
     text-decoration: none;
   }
