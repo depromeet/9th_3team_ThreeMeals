@@ -1,9 +1,10 @@
-import React, { FC, useCallback, useState, useEffect } from 'react'
+import React, { FC, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { AnswerContactType } from '../pages/AnswerDetailPage'
 import {
   ChildrenComments,
   ParentComments,
+  ChildrenCommentInfo,
   GET_CHILDREN_COMMENTS,
 } from '../../lib/queries/getCommentsQueries'
 import { useLazyQuery, useMutation, QueryResult } from '@apollo/client'
@@ -30,25 +31,61 @@ interface Props {
   setParentCommentId: (commentId: string) => void
   onClickRemove?: (type: AnswerContactType, id: string) => void
 }
+
+type ChildrenCommentArr = Array<{
+  parentId: string
+  contents: Array<ChildrenCommentInfo>
+}>
+
 const PostComment: FC<Props> = (props) => {
   const [writeOpen, setWriteOpen] = useState(false)
   const [childrenOpen, setChildrenOpen] = useState<
     Array<{ index: number; value: boolean }>
   >([])
+  const [childrenCommentsArr, setChildrenCommentsArr] =
+    useState<ChildrenCommentArr>()
   const [curPostId, setCurPostId] = useState('')
   const [curParentCommentId, setCurParentCommentId] = useState('')
   const [
-    getChildrenComment,
-    { data: childrenComments, refetch: childrenCommentRefetch },
+    getChildrenComments,
+    { data: childrenComments, refetch: childrenCommentsRefetch },
   ] = useLazyQuery<ChildrenComments>(GET_CHILDREN_COMMENTS, {
     variables: {
       first: 10,
       postId: curPostId,
       parentId: curParentCommentId,
     },
+    onCompleted: (data) => checkChildrenCommentsArr(data),
   })
   const postCommentData = props.commentsInfo?.getParentComments.edges
-  const childrenCommentData = childrenComments?.getChildrenComments.edges
+  const childrenCommentsData = childrenComments?.getChildrenComments.edges
+  const checkChildrenCommentsArr = useCallback(
+    (data: ChildrenComments) => {
+      if (childrenCommentsArr === undefined) {
+        return setChildrenCommentsArr([
+          {
+            parentId: curParentCommentId,
+            contents: data.getChildrenComments.edges,
+          },
+        ])
+      } else {
+        const checkTakingCurChildrenCommentsOnArr = childrenCommentsArr.find(
+          (childrenDataInfo) => childrenDataInfo.parentId === curParentCommentId
+        )
+        if (!checkTakingCurChildrenCommentsOnArr && childrenCommentsData) {
+          setChildrenCommentsArr([
+            ...childrenCommentsArr,
+            {
+              parentId: curParentCommentId,
+              contents: data.getChildrenComments.edges,
+            },
+          ])
+        }
+        return
+      }
+    },
+    [childrenCommentsData, childrenCommentsArr, curParentCommentId]
+  )
   const handleWriteComment = useCallback(
     (commentId: string) => {
       setWriteOpen(!writeOpen)
@@ -56,9 +93,9 @@ const PostComment: FC<Props> = (props) => {
     },
     [props, writeOpen]
   )
-  const handleChildrenComment = useCallback(
+  const handleChildrenComments = useCallback(
     (commentId: string, postId: string, index: number) => {
-      getChildrenComment({
+      getChildrenComments({
         variables: { first: 10, parentId: commentId, postId: postId },
       })
 
@@ -78,7 +115,7 @@ const PostComment: FC<Props> = (props) => {
       setCurPostId(postId)
       props.setParentCommentId(commentId)
     },
-    [childrenOpen, getChildrenComment, props]
+    [childrenOpen, getChildrenComments, props]
   )
   const [createLikeComment] =
     useMutation<createLikeCommentRes, createLikeCommentParams>(
@@ -100,8 +137,8 @@ const PostComment: FC<Props> = (props) => {
               if (id === 'parent') {
                 props.parentCommentsForRefetching.refetch()
               }
-              if (id === 'children' && childrenCommentRefetch !== undefined) {
-                return childrenCommentRefetch()
+              if (id === 'children' && childrenCommentsRefetch !== undefined) {
+                return childrenCommentsRefetch()
               }
             } catch (err) {
               console.log(err)
@@ -115,8 +152,8 @@ const PostComment: FC<Props> = (props) => {
               if (id === 'parent') {
                 props.parentCommentsForRefetching.refetch()
               }
-              if (id === 'children' && childrenCommentRefetch !== undefined) {
-                return childrenCommentRefetch()
+              if (id === 'children' && childrenCommentsRefetch !== undefined) {
+                return childrenCommentsRefetch()
               }
             } catch (err) {
               console.log(err)
@@ -126,7 +163,7 @@ const PostComment: FC<Props> = (props) => {
       }
     },
     [
-      childrenCommentRefetch,
+      childrenCommentsRefetch,
       createLikeComment,
       deleteLikeComment,
       props.isMine,
@@ -177,9 +214,9 @@ const PostComment: FC<Props> = (props) => {
                 >
                   좋아요
                 </LikeAction>
-                <ChildrenCommentCnt
+                <ChildrenCommentsCnt
                   onClick={() =>
-                    handleChildrenComment(
+                    handleChildrenComments(
                       comment.node.id,
                       comment.node.postId,
                       i
@@ -187,73 +224,73 @@ const PostComment: FC<Props> = (props) => {
                   }
                 >
                   답글 {comment.node.childrenCount}개
-                </ChildrenCommentCnt>
+                </ChildrenCommentsCnt>
               </>
             </CommentFooter>
-            {childrenOpen.find((childInfo) => childInfo.index === i) &&
-              childrenCommentData?.map((childrenComment, i) => {
-                if (comment.node.id === childrenComment.node.parentId) {
-                  return (
-                    <ChildrenContainer key={i}>
-                      {childrenComment.node.account &&
-                        props.postData.getPost.fromAccount.id ===
-                          childrenComment.node.account.id && (
-                          <ProfileContainer>
-                            <img
-                              className="profileImg"
-                              src={
-                                childrenComment.node.account?.image ||
-                                SVGS.icon_profileAltImg
-                              }
-                              alt="profileImg"
-                            />
-                            <ChildrenHeader>
-                              <CommentId>
-                                {childrenComment.node.account?.nickname}
-                              </CommentId>
-                            </ChildrenHeader>
-                            {props.isMine && (
-                              <DropMenu
-                                onClick={() => {
-                                  props.onClickRemove &&
-                                    props.onClickRemove(
-                                      'grandChildren',
-                                      childrenComment.node.id
-                                    )
-                                }}
-                              >
-                                •••
-                              </DropMenu>
-                            )}
-                          </ProfileContainer>
-                        )}
-                      <BodyContainer>
-                        <ContentsContainer>
-                          <CommentContent>
-                            {childrenComment.node.content}
-                          </CommentContent>
-                          <ChildrenFooter>
-                            <LikeAction
-                              onClick={(e) =>
-                                handleLikeActive(
-                                  e,
-                                  childrenComment.node.postId,
-                                  childrenComment.node.id,
-                                  childrenComment.node.likedComments
-                                )
-                              }
-                              id="children"
-                              active={
-                                childrenComment.node.likedComments.length > 0
-                              }
+            {childrenOpen.find(
+              (childInfo) => childInfo.index === i && childInfo.value === true
+            ) &&
+              childrenCommentsArr?.map((childrenComments) => {
+                if (comment.node.id === childrenComments.parentId) {
+                  return childrenComments.contents.map((commentData) => {
+                    return (
+                      <ChildrenContainer key={commentData.node.id}>
+                        <ProfileContainer>
+                          <img
+                            className="profileImg"
+                            src={
+                              commentData.node.account?.image ||
+                              SVGS.icon_profileAltImg
+                            }
+                            alt="profileImg"
+                          />
+                          <ChildrenHeader>
+                            <CommentId>
+                              {commentData.node.account?.nickname}
+                            </CommentId>
+                          </ChildrenHeader>
+                          {props.isMine && (
+                            <DropMenu
+                              onClick={() => {
+                                props.onClickRemove &&
+                                  props.onClickRemove(
+                                    'grandChildren',
+                                    commentData.node.id
+                                  )
+                              }}
                             >
-                              좋아요
-                            </LikeAction>
-                          </ChildrenFooter>
-                        </ContentsContainer>
-                      </BodyContainer>
-                    </ChildrenContainer>
-                  )
+                              •••
+                            </DropMenu>
+                          )}
+                        </ProfileContainer>
+                        <BodyContainer>
+                          <ContentsContainer>
+                            <CommentContent>
+                              {commentData.node.content}
+                            </CommentContent>
+                            <ChildrenFooter>
+                              <LikeAction
+                                onClick={(e) =>
+                                  handleLikeActive(
+                                    e,
+                                    commentData.node.postId,
+                                    commentData.node.id,
+                                    commentData.node.likedComments
+                                  )
+                                }
+                                id="children"
+                                active={
+                                  commentData.node.likedComments.length > 0
+                                }
+                              >
+                                좋아요
+                              </LikeAction>
+                            </ChildrenFooter>
+                          </ContentsContainer>
+                        </BodyContainer>
+                      </ChildrenContainer>
+                    )
+                  })
                 }
               })}
           </CommentContainer>
@@ -285,7 +322,6 @@ const AppContainer = styled.div<AppContainerProps>`
   width: 100%;
   max-width: 396px;
 `
-
 const CommentContainer = styled.div`
   margin-top: 24px;
 `
@@ -389,6 +425,6 @@ const LikeAction = styled.span<LikeActionProps>`
   margin-right: 15px;
   ${({ active }) => active && `color:#6799FE`}
 `
-const ChildrenCommentCnt = styled.span`
+const ChildrenCommentsCnt = styled.span`
   cursor: pointer;
 `

@@ -35,7 +35,7 @@ interface ParentCommentInfo {
   }
 }
 
-interface ChildrenCommentInfo {
+export interface ChildrenCommentInfo {
   node: {
     id: string
     content: string
