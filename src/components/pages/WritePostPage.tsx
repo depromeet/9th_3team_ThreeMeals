@@ -56,14 +56,11 @@ const WritePostPage: VFC = () => {
     },
     []
   )
-  const onClickBackColor = useCallback(
-    (e) => {
-      const { id } = e.currentTarget
-      setBackColor(id)
-      addToWritePostInfo({ color: backColor })
-    },
-    [backColor]
-  )
+  const onClickBackColor = useCallback((e) => {
+    const { id } = e.target
+    setBackColor(id)
+    addToWritePostInfo({ color: id })
+  }, [])
 
   const onClickOpenStickerList = useCallback(() => {
     setOpenStickerList(!openStickerList)
@@ -98,7 +95,6 @@ const WritePostPage: VFC = () => {
       const emoticons = writePostInfo.emoticons?.map((emoticon) => {
         return { emoticonId: emoticon.emoticonId, position: emoticon.position }
       })
-
       createPostMutation({
         variables: {
           content: writePostInfo.content,
@@ -119,7 +115,6 @@ const WritePostPage: VFC = () => {
       })
     }
   }
-
   useEffect(() => {
     if (typeof postType === 'string' && profile && !otherId) {
       addToWritePostInfo({
