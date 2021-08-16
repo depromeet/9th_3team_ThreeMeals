@@ -95,8 +95,7 @@ const ContentContainer = styled.div`
 
 const StickerContainer = styled.div<StickerProps>`
   display: ${(props) => (props.isWithSticker ? 'block' : 'none')};
-  border: dashed 1px #000000;
-  opacity: 0.3;
+  border: dashed 1px rgb(0, 0, 0, 0.3);
   height: 60%;
   img {
     width: 100%;
