@@ -110,6 +110,7 @@ const ContentTemplate: FC<Props> = (props) => {
                       createdAt={data.node.createdAt}
                       updatedAt={data.node.updatedAt}
                       secretType={data.node.secretType}
+                      fromAccount={data.node.fromAccount}
                       isLikeActive={data.node.likedPosts.length > 0}
                       onClickOption={() => {
                         onClickRemove(data.node.id)
