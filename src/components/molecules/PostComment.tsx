@@ -8,7 +8,6 @@ import {
   GET_CHILDREN_COMMENTS,
 } from '../../lib/queries/getCommentsQueries'
 import { useLazyQuery, useMutation, QueryResult } from '@apollo/client'
-import dayjs from 'dayjs'
 import { SVGS } from '../../constants/svgs'
 import {
   CREATE_LIKE_COMMENT,
@@ -21,10 +20,10 @@ import {
   DELETE_LIKE_COMMENT,
 } from '../../lib/queries/deleteQueries'
 import { getPostById } from '../../lib/queries/getPostQueries'
+import { feedFormat } from '../../utils/TimeDiffCalc'
 interface Props {
   isMine: boolean
   profileImg: string
-  postData: getPostById
   commentsInfo: ParentComments | undefined
   parentCommentsForRefetching: QueryResult<ParentComments, Record<string, any>>
   setParentCommentId: (commentId: string) => void
@@ -176,7 +175,9 @@ const PostComment: FC<Props> = (props) => {
           <CommentContainer key={i}>
             <CommentHeader>
               <CommentDate>
-                {dayjs(comment.node.createdAt).format('HH:mm:ss')}
+                {comment.node.createdAt
+                  ? feedFormat(new Date(comment.node.createdAt), new Date())
+                  : '-13:33:33'}
               </CommentDate>
               {props.isMine && (
                 <DropMenu
