@@ -95,6 +95,7 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
       <TagContainer>
         <Tag
           external
+          isNonClose
           id={'2'}
           icon={IMAGES.share_16}
           text={
@@ -107,7 +108,6 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
               ? windowObjet.location.origin + '/otherscontent/' + props.myId
               : ''
           }
-          onClickClose={onClickClose}
         />
       </TagContainer>
       <Footer>
