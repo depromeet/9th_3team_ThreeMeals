@@ -82,6 +82,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
                     questionTitle={data.node.content}
                     backColor={data.node.color}
                     stickers={data.node.usedEmoticons}
+                    isLikeActive={data.node.likedPosts.length > 0}
                     comments={data.node.comments}
                   />
                 )
