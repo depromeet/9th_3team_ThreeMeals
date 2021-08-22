@@ -34,21 +34,23 @@ const HomeTemplate: FC<Props> = (props) => {
         <TapesContainer>
           <CrossedTapesLabel />
         </TapesContainer>
-        <TextContainer>
-          <StyledText className="text1">
-            <span>너에게 궁금한것</span>
-            <span>너에게 말하고 싶었던 것</span>
-            <span>모두 카드에 남길게요</span>
-          </StyledText>
-          <StyledText className="text2">
-            24시간 후면 내가 누군지 알게될거야!
-          </StyledText>
-        </TextContainer>
-        <BottomContainer>
-          <div className="kakao">
-            <KakaoButton />
-          </div>
-        </BottomContainer>
+        <BundleContainer>
+          <TextContainer>
+            <StyledText className="text1">
+              <span>너에게 궁금한것</span>
+              <span>너에게 말하고 싶었던 것</span>
+              <span>모두 카드에 남길게요</span>
+            </StyledText>
+            <StyledText className="text2">
+              24시간 후면 내가 누군지 알게될거야!
+            </StyledText>
+          </TextContainer>
+          <BottomContainer>
+            <div className="kakao">
+              <KakaoButton />
+            </div>
+          </BottomContainer>
+        </BundleContainer>
       </MainContainer>
     </AppContainer>
   )
@@ -75,7 +77,7 @@ const CharIconContainer = styled.div`
   height: 150px;
   font-size: 50px;
   margin-bottom: 10px;
-  @media screen and (max-width: 320px) {
+  @media screen and (max-width: 375px) {
     height: 100px;
   }
 `
@@ -145,16 +147,25 @@ const TapesContainer = styled.div`
     height: 150px;
   }
 `
-// char 150 (320): 100    +    tapes 170 (450): 215  (320) 150   +    45  +  64  +    10%   //
-const TextContainer = styled.div`
+// char 150 (max - 375): 100 margin:10px   +    tapes 170 (min - 450): 215  (max - 320) 150   +    10%   //
+const BundleContainer = styled.div`
   width: 100%;
-  height: calc(90% - 474px);
-  font-size: 18px;
-  @media screen and (max-width: 450px) {
-    height: calc(90% - 410px);
+  height: calc(90% - 375px);
+  @media screen and (max-width: 375px) {
+    height: calc(90% - 280px);
+    font-size: 0.8rem;
   }
   @media screen and (max-width: 320px) {
-    height: calc(90% - 295px);
+    height: calc(90% - 260px);
+  }
+`
+
+const TextContainer = styled.div`
+  width: 100%;
+  height: 70%;
+  font-size: 18px;
+  @media screen and (max-width: 320px) {
+    height: 60%;
     font-size: 0.8rem;
   }
   .text1 {
@@ -163,8 +174,11 @@ const TextContainer = styled.div`
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    line-height: 30px;
+    line-height: 35px;
     height: 60%;
+    @media screen and (max-width: 320px) {
+      line-height: 30px;
+    }
   }
   .text2 {
     font-size: 17px;
@@ -180,18 +194,16 @@ const TextContainer = styled.div`
 `
 
 const BottomContainer = styled.div`
-  position: absolute;
   display: flex;
   width: 100%;
-  flex-direction: column;
+  height: 30%;
   align-items: center;
   bottom: 0;
-  margin: 2rem 0;
-  @media screen and (max-width: 375px) {
-    margin-bottom: 1rem 0;
-  }
   .kakao {
     width: 100%;
     padding: 0 30px;
+  }
+  @media screen and (max-width: 320px) {
+    height: 40%;
   }
 `
