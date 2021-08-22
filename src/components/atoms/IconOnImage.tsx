@@ -1,8 +1,10 @@
 import * as React from 'react'
 import styled, { CSSProperties } from 'styled-components'
+import Avatar from 'boring-avatars'
 
 interface Props {
   containerStyle?: CSSProperties
+  curImage: string | undefined
   image: string
   imageStyle?: CSSProperties
   icon: string
@@ -13,7 +15,16 @@ interface Props {
 const IconOnImage: React.FC<Props> = (props: Props) => {
   return (
     <Container style={props.containerStyle}>
-      <Image style={props.imageStyle} src={props.image} />
+      {props.curImage ? (
+        <Image style={props.imageStyle} src={props.image} />
+      ) : (
+        <Avatar
+          size={'5rem'}
+          name="https://source.boringavatars.com/"
+          variant="beam"
+          colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']}
+        />
+      )}
       <IconContainer>
         <Icon
           onClick={props.onClickIcon}

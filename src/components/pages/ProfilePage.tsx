@@ -29,10 +29,10 @@ const ProfilePage: React.FC = () => {
   )
 
   const fileInput = useRef<HTMLInputElement | null>(null)
-  const [profileImage, setProfileImage] = useState<string>(
+  const [profileImage, setProfileImage] = useState<string | undefined>(
     getMyAccountInfo.image
   )
-  const [previewImage, setPreviewImage] = useState<string | ArrayBuffer | null>(
+  const [previewImage, setPreviewImage] = useState<string>(
     getMyAccountInfo.image
   )
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -48,7 +48,10 @@ const ProfilePage: React.FC = () => {
       const file = event.target.files[0]
       reader.onloadend = () => {
         setProfileImage(file)
-        setPreviewImage(reader.result)
+        if (typeof reader.result === 'string') {
+          setPreviewImage(reader.result)
+        }
+
         setIsOpen(false)
       }
       event.target.value = null

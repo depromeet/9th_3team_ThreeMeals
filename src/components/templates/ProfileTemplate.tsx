@@ -1,14 +1,19 @@
+import { useMutation, useQuery } from '@apollo/client'
 import { MutableRefObject, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
+import {
+  GET_MY_PROFILE,
+  UPDATE_ACCOUNT_INFO,
+} from '../../lib/queries/meQueries'
 import DefaultLine from '../atoms/DefaultLine'
 import IconOnImage from '../atoms/IconOnImage'
-import Tag from '../atoms/Tag'
 import Header from '../molecules/Header'
+import { useRouter } from 'next/router'
 
 interface Props {
-  profileImage: string
-  previewImage: string | ArrayBuffer | null
+  profileImage: string | undefined
+  previewImage: string
   fileInput?: MutableRefObject<HTMLInputElement | null>
   nickName: string
   onChangeImage?: (e: any) => void
@@ -23,17 +28,43 @@ interface Props {
 }
 
 const ProfileTemplate: React.FC<Props> = (props: Props) => {
+  const router = useRouter()
+  const {
+    data: { getMyAccountInfo },
+  } = useQuery(GET_MY_PROFILE)
+  const [updateAccountInfo] = useMutation(UPDATE_ACCOUNT_INFO, {
+    onCompleted: () => {
+      router.back()
+    },
+  })
+
   const [blurRightText, setBlurRightText] = useState<boolean>(true)
+  const [inputValues, setInputValues] = useState({
+    content: getMyAccountInfo.content,
+    instaId: '',
+  })
   const [windowObjet, setWindowObjet] = useState<Window | undefined>()
   useEffect(() => {
     setTimeout(() => {
       setBlurRightText(false)
     }, 1000)
   }, [])
+  const onChangeInput = useCallback(
+    (e) => {
+      const { id, value } = e.target
+      setInputValues({ ...inputValues, [id]: value })
+    },
+    [inputValues]
+  )
+  const onSave = () => {
+    updateAccountInfo({
+      variables: {
+        nickname: getMyAccountInfo.nickname,
+        content: inputValues.content,
+      },
+    })
+  }
 
-  const onClickClose = useCallback((id: string) => {
-    console.log('id:', id)
-  }, [])
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setWindowObjet(window)
@@ -45,7 +76,7 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
         leftIcon={IMAGES.icon_24_back_wh}
         rightText={'저장'}
         onClickLeft={props.onClickLeft}
-        onClickRight={props.onClickRight}
+        onClickRight={onSave}
         blurRightText={blurRightText}
       />
       <IconOnImage
@@ -54,7 +85,8 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
           justifyContent: 'center',
           marginLeft: '2rem',
         }}
-        image={props.previewImage || IMAGES.background}
+        image={props.previewImage}
+        curImage={props.profileImage}
         icon={IMAGES.icon_20_camera}
         imageStyle={{ width: 88, height: 88, objectFit: 'cover' }}
         iconStyle={{ width: 20, height: 20 }}
@@ -75,41 +107,34 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
       <DefaultLine containerStyle={{ marginTop: 16, marginBottom: 16 }} />
       <IntroContainer>
         <IntroTitle>소개</IntroTitle>
-        <IntroDesc onClick={props.onClickIntro}>
-          {props.introduction ?? '소개글을 작성해주세요'}
+        <IntroInput
+          id="content"
+          onChange={onChangeInput}
+          value={inputValues.content}
+          placeholder="소개글을 작성해주세요"
+        />
+      </IntroContainer>
+      <DefaultLine containerStyle={{ marginTop: 16, marginBottom: 16 }} />
+      <IntroContainer>
+        <IntroTitle>인스타</IntroTitle>
+        <IntroInput
+          id="instaId"
+          placeholder="인스타그램 아이디를 작성해주세요!"
+          value={inputValues.instaId}
+          onChange={onChangeInput}
+          autoComplete={undefined}
+        />
+      </IntroContainer>
+      <DefaultLine containerStyle={{ marginTop: 16, marginBottom: 16 }} />
+      <IntroContainer>
+        <IntroTitle>URL</IntroTitle>
+        <IntroDesc>
+          {windowObjet !== undefined
+            ? windowObjet.location.origin + '/otherscontent/' + props.myId
+            : ''}
         </IntroDesc>
       </IntroContainer>
-
       <DefaultLine containerStyle={{ marginTop: 16, marginBottom: 16 }} />
-
-      <TagContainer>
-        <Tag
-          id={'1'}
-          icon={IMAGES.icon_16_insta_wh}
-          text={'Add Instgram'}
-          url={'https://google.com'}
-          onClickClose={onClickClose}
-        />
-      </TagContainer>
-      <DefaultLine containerStyle={{ marginTop: 16, marginBottom: 16 }} />
-      <TagContainer>
-        <Tag
-          external
-          id={'2'}
-          icon={IMAGES.share_16}
-          text={
-            windowObjet !== undefined
-              ? windowObjet.location.origin + '/otherscontent/' + props.myId
-              : ''
-          }
-          url={
-            windowObjet !== undefined
-              ? windowObjet.location.origin + '/otherscontent/' + props.myId
-              : ''
-          }
-          onClickClose={onClickClose}
-        />
-      </TagContainer>
       <Footer>
         <DefaultLine containerStyle={{ maxWidth: 500 }} />
         <FooterText onClick={props.onClickLogout}>로그아웃</FooterText>
@@ -138,6 +163,7 @@ const IntroTitle = styled.div`
   letter-spacing: -0.02em;
   white-space: nowrap;
   color: #ffffff;
+  width: 3rem;
 `
 const IntroDesc = styled.span`
   margin-left: 24px;
@@ -146,16 +172,24 @@ const IntroDesc = styled.span`
   font-size: 16px;
   line-height: 19px;
   letter-spacing: -0.02em;
-  cursor: pointer;
   color: #ffffff;
-  opacity: 0.3;
   white-space: nowrap;
   overflow-x: hidden;
 `
 
-const TagContainer = styled.div`
-  margin-left: 75px;
-  display: flex;
+const IntroInput = styled.input`
+  margin-left: 24px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow-x: hidden;
+  background: none;
+  border: none;
+  width: 100%;
 `
 
 const Footer = styled.div`
