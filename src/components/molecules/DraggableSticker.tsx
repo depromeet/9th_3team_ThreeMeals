@@ -5,7 +5,7 @@ import { SVGS } from '../../constants/svgs'
 import Konva from 'konva'
 import { StickerInfo } from '../../types/types'
 import { Vector2d } from 'konva/lib/types'
-import { NodeConfig } from 'konva/lib/Node'
+
 interface Props {
   stickerImage: StickerInfo
   onDelete: (evt: Konva.KonvaEventObject<TouchEvent | MouseEvent>) => void
@@ -61,6 +61,7 @@ const DraggableSticker: FC<Props> = (props) => {
     } else {
       abledYPosition = pos.y
     }
+
     return {
       x: abledXPosition,
       y: abledYPosition,
@@ -76,7 +77,7 @@ const DraggableSticker: FC<Props> = (props) => {
   return (
     <Group
       draggable
-      checkDragBoundFunc={checkDragBound}
+      dragBoundFunc={checkDragBound}
       x={props.stickerImage.position?.positionX}
       y={props.stickerImage.position?.positionY}
       offsetX={stickerImage ? stickerImage.width / 2 : 0}
