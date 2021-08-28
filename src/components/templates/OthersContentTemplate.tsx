@@ -18,6 +18,7 @@ import { getAccountInfo } from '../../lib/queries/userQueries'
 import { getPost } from '../../lib/queries/getPostQueries'
 import QuizAnswerCard from '../organisms/QuizAnswerCard'
 import { getMyAccountInfo } from '../../lib/queries/meQueries'
+import { SpacingText } from '../../utils/SpacingText'
 
 interface Props {
   token?: string
@@ -93,7 +94,13 @@ const OthersContentTemplate: FC<Props> = (props) => {
       case 1:
         return (
           <>
-            <ContentContainer>
+            <TobeContinueContainer>
+              {SpacingText(
+                '서비스 준비중 입니다. \\n 물어봐와 OX로 친구들과의 소통을 즐겨보세요.'
+              )}
+            </TobeContinueContainer>
+            {/* To be continue */}
+            {/* <ContentContainer>
               {postContent && postContent.answer.length > 0 ? (
                 postContent?.answer.map((data, index) => {
                   return (
@@ -115,7 +122,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
               ) : (
                 <BackgroundSticker src={IMAGES.backgroundSticker} />
               )}
-            </ContentContainer>
+            </ContentContainer> */}
           </>
         )
       case 2:
@@ -331,4 +338,15 @@ const BackgroundSticker = styled.img`
   height: 191px;
   bottom: 15px;
   right: 15px;
+`
+const TobeContinueContainer = styled.div`
+  margin-top: 210px;
+  font-size: 13px;
+  line-height: 22px;
+  /* or 169% */
+
+  text-align: center;
+  letter-spacing: -0.02em;
+
+  color: rgba(255, 255, 255, 0.7);
 `
