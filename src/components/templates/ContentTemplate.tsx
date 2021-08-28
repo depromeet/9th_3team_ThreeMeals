@@ -9,6 +9,14 @@ import AnswerCard from '../organisms/AnswerCard'
 import { getMyAccountInfo } from '../../lib/queries/meQueries'
 import { getPost } from '../../lib/queries/getPostQueries'
 import QuizAnswerCard from '../organisms/QuizAnswerCard'
+import { SpacingText } from '../../utils/SpacingText'
+
+/**
+ * exist : 질문 한개라도 이미 답변 한 상태
+ * request : 질문은 요청 받았지만, 답변은 안한 상태
+ * empty : 모두 비어있는 상태
+ */
+export type EmptyCase = 'exist' | 'request' | 'empty'
 
 interface Props {
   tabIndex: number
@@ -53,13 +61,27 @@ const ContentTemplate: FC<Props> = (props) => {
     }
   }, [props.getPost?.getPosts.edges])
 
-  const isExistAsk = useMemo(() => {
-    return !(postContent === undefined || postContent.ask?.length === 0)
-  }, [postContent])
+  const isExistAsk = useMemo((): EmptyCase => {
+    if (
+      postContent === undefined ||
+      (postContent.ask?.length === 0 && newPostCount === 0)
+    ) {
+      return 'empty'
+    } else if (newPostCount !== 0) {
+      return 'request'
+    } else return 'exist'
+  }, [newPostCount, postContent])
 
   const isExistOX = useMemo(() => {
-    return !(postContent === undefined || postContent.quiz?.length === 0)
-  }, [postContent])
+    if (
+      postContent === undefined ||
+      (postContent.quiz?.length === 0 && newPostCount === 0)
+    ) {
+      return 'empty'
+    } else if (newPostCount !== 0) {
+      return 'request'
+    } else return 'exist'
+  }, [newPostCount, postContent])
 
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
@@ -67,7 +89,7 @@ const ContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <NoticeContainer>
-              {newPostCount === 0 && !isExistAsk ? (
+              {isExistAsk === 'empty' ? (
                 <img
                   style={{ position: 'relative', bottom: 15, zIndex: -1 }}
                   src={IMAGES.img_tape_empty}
@@ -86,7 +108,7 @@ const ContentTemplate: FC<Props> = (props) => {
                       style={{ marginTop: 1, cursor: 'pointer' }}
                       onClick={() => onClickNewSecretCard('ask')}
                     >
-                      {`${newPostCount || 0}개의 비밀카드 도착`}
+                      {`${newPostCount || 0}개 질문에 답하기`}
                     </span>
                     <img
                       onClick={() => onClickNewSecretCard('ask')}
@@ -104,7 +126,7 @@ const ContentTemplate: FC<Props> = (props) => {
               )}
             </NoticeContainer>
             <ContentContainer>
-              {isExistAsk ? (
+              {isExistAsk === 'exist' ? (
                 postContent?.ask.map((data, index) => {
                   return data.node.postState === 'Completed' ? (
                     <QuestionCard
@@ -133,15 +155,13 @@ const ContentTemplate: FC<Props> = (props) => {
                 })
               ) : (
                 <>
-                  <AskEmptyContainer>
-                    <AskEmptyBody>
-                      <AskEmptyTitle>질문하기</AskEmptyTitle>
-                      <AskEmptyDesc>
-                        다른 사람들이 와서 질문을 남기는 공간이에요.
-                      </AskEmptyDesc>
-                    </AskEmptyBody>
-                  </AskEmptyContainer>
-                  <BackgroundSticker src={IMAGES.backgroundSticker} />
+                  <EmptyContainer>
+                    {isExistAsk === 'request'
+                      ? '질문에 답장을 완료하면 이곳에 카드로 뜰거에요 !'
+                      : SpacingText(
+                          '아직 도착한 질문이 없네요..ㅠㅠ!\\n친구들에게 링크를 공유해보세요!'
+                        )}
+                  </EmptyContainer>
                 </>
               )}
             </ContentContainer>
@@ -241,7 +261,7 @@ const ContentTemplate: FC<Props> = (props) => {
                   ) : null
                 })
               ) : (
-                <BackgroundSticker src={IMAGES.backgroundSticker} />
+                <></>
               )}
             </ContentContainer>
           </>
@@ -465,51 +485,14 @@ const QuizAnswerCardContainer = styled.div`
   margin-bottom: 20px;
 `
 
-const AskEmptyContainer = styled.div`
-  position: fixed;
+const EmptyContainer = styled.div`
   width: 100%;
-  height: 191px;
-  display: flex;
-  justify-content: center;
-  align-content: space-between;
-  align-items: center;
-  bottom: 65px;
-  flex-direction: column;
-  z-index: 1;
-`
-
-const AskEmptyBody = styled.div`
-  width: 327px;
-  height: 78px;
-  background: rgba(103, 213, 133, 0.1);
-  border: 1px solid rgba(103, 213, 133, 0.2);
-  backdrop-filter: blur(12px);
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`
-
-const AskEmptyTitle = styled.div`
-  text-align: center;
-  font-weight: 800;
-  font-size: 18px;
-  line-height: 28px;
-  letter-spacing: 0.04em;
-  color: #67d585;
-`
-const AskEmptyDesc = styled.div`
-  text-align: center;
-  font-size: 15px;
+  position: absolute;
+  bottom: 40vh;
+  font-size: 13px;
   line-height: 22px;
-  letter-spacing: -0.04em;
-  color: #ffffff;
-  opacity: 0.8;
-`
-const BackgroundSticker = styled.img`
-  position: fixed;
-  width: 214px;
-  height: 191px;
-  bottom: 15px;
-  right: 15px;
+  /* or 169% */
+  text-align: center;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.7);
 `
