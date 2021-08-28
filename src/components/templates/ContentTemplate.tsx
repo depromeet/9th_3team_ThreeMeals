@@ -53,14 +53,21 @@ const ContentTemplate: FC<Props> = (props) => {
     }
   }, [props.getPost?.getPosts.edges])
 
+  const isExistAsk = useMemo(() => {
+    return !(postContent === undefined || postContent.ask?.length === 0)
+  }, [postContent])
+
+  const isExistOX = useMemo(() => {
+    return !(postContent === undefined || postContent.quiz?.length === 0)
+  }, [postContent])
+
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:
         return (
           <>
             <NoticeContainer>
-              {newPostCount === 0 &&
-              (postContent === undefined || postContent.ask?.length === 0) ? (
+              {newPostCount === 0 && !isExistAsk ? (
                 <img
                   style={{ position: 'relative', bottom: 15, zIndex: -1 }}
                   src={IMAGES.img_tape_empty}
@@ -97,7 +104,7 @@ const ContentTemplate: FC<Props> = (props) => {
               )}
             </NoticeContainer>
             <ContentContainer>
-              {postContent && postContent.ask.length > 0 ? (
+              {isExistAsk ? (
                 postContent?.ask.map((data, index) => {
                   return data.node.postState === 'Completed' ? (
                     <QuestionCard
@@ -125,7 +132,17 @@ const ContentTemplate: FC<Props> = (props) => {
                   ) : null
                 })
               ) : (
-                <BackgroundSticker src={IMAGES.backgroundSticker} />
+                <>
+                  <AskEmptyContainer>
+                    <AskEmptyBody>
+                      <AskEmptyTitle>질문하기</AskEmptyTitle>
+                      <AskEmptyDesc>
+                        다른 사람들이 와서 질문을 남기는 공간이에요.
+                      </AskEmptyDesc>
+                    </AskEmptyBody>
+                  </AskEmptyContainer>
+                  <BackgroundSticker src={IMAGES.backgroundSticker} />
+                </>
               )}
             </ContentContainer>
           </>
@@ -162,8 +179,7 @@ const ContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <NoticeContainer>
-              {newPostCount === 0 &&
-              (postContent === undefined || postContent.quiz?.length === 0) ? (
+              {newPostCount === 0 && !isExistOX ? (
                 <img
                   style={{ position: 'relative', bottom: 15, zIndex: -1 }}
                   src={IMAGES.img_tape_empty}
@@ -200,7 +216,7 @@ const ContentTemplate: FC<Props> = (props) => {
               )}
             </NoticeContainer>
             <ContentContainer>
-              {postContent && postContent.quiz.length > 0 ? (
+              {isExistOX ? (
                 postContent?.quiz.map((content, index) => {
                   return content.node.comments &&
                     content.node.comments.length > 0 ? (
@@ -236,11 +252,15 @@ const ContentTemplate: FC<Props> = (props) => {
   }, [
     tabIndex,
     newPostCount,
-    postContent,
+    isExistAsk,
+    postContent?.ask,
+    postContent?.answer,
+    postContent?.quiz,
+    isExistOX,
     onClickNewSecretCard,
     onClickRemove,
     onClickLike,
-    props,
+    props.myAccount?.getMyAccountInfo.id,
     onClickAnswerCard,
   ])
 
@@ -443,6 +463,48 @@ const QuizAnswerCardContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
+`
+
+const AskEmptyContainer = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 191px;
+  display: flex;
+  justify-content: center;
+  align-content: space-between;
+  align-items: center;
+  bottom: 65px;
+  flex-direction: column;
+  z-index: 1;
+`
+
+const AskEmptyBody = styled.div`
+  width: 327px;
+  height: 78px;
+  background: rgba(103, 213, 133, 0.1);
+  border: 1px solid rgba(103, 213, 133, 0.2);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
+
+const AskEmptyTitle = styled.div`
+  text-align: center;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 28px;
+  letter-spacing: 0.04em;
+  color: #67d585;
+`
+const AskEmptyDesc = styled.div`
+  text-align: center;
+  font-size: 15px;
+  line-height: 22px;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+  opacity: 0.8;
 `
 const BackgroundSticker = styled.img`
   position: fixed;
