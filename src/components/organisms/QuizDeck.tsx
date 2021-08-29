@@ -20,6 +20,7 @@ import {
   deleteCommentParams,
   DELETE_COMMENT,
 } from '../../lib/queries/deleteQueries'
+import { useRouter } from 'next/router'
 
 interface Props {
   cardHeader?: CardHeaderProps
@@ -40,6 +41,7 @@ const trans = (r: number, s: number) =>
     r / 10
   }deg) rotateZ(${r}deg) scale(${s})`
 const QuizDeck: FC<Props> = (deckProps) => {
+  const router = useRouter()
   const [createCommentMutation] = useMutation<
     CreateCommentRes,
     CreateCommentParams
@@ -47,6 +49,9 @@ const QuizDeck: FC<Props> = (deckProps) => {
     onCompleted: ({ createComment }) => {
       if (createComment) {
         setPrevQuizCommentIdArr([...prevQuizCommentIdArr, createComment.id])
+        if (curQuizDataCnt === -1) {
+          router.push('/content')
+        }
       }
     },
   })
@@ -91,7 +96,7 @@ const QuizDeck: FC<Props> = (deckProps) => {
         if (isGone) {
           setCurQuizDataCnt(curQuizDataCnt - 1)
           gone.delete(index)
-          if (dir === 1) {
+          if (dir === -1) {
             createCommentMutation({
               variables: {
                 postId: quizData[quizData.length - 1].id,
@@ -112,6 +117,7 @@ const QuizDeck: FC<Props> = (deckProps) => {
             handleQuizData()
           }, 100)
         }
+
         return {
           x,
           rot,
@@ -166,7 +172,6 @@ const QuizDeck: FC<Props> = (deckProps) => {
   useEffect(() => {
     setRenderQuizData(true)
   }, [])
-
   return (
     <>
       <SkipCardHandlerContainer>
@@ -181,7 +186,7 @@ const QuizDeck: FC<Props> = (deckProps) => {
           <div className="leftEmpty"></div>
         )}
         <span>
-          {quizData.length}/{deckProps.cardData?.length}
+          {deckProps.cardData?.length}/{quizData.length}
         </span>
         <img
           src={SVGS.icon_24_next_wh}

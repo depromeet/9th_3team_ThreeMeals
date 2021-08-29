@@ -23,6 +23,7 @@ import { getPostById } from '../../lib/queries/getPostQueries'
 import { feedFormat } from '../../utils/TimeDiffCalc'
 interface Props {
   isMine: boolean
+  postData: getPostById
   profileImg: string
   commentsInfo: ParentComments | undefined
   parentCommentsForRefetching: QueryResult<ParentComments, Record<string, any>>

@@ -102,21 +102,20 @@ const QuizCard: FC<PropsWithChildren<Props>> = (props) => {
       >
         <ContextContainer bottomHeight={props.bottomHeight}>
           <StyledQuizCardHeader
-            // isLikeActive={props.cardHeader.isLikeActive}
-            // className={props.cardHeader.className}
             color={props.backColor}
             isMyFeed={true}
+            isAnswerNewOXPage
           />
           <div className="textArea">{props.children}</div>
           <div className="bottomArea">
             <img
-              src={getOImg(props.backColor)}
+              src={getXImg(props.backColor)}
               alt="LArrow"
               id="-1"
               className="leftArrow"
             />
             <img
-              src={getXImg(props.backColor)}
+              src={getOImg(props.backColor)}
               alt="RArrow"
               id="+1"
               className="rightArrow"
@@ -151,11 +150,13 @@ export const ContextContainer = styled.div<StyledProps>`
     position: absolute;
     left: -10px;
     width: 35%;
+    transform: rotate(180deg);
   }
   .rightArrow {
     position: absolute;
     right: -10px;
     width: 35%;
+    transform: rotate(180deg);
   }
   .answerImg {
     right: -90px;

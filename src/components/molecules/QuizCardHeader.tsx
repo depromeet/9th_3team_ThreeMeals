@@ -7,6 +7,7 @@ import { BackColor } from '../../types/types'
 
 export interface CardHeaderProps {
   isLikeActive?: boolean
+  isAnswerNewOXPage?: boolean
   className?: string
   color: BackColor
   isMyFeed: boolean
@@ -59,7 +60,7 @@ const QuizCardHeader: React.FunctionComponent<CardHeaderProps> = (props) => {
           <button type="button" onClick={props.onClickLike}>
             <img src={SVGS.icon_32_like_active} alt="active" />
           </button>
-        ) : (
+        ) : props.isAnswerNewOXPage ? undefined : (
           <button type="button" onClick={props.onClickLike}>
             <img src={SVGS.icon_32_like} alt="inactive" />
           </button>
