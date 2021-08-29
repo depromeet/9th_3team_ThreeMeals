@@ -9,6 +9,14 @@ import AnswerCard from '../organisms/AnswerCard'
 import { getMyAccountInfo } from '../../lib/queries/meQueries'
 import { getPost } from '../../lib/queries/getPostQueries'
 import QuizAnswerCard from '../organisms/QuizAnswerCard'
+import { SpacingText } from '../../utils/SpacingText'
+
+/**
+ * exist : 질문 한개라도 이미 답변 한 상태
+ * request : 질문은 요청 받았지만, 답변은 안한 상태
+ * empty : 모두 비어있는 상태
+ */
+export type EmptyCase = 'exist' | 'request' | 'empty'
 
 interface Props {
   tabIndex: number
@@ -53,14 +61,35 @@ const ContentTemplate: FC<Props> = (props) => {
     }
   }, [props.getPost?.getPosts.edges])
 
+  const isExistAsk = useMemo((): EmptyCase => {
+    if (
+      postContent === undefined ||
+      (postContent.ask?.length === 0 && newPostCount === 0)
+    ) {
+      return 'empty'
+    } else if (newPostCount !== 0) {
+      return 'request'
+    } else return 'exist'
+  }, [newPostCount, postContent])
+
+  const isExistOX = useMemo(() => {
+    if (
+      postContent === undefined ||
+      (postContent.quiz?.length === 0 && newPostCount === 0)
+    ) {
+      return 'empty'
+    } else if (newPostCount !== 0) {
+      return 'request'
+    } else return 'exist'
+  }, [newPostCount, postContent])
+
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:
         return (
           <>
             <NoticeContainer>
-              {newPostCount === 0 &&
-              (postContent === undefined || postContent.ask?.length === 0) ? (
+              {isExistAsk === 'empty' ? (
                 <img
                   style={{ position: 'relative', bottom: 15, zIndex: -1 }}
                   src={IMAGES.img_tape_empty}
@@ -79,7 +108,7 @@ const ContentTemplate: FC<Props> = (props) => {
                       style={{ marginTop: 1, cursor: 'pointer' }}
                       onClick={() => onClickNewSecretCard('ask')}
                     >
-                      {`${newPostCount || 0}개의 비밀카드 도착`}
+                      {`${newPostCount || 0}개 질문에 답하기`}
                     </span>
                     <img
                       onClick={() => onClickNewSecretCard('ask')}
@@ -97,7 +126,7 @@ const ContentTemplate: FC<Props> = (props) => {
               )}
             </NoticeContainer>
             <ContentContainer>
-              {postContent && postContent.ask.length > 0 ? (
+              {isExistAsk === 'exist' ? (
                 postContent?.ask.map((data, index) => {
                   return data.node.postState === 'Completed' ? (
                     <QuestionCard
@@ -125,7 +154,15 @@ const ContentTemplate: FC<Props> = (props) => {
                   ) : null
                 })
               ) : (
-                <BackgroundSticker src={IMAGES.backgroundSticker} />
+                <>
+                  <EmptyContainer>
+                    {isExistAsk === 'request'
+                      ? '질문에 답장을 완료하면 이곳에 카드로 뜰거에요 !'
+                      : SpacingText(
+                          '아직 도착한 질문이 없네요..ㅠㅠ!\\n친구들에게 링크를 공유해보세요!'
+                        )}
+                  </EmptyContainer>
+                </>
               )}
             </ContentContainer>
           </>
@@ -162,8 +199,7 @@ const ContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <NoticeContainer>
-              {newPostCount === 0 &&
-              (postContent === undefined || postContent.quiz?.length === 0) ? (
+              {newPostCount === 0 && !isExistOX ? (
                 <img
                   style={{ position: 'relative', bottom: 15, zIndex: -1 }}
                   src={IMAGES.img_tape_empty}
@@ -200,7 +236,7 @@ const ContentTemplate: FC<Props> = (props) => {
               )}
             </NoticeContainer>
             <ContentContainer>
-              {postContent && postContent.quiz.length > 0 ? (
+              {isExistOX ? (
                 postContent?.quiz.map((content, index) => {
                   return content.node.comments &&
                     content.node.comments.length > 0 ? (
@@ -225,7 +261,7 @@ const ContentTemplate: FC<Props> = (props) => {
                   ) : null
                 })
               ) : (
-                <BackgroundSticker src={IMAGES.backgroundSticker} />
+                <></>
               )}
             </ContentContainer>
           </>
@@ -236,11 +272,15 @@ const ContentTemplate: FC<Props> = (props) => {
   }, [
     tabIndex,
     newPostCount,
-    postContent,
+    isExistAsk,
+    postContent?.ask,
+    postContent?.answer,
+    postContent?.quiz,
+    isExistOX,
     onClickNewSecretCard,
     onClickRemove,
     onClickLike,
-    props,
+    props.myAccount?.getMyAccountInfo.id,
     onClickAnswerCard,
   ])
 
@@ -444,10 +484,15 @@ const QuizAnswerCardContainer = styled.div`
   justify-content: center;
   margin-bottom: 20px;
 `
-const BackgroundSticker = styled.img`
-  position: fixed;
-  width: 214px;
-  height: 191px;
-  bottom: 15px;
-  right: 15px;
+
+const EmptyContainer = styled.div`
+  width: 100%;
+  position: absolute;
+  bottom: 40vh;
+  font-size: 13px;
+  line-height: 22px;
+  /* or 169% */
+  text-align: center;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.7);
 `
