@@ -78,6 +78,7 @@ const ContentPage: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [tabIndex, setTabIndex] = useState<number>(0)
   const [selectedPostId, setSelectedPostId] = useState<string>()
+
   const newPostCount = useMemo(() => {
     if (getMyNewPostCount.data) {
       return getMyNewPostCount.data?.getMyNewPostCount.postCount[0].count
