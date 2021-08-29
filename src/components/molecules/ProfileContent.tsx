@@ -1,14 +1,14 @@
 import * as React from 'react'
 import styled from 'styled-components'
+import { SnsInfo } from '../../lib/queries/meQueries'
 import Tag from '../atoms/Tag'
-import Link from 'next/link'
 
 interface Props {
   name: string
   desc: string
   url: string
   urlName: string
-  instagramUrl: string | undefined
+  snsInfos: SnsInfo[] | undefined
 }
 
 const ProfileContent: React.FC<Props> = (props: Props) => {
@@ -17,7 +17,14 @@ const ProfileContent: React.FC<Props> = (props: Props) => {
       <NameText>{props.name}</NameText>
       <DescText>{props.desc}</DescText>
       <ProfileInfoContainer>
-        {/* <Tag snsId={props.instagramUrl} type="sns" /> */}
+        {props.snsInfos &&
+          props.snsInfos.map((snsInfo) => {
+            if (snsInfo.snsId) {
+              return (
+                <Tag snsId={snsInfo.snsId} snsUrl={snsInfo.url} type="sns" />
+              )
+            }
+          })}
 
         <Tag
           text={props.urlName}
@@ -60,13 +67,4 @@ const ProfileInfoContainer = styled.div`
   display: flex;
   width: 100%;
   gap: 1rem;
-`
-
-const InstaLinkIcon = styled.a`
-  width: 60px;
-  height: 22px;
-  border-radius: 7px;
-  color: #fff;
-  display: flex;
-  align-items: center;
 `

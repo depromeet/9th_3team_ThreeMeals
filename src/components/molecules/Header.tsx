@@ -3,10 +3,11 @@ import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import { slide as Menu } from 'react-burger-menu'
 import { useRouter } from 'next/router'
+import EmptyProfileImg from '../atoms/EmptyProfileImg'
 interface Props {
   isProfile?: boolean
   isLogin?: boolean
-  profileImage?: string
+  profileImage?: string | null
   myProfileImage?: string
   leftIcon?: string
   centerText?: string
@@ -49,10 +50,16 @@ const Header: React.FC<Props> = (props: Props) => {
     <>
       <Container>
         <ContentLeft>
-          {props.profileImage && props.isProfile && (
+          {props.isProfile && (
             <ProfileContainer onClick={props.onClickLeft}>
-              <ProfileImage src={props.profileImage} />
-              <ProfileReviseImage src={IMAGES.btn_20_revise} />
+              {props.profileImage === null ? (
+                <EmptyProfileImg size="3rem" />
+              ) : (
+                <ProfileImage src={props.profileImage} />
+              )}
+              {!props.isOthersContent && (
+                <ProfileReviseImage src={IMAGES.btn_20_revise} />
+              )}
             </ProfileContainer>
           )}
           {props.leftIcon && (

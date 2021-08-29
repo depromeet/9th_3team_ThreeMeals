@@ -8,16 +8,15 @@ import ProfileTemplate from '../templates/ProfileTemplate'
 import Modal from '../molecules/Modal'
 import { IMAGES } from '../../constants/images'
 import {
+  getMyAccountInfo,
   GET_MY_PROFILE,
   UPDATE_DEFAULT_PROFILE_IMAGE,
 } from '../../lib/queries/meQueries'
 import { SINGLE_UPLOAD } from '../../lib/queries/singleFileUploadQuery'
 
 const ProfilePage: React.FC = () => {
-  const {
-    data: { getMyAccountInfo },
-    refetch,
-  } = useQuery(GET_MY_PROFILE)
+  const { data, refetch } = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
+  const { getMyAccountInfo } = data as getMyAccountInfo
   const [singleUploadMutation] = useMutation(SINGLE_UPLOAD)
   const [updateDefaultProfileImage] = useMutation(
     UPDATE_DEFAULT_PROFILE_IMAGE,
@@ -27,9 +26,8 @@ const ProfilePage: React.FC = () => {
       },
     }
   )
-
   const fileInput = useRef<HTMLInputElement | null>(null)
-  const [profileImage, setProfileImage] = useState<string | undefined>(
+  const [profileImage, setProfileImage] = useState<string | null>(
     getMyAccountInfo.image
   )
   const [previewImage, setPreviewImage] = useState<string>(
@@ -91,6 +89,8 @@ const ProfilePage: React.FC = () => {
         onClickIcon={onClickIcon}
         introduction={getMyAccountInfo.content}
         myId={getMyAccountInfo.id}
+        snsInfos={getMyAccountInfo.snsInfos}
+        content={getMyAccountInfo.content}
       />
 
       <Modal

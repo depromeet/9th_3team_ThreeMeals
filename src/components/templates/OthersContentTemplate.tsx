@@ -83,6 +83,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
                     backColor={data.node.color}
                     stickers={data.node.usedEmoticons}
                     isLikeActive={data.node.likedPosts.length > 0}
+                    isOnNewSecretPage={false}
                     comments={data.node.comments}
                   />
                 )
@@ -162,7 +163,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
       <Header
         isOthersContent
         isLogin={props.myAccount ? true : false}
-        isProfile={profileImage ? true : false}
+        isProfile={true}
         profileImage={profileImage}
         myProfileImage={myProfileImage}
         rightIcon={IMAGES.icon_24_drawer}
@@ -180,7 +181,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
             props.account?.getAccountInfo.nickname || '닉네임을 입력해주세요.'
           }
           desc={props.account?.getAccountInfo.content || '소개를 입력해주세요.'}
-          urlName="프로필"
+          urlName="랑크 복사"
           url={
             windowObjet !== undefined
               ? windowObjet.location.origin +
@@ -188,6 +189,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
                 props.account?.getAccountInfo.id
               : ''
           }
+          snsInfos={props.account?.getAccountInfo.snsInfos}
         />
         <TabContainer>
           <Tab
@@ -299,12 +301,11 @@ const ContentContainer = styled.div`
   margin-top: 10px;
 `
 
-const WriteButton = styled.div`
-  max-width: 500px;
+const WriteButton = styled.button.attrs({ type: 'button' })`
   bottom: 0;
   right: 0;
   position: fixed;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 
   @media all and (min-width: 515px) {

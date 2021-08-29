@@ -3,7 +3,11 @@ import { MutableRefObject, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import {
+  DEREGISTER_SNSINFO,
+  getMyAccountInfo,
   GET_MY_PROFILE,
+  REGISTER_SNSINFO,
+  SnsInfo,
   UPDATE_ACCOUNT_INFO,
 } from '../../lib/queries/meQueries'
 import DefaultLine from '../atoms/DefaultLine'
@@ -12,7 +16,7 @@ import Header from '../molecules/Header'
 import { useRouter } from 'next/router'
 
 interface Props {
-  profileImage: string | undefined
+  profileImage: string | null
   previewImage: string
   fileInput?: MutableRefObject<HTMLInputElement | null>
   nickName: string
@@ -25,13 +29,14 @@ interface Props {
   onClickLogout?: () => void
   introduction?: string
   myId: string
+  snsInfos: SnsInfo[]
+  content: string
 }
 
 const ProfileTemplate: React.FC<Props> = (props: Props) => {
   const router = useRouter()
-  const {
-    data: { getMyAccountInfo },
-  } = useQuery(GET_MY_PROFILE)
+  const [registerSnsInfo] = useMutation(REGISTER_SNSINFO)
+  const [deregisterSnsInfo] = useMutation(DEREGISTER_SNSINFO)
   const [updateAccountInfo] = useMutation(UPDATE_ACCOUNT_INFO, {
     onCompleted: () => {
       router.back()
@@ -40,8 +45,9 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
 
   const [blurRightText, setBlurRightText] = useState<boolean>(true)
   const [inputValues, setInputValues] = useState({
-    content: getMyAccountInfo.content,
-    instagramId: '',
+    nickName: props.nickName === null ? '' : props.nickName,
+    content: props.content === null ? '' : props.content,
+    instagramId: props.snsInfos === undefined ? '' : props.snsInfos[0].snsId,
   })
   const [windowObjet, setWindowObjet] = useState<Window | undefined>()
   useEffect(() => {
@@ -56,12 +62,23 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
     },
     [inputValues]
   )
-  const onSave = () => {
+  const onSave = async () => {
+    await deregisterSnsInfo({
+      variables: {
+        snsType: 'Instagram',
+      },
+    })
+    await registerSnsInfo({
+      variables: {
+        snsId: inputValues.instagramId,
+        url: `https://instagram.com/${inputValues.instagramId}`,
+        snsType: 'Instagram',
+      },
+    })
     updateAccountInfo({
       variables: {
-        nickname: getMyAccountInfo.nickname,
+        nickname: inputValues.nickName,
         content: inputValues.content,
-        instagramUrl: inputValues.instagramId,
       },
     })
   }
@@ -102,7 +119,12 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
       />
       <IntroContainer style={{ marginTop: 40 }}>
         <IntroTitle>이름</IntroTitle>
-        <IntroDesc onClick={props.onClickName}>{props.nickName}</IntroDesc>
+        <IntroInput
+          id="nickName"
+          onChange={onChangeInput}
+          value={inputValues.nickName}
+          placeholder="이름을 작성해주세요!"
+        />
       </IntroContainer>
       <DefaultLine containerStyle={{ marginTop: 16, marginBottom: 16 }} />
       <IntroContainer>
@@ -111,7 +133,7 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
           id="content"
           onChange={onChangeInput}
           value={inputValues.content}
-          placeholder="소개글을 작성해주세요"
+          placeholder="소개글을 작성해주세요!"
         />
       </IntroContainer>
       <DefaultLine containerStyle={{ marginTop: 16, marginBottom: 16 }} />
@@ -148,6 +170,7 @@ const Container = styled.div`
   max-width: 500px;
   width: 100%;
 `
+
 const IntroContainer = styled.div`
   display: flex;
   flex-direction: row;

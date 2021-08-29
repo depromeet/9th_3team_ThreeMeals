@@ -14,4 +14,5 @@ export const SVGS = {
   icon_24_prev_wh: require('../assets/svgs/icon_24_prev_wh.svg'),
   icon_24_next_wh: require('../assets/svgs/icon_24_next_wh.svg'),
   icon_profileAltImg: require('../assets/svgs/icon_profileAltImg.svg'),
+  icon_16_insta_wh: require('../assets/svgs/icon_16_insta_wh.svg'),
 }

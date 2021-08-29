@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client'
+import { SnsInfo } from './meQueries'
 
 export interface getAccountInfo {
   getAccountInfo: {
@@ -8,6 +9,7 @@ export interface getAccountInfo {
     image: string
     content: string
     profileUrl: string
+    snsInfos: SnsInfo[]
   }
 }
 
@@ -20,6 +22,11 @@ export const GET_ACCOUNT_INFO = gql`
       image
       content
       profileUrl
+      snsInfos {
+        url
+        snsType
+        snsId
+      }
     }
   }
 `

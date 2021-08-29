@@ -26,6 +26,7 @@ interface getPostEdges {
     commentsCount: number
     fromAccount: {
       id: string
+      nickname: string
     }
     toAccount: {
       id: string
@@ -139,6 +140,7 @@ export const GET_POST = gql`
           commentsCount
           fromAccount {
             id
+            nickname
           }
           toAccount {
             id
