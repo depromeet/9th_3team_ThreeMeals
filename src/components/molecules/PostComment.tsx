@@ -8,7 +8,6 @@ import {
   GET_CHILDREN_COMMENTS,
 } from '../../lib/queries/getCommentsQueries'
 import { useLazyQuery, useMutation, QueryResult } from '@apollo/client'
-import dayjs from 'dayjs'
 import { SVGS } from '../../constants/svgs'
 import {
   CREATE_LIKE_COMMENT,
@@ -20,6 +19,8 @@ import {
   deleteLikeCommentParams,
   DELETE_LIKE_COMMENT,
 } from '../../lib/queries/deleteQueries'
+import { getPostById } from '../../lib/queries/getPostQueries'
+import { feedFormat } from '../../utils/TimeDiffCalc'
 interface Props {
   isMine: boolean
   profileImg: string
@@ -168,13 +169,15 @@ const PostComment: FC<Props> = (props) => {
     ]
   )
   return (
-    <AppContainer>
+    <AppContainer cardColor={props.postData.getPost.color}>
       {postCommentData?.map((comment, i) => {
         return (
           <CommentContainer key={i}>
             <CommentHeader>
               <CommentDate>
-                {dayjs(comment.node.createdAt).format('HH:mm:ss')}
+                {comment.node.createdAt
+                  ? feedFormat(new Date(comment.node.createdAt), new Date())
+                  : '-13:33:33'}
               </CommentDate>
               {props.isMine && (
                 <DropMenu
@@ -299,16 +302,20 @@ const PostComment: FC<Props> = (props) => {
 
 export default React.memo(PostComment)
 
+interface AppContainerProps {
+  cardColor: string
+}
+
 interface LikeActionProps {
   active: boolean
 }
 
-const AppContainer = styled.div`
+const AppContainer = styled.div<AppContainerProps>`
   padding: 0 24px;
   display: flex;
   flex-direction: column;
   background: rgba(255, 131, 61, 0.05);
-  border: 2px solid #ff833d;
+  ${({ cardColor }) => `border: 2px solid ${cardColor};`}
   border-radius: 24px;
   margin-left: 5%;
   margin-right: 5%;

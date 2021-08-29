@@ -29,17 +29,16 @@ const LabelCardHeader: React.FunctionComponent<Props> = (props) => {
       {props.labelComponent}
 
       <span>
-        {props.onClickLike ? (
-          props.isLikeActive ? (
-            <button type="button" onClick={props.onClickLike}>
-              <img src={SVGS.icon_32_like_active} alt="active" />
-            </button>
-          ) : (
-            <button type="button" onClick={props.onClickLike}>
-              <img src={SVGS.icon_32_like} alt="inactive" />
-            </button>
-          )
-        ) : null}
+        {props.isLikeActive ? (
+          <button type="button" onClick={props.onClickLike}>
+            <img src={SVGS.icon_32_like_active} alt="active" />
+          </button>
+        ) : (
+          <button type="button" onClick={props.onClickLike}>
+            <img src={SVGS.icon_32_like} alt="inactive" />
+          </button>
+        )}
+
         {props.onClickOption && (
           <button type="button" onClick={props.onClickOption}>
             <img src={SVGS.icon_32_option} alt="option" />

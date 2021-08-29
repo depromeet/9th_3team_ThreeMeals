@@ -12,18 +12,20 @@ interface Props {
   onClickIcon?: () => void
 }
 
+const avatarProps = {
+  size: '5rem',
+  name: 'https://source.boringavatars.com/',
+  varaint: 'beam',
+  colors: ['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90'],
+}
+
 const IconOnImage: React.FC<Props> = (props: Props) => {
   return (
     <Container style={props.containerStyle}>
       {props.curImage ? (
         <Image style={props.imageStyle} src={props.image} />
       ) : (
-        <Avatar
-          size={'5rem'}
-          name="https://source.boringavatars.com/"
-          variant="beam"
-          colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']}
-        />
+        <Avatar {...avatarProps} />
       )}
       <IconContainer>
         <Icon

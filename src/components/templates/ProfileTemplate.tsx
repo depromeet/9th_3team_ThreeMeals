@@ -41,7 +41,7 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
   const [blurRightText, setBlurRightText] = useState<boolean>(true)
   const [inputValues, setInputValues] = useState({
     content: getMyAccountInfo.content,
-    instaId: '',
+    instagramId: '',
   })
   const [windowObjet, setWindowObjet] = useState<Window | undefined>()
   useEffect(() => {
@@ -61,10 +61,10 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
       variables: {
         nickname: getMyAccountInfo.nickname,
         content: inputValues.content,
+        instagramUrl: inputValues.instagramId,
       },
     })
   }
-
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setWindowObjet(window)
@@ -118,9 +118,9 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
       <IntroContainer>
         <IntroTitle>인스타</IntroTitle>
         <IntroInput
-          id="instaId"
+          id="instagramId"
           placeholder="인스타그램 아이디를 작성해주세요!"
-          value={inputValues.instaId}
+          value={inputValues.instagramId}
           onChange={onChangeInput}
           autoComplete={undefined}
         />
@@ -134,7 +134,6 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
             : ''}
         </IntroDesc>
       </IntroContainer>
-      <DefaultLine containerStyle={{ marginTop: 16, marginBottom: 16 }} />
       <Footer>
         <DefaultLine containerStyle={{ maxWidth: 500 }} />
         <FooterText onClick={props.onClickLogout}>로그아웃</FooterText>
@@ -166,6 +165,7 @@ const IntroTitle = styled.div`
   width: 3rem;
 `
 const IntroDesc = styled.span`
+  width: 100%;
   margin-left: 24px;
   font-style: normal;
   font-weight: normal;
@@ -191,7 +191,6 @@ const IntroInput = styled.input`
   border: none;
   width: 100%;
 `
-
 const Footer = styled.div`
   position: fixed;
   left: 0px;

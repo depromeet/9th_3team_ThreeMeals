@@ -38,6 +38,7 @@ const ContentTemplate: FC<Props> = (props) => {
     onClickAnswerCard,
     onClickLike,
   } = props
+  console.log(props.myAccount)
   const postContent = useMemo(() => {
     if (props.getPost?.getPosts.edges) {
       const edges = props.getPost?.getPosts.edges
@@ -59,7 +60,8 @@ const ContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <NoticeContainer>
-              {newPostCount === 0 ? (
+              {newPostCount === 0 &&
+              (postContent === undefined || postContent.ask?.length === 0) ? (
                 <img
                   style={{ position: 'relative', bottom: 15, zIndex: -1 }}
                   src={IMAGES.img_tape_empty}
@@ -98,7 +100,7 @@ const ContentTemplate: FC<Props> = (props) => {
             <ContentContainer>
               {postContent && postContent.ask.length > 0 ? (
                 postContent?.ask.map((data, index) => {
-                  return (
+                  return data.node.postState === 'Completed' ? (
                     <QuestionCard
                       key={index}
                       id={data.node.id}
@@ -109,6 +111,7 @@ const ContentTemplate: FC<Props> = (props) => {
                       createdAt={data.node.createdAt}
                       updatedAt={data.node.updatedAt}
                       secretType={data.node.secretType}
+                      fromAccount={data.node.fromAccount}
                       isLikeActive={data.node.likedPosts.length > 0}
                       onClickOption={() => {
                         onClickRemove(data.node.id)
@@ -120,7 +123,7 @@ const ContentTemplate: FC<Props> = (props) => {
                         )
                       }}
                     />
-                  )
+                  ) : null
                 })
               ) : (
                 <BackgroundSticker src={IMAGES.backgroundSticker} />
@@ -160,7 +163,8 @@ const ContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <NoticeContainer>
-              {newPostCount === 0 ? (
+              {newPostCount === 0 &&
+              (postContent === undefined || postContent.quiz?.length === 0) ? (
                 <img
                   style={{ position: 'relative', bottom: 15, zIndex: -1 }}
                   src={IMAGES.img_tape_empty}
@@ -283,6 +287,7 @@ const ContentTemplate: FC<Props> = (props) => {
                 props.myAccount?.getMyAccountInfo.id
               : ''
           }
+          // instagramUrl={props.myAccount?.getMyAccountInfo.snsInfos.url}
         />
         <TabContainer>
           <Tab

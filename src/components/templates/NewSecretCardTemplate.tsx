@@ -56,13 +56,8 @@ const NewSecretCardTemplate: FC<Props> = (props) => {
                 onClickSend={props.onClickSend}
                 id={data.node.id}
                 secretType={data.node.secretType}
-                labelComponent={
-                  data.node.secretType === 'Forever' ? (
-                    <PrivateCardLabel text="BONG IN" active={false} />
-                  ) : (
-                    <CardLabel text={data.node.createdAt} active />
-                  )
-                }
+                createdAt={data.node.createdAt}
+                updatedAt={data.node.updatedAt}
                 questionTitle={data.node.content}
                 backColor={data.node.color}
                 stickers={data.node.usedEmoticons}

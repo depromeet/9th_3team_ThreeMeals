@@ -37,6 +37,10 @@ interface Props {
     createdAt: string
     updatedAt: string
   }[]
+  fromAccount?: {
+    nickname?: string
+    image?: string
+  }
   onClickSend?: (text: string, postId: string, secretType: string) => void
   onClickLike?: () => void
   onClickOption?: () => void
@@ -69,7 +73,11 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
   }, [props.createdAt, props.secretType])
 
   useEffect(() => {
-    if (timeStatus !== 'bong-in') {
+    if (
+      timeStatus !== 'bong-in' &&
+      props.comments &&
+      props.comments?.length > 0
+    ) {
       const interval = setInterval(() => {
         const postDate = new Date(props.createdAt)
         postDate.setHours(postDate.getHours() + 24)
@@ -77,7 +85,7 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
       }, 1000)
       return () => clearInterval(interval)
     }
-  }, [props.createdAt, timeStatus])
+  }, [props.comments, props.createdAt, timeStatus])
 
   return (
     <>
@@ -98,8 +106,12 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
                 <PrivateCardLabel text="BONG IN" active={false} />
               ) : timeStatus === 'show' ? (
                 <ShowProfile>
-                  <ProfileImg src={IMAGES.background} />
-                  <ProfileName>hi</ProfileName>
+                  <ProfileImg
+                    src={props.fromAccount?.image || IMAGES.thumbnail}
+                  />
+                  <ProfileName>
+                    {props.fromAccount?.nickname || '닉네임'}
+                  </ProfileName>
                   <ProfileImgSticker src={IMAGES.open_label} />
                 </ShowProfile>
               ) : (
@@ -323,13 +335,13 @@ const ShowProfile = styled.div`
 `
 
 const ProfileImgSticker = styled.img`
-  width: 76px;
+  width: 76px !important;
   height: 69.5px;
   position: absolute;
   left: -15px;
 `
 const ProfileImg = styled.img`
-  width: 32px;
+  width: 32px !important;
   height: 32px;
   border-radius: 50%;
   margin-right: 8px;

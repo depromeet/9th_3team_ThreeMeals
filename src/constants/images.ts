@@ -47,10 +47,12 @@ export const IMAGES = {
   img_scrolldown: require('../assets/images/img_scrolldown.png'),
   icon_floating: require('../assets/images/icon_floating.png'),
   img_homebox: require('../assets/images/img_homebox.png'),
+  icon_home_text: require('../assets/images/icon_home_text.png'),
 
   // Profile img //
   icon_16_insta_wh: require('../assets/images/icon_16_insta_wh.png'),
   share_16: require('../assets/images/share_16.png'),
+  thumbnail: require('../assets/images/thumbnail.png'),
 
   // contactUs img //
   tape_contact: require('../assets/images/tape_contact.png'),

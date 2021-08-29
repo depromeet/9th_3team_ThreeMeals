@@ -2,15 +2,18 @@ import React from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import Link from 'next/link'
 
 interface Props {
   id?: string
-  text: string
-  url: string
+  text?: string
+  url?: string
   icon?: string
   onClickClose?: (id: string) => void
   isNonClose?: boolean
   external?: boolean
+  type: 'sns' | 'profileUrl'
+  snsId?: string
 }
 
 const Container = styled.div`
@@ -54,27 +57,50 @@ const Text = styled.span`
   float: left;
   cursor: pointer;
 `
+
+const SnsLinkText = styled.a`
+  margin-top: 2px;
+  float: left;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  align-items: center;
+`
 const Tag: React.FunctionComponent<Props> = (props) => {
   return (
     <Container>
-      <IconContainer>{props.icon && <Icon src={props.icon} />}</IconContainer>
-      <StyledTag
-        text={props.url}
-        onCopy={() => {
-          window.alert('클립보드에 복사되었습니다.')
-        }}
-      >
-        <Text style={{ paddingRight: props.icon ? '8px' : '2px' }}>
-          {props.text}
-        </Text>
-      </StyledTag>
-      {!props.isNonClose && (
-        <CloseIcon
-          src={IMAGES.icon_24_close_green_wh}
-          onClick={() => {
-            props.onClickClose && props.id && props.onClickClose(props.id)
-          }}
-        />
+      {props.type === 'profileUrl' && props.url ? (
+        <>
+          <IconContainer>
+            {props.icon && <Icon src={props.icon} />}
+          </IconContainer>
+          <StyledTag
+            text={props.url}
+            onCopy={() => {
+              window.alert('클립보드에 복사되었습니다.')
+            }}
+          >
+            <Text style={{ paddingRight: props.icon ? '8px' : '2px' }}>
+              {props.text}
+            </Text>
+          </StyledTag>
+          {!props.isNonClose && (
+            <CloseIcon
+              src={IMAGES.icon_24_close_green_wh}
+              onClick={() => {
+                props.onClickClose && props.id && props.onClickClose(props.id)
+              }}
+            />
+          )}
+        </>
+      ) : (
+        props.type === 'sns' && (
+          <IconContainer>
+            <Link passHref href={`https://www.instagram.com/${props.snsId}`}>
+              {props.snsId && <SnsLinkText>{props.snsId}</SnsLinkText>}
+            </Link>
+          </IconContainer>
+        )
       )}
     </Container>
   )

@@ -1,12 +1,14 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import Tag from '../atoms/Tag'
+import Link from 'next/link'
 
 interface Props {
   name: string
   desc: string
   url: string
   urlName: string
+  instagramUrl: string | undefined
 }
 
 const ProfileContent: React.FC<Props> = (props: Props) => {
@@ -14,9 +16,16 @@ const ProfileContent: React.FC<Props> = (props: Props) => {
     <Container>
       <NameText>{props.name}</NameText>
       <DescText>{props.desc}</DescText>
-      <div style={{ display: 'flex' }}>
-        <Tag text={props.urlName} isNonClose url={props.url} />
-      </div>
+      <ProfileInfoContainer>
+        {/* <Tag snsId={props.instagramUrl} type="sns" /> */}
+
+        <Tag
+          text={props.urlName}
+          isNonClose
+          url={props.url}
+          type="profileUrl"
+        />
+      </ProfileInfoContainer>
     </Container>
   )
 }
@@ -45,4 +54,19 @@ const DescText = styled.div`
   letter-spacing: -0.02em;
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 8px;
+`
+
+const ProfileInfoContainer = styled.div`
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+`
+
+const InstaLinkIcon = styled.a`
+  width: 60px;
+  height: 22px;
+  border-radius: 7px;
+  color: #fff;
+  display: flex;
+  align-items: center;
 `

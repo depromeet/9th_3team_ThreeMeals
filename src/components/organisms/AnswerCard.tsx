@@ -2,9 +2,9 @@ import React, { useEffect, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import dayjs from 'dayjs'
 import { StickerInfo } from '../../types/types'
 import dynamic from 'next/dynamic'
+import { feedFormat } from '../../utils/TimeDiffCalc'
 const StickerPanelWithNoSSR = dynamic(
   () => import('../molecules/StickerPanel'),
   { ssr: false }
@@ -43,7 +43,9 @@ const AnswerCard: React.FunctionComponent<Props> = (props) => {
       <Container backColor={props.backColor}>
         <Header>
           <TimeContainer>
-            {dayjs(props.time).format('HH:mm:ss') || '-13:33:33'}
+            {props.time
+              ? feedFormat(new Date(props.time), new Date())
+              : '-13:33:33'}
           </TimeContainer>
           <div>
             {props.isContent && props.id && (

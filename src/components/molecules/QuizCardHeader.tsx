@@ -53,26 +53,24 @@ const QuizCardHeader: React.FunctionComponent<CardHeaderProps> = (props) => {
   return (
     <Container className={props.className}>
       <img src={getImage(props.color)} alt={'quiz'} width="89" height="39" />
-      {props.isMyFeed ? (
-        <span>
-          {props.onClickLike ? (
-            props.isLikeActive ? (
-              <button type="button" onClick={props.onClickLike}>
-                <img src={SVGS.icon_32_like_active} alt="active" />
-              </button>
-            ) : (
-              <button type="button" onClick={props.onClickLike}>
-                <img src={SVGS.icon_32_like} alt="inactive" />
-              </button>
-            )
-          ) : null}
-          {props.onClickOption && (
-            <button type="button" onClick={props.onClickOption}>
-              <img src={SVGS.icon_32_option} alt="option" />
-            </button>
-          )}
-        </span>
-      ) : null}
+
+      <span>
+        {props.isLikeActive ? (
+          <button type="button" onClick={props.onClickLike}>
+            <img src={SVGS.icon_32_like_active} alt="active" />
+          </button>
+        ) : (
+          <button type="button" onClick={props.onClickLike}>
+            <img src={SVGS.icon_32_like} alt="inactive" />
+          </button>
+        )}
+
+        {props.isMyFeed && props.onClickOption && (
+          <button type="button" onClick={props.onClickOption}>
+            <img src={SVGS.icon_32_option} alt="option" />
+          </button>
+        )}
+      </span>
     </Container>
   )
 }
