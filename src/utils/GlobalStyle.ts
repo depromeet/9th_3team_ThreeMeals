@@ -34,6 +34,11 @@ export const GlobalStyle = createGlobalStyle`
     /* The hack for Safari */
     height: -webkit-fill-available;
   }
+  @supports (-webkit-touch-callout: none) {
+  body {
+    /* The hack for Safari */
+    height: -webkit-fill-available;
+  }
 }
   a, u {
     text-decoration: none;

@@ -73,6 +73,7 @@ const AnswerDetailTemplate: React.FC<Props> = (props: Props) => {
           postData={props.postData}
           parentCommentsForRefetching={props.parentCommentsForRefetching}
           profileImg={IMAGES.background}
+          postData={props.postData}
           commentsInfo={props.parentComments}
           onClickRemove={props.onClickRemove}
           setParentCommentId={props.setParentCommentId}
