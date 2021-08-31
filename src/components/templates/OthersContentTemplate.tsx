@@ -19,6 +19,7 @@ import { getPost } from '../../lib/queries/getPostQueries'
 import QuizAnswerCard from '../organisms/QuizAnswerCard'
 import { getMyAccountInfo } from '../../lib/queries/meQueries'
 import { SpacingText } from '../../utils/SpacingText'
+import { EmptyCase } from './ContentTemplate'
 
 interface Props {
   token?: string
@@ -66,28 +67,47 @@ const OthersContentTemplate: FC<Props> = (props) => {
       router.push('/')
     }
   }, [props.account?.getAccountInfo.id, props.token, router, tabIndex])
+
+  const isExistAsk = useMemo((): EmptyCase => {
+    if (postContent === undefined || postContent.ask?.length === 0) {
+      return 'empty'
+    } else return 'exist'
+  }, [postContent])
+
+  const isExistOX = useMemo(() => {
+    if (postContent === undefined || postContent.quiz?.length === 0) {
+      return 'empty'
+    } else return 'exist'
+  }, [postContent])
+
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:
         return (
           <>
             <ContentContainer>
-              {postContent?.ask.map((data, index) => {
-                return (
-                  <QuestionCard
-                    key={index}
-                    id={data.node.id}
-                    createdAt={data.node.createdAt}
-                    updatedAt={data.node.updatedAt}
-                    secretType={data.node.secretType}
-                    questionTitle={data.node.content}
-                    backColor={data.node.color}
-                    stickers={data.node.usedEmoticons}
-                    isLikeActive={data.node.likedPosts.length > 0}
-                    comments={data.node.comments}
-                  />
-                )
-              })}
+              {isExistAsk === 'exist' ? (
+                postContent?.ask.map((data, index) => {
+                  return (
+                    <QuestionCard
+                      key={index}
+                      id={data.node.id}
+                      createdAt={data.node.createdAt}
+                      updatedAt={data.node.updatedAt}
+                      secretType={data.node.secretType}
+                      questionTitle={data.node.content}
+                      backColor={data.node.color}
+                      stickers={data.node.usedEmoticons}
+                      isLikeActive={data.node.likedPosts.length > 0}
+                      comments={data.node.comments}
+                    />
+                  )
+                })
+              ) : (
+                <EmptyContainer>
+                  {'아직 질문카드가 없네요. 가장 먼저 질문해보세요!'}
+                </EmptyContainer>
+              )}
             </ContentContainer>
           </>
         )
@@ -129,27 +149,33 @@ const OthersContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <ContentContainer>
-              {postContent?.quiz.map((content, index) => {
-                return content.node.comments &&
-                  content.node.comments.length > 0 ? (
-                  <QuizAnswerCardContainer key={index}>
-                    <QuizAnswerCard
-                      content={content.node.content}
-                      backColor={content.node.color}
-                      answerType={content.node.comments[0].content}
-                      isMyFeed={false}
-                      isLikeActive={content.node.likedPosts.length > 0}
-                    />
-                  </QuizAnswerCardContainer>
-                ) : null
-              })}
+              {isExistOX === 'exist' ? (
+                postContent?.quiz.map((content, index) => {
+                  return content.node.comments &&
+                    content.node.comments.length > 0 ? (
+                    <QuizAnswerCardContainer key={index}>
+                      <QuizAnswerCard
+                        content={content.node.content}
+                        backColor={content.node.color}
+                        answerType={content.node.comments[0].content}
+                        isMyFeed={false}
+                        isLikeActive={content.node.likedPosts.length > 0}
+                      />
+                    </QuizAnswerCardContainer>
+                  ) : null
+                })
+              ) : (
+                <EmptyContainer>
+                  {'아직 질문카드가 없네요. 가장 먼저 질문해보세요!'}
+                </EmptyContainer>
+              )}
             </ContentContainer>
           </>
         )
       default:
         break
     }
-  }, [props, tabIndex, postContent])
+  }, [tabIndex, isExistAsk, postContent, isExistOX, props])
 
   const profileImage = useMemo(() => {
     return props.account?.getAccountInfo.image
@@ -339,14 +365,23 @@ const BackgroundSticker = styled.img`
   bottom: 15px;
   right: 15px;
 `
+
 const TobeContinueContainer = styled.div`
   margin-top: 210px;
   font-size: 13px;
   line-height: 22px;
-  /* or 169% */
-
   text-align: center;
   letter-spacing: -0.02em;
+`
 
+const EmptyContainer = styled.div`
+  width: 100%;
+  position: absolute;
+  bottom: 40vh;
+  font-size: 13px;
+  line-height: 22px;
+  /* or 169% */
+  text-align: center;
+  letter-spacing: -0.02em;
   color: rgba(255, 255, 255, 0.7);
 `
