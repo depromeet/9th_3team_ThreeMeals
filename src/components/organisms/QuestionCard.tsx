@@ -41,6 +41,7 @@ interface Props {
     nickname?: string
     image?: string
   }
+  isOnNewSecretPage: boolean
   onClickSend?: (text: string, postId: string, secretType: string) => void
   onClickLike?: () => void
   onClickOption?: () => void
@@ -76,10 +77,10 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
     if (
       timeStatus !== 'bong-in' &&
       props.comments &&
-      props.comments?.length > 0
+      props.comments.length > 0
     ) {
       const interval = setInterval(() => {
-        const postDate = new Date(props.createdAt)
+        const postDate = new Date(props.comments[0].createdAt)
         postDate.setHours(postDate.getHours() + 24)
         setTimerValue(dateDiffToTimer(new Date(postDate), new Date()))
       }, 1000)
@@ -134,7 +135,7 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
               height={37}
               style={{ width: 45 }}
             />
-            밀어서 답장보기
+            {props.isOnNewSecretPage ? '밀어서 답장쓰기' : '밀어서 답장보기'}
           </BottomContainer>
         </Container>
         <SecondContainer backColor={props.backColor} style={{ opacity: 0.05 }}>
@@ -300,7 +301,6 @@ const TextArea = styled.textarea`
   border: none;
   resize: none;
   background: border-box;
-  border-radius: 24px;
   font-style: normal;
   font-weight: 500;
   font-size: 24px;

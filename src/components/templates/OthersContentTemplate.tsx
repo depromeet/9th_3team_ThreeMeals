@@ -116,6 +116,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
                       backColor={data.node.color}
                       stickers={data.node.usedEmoticons}
                       isLikeActive={data.node.likedPosts.length > 0}
+                      isOnNewSecretPage={false}
                       comments={data.node.comments}
                     />
                   )
