@@ -170,7 +170,13 @@ const ContentTemplate: FC<Props> = (props) => {
       case 1:
         return (
           <>
-            <ContentContainer>
+            <TobeContinueContainer>
+              {SpacingText(
+                '서비스 준비중 입니다. \\n 물어봐와 OX로 친구들과의 소통을 즐겨보세요.'
+              )}
+            </TobeContinueContainer>
+            {/* To be continue */}
+            {/* <ContentContainer>
               {postContent?.answer.map((data, index) => {
                 return (
                   <AnswerCard
@@ -192,7 +198,7 @@ const ContentTemplate: FC<Props> = (props) => {
                   />
                 )
               })}
-            </ContentContainer>
+            </ContentContainer> */}
           </>
         )
       case 2:
@@ -382,7 +388,7 @@ const ContentTemplate: FC<Props> = (props) => {
         />
         {ContentView}
       </MainContainer>
-      {postContent && props.tabIndex === 1 ? (
+      {/* {postContent && props.tabIndex === 1 ? (
         postContent.answer.length > 0 ? (
           <WriteButton>
             <img onClick={props.onClickWrite} src={IMAGES.write} width={88} />
@@ -396,7 +402,7 @@ const ContentTemplate: FC<Props> = (props) => {
             />
           </WriteButton>
         )
-      ) : null}
+      ) : null} */}
     </AppContainer>
   )
 }
@@ -494,5 +500,17 @@ const EmptyContainer = styled.div`
   /* or 169% */
   text-align: center;
   letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.7);
+`
+
+const TobeContinueContainer = styled.div`
+  margin-top: 210px;
+  font-size: 13px;
+  line-height: 22px;
+  /* or 169% */
+
+  text-align: center;
+  letter-spacing: -0.02em;
+
   color: rgba(255, 255, 255, 0.7);
 `
