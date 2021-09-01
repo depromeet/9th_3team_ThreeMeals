@@ -54,7 +54,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
       }
     }
   }, [props.getPost?.getPosts.edges])
-  console.log(postContent?.ask)
+
   const onClickWrite = useCallback(() => {
     if (props.token) {
       if (tabIndex === 0) {
@@ -399,6 +399,7 @@ const TobeContinueContainer = styled.div`
 const EmptyContainer = styled.div`
   width: 100%;
   position: absolute;
+  left: 0;
   bottom: 40vh;
   font-size: 13px;
   line-height: 22px;
