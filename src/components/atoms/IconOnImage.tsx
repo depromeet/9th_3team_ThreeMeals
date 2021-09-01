@@ -1,8 +1,11 @@
 import * as React from 'react'
 import styled, { CSSProperties } from 'styled-components'
+import Avatar from 'boring-avatars'
+import EmptyProfileImg from './EmptyProfileImg'
 
 interface Props {
   containerStyle?: CSSProperties
+  curImage: string | null
   image: string
   imageStyle?: CSSProperties
   icon: string
@@ -10,10 +13,22 @@ interface Props {
   onClickIcon?: () => void
 }
 
+const avatarProps = {
+  size: '5rem',
+  name: 'https://source.boringavatars.com/',
+  varaint: 'beam',
+  colors: ['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90'],
+}
+
 const IconOnImage: React.FC<Props> = (props: Props) => {
+  console.log(props.curImage)
   return (
     <Container style={props.containerStyle}>
-      <Image style={props.imageStyle} src={props.image} />
+      {props.curImage !== null ? (
+        <Image style={props.imageStyle} src={props.image} />
+      ) : (
+        <EmptyProfileImg size="5rem" />
+      )}
       <IconContainer>
         <Icon
           onClick={props.onClickIcon}

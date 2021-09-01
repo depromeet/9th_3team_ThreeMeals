@@ -60,7 +60,6 @@ const ContentTemplate: FC<Props> = (props) => {
       }
     }
   }, [props.getPost?.getPosts.edges])
-
   const isExistAsk = useMemo((): EmptyCase => {
     if (
       postContent === undefined ||
@@ -82,7 +81,6 @@ const ContentTemplate: FC<Props> = (props) => {
       return 'request'
     } else return 'exist'
   }, [newPostCount, postContent])
-
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:
@@ -141,6 +139,7 @@ const ContentTemplate: FC<Props> = (props) => {
                       secretType={data.node.secretType}
                       fromAccount={data.node.fromAccount}
                       isLikeActive={data.node.likedPosts.length > 0}
+                      isOnNewSecretPage={false}
                       onClickOption={() => {
                         onClickRemove(data.node.id)
                       }}
@@ -304,7 +303,7 @@ const ContentTemplate: FC<Props> = (props) => {
     <AppContainer>
       <Header
         isLogin={props.myAccount ? true : false}
-        isProfile={profileImage ? true : false}
+        isProfile={true}
         profileImage={profileImage}
         rightIcon={IMAGES.icon_24_drawer}
         rightSecondIcon={
@@ -324,7 +323,7 @@ const ContentTemplate: FC<Props> = (props) => {
           desc={
             props.myAccount?.getMyAccountInfo.content || '소개를 입력해주세요.'
           }
-          urlName="프로필"
+          urlName="링크 복사"
           url={
             windowObjet !== undefined
               ? windowObjet.location.origin +
@@ -332,6 +331,7 @@ const ContentTemplate: FC<Props> = (props) => {
                 props.myAccount?.getMyAccountInfo.id
               : ''
           }
+          snsInfos={props.myAccount?.getMyAccountInfo.snsInfos}
         />
         <TabContainer>
           <Tab

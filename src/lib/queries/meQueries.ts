@@ -8,8 +8,16 @@ export interface getMyAccountInfo {
     image: string
     content: string
     profileUrl: string
+    snsInfos: SnsInfo[]
   }
 }
+
+export interface SnsInfo {
+  snsId: string
+  snsType: 'Instagram' | 'Facebook'
+  url: string
+}
+
 export const GET_MY_PROFILE = gql`
   query {
     getMyAccountInfo {
@@ -19,6 +27,10 @@ export const GET_MY_PROFILE = gql`
       image
       content
       profileUrl
+      snsInfos {
+        url
+        snsId
+      }
     }
   }
 `
@@ -32,22 +44,16 @@ export const GET_MY_CONTENT = gql`
 `
 
 export const UPDATE_ACCOUNT_INFO = gql`
-  mutation updateAccountInfo(
-    $content: String
-    $nickname: String!
-    $profileUrl: String
-  ) {
-    updateAccountInfo(
-      content: $content
-      nickname: $nickname
-      profileUrl: $profileUrl
-    ) {
+  mutation updateAccountInfo($content: String, $nickname: String!) {
+    updateAccountInfo(content: $content, nickname: $nickname) {
       id
       nickname
       status
       image
       content
-      profileUrl
+      snsInfos {
+        url
+      }
     }
   }
 `
@@ -55,5 +61,21 @@ export const UPDATE_ACCOUNT_INFO = gql`
 export const UPDATE_DEFAULT_PROFILE_IMAGE = gql`
   mutation updateImageToBasic {
     updateImageToBasic
+  }
+`
+
+export const REGISTER_SNSINFO = gql`
+  mutation registerSnsInfo($snsId: String!, $url: String!, $snsType: String!) {
+    registerSnsInfo(snsId: $snsId, url: $url, snsType: $snsType) {
+      message
+    }
+  }
+`
+
+export const DEREGISTER_SNSINFO = gql`
+  mutation deregisterSnsInfo($snsType: String!) {
+    deregisterSnsInfo(snsType: $snsType) {
+      message
+    }
   }
 `

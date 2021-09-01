@@ -1,5 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
+import { SnsInfo } from '../../lib/queries/meQueries'
 import Tag from '../atoms/Tag'
 
 interface Props {
@@ -7,6 +8,7 @@ interface Props {
   desc: string
   url: string
   urlName: string
+  snsInfos: SnsInfo[] | undefined
 }
 
 const ProfileContent: React.FC<Props> = (props: Props) => {
@@ -14,9 +16,23 @@ const ProfileContent: React.FC<Props> = (props: Props) => {
     <Container>
       <NameText>{props.name}</NameText>
       <DescText>{props.desc}</DescText>
-      <div style={{ display: 'flex' }}>
-        <Tag text={props.urlName} isNonClose url={props.url} />
-      </div>
+      <ProfileInfoContainer>
+        {props.snsInfos &&
+          props.snsInfos.map((snsInfo) => {
+            if (snsInfo.snsId) {
+              return (
+                <Tag snsId={snsInfo.snsId} snsUrl={snsInfo.url} type="sns" />
+              )
+            }
+          })}
+
+        <Tag
+          text={props.urlName}
+          isNonClose
+          url={props.url}
+          type="profileUrl"
+        />
+      </ProfileInfoContainer>
     </Container>
   )
 }
@@ -45,4 +61,10 @@ const DescText = styled.div`
   letter-spacing: -0.02em;
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 8px;
+`
+
+const ProfileInfoContainer = styled.div`
+  display: flex;
+  width: 100%;
+  gap: 1rem;
 `

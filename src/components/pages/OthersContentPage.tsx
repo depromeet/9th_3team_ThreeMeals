@@ -54,9 +54,6 @@ const OthersContentPage: React.FC = () => {
         account={account.data}
         getUnreadNotiCount={getUnreadNotiCount.data?.getUnreadNotiCount.count}
         profileImage={IMAGES.background}
-        onClickLeft={() => {
-          router.push('/profile')
-        }}
         onClickSecondRight={() => {
           router.push('/notification')
         }}

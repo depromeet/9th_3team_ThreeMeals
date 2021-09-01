@@ -62,6 +62,7 @@ const NewSecretCardTemplate: FC<Props> = (props) => {
                 backColor={data.node.color}
                 stickers={data.node.usedEmoticons}
                 comments={data.node.comments}
+                isOnNewSecretPage={true}
                 onClickOption={() => {
                   props.onClickRemove(data.node.id)
                 }}
