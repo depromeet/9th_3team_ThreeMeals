@@ -47,7 +47,7 @@ const ProfileTemplate: React.FC<Props> = (props: Props) => {
   const [inputValues, setInputValues] = useState({
     nickName: props.nickName === null ? '' : props.nickName,
     content: props.content === null ? '' : props.content,
-    instagramId: props.snsInfos === undefined ? '' : props.snsInfos[0].snsId,
+    instagramId: props.snsInfos[0] === undefined ? '' : props.snsInfos[0].snsId,
   })
   const [windowObjet, setWindowObjet] = useState<Window | undefined>()
   useEffect(() => {
