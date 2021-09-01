@@ -25,7 +25,7 @@ const NotificationTemplate: FC<Props> = (props) => {
         .slice()
         .reverse()
         .map((value, index) => {
-          return value.read !== true ? (
+          return value.read !== true && value.otherAccount !== null ? (
             <AlarmContentField
               key={index}
               nickname={value.otherAccount.nickname}
@@ -39,7 +39,6 @@ const NotificationTemplate: FC<Props> = (props) => {
     )
   }, [props.notification])
 
-  console.log('notificationData', notificationData)
   return (
     <AppContainer>
       <Header

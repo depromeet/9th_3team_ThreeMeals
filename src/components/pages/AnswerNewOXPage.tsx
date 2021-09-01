@@ -9,6 +9,7 @@ import {
   getPost,
 } from '../../lib/queries/getPostQueries'
 import { getMyAccountInfo, GET_MY_PROFILE } from '../../lib/queries/meQueries'
+import { updateCurTabIdx } from '../../lib/localStore/contentTabIndex'
 
 const AnswerNewOXPage: VFC = () => {
   const router = useRouter()
@@ -35,6 +36,9 @@ const AnswerNewOXPage: VFC = () => {
       addQuizData(cardData)
     }
   }, [cardData])
+  useEffect(() => {
+    updateCurTabIdx(2)
+  }, [])
   if (!cardData || !cardDataColors) {
     return <></>
   }

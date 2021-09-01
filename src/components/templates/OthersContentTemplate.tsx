@@ -20,6 +20,8 @@ import QuizAnswerCard from '../organisms/QuizAnswerCard'
 import { getMyAccountInfo } from '../../lib/queries/meQueries'
 import { SpacingText } from '../../utils/SpacingText'
 import { EmptyCase } from './ContentTemplate'
+import { useReactiveVar } from '@apollo/client'
+import { curTabIdx } from '../../lib/localStore/contentTabIndex'
 
 interface Props {
   token?: string
@@ -35,6 +37,7 @@ interface Props {
 
 const OthersContentTemplate: FC<Props> = (props) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
+  const currentTabIdx = useReactiveVar(curTabIdx)
   const [windowObjet, setWindowObjet] = useState<Window | undefined>()
   const router = useRouter()
   const postContent = useMemo(() => {
@@ -51,6 +54,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
       }
     }
   }, [props.getPost?.getPosts.edges])
+  console.log(postContent?.ask)
   const onClickWrite = useCallback(() => {
     if (props.token) {
       if (tabIndex === 0) {

@@ -4,9 +4,12 @@ import CardContainer from '../atoms/CardContainer'
 import dynamic from 'next/dynamic'
 import addToPanelVar from '../../lib/localStore/stickerPanel'
 import { useReactiveVar } from '@apollo/client'
-import { addToWritePostInfo } from '../../lib/localStore/writePost'
+import writePostInfoVar, {
+  addToWritePostInfo,
+} from '../../lib/localStore/writePost'
 import { debounce } from 'lodash'
 import { StickerInfo } from '../../types/types'
+import SimpleBarReact from 'simplebar-react'
 const StickerPanelWithNoSSR = dynamic(
   () => import('../molecules/StickerPanel'),
   { ssr: false }
@@ -19,6 +22,7 @@ interface Props {
 }
 
 const WriteQACard: FC<Props> = (props) => {
+  const writePostInfo = useReactiveVar(writePostInfoVar)
   const [content, setContent] = useState('')
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const addContentToWritePost = useCallback(
@@ -42,7 +46,9 @@ const WriteQACard: FC<Props> = (props) => {
           placeholder={`질문을 자유롭게\n작성해 주세요.`}
           onChange={onChangeContent}
           value={content}
+          maxLength={writePostInfo?.postType === 'Quiz' ? 100 : undefined}
         />
+
         <StickerContainer isWithSticker={props.isWithSticker}>
           {addToPanelInfo?.imgUrl && addToPanelInfo.width ? (
             <StickerPanelWithNoSSR />
@@ -89,6 +95,14 @@ const ContentContainer = styled.div`
     :-ms-input-placeholder {
       opacity: 0.2;
       color: #000000;
+    }
+    ::-webkit-scrollbar {
+      width: 2px;
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: transparent;
+      opacity: 0.1;
     }
   }
 `

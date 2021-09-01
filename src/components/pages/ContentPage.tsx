@@ -12,7 +12,7 @@ import {
   deleteLikeParams,
   DELETE_LIKE,
 } from '../../lib/queries/deleteQueries'
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation, useQuery, useReactiveVar } from '@apollo/client'
 import {
   getMyNewPostCount,
   getMyNewPostCountParams,
@@ -31,8 +31,13 @@ import {
   createLikeParams,
   CREATE_LIKE,
 } from '../../lib/queries/createQueries'
+import {
+  curTabIdx,
+  updateCurTabIdx,
+} from '../../lib/localStore/contentTabIndex'
 
 const ContentPage: React.FC = () => {
+  const currentTabIdx = useReactiveVar(curTabIdx)
   const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
   const getPost = useQuery<getPost, getPostParams>(GET_POST, {
     variables: { first: 10, accountId: myAccount.data?.getMyAccountInfo.id },
@@ -69,10 +74,25 @@ const ContentPage: React.FC = () => {
     variables: { postType: 'Ask' },
   })
   const getUnreadNotiCount = useQuery<getUnreadNotiCount>(GET_UNREAD_NOTI_COUNT)
-
-  useEffect(() => {
+  const refetchGetQuries = useCallback(async () => {
     getPost.refetch()
-  }, [])
+    switch (currentTabIdx) {
+      case 0:
+        await getMyNewPostCount.refetch({ postType: 'Ask' })
+        break
+      case 1:
+        await getMyNewPostCount.refetch({ postType: 'Answer' })
+        break
+      case 2:
+        await getMyNewPostCount.refetch({ postType: 'Quiz' })
+        break
+      default:
+        break
+    }
+  }, [currentTabIdx, getMyNewPostCount, getPost])
+  useEffect(() => {
+    refetchGetQuries()
+  }, [currentTabIdx])
 
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -124,31 +144,16 @@ const ContentPage: React.FC = () => {
       })
     }
   }, [deletePostMutation, selectedPostId])
-  const onClickTabIndex = useCallback(
-    async (index: number) => {
-      setTabIndex(index)
-
-      switch (index) {
-        case 0:
-          await getMyNewPostCount.refetch({ postType: 'Ask' })
-          break
-        case 1:
-          await getMyNewPostCount.refetch({ postType: 'Answer' })
-          break
-        case 2:
-          await getMyNewPostCount.refetch({ postType: 'Quiz' })
-          break
-        default:
-          break
-      }
-    },
-    [getMyNewPostCount]
-  )
-
+  const onClickTabIndex = useCallback(async (index: number) => {
+    setTabIndex(index)
+    updateCurTabIdx(index)
+    // refetchGetQuries()
+  }, [])
+  console.log(currentTabIdx)
   return (
     <AppContainer>
       <ContentTemplate
-        tabIndex={tabIndex}
+        tabIndex={currentTabIdx}
         getUnreadNotiCount={getUnreadNotiCount.data?.getUnreadNotiCount.count}
         newPostCount={newPostCount}
         getPost={getPost.data}

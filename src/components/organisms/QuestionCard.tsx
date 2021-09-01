@@ -13,6 +13,7 @@ import {
   dateDiffToTimer,
 } from '../../utils/TimeDiffCalc'
 import PrivateCardLabel from '../atoms/PrivateCardLabel'
+import SimpleBarReact from 'simplebar-react'
 const StickerPanelWithNoSSR = dynamic(
   () => import('../molecules/StickerPanel'),
   { ssr: false }
@@ -123,7 +124,13 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
             onClickOption={props.onClickOption}
             isLikeActive={props.isLikeActive}
           />
-          <QuestionTitle>{props.questionTitle}</QuestionTitle>
+
+          <QuestionTitle>
+            <SimpleBarReact style={{ maxHeight: '100%' }}>
+              {props.questionTitle}
+            </SimpleBarReact>
+          </QuestionTitle>
+
           <StickerContainer>
             <StickerPanelWithNoSSR postedStickers={props.stickers} />
           </StickerContainer>
@@ -252,7 +259,7 @@ const StyledLabelCardHeader = styled(LabelCardHeader)`
 `
 
 const QuestionTitle = styled.p`
-  overflow: auto;
+  overflow: hidden;
 `
 
 const StickerContainer = styled.div`

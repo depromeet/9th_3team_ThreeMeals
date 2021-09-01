@@ -69,13 +69,10 @@ const NewSecretCardPage: React.FC = () => {
   )
 
   const onClickRemove = useCallback((id: string) => {
-    console.log('onClickRemove id', id)
     setIsOpen(true)
   }, [])
 
-  const onClickLike = useCallback((id: string) => {
-    console.log('onClickLike id', id)
-  }, [])
+  const onClickLike = useCallback((id: string) => {}, [])
   return (
     <AppContainer>
       <NewSecretCardTemplate

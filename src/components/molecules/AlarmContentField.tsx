@@ -36,6 +36,7 @@ const FieldContainer = styled.div`
     display: flex;
     align-items: center;
     opacity: 0.8;
+    overflow: hidden;
   }
 `
 

@@ -1,4 +1,11 @@
-import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react'
+import React, {
+  FC,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import Header from '../molecules/Header'
 import { IMAGES } from '../../constants/images'
 import styled from 'styled-components'
@@ -60,17 +67,23 @@ const ContentTemplate: FC<Props> = (props) => {
       }
     }
   }, [props.getPost?.getPosts.edges])
+  const checkExistAskIsRequest = useCallback(
+    () =>
+      !postContent?.ask?.find(
+        (postData) => postData.node.comments.length > 0
+      ) && newPostCount !== 0,
+    [newPostCount, postContent?.ask]
+  )
   const isExistAsk = useMemo((): EmptyCase => {
     if (
       postContent === undefined ||
       (postContent.ask?.length === 0 && newPostCount === 0)
     ) {
       return 'empty'
-    } else if (newPostCount !== 0) {
+    } else if (checkExistAskIsRequest()) {
       return 'request'
     } else return 'exist'
-  }, [newPostCount, postContent])
-
+  }, [checkExistAskIsRequest, newPostCount, postContent])
   const isExistOX = useMemo(() => {
     if (
       postContent === undefined ||
@@ -279,14 +292,11 @@ const ContentTemplate: FC<Props> = (props) => {
     newPostCount,
     isExistAsk,
     postContent?.ask,
-    postContent?.answer,
     postContent?.quiz,
     isExistOX,
     onClickNewSecretCard,
     onClickRemove,
     onClickLike,
-    props.myAccount?.getMyAccountInfo.id,
-    onClickAnswerCard,
   ])
 
   const profileImage = useMemo(() => {

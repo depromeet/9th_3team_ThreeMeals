@@ -7,7 +7,7 @@ import { ApolloProvider } from '@apollo/client'
 import NextHead from '../src/components/NextHead'
 import { GlobalStyle } from '../src/utils/GlobalStyle'
 import { useApollo } from '../src/lib/apollo'
-
+import 'simplebar/src/simplebar.css'
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const apolloClient = useApollo(pageProps.initialApolloState)

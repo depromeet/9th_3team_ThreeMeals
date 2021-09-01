@@ -23,7 +23,6 @@ const Container = styled.div`
   background-color: #242424;
   border-radius: 11px;
   padding: 0 0.6rem;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 `
 const StyledTag = styled(CopyToClipboard)`
   font-size: 15px;

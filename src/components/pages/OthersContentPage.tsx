@@ -39,12 +39,6 @@ const OthersContentPage: React.FC = () => {
   useEffect(() => {
     getPost.refetch()
   }, [])
-  useEffect(() => {
-    if (id === myAccount.data?.getMyAccountInfo.id) {
-      router.push('/content')
-    }
-  }, [id, myAccount.data?.getMyAccountInfo.id, router])
-
   return (
     <AppContainer>
       <OthersContentTemplate

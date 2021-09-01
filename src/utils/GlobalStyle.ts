@@ -33,13 +33,9 @@ export const GlobalStyle = createGlobalStyle`
   body {
     /* The hack for Safari */
     height: -webkit-fill-available;
-  }}
-  @supports (-webkit-touch-callout: none) {
-  body {
-    /* The hack for Safari */
-    height: -webkit-fill-available;
   }
 }
+
   a, u {
     text-decoration: none;
   }
@@ -62,4 +58,5 @@ input:-webkit-autofill:active
    -webkit-text-fill-color: #fff !important;
    -moz-text-fill-color: #fff !important;
 }
+
 `
