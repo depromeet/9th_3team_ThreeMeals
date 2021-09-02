@@ -77,6 +77,7 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
   useEffect(() => {
     if (
       timeStatus !== 'bong-in' &&
+      timeStatus !== 'show' &&
       props.comments &&
       props.comments.length > 0
     ) {
