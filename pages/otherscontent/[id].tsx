@@ -28,22 +28,26 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       props: {},
       redirect: {
-        destination: '/content',
+        destination: '/',
         permanent: false,
       },
     }
+  }
+  try {
+    const myData = await apolloClient.query({ query: GET_MY_PROFILE })
+    if (myData.data.getMyAccountInfo.id === id) {
+      return {
+        props: {},
+        redirect: {
+          destination: '/content',
+          permanent: false,
+        },
+      }
+    }
+  } catch (error) {
+    console.error('non-members')
   }
 
-  const myData = await apolloClient.query({ query: GET_MY_PROFILE })
-  if (myData.data.getMyAccountInfo.id === id) {
-    return {
-      props: {},
-      redirect: {
-        destination: '/content',
-        permanent: false,
-      },
-    }
-  }
   return {
     props: { initialApolloState: apolloClient.cache.extract() },
   }
