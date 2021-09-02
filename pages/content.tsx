@@ -22,9 +22,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   const apolloClient = initializeApollo({}, ctx)
-  await apolloClient.query({
-    query: GET_MY_PROFILE,
-  })
+  try {
+    await apolloClient.query({
+      query: GET_MY_PROFILE,
+    })
+  } catch (error) {
+    console.error('getMyProfile Error:', error)
+    return {
+      props: {},
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
   return {
     props: { initialApolloState: apolloClient.cache.extract() },
   }
