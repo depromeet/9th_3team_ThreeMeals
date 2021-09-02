@@ -36,8 +36,10 @@ const FieldContainer = styled.div`
     display: flex;
     align-items: center;
     opacity: 0.8;
-    overflow: hidden;
+  }
+  .contentText {
     text-overflow: ellipsis;
+    overflow: hidden;
   }
 `
 
@@ -60,7 +62,9 @@ const AlarmContentField: FC<Props> = (props) => {
           {timeDiffCalc(new Date(props.time), new Date())}
         </span>
       </div>
-      <div className="content">{props.content}</div>
+      <div className="content">
+        <span className="contentText">{props.content}</span>
+      </div>
     </FieldContainer>
   )
 }
