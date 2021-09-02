@@ -23,18 +23,16 @@ const NotificationTemplate: FC<Props> = (props) => {
       props.notification &&
       props.notification
         .slice()
-        .reverse()
+        // .reverse()
         .map((value, index) => {
           return (
-            !value.read && (
-              <AlarmContentField
-                key={index}
-                // nickname={value.otherAccount.nickname}
-                content={value.relatedPost.content}
-                contentType={value.relatedPost.postType}
-                time={value.createdAt}
-              />
-            )
+            <AlarmContentField
+              key={index}
+              // nickname={value.otherAccount.nickname}
+              content={value.relatedPost.content}
+              contentType={value.relatedPost.postType}
+              time={value.createdAt}
+            />
           )
         })
         .filter((item) => item)
