@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import NewSecretCardTemplate from '../templates/NewSecretCardTemplate'
@@ -19,6 +19,7 @@ import {
   CreateCommentAskResponse,
   CreateCommentAskParams,
 } from '../../lib/queries/createCommentQueries'
+import { updateCurTabIdx } from '../../lib/localStore/contentTabIndex'
 const NewSecretCardPage: React.FC = () => {
   const router = useRouter()
   const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
@@ -73,6 +74,9 @@ const NewSecretCardPage: React.FC = () => {
   }, [])
 
   const onClickLike = useCallback((id: string) => {}, [])
+  useEffect(() => {
+    updateCurTabIdx(0)
+  }, [])
   return (
     <AppContainer>
       <NewSecretCardTemplate

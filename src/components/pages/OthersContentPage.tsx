@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client'
+import { useQuery, useReactiveVar } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
@@ -16,11 +16,13 @@ import {
 } from '../../lib/queries/getQueries'
 import jsCookies from 'js-cookie'
 import { getMyAccountInfo, GET_MY_PROFILE } from '../../lib/queries/meQueries'
-
+import { updateCurTabIdx } from '../../lib/localStore/contentTabIndex'
+import { curTabIdx } from '../../lib/localStore/contentTabIndex'
 const OthersContentPage: React.FC = () => {
   const router = useRouter()
   const { id } = router.query
   const token = jsCookies.get('token')
+  const currentTabIdx = useReactiveVar(curTabIdx)
   const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
   const account = useQuery<getAccountInfo>(GET_ACCOUNT_INFO, {
     variables: { accountId: id },
@@ -35,10 +37,13 @@ const OthersContentPage: React.FC = () => {
     },
     [router]
   )
-
+  const onClickTabIndex = useCallback(async (index: number) => {
+    updateCurTabIdx(index)
+    // refetchGetQuries()
+  }, [])
   useEffect(() => {
     getPost.refetch()
-  }, [])
+  }, [currentTabIdx])
   return (
     <AppContainer>
       <OthersContentTemplate
@@ -52,6 +57,7 @@ const OthersContentPage: React.FC = () => {
           router.push('/notification')
         }}
         onClickAnswerCard={onClickAnswerCard}
+        onClickTabIndex={onClickTabIndex}
       />
     </AppContainer>
   )
