@@ -507,6 +507,7 @@ const EmptyContainer = styled.div`
   bottom: 40vh;
   font-size: 13px;
   line-height: 22px;
+  left: 0;
   /* or 169% */
   text-align: center;
   letter-spacing: -0.02em;
