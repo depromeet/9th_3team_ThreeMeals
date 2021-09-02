@@ -13,7 +13,7 @@ export interface getMyNewPostCountParams {
   postType?: string
 }
 
-interface getPostEdges {
+export interface getPostEdges {
   node: {
     id: string
     content: string

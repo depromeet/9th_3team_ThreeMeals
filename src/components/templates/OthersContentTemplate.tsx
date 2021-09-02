@@ -15,7 +15,7 @@ import QuestionCard from '../organisms/QuestionCard'
 import AnswerCard from '../organisms/AnswerCard'
 import { useRouter } from 'next/router'
 import { getAccountInfo } from '../../lib/queries/userQueries'
-import { getPost } from '../../lib/queries/getPostQueries'
+import { getPost, getPostEdges } from '../../lib/queries/getPostQueries'
 import QuizAnswerCard from '../organisms/QuizAnswerCard'
 import { getMyAccountInfo } from '../../lib/queries/meQueries'
 import { SpacingText } from '../../utils/SpacingText'
@@ -30,15 +30,29 @@ interface Props {
   myAccount?: getMyAccountInfo
   account?: getAccountInfo
   profileImage: string
+  onClickTabIndex: (index: number) => void
   onClickLeft?: () => void
   onClickAnswerCard: (postId: string) => void
   onClickSecondRight?: () => void
+}
+
+interface CntOfCardWithComment {
+  askCardCnt: number
+  quizCardCnt: number
+}
+
+interface checkIsCardWithCommentProps {
+  content: getPostEdges
+  index: number
+  postType: 'Ask' | 'Quiz'
 }
 
 const OthersContentTemplate: FC<Props> = (props) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
   const currentTabIdx = useReactiveVar(curTabIdx)
   const [windowObjet, setWindowObjet] = useState<Window | undefined>()
+  const [cntOfCardWithComment, setCntOfCardWithComment] =
+    useState<CntOfCardWithComment>({ askCardCnt: 0, quizCardCnt: 0 })
   const router = useRouter()
   const postContent = useMemo(() => {
     if (props.getPost?.getPosts.edges) {
@@ -54,10 +68,10 @@ const OthersContentTemplate: FC<Props> = (props) => {
       }
     }
   }, [props.getPost?.getPosts.edges])
-
+  console.log(postContent, currentTabIdx)
   const onClickWrite = useCallback(() => {
     if (props.token) {
-      if (tabIndex === 0) {
+      if (currentTabIdx === 0) {
         router.push(
           `/writePost/Ask?otherId=${props.account?.getAccountInfo.id}`
         )
@@ -70,7 +84,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
       window.alert('로그인을 해주세요.')
       router.push('/')
     }
-  }, [props.account?.getAccountInfo.id, props.token, router, tabIndex])
+  }, [props.account?.getAccountInfo.id, props.token, router, currentTabIdx])
 
   const isExistAsk = useMemo((): EmptyCase => {
     if (postContent === undefined || postContent.ask?.length === 0) {
@@ -83,30 +97,60 @@ const OthersContentTemplate: FC<Props> = (props) => {
       return 'empty'
     } else return 'exist'
   }, [postContent])
+  const checkIsCardWithComment = useCallback(
+    ({ content, index, postType }: checkIsCardWithCommentProps) => {
+      if (content.node.comments && content.node.comments.length > 0) {
+        switch (postType) {
+          case 'Ask':
+            setCntOfCardWithComment({
+              ...cntOfCardWithComment,
+              askCardCnt: index + 1,
+            })
+            break
+          case 'Quiz':
+            setCntOfCardWithComment({
+              ...cntOfCardWithComment,
+              quizCardCnt: index + 1,
+            })
+            break
+          default:
+            undefined
+        }
+        return true
+      }
+      return false
+    },
+    [cntOfCardWithComment]
+  )
 
   const ContentView = useMemo((): ReactElement | undefined => {
-    switch (tabIndex) {
+    switch (currentTabIdx) {
       case 0:
         return (
           <>
             <ContentContainer>
               {isExistAsk === 'exist' ? (
-                postContent?.ask.map((data, index) => {
-                  return (
+                postContent?.ask.map((content, index) => {
+                  return checkIsCardWithComment({
+                    content: content,
+                    index: index,
+                    postType: 'Ask',
+                  }) ? (
                     <QuestionCard
                       key={index}
-                      id={data.node.id}
-                      createdAt={data.node.createdAt}
-                      updatedAt={data.node.updatedAt}
-                      secretType={data.node.secretType}
-                      questionTitle={data.node.content}
-                      backColor={data.node.color}
-                      stickers={data.node.usedEmoticons}
-                      isLikeActive={data.node.likedPosts.length > 0}
+                      id={content.node.id}
+                      createdAt={content.node.createdAt}
+                      updatedAt={content.node.updatedAt}
+                      secretType={content.node.secretType}
+                      questionTitle={content.node.content}
+                      backColor={content.node.color}
+                      stickers={content.node.usedEmoticons}
+                      isLikeActive={content.node.likedPosts.length > 0}
                       isOnNewSecretPage={false}
-                      comments={data.node.comments}
+                      comments={content.node.comments}
+                      fromAccount={content.node.fromAccount}
                     />
-                  )
+                  ) : null
                 })
               ) : (
                 <EmptyContainer>
@@ -156,8 +200,11 @@ const OthersContentTemplate: FC<Props> = (props) => {
             <ContentContainer>
               {isExistOX === 'exist' ? (
                 postContent?.quiz.map((content, index) => {
-                  return content.node.comments &&
-                    content.node.comments.length > 0 ? (
+                  return checkIsCardWithComment({
+                    content: content,
+                    index: index,
+                    postType: 'Quiz',
+                  }) ? (
                     <QuizAnswerCardContainer key={index}>
                       <QuizAnswerCard
                         content={content.node.content}
@@ -180,7 +227,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
       default:
         break
     }
-  }, [tabIndex, isExistAsk, postContent, isExistOX, props])
+  }, [currentTabIdx, isExistAsk, postContent, isExistOX])
 
   const profileImage = useMemo(() => {
     return props.account?.getAccountInfo.image
@@ -231,7 +278,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
         <TabContainer>
           <Tab
             style={
-              tabIndex === 0
+              currentTabIdx === 0
                 ? {
                     borderBottom: 1,
                     borderColor: 'white',
@@ -240,14 +287,14 @@ const OthersContentTemplate: FC<Props> = (props) => {
                 : undefined
             }
             onClick={() => {
-              setTabIndex(0)
+              props.onClickTabIndex(0)
             }}
           >
             물어봐
           </Tab>
           <Tab
             style={
-              tabIndex === 1
+              currentTabIdx === 1
                 ? {
                     borderBottom: 1,
                     borderColor: 'white',
@@ -256,14 +303,14 @@ const OthersContentTemplate: FC<Props> = (props) => {
                 : undefined
             }
             onClick={() => {
-              setTabIndex(1)
+              props.onClickTabIndex(1)
             }}
           >
             답해줘
           </Tab>
           <Tab
             style={
-              tabIndex === 2
+              currentTabIdx === 2
                 ? {
                     borderBottom: 1,
                     borderColor: 'white',
@@ -272,7 +319,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
                 : undefined
             }
             onClick={() => {
-              setTabIndex(2)
+              props.onClickTabIndex(2)
             }}
           >
             OX퀴즈
@@ -283,9 +330,10 @@ const OthersContentTemplate: FC<Props> = (props) => {
         />
         {ContentView}
       </MainContainer>
-      {(postContent && tabIndex === 0) || (postContent && tabIndex === 2) ? (
-        (tabIndex === 0 && postContent.ask.length > 1) ||
-        (tabIndex === 2 && postContent.quiz.length > 1) ? (
+      {(postContent && currentTabIdx === 0) ||
+      (postContent && currentTabIdx === 2) ? (
+        (currentTabIdx === 0 && cntOfCardWithComment.askCardCnt >= 2) ||
+        (currentTabIdx === 2 && cntOfCardWithComment.quizCardCnt >= 2) ? (
           <WriteButton>
             <img onClick={onClickWrite} src={IMAGES.write} width={88} />
           </WriteButton>
