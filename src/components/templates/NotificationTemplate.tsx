@@ -25,15 +25,17 @@ const NotificationTemplate: FC<Props> = (props) => {
         .slice()
         .reverse()
         .map((value, index) => {
-          return value.read !== true && value.otherAccount !== null ? (
-            <AlarmContentField
-              key={index}
-              nickname={value.otherAccount.nickname}
-              content={value.relatedPost.content}
-              contentType={value.relatedPost.postType}
-              time={value.createdAt}
-            />
-          ) : undefined
+          return (
+            !value.read && (
+              <AlarmContentField
+                key={index}
+                // nickname={value.otherAccount.nickname}
+                content={value.relatedPost.content}
+                contentType={value.relatedPost.postType}
+                time={value.createdAt}
+              />
+            )
+          )
         })
         .filter((item) => item)
     )
@@ -101,9 +103,6 @@ const ContentContainer = styled.div`
   padding: 0 10px;
   margin-top: 10px;
   height: 100%;
-  div {
-    margin-bottom: 12px;
-  }
 `
 const EmptyContainer = styled.div`
   width: 100%;

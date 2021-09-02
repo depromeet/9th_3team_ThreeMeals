@@ -2,7 +2,7 @@ import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 import { timeDiffCalc } from '../../utils/TimeDiffCalc'
 interface Props {
-  nickname: string
+  // nickname: string
   content: string
   contentType: string
   time: string
@@ -17,7 +17,7 @@ const FieldContainer = styled.div`
   background: rgba(255, 255, 255, 0.05);
   color: #ffffff;
   padding: 15px 20px;
-
+  margin-bottom: 1rem;
   .header {
     width: 100%;
     height: 50%;
@@ -37,6 +37,7 @@ const FieldContainer = styled.div`
     align-items: center;
     opacity: 0.8;
     overflow: hidden;
+    text-overflow: ellipsis;
   }
 `
 
@@ -47,14 +48,14 @@ const AlarmContentField: FC<Props> = (props) => {
     } else if (props.contentType === 'Answer') {
       return '답해줘'
     } else if (props.contentType === 'Quiz') {
-      return 'OX퀴즈'
+      return 'OX'
     } else undefined
   }, [props.contentType])
 
   return (
     <FieldContainer>
       <div className="header">
-        <span>{props.nickname + '님의 ' + contentType}</span>
+        <span>{contentType}</span>
         <span className="time">
           {timeDiffCalc(new Date(props.time), new Date())}
         </span>

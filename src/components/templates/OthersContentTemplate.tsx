@@ -90,23 +90,6 @@ const OthersContentTemplate: FC<Props> = (props) => {
         return (
           <>
             <ContentContainer>
-              {postContent?.ask.map((data, index) => {
-                return (
-                  <QuestionCard
-                    key={index}
-                    id={data.node.id}
-                    createdAt={data.node.createdAt}
-                    updatedAt={data.node.updatedAt}
-                    secretType={data.node.secretType}
-                    questionTitle={data.node.content}
-                    backColor={data.node.color}
-                    stickers={data.node.usedEmoticons}
-                    isLikeActive={data.node.likedPosts.length > 0}
-                    isOnNewSecretPage={false}
-                    comments={data.node.comments}
-                  />
-                )
-              })}
               {isExistAsk === 'exist' ? (
                 postContent?.ask.map((data, index) => {
                   return (
