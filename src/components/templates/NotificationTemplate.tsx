@@ -23,7 +23,7 @@ const NotificationTemplate: FC<Props> = (props) => {
       props.notification &&
       props.notification
         .slice()
-        // .reverse()
+        .reverse()
         .map((value, index) => {
           return (
             <AlarmContentField

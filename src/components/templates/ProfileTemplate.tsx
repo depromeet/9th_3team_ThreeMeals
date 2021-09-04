@@ -189,10 +189,10 @@ const IntroTitle = styled.div`
 `
 const IntroDesc = styled.span`
   width: 100%;
-  margin-left: 24px;
+  margin-left: 26px;
   font-style: normal;
   font-weight: normal;
-  font-size: 16px;
+  font-size: 0.9rem;
   line-height: 19px;
   letter-spacing: -0.02em;
   color: #ffffff;
