@@ -3,11 +3,13 @@ import { ContextContainer, StyledQuizCardHeader } from '../molecules/QuizCard'
 import { IMAGES } from '../../constants/images'
 import CardContainer from '../atoms/CardContainer'
 import { BackColor } from '../../types/types'
+import { CSSProperties } from 'styled-components'
 
 interface Props {
   backColor: BackColor
   answerType: string
   content: string
+  cardContainerStyle?: CSSProperties
   isMyFeed: boolean
   isLikeActive?: boolean
   onClickLike?: () => void
@@ -42,7 +44,7 @@ const QuizAnswerCard: FC<Props> = (props) => {
     }
   }, [])
   return (
-    <CardContainer backColor={props.backColor}>
+    <CardContainer backColor={props.backColor} style={props.cardContainerStyle}>
       <ContextContainer bottomHeight="none">
         <StyledQuizCardHeader
           onClickLike={props.onClickLike}

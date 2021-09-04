@@ -212,6 +212,10 @@ const OthersContentTemplate: FC<Props> = (props) => {
                         answerType={content.node.comments[0].content}
                         isMyFeed={false}
                         isLikeActive={content.node.likedPosts.length > 0}
+                        cardContainerStyle={{
+                          height: '100%',
+                          minHeight: '360px',
+                        }}
                       />
                     </QuizAnswerCardContainer>
                   ) : null
@@ -265,7 +269,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
             props.account?.getAccountInfo.nickname || '닉네임을 입력해주세요.'
           }
           desc={props.account?.getAccountInfo.content || '소개를 입력해주세요.'}
-          urlName="랑크 복사"
+          urlName="링크 복사"
           url={
             windowObjet !== undefined
               ? windowObjet.location.origin +

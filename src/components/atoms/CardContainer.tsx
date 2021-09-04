@@ -1,7 +1,8 @@
 import React, { FC, PropsWithChildren } from 'react'
-import styled from 'styled-components'
+import styled, { CSSProperties } from 'styled-components'
 interface Props {
   backColor: string
+  style?: CSSProperties
 }
 interface StyledProps {
   backColor: string
@@ -15,7 +16,11 @@ const Container = styled.div<StyledProps>`
 `
 
 const CardContainer: FC<PropsWithChildren<Props>> = (props) => {
-  return <Container backColor={props.backColor}>{props.children}</Container>
+  return (
+    <Container backColor={props.backColor} style={props.style}>
+      {props.children}
+    </Container>
+  )
 }
 
 export default CardContainer

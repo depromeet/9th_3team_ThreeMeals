@@ -141,6 +141,8 @@ export const ContextContainer = styled.div<StyledProps>`
     padding-top: 30px;
     font-size: 25px;
     color: black;
+    min-height: 128px;
+    word-break: break-all;
   }
   .bottomArea {
     width: 100%;
