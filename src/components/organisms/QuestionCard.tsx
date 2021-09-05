@@ -126,11 +126,9 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
             isLikeActive={props.isLikeActive}
           />
 
-          <QuestionTitle>
-            <SimpleBarReact style={{ maxHeight: '100%' }}>
-              {props.questionTitle}
-            </SimpleBarReact>
-          </QuestionTitle>
+          <SimpleBarReact style={{ maxHeight: '100%' }}>
+            <QuestionTitle>{props.questionTitle}</QuestionTitle>
+          </SimpleBarReact>
 
           <StickerContainer>
             <StickerPanelWithNoSSR postedStickers={props.stickers} />
