@@ -9,6 +9,7 @@ interface Props {
   otherContentInfo?: {
     nickname: string
     postType: 'Ask' | 'Quiz' | 'Answer'
+    isLikeNotiType: boolean
   }
 }
 
@@ -79,10 +80,23 @@ const AlarmContentField: FC<Props> = (props) => {
         undefined
     }
   }, [props.otherContentInfo?.nickname, props.otherContentInfo?.postType])
+  const otherContentText = useMemo(() => {
+    switch (props.otherContentInfo?.isLikeNotiType) {
+      case true:
+        return `${props.otherContentInfo.nickname}님이 ${props.myNickName}님의 카드를 좋아합니다.`
+      case false:
+        return `${props.myNickName}님이 작성한 카드에 답변이 달렸습니다.`
+      default:
+        undefined
+    }
+  }, [
+    props.myNickName,
+    props.otherContentInfo?.isLikeNotiType,
+    props.otherContentInfo?.nickname,
+  ])
   const checkIsWithOtherAccount = useCallback(() => {
     return props.otherContentInfo !== undefined
   }, [props.otherContentInfo])
-
   return (
     <FieldContainer isWithOtherAccount={checkIsWithOtherAccount()}>
       <div className="header">
@@ -95,9 +109,7 @@ const AlarmContentField: FC<Props> = (props) => {
       </div>
       <div className="content">
         <span className="contentText">
-          {props.otherContentInfo
-            ? `${props.myNickName}님이 작성한 카드에 답변이 달렸습니다.`
-            : props.content}
+          {props.otherContentInfo ? otherContentText : props.content}
         </span>
       </div>
     </FieldContainer>

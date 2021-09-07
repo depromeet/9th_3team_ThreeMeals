@@ -33,6 +33,7 @@ const NotificationTemplate: FC<Props> = (props) => {
                   ? {
                       nickname: value.otherAccount.nickname,
                       postType: value.relatedPost.postType,
+                      isLikeNotiType: value.notificationType === 'LikeToMine',
                     }
                   : undefined
               }
