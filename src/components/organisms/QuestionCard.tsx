@@ -202,21 +202,12 @@ const Container = styled.div<{ backColor: string }>`
   border-radius: 24px;
   padding: 24px;
 
-  p {
-    text-align: initial;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 24px;
-    line-height: 32px;
-    letter-spacing: -0.02em;
-    color: #000000;
-  }
-
   margin-bottom: 16px;
   margin-left: 5%;
   margin-right: 5%;
   width: 90% !important;
   max-width: 396px;
+  padding-bottom: 50px;
   *:focus {
     outline: 0;
   }
@@ -259,8 +250,18 @@ const StyledLabelCardHeader = styled(LabelCardHeader)`
   margin-bottom: 20px;
 `
 
-const QuestionTitle = styled.p`
+const QuestionTitle = styled.div`
+  text-align: initial;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.02em;
+  color: #000000;
   overflow: hidden;
+  .simplebar-content {
+    word-break: break-all;
+  }
 `
 
 const StickerContainer = styled.div`

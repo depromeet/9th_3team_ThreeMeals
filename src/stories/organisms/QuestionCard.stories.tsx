@@ -9,6 +9,7 @@ storiesOf('organisms/QuestionCard', module).add('with #FF833D', () => {
       backColor={'#FF833D'}
       createdAt={'createdAt'}
       updatedAt={'updatedAt'}
+      isOnNewSecretPage
     />
   )
 })
@@ -20,6 +21,7 @@ storiesOf('organisms/QuestionCard', module).add('with input #67D585', () => {
       backColor={'#67D585'}
       createdAt={'createdAt'}
       updatedAt={'updatedAt'}
+      isOnNewSecretPage
       isInput
     />
   )
