@@ -68,7 +68,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
       }
     }
   }, [props.getPost?.getPosts.edges])
-  console.log(postContent, currentTabIdx)
+
   const onClickWrite = useCallback(() => {
     if (props.token) {
       if (currentTabIdx === 0) {

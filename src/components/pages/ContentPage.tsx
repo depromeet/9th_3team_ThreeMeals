@@ -149,7 +149,7 @@ const ContentPage: React.FC = () => {
     updateCurTabIdx(index)
     // refetchGetQuries()
   }, [])
-  console.log(currentTabIdx)
+
   return (
     <AppContainer>
       <ContentTemplate
