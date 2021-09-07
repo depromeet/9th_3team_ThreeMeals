@@ -1,13 +1,22 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { timeDiffCalc } from '../../utils/TimeDiffCalc'
 interface Props {
-  // nickname: string
+  myNickName: string | undefined
   content: string
   contentType: string
   time: string
+  otherContentInfo?: {
+    nickname: string
+    postType: 'Ask' | 'Quiz' | 'Answer'
+  }
 }
-const FieldContainer = styled.div`
+
+interface FieldContainerProps {
+  isWithOtherAccount: boolean
+}
+
+const FieldContainer = styled.div<FieldContainerProps>`
   width: 100%;
   min-width: 335px;
   height: 84px;
@@ -18,6 +27,9 @@ const FieldContainer = styled.div`
   color: #ffffff;
   padding: 15px 20px;
   margin-bottom: 1rem;
+  ${({ isWithOtherAccount }) =>
+    isWithOtherAccount &&
+    `background: rgba(103, 213, 133, 0.05); 1px solid rgba(103, 213, 133, 0.1);`}
   .header {
     width: 100%;
     height: 50%;
@@ -37,6 +49,10 @@ const FieldContainer = styled.div`
     align-items: center;
     opacity: 0.8;
   }
+  .contentTitle {
+    font-weight: bold;
+    ${({ isWithOtherAccount }) => isWithOtherAccount && `color: #67D585;`}
+  }
   .contentText {
     text-overflow: ellipsis;
     overflow: hidden;
@@ -53,17 +69,36 @@ const AlarmContentField: FC<Props> = (props) => {
       return 'OX'
     } else undefined
   }, [props.contentType])
+  const contentTitleWithOtherAccount = useMemo(() => {
+    switch (props.otherContentInfo?.postType) {
+      case 'Ask':
+        return `${props.otherContentInfo.nickname}님의 물어봐`
+      case 'Quiz':
+        return `${props.otherContentInfo.nickname}님의 OX`
+      default:
+        undefined
+    }
+  }, [props.otherContentInfo?.nickname, props.otherContentInfo?.postType])
+  const checkIsWithOtherAccount = useCallback(() => {
+    return props.otherContentInfo !== undefined
+  }, [props.otherContentInfo])
 
   return (
-    <FieldContainer>
+    <FieldContainer isWithOtherAccount={checkIsWithOtherAccount()}>
       <div className="header">
-        <span>{contentType}</span>
+        <span className="contentTitle">
+          {props.otherContentInfo ? contentTitleWithOtherAccount : contentType}
+        </span>
         <span className="time">
           {timeDiffCalc(new Date(props.time), new Date())}
         </span>
       </div>
       <div className="content">
-        <span className="contentText">{props.content}</span>
+        <span className="contentText">
+          {props.otherContentInfo
+            ? `${props.myNickName}님이 작성한 카드에 답변이 달렸습니다.`
+            : props.content}
+        </span>
       </div>
     </FieldContainer>
   )

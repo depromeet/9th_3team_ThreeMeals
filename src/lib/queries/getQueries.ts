@@ -28,7 +28,7 @@ export interface GetNotification {
   notificationType: string
   relatedPost: {
     id: string
-    postType: string
+    postType: 'Ask' | 'Quiz' | 'Answer'
     content: string
   }
   otherAccount: {
