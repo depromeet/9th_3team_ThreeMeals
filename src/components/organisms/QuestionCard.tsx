@@ -207,6 +207,7 @@ const Container = styled.div<{ backColor: string }>`
   margin-right: 5%;
   width: 90% !important;
   max-width: 396px;
+  padding-bottom: 50px;
   *:focus {
     outline: 0;
   }
@@ -257,8 +258,10 @@ const QuestionTitle = styled.div`
   line-height: 32px;
   letter-spacing: -0.02em;
   color: #000000;
-
   overflow: hidden;
+  .simplebar-content {
+    word-break: break-all;
+  }
 `
 
 const StickerContainer = styled.div`
