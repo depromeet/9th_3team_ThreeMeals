@@ -1,5 +1,14 @@
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  Dispatch,
+  Ref,
+  RefObject,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import ContentTemplate from '../templates/ContentTemplate'
@@ -35,14 +44,49 @@ import {
   curTabIdx,
   updateCurTabIdx,
 } from '../../lib/localStore/contentTabIndex'
+import checkCurPostType from '../../utils/checkCurPostType'
+import useIntersect from '../../hooks/useIntersect'
 
 const ContentPage: React.FC = () => {
+  const [lastPostId, setLastPostId] = useState<undefined | string>()
+  const [getPostFirstCnt, setGetPostFirstCnt] = useState(10)
+  const [stopFetchMore, setStopFetchMore] = useState(false)
   const currentTabIdx = useReactiveVar(curTabIdx)
+  const curPostType = checkCurPostType(currentTabIdx)
   const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
   const getPost = useQuery<getPost, getPostParams>(GET_POST, {
-    variables: { first: 10, accountId: myAccount.data?.getMyAccountInfo.id },
+    variables: {
+      first: getPostFirstCnt,
+      accountId: myAccount.data?.getMyAccountInfo.id,
+      postType: curPostType,
+      // postState: 'Completed',
+    },
+    onCompleted: (data) => {
+      setLastPostId(data.getPosts.pageInfo.endCursor)
+    },
   })
-
+  const [_, setIntersectRef] = useIntersect({
+    onIntersect: async (entry, observer) => {
+      observer.unobserve(entry.target)
+      const getPostData = await getPost.refetch({
+        first: getPostFirstCnt + 10,
+        accountId: myAccount.data?.getMyAccountInfo.id,
+        postType: curPostType,
+        // postState: 'Completed',
+      })
+      if (lastPostId === getPostData.data.getPosts.pageInfo.endCursor) {
+        setStopFetchMore(true)
+      } else {
+        await new Promise((_) => {
+          setLastPostId(getPostData.data.getPosts.pageInfo.endCursor)
+          setGetPostFirstCnt(getPostFirstCnt + 10)
+        })
+        observer.observe(entry.target)
+      }
+    },
+    option: { threshold: 0.2 },
+    stopFetchMore,
+  })
   const [createLike] = useMutation<createLikeRes, createLikeParams>(
     CREATE_LIKE,
     {
@@ -74,29 +118,20 @@ const ContentPage: React.FC = () => {
     variables: { postType: 'Ask' },
   })
   const getUnreadNotiCount = useQuery<getUnreadNotiCount>(GET_UNREAD_NOTI_COUNT)
-  const refetchGetQuries = useCallback(async () => {
-    getPost.refetch()
-    switch (currentTabIdx) {
-      case 0:
-        await getMyNewPostCount.refetch({ postType: 'Ask' })
-        break
-      case 1:
-        await getMyNewPostCount.refetch({ postType: 'Answer' })
-        break
-      case 2:
-        await getMyNewPostCount.refetch({ postType: 'Quiz' })
-        break
-      default:
-        break
-    }
-  }, [currentTabIdx, getMyNewPostCount, getPost])
   useEffect(() => {
-    refetchGetQuries()
-  }, [currentTabIdx])
+    getPost.refetch({
+      first: 10,
+      accountId: myAccount.data?.getMyAccountInfo.id,
+      postType: curPostType,
+      // postState: 'Completed',
+    })
+    getMyNewPostCount.refetch({ postType: curPostType })
+    setStopFetchMore(false)
+    setGetPostFirstCnt(10)
+  }, [currentTabIdx, curPostType])
 
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [tabIndex, setTabIndex] = useState<number>(0)
   const [selectedPostId, setSelectedPostId] = useState<string>()
 
   const newPostCount = useMemo(() => {
@@ -106,7 +141,6 @@ const ContentPage: React.FC = () => {
       return 0
     }
   }, [getMyNewPostCount])
-
   const onClickAnswerCard = useCallback(
     (postId, isMine) => {
       router.push({ pathname: '/answerDetail', query: { postId, isMine } })
@@ -145,55 +179,59 @@ const ContentPage: React.FC = () => {
     }
   }, [deletePostMutation, selectedPostId])
   const onClickTabIndex = useCallback(async (index: number) => {
-    setTabIndex(index)
     updateCurTabIdx(index)
-    // refetchGetQuries()
   }, [])
-
   return (
-    <AppContainer>
-      <ContentTemplate
-        tabIndex={currentTabIdx}
-        getUnreadNotiCount={getUnreadNotiCount.data?.getUnreadNotiCount.count}
-        newPostCount={newPostCount}
-        getPost={getPost.data}
-        myAccount={myAccount.data}
-        isProfile={true}
-        profileImage={IMAGES.background}
-        onClickTabIndex={onClickTabIndex}
-        onClickLeft={() => {
-          router.push('/profile')
-        }}
-        onClickSecondRight={() => {
-          router.push('/notification')
-        }}
-        onClickNewSecretCard={(tabName: string) => {
-          if (tabName === 'ask') {
-            router.push('/newSecretCard')
-          } else {
-            if (newPostCount === 0) {
-              return
+    <div>
+      <AppContainer>
+        <ContentTemplate
+          tabIndex={currentTabIdx}
+          getUnreadNotiCount={getUnreadNotiCount.data?.getUnreadNotiCount.count}
+          newPostCount={newPostCount}
+          getPost={getPost.data}
+          myAccount={myAccount.data}
+          isProfile={true}
+          profileImage={IMAGES.background}
+          onClickTabIndex={onClickTabIndex}
+          onClickLeft={() => {
+            router.push('/profile')
+          }}
+          onClickSecondRight={() => {
+            router.push('/notification')
+          }}
+          onClickNewSecretCard={(tabName: string) => {
+            if (tabName === 'ask') {
+              router.push('/newSecretCard')
+            } else {
+              if (newPostCount === 0) {
+                return
+              }
+              router.push('/answerNewOX')
             }
-            router.push('/answerNewOX')
+          }}
+          onClickAnswerCard={onClickAnswerCard}
+          onClickWrite={onClickWrite}
+          onClickRemove={onClickRemove}
+          onClickLike={onClickLike}
+          ref={
+            setIntersectRef as Ref<
+              Dispatch<SetStateAction<RefObject<HTMLDivElement | null> | null>>
+            >
           }
-        }}
-        onClickAnswerCard={onClickAnswerCard}
-        onClickWrite={onClickWrite}
-        onClickRemove={onClickRemove}
-        onClickLike={onClickLike}
-      />
-      <Modal
-        open={isOpen}
-        title={'이 질문을 삭제하시겠습니까?'}
-        titleEmojiTextType="💬"
-        confirmText={'삭제하기'}
-        cancelText={'취소'}
-        onClickConfirm={onClickConfirmModal}
-        onClickCancel={() => {
-          setIsOpen(false)
-        }}
-      />
-    </AppContainer>
+        />
+        <Modal
+          open={isOpen}
+          title={'이 질문을 삭제하시겠습니까?'}
+          titleEmojiTextType="💬"
+          confirmText={'삭제하기'}
+          cancelText={'취소'}
+          onClickConfirm={onClickConfirmModal}
+          onClickCancel={() => {
+            setIsOpen(false)
+          }}
+        />
+      </AppContainer>
+    </div>
   )
 }
 
