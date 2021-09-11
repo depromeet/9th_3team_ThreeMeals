@@ -298,22 +298,6 @@ const OthersContentTemplate: FC<Props> = (props) => {
           </Tab>
           <Tab
             style={
-              currentTabIdx === 1
-                ? {
-                    borderBottom: 1,
-                    borderColor: 'white',
-                    borderStyle: 'solid',
-                  }
-                : undefined
-            }
-            onClick={() => {
-              props.onClickTabIndex(1)
-            }}
-          >
-            답해줘
-          </Tab>
-          <Tab
-            style={
               currentTabIdx === 2
                 ? {
                     borderBottom: 1,
@@ -327,6 +311,22 @@ const OthersContentTemplate: FC<Props> = (props) => {
             }}
           >
             OX퀴즈
+          </Tab>
+          <Tab
+            style={
+              currentTabIdx === 1
+                ? {
+                    borderBottom: 1,
+                    borderColor: 'white',
+                    borderStyle: 'solid',
+                  }
+                : undefined
+            }
+            onClick={() => {
+              props.onClickTabIndex(1)
+            }}
+          >
+            <TobeContinueTitle>답해줘</TobeContinueTitle>
           </Tab>
         </TabContainer>
         <DefaultLine
@@ -442,4 +442,7 @@ const EmptyContainer = styled.div`
   text-align: center;
   letter-spacing: -0.02em;
   color: rgba(255, 255, 255, 0.7);
+`
+const TobeContinueTitle = styled.div`
+  opacity: 0.3;
 `
