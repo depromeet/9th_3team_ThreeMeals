@@ -117,8 +117,10 @@ const QuestionCard: React.FunctionComponent<Props> = (props) => {
                   </ProfileName>
                   <ProfileImgSticker src={IMAGES.open_label} />
                 </ShowProfile>
+              ) : timerValue ? (
+                <CardLabel text={timerValue} active />
               ) : (
-                <CardLabel text={timerValue || '00:00:00'} active />
+                <PrivateCardLabel text="Secret 24" active={false} />
               )
             }
             onClickLike={props.onClickLike}
