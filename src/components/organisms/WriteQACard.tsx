@@ -7,9 +7,9 @@ import { useReactiveVar } from '@apollo/client'
 import writePostInfoVar, {
   addToWritePostInfo,
 } from '../../lib/localStore/writePost'
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 import { StickerInfo } from '../../types/types'
-import SimpleBarReact from 'simplebar-react'
+
 const StickerPanelWithNoSSR = dynamic(
   () => import('../molecules/StickerPanel'),
   { ssr: false }
