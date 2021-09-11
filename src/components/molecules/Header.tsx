@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { IMAGES } from '../../constants/images'
 import { slide as Menu } from 'react-burger-menu'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 import EmptyProfileImg from '../atoms/EmptyProfileImg'
 interface Props {
   isProfile?: boolean
@@ -100,9 +101,12 @@ const Header: React.FC<Props> = (props: Props) => {
                   >
                     {props.isLogin ? 'My feed' : 'Log in'}
                   </BurgerText>
-                  <BurgerText onClick={props.onClickHowToUse}>
-                    How to use
-                  </BurgerText>
+                  <Link
+                    href="https://hush-it.notion.site/Hush-1e3de882b5d544b8b30c9913635c1474"
+                    passHref
+                  >
+                    <BurgerLink>How to use</BurgerLink>
+                  </Link>
                 </BurgerContent>
                 {props.isLogin && (
                   <BurgerSmallText onClick={() => router.push('/contactUs')}>
@@ -321,6 +325,19 @@ const BurgerText = styled.div`
 
   color: #ffffff;
   cursor: pointer;
+`
+
+const BurgerLink = styled.a`
+  font-style: normal;
+  font-weight: bold;
+  font-size: 32px;
+  line-height: 40px;
+  /* identical to box height, or 125% */
+
+  text-align: center;
+  letter-spacing: -0.04em;
+
+  color: #ffffff; ;
 `
 
 const BurgerSmallText = styled.div`
