@@ -17,6 +17,7 @@ import { getMyAccountInfo } from '../../lib/queries/meQueries'
 import { getPost } from '../../lib/queries/getPostQueries'
 import QuizAnswerCard from '../organisms/QuizAnswerCard'
 import { SpacingText } from '../../utils/SpacingText'
+import Link from 'next/link'
 
 /**
  * exist : 질문 한개라도 이미 답변 한 상태
@@ -99,43 +100,47 @@ const ContentTemplate: FC<Props> = (props) => {
       case 0:
         return (
           <>
-            <NoticeContainer>
-              {isExistAsk === 'empty' ? (
-                <img
-                  style={{ position: 'relative', bottom: 15, zIndex: -1 }}
-                  src={IMAGES.img_tape_empty}
-                  width={'100%'}
-                />
-              ) : (
-                <>
-                  <NoticeText>
-                    <img
-                      style={{ position: 'relative', bottom: 15 }}
-                      src={IMAGES.img_newq_1}
-                      width={106}
-                      height={72}
-                    />
-                    <span
-                      style={{ marginTop: 1, cursor: 'pointer' }}
-                      onClick={() => onClickNewSecretCard('ask')}
-                    >
-                      {`${newPostCount || 0}개 질문에 답하기`}
-                    </span>
-                    <img
-                      onClick={() => onClickNewSecretCard('ask')}
-                      src={IMAGES.rightButton}
-                      width={22}
-                      height={22}
-                    />
-                  </NoticeText>
+            <Link href="/newSecretCard">
+              <NoticeContainer>
+                {isExistAsk === 'empty' ? (
                   <img
-                    style={{ position: 'relative', bottom: 65, zIndex: -1 }}
-                    src={IMAGES.img_tape_newq}
+                    style={{ position: 'relative', bottom: 15, zIndex: -1 }}
+                    src={IMAGES.img_tape_empty}
                     width={'100%'}
                   />
-                </>
-              )}
-            </NoticeContainer>
+                ) : (
+                  <>
+                    <NoticeText>
+                      <>
+                        <img
+                          style={{ position: 'relative', bottom: 15 }}
+                          src={IMAGES.img_newq_1}
+                          width={106}
+                          height={72}
+                        />
+                        <span
+                          style={{ marginTop: 1, cursor: 'pointer' }}
+                          onClick={() => onClickNewSecretCard('ask')}
+                        >
+                          {`${newPostCount || 0}개 질문에 답하기`}
+                        </span>
+                        <img
+                          onClick={() => onClickNewSecretCard('ask')}
+                          src={IMAGES.rightButton}
+                          width={22}
+                          height={22}
+                        />
+                      </>
+                    </NoticeText>
+                    <img
+                      style={{ position: 'relative', bottom: 65, zIndex: -1 }}
+                      src={IMAGES.img_tape_newq}
+                      width={'100%'}
+                    />
+                  </>
+                )}
+              </NoticeContainer>
+            </Link>
             <ContentContainer>
               {isExistAsk === 'exist' ? (
                 postContent?.ask.map((data, index) => {
@@ -216,43 +221,45 @@ const ContentTemplate: FC<Props> = (props) => {
       case 2:
         return (
           <>
-            <NoticeContainer>
-              {newPostCount === 0 && !isExistOX ? (
-                <img
-                  style={{ position: 'relative', bottom: 15, zIndex: -1 }}
-                  src={IMAGES.img_tape_empty}
-                  width={'100%'}
-                />
-              ) : (
-                <>
-                  <NoticeText>
-                    <img
-                      style={{ position: 'relative', bottom: 15 }}
-                      src={IMAGES.img_newq_1}
-                      width={106}
-                      height={72}
-                    />
-                    <span
-                      style={{ marginTop: 1, cursor: 'pointer' }}
-                      onClick={() => onClickNewSecretCard('OX')}
-                    >
-                      {`${newPostCount || 0}개의 OX퀴즈 도착`}
-                    </span>
-                    <img
-                      onClick={() => onClickNewSecretCard('OX')}
-                      src={IMAGES.rightButton}
-                      width={22}
-                      height={22}
-                    />
-                  </NoticeText>
+            <Link href="/newSecretCard">
+              <NoticeContainer>
+                {newPostCount === 0 && !isExistOX ? (
                   <img
-                    style={{ position: 'relative', bottom: 65, zIndex: -1 }}
-                    src={IMAGES.img_tape_newq}
+                    style={{ position: 'relative', bottom: 15, zIndex: -1 }}
+                    src={IMAGES.img_tape_empty}
                     width={'100%'}
                   />
-                </>
-              )}
-            </NoticeContainer>
+                ) : (
+                  <>
+                    <NoticeText>
+                      <img
+                        style={{ position: 'relative', bottom: 15 }}
+                        src={IMAGES.img_newq_1}
+                        width={106}
+                        height={72}
+                      />
+                      <span
+                        style={{ marginTop: 1, cursor: 'pointer' }}
+                        onClick={() => onClickNewSecretCard('OX')}
+                      >
+                        {`${newPostCount || 0}개의 OX퀴즈 도착`}
+                      </span>
+                      <img
+                        onClick={() => onClickNewSecretCard('OX')}
+                        src={IMAGES.rightButton}
+                        width={22}
+                        height={22}
+                      />
+                    </NoticeText>
+                    <img
+                      style={{ position: 'relative', bottom: 65, zIndex: -1 }}
+                      src={IMAGES.img_tape_newq}
+                      width={'100%'}
+                    />
+                  </>
+                )}
+              </NoticeContainer>
+            </Link>
             <ContentContainer>
               {isExistOX ? (
                 postContent?.quiz.map((content, index) => {
@@ -452,7 +459,7 @@ const Tab = styled.div`
   cursor: pointer;
 `
 
-const NoticeContainer = styled.div`
+const NoticeContainer = styled.a`
   margin-top: 32px;
 `
 const NoticeText = styled.div`

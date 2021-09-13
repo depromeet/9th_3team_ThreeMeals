@@ -28,7 +28,37 @@ const OthersContentPage: React.FC = () => {
     variables: { accountId: id },
   })
   const getPost = useQuery<getPost, getPostParams>(GET_POST, {
-    variables: { first: 10, accountId: account.data?.getAccountInfo.id },
+    variables: {
+      first: getPostFirstCnt,
+      accountId: account.data?.getAccountInfo.id,
+      postType: curPostType,
+      postState: 'Completed',
+    },
+    onCompleted: (data) => {
+      setLastPostId(data.getPosts.pageInfo.endCursor)
+    },
+  })
+  const [_, setIntersectRef] = useIntersect({
+    onIntersect: async (entry, observer) => {
+      observer.unobserve(entry.target)
+      const getPostData = await getPost.refetch({
+        first: getPostFirstCnt + 10,
+        accountId: account.data?.getAccountInfo.id,
+        postType: curPostType,
+        postState: 'Completed',
+      })
+      if (lastPostId === getPostData.data.getPosts.pageInfo.endCursor) {
+        setStopFetchMore(true)
+      } else {
+        await new Promise((_) => {
+          setLastPostId(getPostData.data.getPosts.pageInfo.endCursor)
+          setGetPostFirstCnt(getPostFirstCnt + 10)
+        })
+        observer.observe(entry.target)
+      }
+    },
+    option: { threshold: 0.2 },
+    stopFetchMore,
   })
   const getUnreadNotiCount = useQuery<getUnreadNotiCount>(GET_UNREAD_NOTI_COUNT)
   const onClickAnswerCard = useCallback(
