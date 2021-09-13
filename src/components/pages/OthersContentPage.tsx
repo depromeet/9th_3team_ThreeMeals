@@ -47,11 +47,7 @@ const OthersContentPage: React.FC = () => {
       first: getPostFirstCnt,
       accountId: account.data?.getAccountInfo.id,
       postType: curPostType,
-<<<<<<< HEAD
       postState: 'Completed',
-=======
-      // postState: 'Completed',
->>>>>>> feat/infiniteScroll
     },
     onCompleted: (data) => {
       setLastPostId(data.getPosts.pageInfo.endCursor)
@@ -64,11 +60,7 @@ const OthersContentPage: React.FC = () => {
         first: getPostFirstCnt + 10,
         accountId: account.data?.getAccountInfo.id,
         postType: curPostType,
-<<<<<<< HEAD
         postState: 'Completed',
-=======
-        // postState: 'Completed',
->>>>>>> feat/infiniteScroll
       })
       if (lastPostId === getPostData.data.getPosts.pageInfo.endCursor) {
         setStopFetchMore(true)

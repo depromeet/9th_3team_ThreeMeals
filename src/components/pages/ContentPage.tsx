@@ -59,11 +59,7 @@ const ContentPage: React.FC = () => {
       first: getPostFirstCnt,
       accountId: myAccount.data?.getMyAccountInfo.id,
       postType: curPostType,
-<<<<<<< HEAD
       postState: 'Completed',
-=======
-      // postState: 'Completed',
->>>>>>> feat/infiniteScroll
     },
     onCompleted: (data) => {
       setLastPostId(data.getPosts.pageInfo.endCursor)
