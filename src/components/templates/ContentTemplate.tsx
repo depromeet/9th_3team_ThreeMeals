@@ -1,6 +1,9 @@
 import React, {
-  FC,
+  Dispatch,
+  forwardRef,
   ReactElement,
+  RefObject,
+  SetStateAction,
   useCallback,
   useEffect,
   useMemo,
@@ -44,7 +47,12 @@ interface Props {
   onClickLike: (id: string, isLikeActive: boolean) => void
 }
 
-const ContentTemplate: FC<Props> = (props) => {
+const ContentTemplate = forwardRef<
+  | HTMLDivElement
+  | Dispatch<SetStateAction<RefObject<HTMLDivElement | null> | null>>
+  | null,
+  Props
+>((props, ref) => {
   const [windowObjet, setWindowObjet] = useState<Window | undefined>()
   const {
     tabIndex,
@@ -144,9 +152,9 @@ const ContentTemplate: FC<Props> = (props) => {
             <ContentContainer>
               {isExistAsk === 'exist' ? (
                 postContent?.ask.map((data, index) => {
-                  return data.node.postState === 'Completed' ? (
+                  const questionCardComponent = (
                     <QuestionCard
-                      key={index}
+                      key={data.node.id}
                       id={data.node.id}
                       questionTitle={data.node.content}
                       backColor={data.node.color}
@@ -168,6 +176,19 @@ const ContentTemplate: FC<Props> = (props) => {
                         )
                       }}
                     />
+                  )
+                  const isLastPost = index === postContent.ask.length - 1
+                  return data.node.postState === 'Completed' ? (
+                    isLastPost ? (
+                      <div
+                        ref={ref as RefObject<HTMLDivElement>}
+                        key={data.node.id}
+                      >
+                        {questionCardComponent}
+                      </div>
+                    ) : (
+                      questionCardComponent
+                    )
                   ) : null
                 })
               ) : (
@@ -263,13 +284,12 @@ const ContentTemplate: FC<Props> = (props) => {
             <ContentContainer>
               {isExistOX ? (
                 postContent?.quiz.map((content, index) => {
-                  return content.node.comments &&
-                    content.node.comments.length > 0 ? (
-                    <QuizAnswerCardContainer key={index}>
+                  const quizAnswerCardComponent = (
+                    <QuizAnswerCardContainer key={content.node.id}>
                       <QuizAnswerCard
                         content={content.node.content}
                         backColor={content.node.color}
-                        answerType={content.node.comments[0].content}
+                        answerType={content.node.comments[0]?.content}
                         isMyFeed={true}
                         isLikeActive={content.node.likedPosts.length > 0}
                         onClickOption={() => {
@@ -283,6 +303,20 @@ const ContentTemplate: FC<Props> = (props) => {
                         }}
                       />
                     </QuizAnswerCardContainer>
+                  )
+                  const isLasPost = index === postContent.quiz.length - 1
+                  return content.node.comments &&
+                    content.node.comments.length > 0 ? (
+                    isLasPost ? (
+                      <div
+                        ref={ref as RefObject<HTMLDivElement>}
+                        key={content.node.id}
+                      >
+                        {quizAnswerCardComponent}
+                      </div>
+                    ) : (
+                      quizAnswerCardComponent
+                    )
                   ) : null
                 })
               ) : (
@@ -296,12 +330,13 @@ const ContentTemplate: FC<Props> = (props) => {
     }
   }, [
     tabIndex,
-    newPostCount,
     isExistAsk,
+    newPostCount,
     postContent?.ask,
     postContent?.quiz,
     isExistOX,
     onClickNewSecretCard,
+    ref,
     onClickRemove,
     onClickLike,
   ])
@@ -422,7 +457,7 @@ const ContentTemplate: FC<Props> = (props) => {
       ) : null} */}
     </AppContainer>
   )
-}
+})
 export default React.memo(ContentTemplate)
 
 const AppContainer = styled.div`
@@ -433,7 +468,7 @@ const AppContainer = styled.div`
 `
 const MainContainer = styled.div`
   width: 100%;
-  height: calc(100vh - 64px);
+  min-height: calc(100vh - 64px);
 `
 
 const TabContainer = styled.div`

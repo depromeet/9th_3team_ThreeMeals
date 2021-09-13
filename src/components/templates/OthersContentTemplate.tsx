@@ -1,6 +1,10 @@
 import React, {
+  Dispatch,
   FC,
+  forwardRef,
   ReactElement,
+  RefObject,
+  SetStateAction,
   useCallback,
   useEffect,
   useMemo,
@@ -47,11 +51,19 @@ interface checkIsCardWithCommentProps {
   postType: 'Ask' | 'Quiz'
 }
 
-const OthersContentTemplate: FC<Props> = (props) => {
-  const [tabIndex, setTabIndex] = useState<number>(0)
+const OthersContentTemplate = forwardRef<
+  | HTMLDivElement
+  | Dispatch<SetStateAction<RefObject<HTMLDivElement | null> | null>>
+  | null,
+  Props
+>((props, ref) => {
   const currentTabIdx = useReactiveVar(curTabIdx)
   const [windowObjet, setWindowObjet] = useState<Window | undefined>()
-  const [cntOfCardWithComment, setCntOfCardWithComment] =
+  const [isMoreThanOne, setIsMoreThanOne] = useState({
+    ask: false,
+    quiz: false,
+  })
+  const [cntsOfCardWithComment, setCntsOfCardWithComment] =
     useState<CntOfCardWithComment>({ askCardCnt: 0, quizCardCnt: 0 })
   const router = useRouter()
   const postContent = useMemo(() => {
@@ -68,7 +80,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
       }
     }
   }, [props.getPost?.getPosts.edges])
-
+  console.log(postContent)
   const onClickWrite = useCallback(() => {
     if (props.token) {
       if (currentTabIdx === 0) {
@@ -99,18 +111,18 @@ const OthersContentTemplate: FC<Props> = (props) => {
   }, [postContent])
   const checkIsCardWithComment = useCallback(
     ({ content, index, postType }: checkIsCardWithCommentProps) => {
-      if (content.node.comments && content.node.comments.length > 0) {
+      if (content.node.comments && content.node.postState === 'Completed') {
         switch (postType) {
           case 'Ask':
-            setCntOfCardWithComment({
-              ...cntOfCardWithComment,
-              askCardCnt: index + 1,
+            setCntsOfCardWithComment({
+              ...cntsOfCardWithComment,
+              askCardCnt: cntsOfCardWithComment.askCardCnt + 1,
             })
             break
           case 'Quiz':
-            setCntOfCardWithComment({
-              ...cntOfCardWithComment,
-              quizCardCnt: index + 1,
+            setCntsOfCardWithComment({
+              ...cntsOfCardWithComment,
+              quizCardCnt: cntsOfCardWithComment.quizCardCnt + 1,
             })
             break
           default:
@@ -120,7 +132,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
       }
       return false
     },
-    [cntOfCardWithComment]
+    [cntsOfCardWithComment]
   )
 
   const ContentView = useMemo((): ReactElement | undefined => {
@@ -131,11 +143,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
             <ContentContainer>
               {isExistAsk === 'exist' ? (
                 postContent?.ask.map((content, index) => {
-                  return checkIsCardWithComment({
-                    content: content,
-                    index: index,
-                    postType: 'Ask',
-                  }) ? (
+                  const questionCardComponent = (
                     <QuestionCard
                       key={index}
                       id={content.node.id}
@@ -150,7 +158,18 @@ const OthersContentTemplate: FC<Props> = (props) => {
                       comments={content.node.comments}
                       fromAccount={content.node.fromAccount}
                     />
-                  ) : null
+                  )
+                  const isLastPost = index === postContent.ask.length - 1
+                  return isLastPost ? (
+                    <div
+                      ref={ref as RefObject<HTMLDivElement>}
+                      key={content.node.id}
+                    >
+                      {questionCardComponent}
+                    </div>
+                  ) : (
+                    questionCardComponent
+                  )
                 })
               ) : (
                 <EmptyContainer>
@@ -200,11 +219,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
             <ContentContainer>
               {isExistOX === 'exist' ? (
                 postContent?.quiz.map((content, index) => {
-                  return checkIsCardWithComment({
-                    content: content,
-                    index: index,
-                    postType: 'Quiz',
-                  }) ? (
+                  const quizAnswerCardComponent = (
                     <QuizAnswerCardContainer key={index}>
                       <QuizAnswerCard
                         content={content.node.content}
@@ -218,7 +233,18 @@ const OthersContentTemplate: FC<Props> = (props) => {
                         }}
                       />
                     </QuizAnswerCardContainer>
-                  ) : null
+                  )
+                  const isLastPost = index === postContent.quiz.length - 1
+                  return isLastPost ? (
+                    <div
+                      ref={ref as RefObject<HTMLDivElement>}
+                      key={content.node.id}
+                    >
+                      {quizAnswerCardComponent}
+                    </div>
+                  ) : (
+                    quizAnswerCardComponent
+                  )
                 })
               ) : (
                 <EmptyContainer>
@@ -231,7 +257,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
       default:
         break
     }
-  }, [currentTabIdx, isExistAsk, postContent, isExistOX])
+  }, [currentTabIdx, isExistAsk, postContent, isExistOX, ref])
 
   const profileImage = useMemo(() => {
     return props.account?.getAccountInfo.image
@@ -245,7 +271,16 @@ const OthersContentTemplate: FC<Props> = (props) => {
       setWindowObjet(window)
     }
   }, [])
-
+  useEffect(() => {
+    if (postContent) {
+      if (postContent?.ask.length > 1) {
+        setIsMoreThanOne({ ...isMoreThanOne, ask: true })
+      }
+      if (postContent?.quiz.length > 1) {
+        setIsMoreThanOne({ ...isMoreThanOne, quiz: true })
+      }
+    }
+  }, [postContent])
   return (
     <AppContainer>
       <Header
@@ -336,8 +371,8 @@ const OthersContentTemplate: FC<Props> = (props) => {
       </MainContainer>
       {(postContent && currentTabIdx === 0) ||
       (postContent && currentTabIdx === 2) ? (
-        (currentTabIdx === 0 && cntOfCardWithComment.askCardCnt >= 2) ||
-        (currentTabIdx === 2 && cntOfCardWithComment.quizCardCnt >= 2) ? (
+        (currentTabIdx === 0 && postContent.ask.length >= 2) ||
+        (currentTabIdx === 2 && postContent.quiz.length >= 2) ? (
           <WriteButton>
             <img onClick={onClickWrite} src={IMAGES.write} width={88} />
           </WriteButton>
@@ -349,7 +384,7 @@ const OthersContentTemplate: FC<Props> = (props) => {
       ) : null}
     </AppContainer>
   )
-}
+})
 
 export default OthersContentTemplate
 
@@ -361,7 +396,7 @@ const AppContainer = styled.div`
 `
 const MainContainer = styled.div`
   width: 100%;
-  height: calc(100vh - 64px);
+  min-height: calc(100vh - 64px);
 `
 
 const TabContainer = styled.div`

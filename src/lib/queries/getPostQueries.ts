@@ -4,6 +4,9 @@ import { gql } from '@apollo/client'
 export interface getPostParams {
   first: number
   accountId?: string
+  after?: string
+  postType?: 'Ask' | 'Answer' | 'Quiz'
+  postState?: 'Submitted' | 'Completed' | 'Deleted'
 }
 export interface getPostByIdParams {
   postId: string | string[] | undefined
@@ -128,8 +131,20 @@ export const GET_MY_NEW_POST_COUNT = gql`
 `
 
 export const GET_POST = gql`
-  query getPosts($first: Float!, $accountId: String!) {
-    getPosts(first: $first, accountId: $accountId) {
+  query getPosts(
+    $first: Float!
+    $accountId: String!
+    $after: String
+    $postType: PostType
+    $postState: PostState
+  ) {
+    getPosts(
+      first: $first
+      accountId: $accountId
+      after: $after
+      postType: $postType
+      postState: $postState
+    ) {
       edges {
         node {
           id
