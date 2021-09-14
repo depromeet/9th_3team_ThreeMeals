@@ -1,4 +1,4 @@
-name: Deploy to Stage
+name: Deploy to Production
 on:
   push:
     branches: [master]
