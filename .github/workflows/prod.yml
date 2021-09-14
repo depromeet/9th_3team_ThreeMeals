@@ -1,4 +1,4 @@
-name: CI
+name: Deploy to Production
 on:
   push:
     branches: [master]
@@ -7,25 +7,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Set output
+        id: vars
+        run: |
+          echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+          echo ::set-output name=git_hash::$(git rev-parse --short "$GITHUB_SHA")
+          echo ::set-output name=app_env::production
       - uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '12'
       - name: Install dependencies
         run: yarn install
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1
         with:
+          envkey_NODE_ENV: ${{ steps.vars.outputs.app_env }}
           envkey_NEXT_PUBLIC_DOMAIN_NAME: ${{ secrets.NEXT_PUBLIC_DOMAIN_NAME }}
+          envkey_NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           envkey_NEXT_PUBLIC_JAVASCRIPT_KEY: ${{ secrets.NEXT_PUBLIC_JAVASCRIPT_KEY }}
           envkey_NEXT_PUBLIC_REST_API_KEY: ${{ secrets.NEXT_PUBLIC_REST_API_KEY }}
-          envkey_NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           envkey_NEXT_PUBLIC_GA_TRACK_ID: ${{ secrets.NEXT_PUBLIC_GA_TRACK_ID }}
           file_name: .env.production
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET }}
+          aws-access-key-id: ${{ secrets.AWS_PROD_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_PROD_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
       - name: Deploy Next.js app
-        run: npx serverless
+        env:
+          APP_ENV: ${{ steps.vars.outputs.app_env }}
+        run: env APP_ENV=$APP_ENV env DISTRIBUTION_ID=E277D6IWURSJWO npx serverless

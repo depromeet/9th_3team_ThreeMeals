@@ -1,11 +1,13 @@
 # serverless.yml
+appEnv: ${env.APP_ENV}
+distributionId: ${env.DISTRIBUTION_ID}
 hush:
   component: '@sls-next/serverless-component@1.19.0'
   inputs:
     name:
-      defaultLambda: hushDefaultLamda
-      imageLambda: hushImageLambda
+      defaultLambda: "hush-it-${appEnv}-front-default"
+      imageLambda: "hush-it-${appEnv}-front-image"
     bucketRegion: 'ap-northeast-2'
-    bucketName: 'hush-static'
+    bucketName: 'hush-it-${appEnv}-front-static'
     cloudfront:
-      distributionId: 'EFA4PDMIEXVIK'
+      distributionId: "${distributionId}"
