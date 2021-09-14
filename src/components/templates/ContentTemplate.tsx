@@ -242,7 +242,7 @@ const ContentTemplate = forwardRef<
       case 2:
         return (
           <>
-            <Link href="/newSecretCard">
+            <Link href="/answerNewOX">
               <NoticeContainer>
                 {newPostCount === 0 && !isExistOX ? (
                   <img
