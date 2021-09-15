@@ -53,7 +53,7 @@ const StickerPanel: FC<Props> = (props) => {
   const addToPanelByClicking = useCallback(
     (width, imgUrl, id) => {
       const droppedImgInfo = {
-        position: { positionX: 279 / 2, positionY: 192 / 2 },
+        position: { positionX: 250, positionY: 192 },
         fileUrl: imgUrl,
         width: width,
         emoticonId: id,
@@ -146,6 +146,6 @@ const StickerPanel: FC<Props> = (props) => {
 export default React.memo(StickerPanel)
 
 const PanelContainer = styled.div`
-  width: 279px;
+  width: 287px;
   height: 192px;
 `

@@ -47,17 +47,17 @@ const DraggableSticker: FC<Props> = (props) => {
   const checkDragBound = useCallback((pos: Vector2d) => {
     let abledXPosition
     let abledYPosition
-    if (pos.x <= 60) {
-      abledXPosition = 60
-    } else if (pos.x > 210) {
-      abledXPosition = 210
+    if (pos.x <= 170) {
+      abledXPosition = 170
+    } else if (pos.x > 352) {
+      abledXPosition = 352
     } else {
       abledXPosition = pos.x
     }
-    if (pos.y <= 50) {
-      abledYPosition = 50
-    } else if (pos.y >= 120) {
-      abledYPosition = 120
+    if (pos.y <= 173) {
+      abledYPosition = 173
+    } else if (pos.y >= 250) {
+      abledYPosition = 250
     } else {
       abledYPosition = pos.y
     }
@@ -67,6 +67,7 @@ const DraggableSticker: FC<Props> = (props) => {
       y: abledYPosition,
     }
   }, [])
+
   useEffect(() => {
     if (props.showDeleteBtnIdx === props.idx) {
       showDeleteBtnByTouching(true)
@@ -74,6 +75,7 @@ const DraggableSticker: FC<Props> = (props) => {
       showDeleteBtnByTouching(false)
     }
   }, [props.idx, props.showDeleteBtnIdx, showDeleteBtnByTouching])
+
   return (
     <Group
       draggable
