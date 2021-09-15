@@ -80,7 +80,6 @@ const OthersContentTemplate = forwardRef<
       }
     }
   }, [props.getPost?.getPosts.edges])
-  console.log(postContent)
   const onClickWrite = useCallback(() => {
     if (props.token) {
       if (currentTabIdx === 0) {

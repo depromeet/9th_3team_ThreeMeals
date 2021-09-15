@@ -43,7 +43,7 @@ const WriteQACard: FC<Props> = (props) => {
     <CardContainer backColor={props.backColor}>
       <ContentContainer>
         <textarea
-          placeholder={`질문을 자유롭게\n작성해 주세요.`}
+          placeholder={`질문을 자유롭게\n작성해주세요.`}
           onChange={onChangeContent}
           value={content}
           maxLength={writePostInfo?.postType === 'Quiz' ? 100 : undefined}
