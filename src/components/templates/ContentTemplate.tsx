@@ -11,7 +11,7 @@ import React, {
 } from 'react'
 import Header from '../molecules/Header'
 import { IMAGES } from '../../constants/images'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import ProfileContent from '../molecules/ProfileContent'
 import DefaultLine from '../atoms/DefaultLine'
 import QuestionCard from '../organisms/QuestionCard'
@@ -21,6 +21,7 @@ import { getPost } from '../../lib/queries/getPostQueries'
 import QuizAnswerCard from '../organisms/QuizAnswerCard'
 import { SpacingText } from '../../utils/SpacingText'
 import Link from 'next/link'
+import { SVGS } from '../../constants/svgs'
 
 /**
  * exist : 질문 한개라도 이미 답변 한 상태
@@ -127,10 +128,11 @@ const ContentTemplate = forwardRef<
                           height={72}
                         />
                         <span
-                          style={{ marginTop: 1, cursor: 'pointer' }}
                           onClick={() => onClickNewSecretCard('ask')}
+                          className="notiTextSpan"
                         >
                           {`${newPostCount || 0}개 질문에 답하기`}
+                          <GuideLineIcon src={SVGS.icon_24_next_wh} />
                         </span>
                         <img
                           onClick={() => onClickNewSecretCard('ask')}
@@ -260,10 +262,11 @@ const ContentTemplate = forwardRef<
                         height={72}
                       />
                       <span
-                        style={{ marginTop: 1, cursor: 'pointer' }}
+                        className="notiTextSpan"
                         onClick={() => onClickNewSecretCard('OX')}
                       >
                         {`${newPostCount || 0}개의 OX퀴즈 도착`}
+                        <GuideLineIcon src={SVGS.icon_24_next_wh} />
                       </span>
                       <img
                         onClick={() => onClickNewSecretCard('OX')}
@@ -509,10 +512,35 @@ const NoticeText = styled.div`
 
   text-align: center;
   letter-spacing: -0.04em;
-
   color: rgba(255, 255, 255, 0.8);
-
   opacity: 0.9;
+  .notiTextSpan {
+    margin-top: 1px;
+    cursor: 'pointer';
+    position: relative;
+  }
+`
+
+const GuideLineIcon = styled.img`
+  position: absolute;
+  aspect-ratio: 1/1;
+  width: 50px;
+  animation: arrow 2s cubic-bezier(0.19, 0.26, 0.42, 0.8) infinite both;
+  top: -5.5rem;
+  left: 3rem;
+  @keyframes arrow {
+    0% {
+      transform: translate(0, 0) rotate(90deg);
+    }
+
+    50% {
+      transform: translate(0, 40px) rotate(90deg);
+    }
+
+    100% {
+      transform: translate(0, 0) rotate(90deg);
+    }
+  }
 `
 
 const ContentContainer = styled.div``
