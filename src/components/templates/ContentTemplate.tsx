@@ -132,7 +132,7 @@ const ContentTemplate = forwardRef<
                           className="notiTextSpan"
                         >
                           {`${newPostCount || 0}개 질문에 답하기`}
-                          <GuideLineIcon src={SVGS.icon_24_next_wh} />
+                          {/* <GuideLineIcon src={SVGS.icon_24_next_wh} /> */}
                         </span>
                         <img
                           onClick={() => onClickNewSecretCard('ask')}
@@ -266,7 +266,7 @@ const ContentTemplate = forwardRef<
                         onClick={() => onClickNewSecretCard('OX')}
                       >
                         {`${newPostCount || 0}개의 OX퀴즈 도착`}
-                        <GuideLineIcon src={SVGS.icon_24_next_wh} />
+                        {/* <GuideLineIcon src={SVGS.icon_24_next_wh} /> */}
                       </span>
                       <img
                         onClick={() => onClickNewSecretCard('OX')}
