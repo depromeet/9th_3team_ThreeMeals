@@ -6,7 +6,7 @@ const Sitemap = () => {}
 export const getServerSideProps = ({ res }) => {
   const baseUrl = {
     development: 'http://localhost:3002',
-    production: 'https://d3egwu5gw26rxc.cloudfront.net',
+    production: 'https://hush-it.com/',
     test: 'http://localhost:3002',
   }
 
