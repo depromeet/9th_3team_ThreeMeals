@@ -72,7 +72,7 @@ const ContentPage: React.FC = () => {
         first: getPostFirstCnt + 10,
         accountId: myAccount.data?.getMyAccountInfo.id,
         postType: curPostType,
-        // postState: 'Completed',
+        postState: 'Completed',
       })
       if (lastPostId === getPostData.data.getPosts.pageInfo.endCursor) {
         setStopFetchMore(true)
@@ -124,7 +124,7 @@ const ContentPage: React.FC = () => {
       first: 10,
       accountId: myAccount.data?.getMyAccountInfo.id,
       postType: curPostType,
-      // postState: 'Completed',
+      postState: 'Completed',
     })
     getMyNewPostCount.refetch({ postType: curPostType })
     setStopFetchMore(false)
