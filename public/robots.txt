@@ -16,6 +16,10 @@ Allow: /
 User-agent: Naverbot
 Allow: /
 
+User-agent: Yeti
+Allow: /
+
+
 User-agent: Slurp
 Allow: /
 
