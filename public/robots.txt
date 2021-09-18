@@ -1,4 +1,4 @@
-Sitemap: https://d3egwu5gw26rxc.cloudfront.net//sitemap.xml    
+Sitemap: https://hush-it.com/sitemap.xml
 
 User-agent: Applebot
 Allow: /
