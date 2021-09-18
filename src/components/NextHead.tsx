@@ -23,9 +23,14 @@ const NextHead: FC<Props> = ({ title, description, image }) => {
       <meta name="description" content={ogDesc} />
       <meta property="og:description" content={ogDesc} />
       <meta property="og:image" content={ogImage} />
+
       <meta
         name="google-site-verification"
         content="yaj6bnlmqVVhDCO_rvMvmNeQGaZqzoHIE7kYTngO2P8"
+      />
+      <meta
+        name="naver-site-verification"
+        content="4480351dcb07dd333511739e6a42ad4b0eddaff7"
       />
     </Head>
   )
