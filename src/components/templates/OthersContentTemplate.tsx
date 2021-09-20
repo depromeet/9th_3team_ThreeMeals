@@ -40,17 +40,6 @@ interface Props {
   onClickSecondRight?: () => void
 }
 
-interface CntOfCardWithComment {
-  askCardCnt: number
-  quizCardCnt: number
-}
-
-interface checkIsCardWithCommentProps {
-  content: getPostEdges
-  index: number
-  postType: 'Ask' | 'Quiz'
-}
-
 const OthersContentTemplate = forwardRef<
   | HTMLDivElement
   | Dispatch<SetStateAction<RefObject<HTMLDivElement | null> | null>>
@@ -59,12 +48,6 @@ const OthersContentTemplate = forwardRef<
 >((props, ref) => {
   const currentTabIdx = useReactiveVar(curTabIdx)
   const [windowObjet, setWindowObjet] = useState<Window | undefined>()
-  const [isMoreThanOne, setIsMoreThanOne] = useState({
-    ask: false,
-    quiz: false,
-  })
-  const [cntsOfCardWithComment, setCntsOfCardWithComment] =
-    useState<CntOfCardWithComment>({ askCardCnt: 0, quizCardCnt: 0 })
   const router = useRouter()
   const postContent = useMemo(() => {
     if (props.getPost?.getPosts.edges) {
@@ -93,7 +76,9 @@ const OthersContentTemplate = forwardRef<
       }
     } else {
       window.alert('로그인을 해주세요.')
-      router.push('/')
+      window.Kakao.Auth.authorize({
+        redirectUri: `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/auth`,
+      })
     }
   }, [props.account?.getAccountInfo.id, props.token, router, currentTabIdx])
 
@@ -108,31 +93,13 @@ const OthersContentTemplate = forwardRef<
       return 'empty'
     } else return 'exist'
   }, [postContent])
-  const checkIsCardWithComment = useCallback(
-    ({ content, index, postType }: checkIsCardWithCommentProps) => {
-      if (content.node.comments && content.node.postState === 'Completed') {
-        switch (postType) {
-          case 'Ask':
-            setCntsOfCardWithComment({
-              ...cntsOfCardWithComment,
-              askCardCnt: cntsOfCardWithComment.askCardCnt + 1,
-            })
-            break
-          case 'Quiz':
-            setCntsOfCardWithComment({
-              ...cntsOfCardWithComment,
-              quizCardCnt: cntsOfCardWithComment.quizCardCnt + 1,
-            })
-            break
-          default:
-            undefined
-        }
-        return true
-      }
-      return false
-    },
-    [cntsOfCardWithComment]
-  )
+
+  const isAskOrOXTab =
+    (postContent && currentTabIdx === 0) || (postContent && currentTabIdx === 2)
+
+  const isPostCntMoreThanOne =
+    (postContent && currentTabIdx === 0 && postContent.ask.length >= 2) ||
+    (postContent && currentTabIdx === 2 && postContent.quiz.length >= 2)
 
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (currentTabIdx) {
@@ -270,16 +237,7 @@ const OthersContentTemplate = forwardRef<
       setWindowObjet(window)
     }
   }, [])
-  useEffect(() => {
-    if (postContent) {
-      if (postContent?.ask.length > 1) {
-        setIsMoreThanOne({ ...isMoreThanOne, ask: true })
-      }
-      if (postContent?.quiz.length > 1) {
-        setIsMoreThanOne({ ...isMoreThanOne, quiz: true })
-      }
-    }
-  }, [postContent])
+
   return (
     <AppContainer>
       <Header
@@ -368,10 +326,8 @@ const OthersContentTemplate = forwardRef<
         />
         {ContentView}
       </MainContainer>
-      {(postContent && currentTabIdx === 0) ||
-      (postContent && currentTabIdx === 2) ? (
-        (currentTabIdx === 0 && postContent.ask.length >= 2) ||
-        (currentTabIdx === 2 && postContent.quiz.length >= 2) ? (
+      {isAskOrOXTab ? (
+        isPostCntMoreThanOne ? (
           <WriteButton>
             <img onClick={onClickWrite} src={IMAGES.write} width={88} />
           </WriteButton>
