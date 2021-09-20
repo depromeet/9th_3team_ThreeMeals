@@ -24,14 +24,19 @@ const NewSecretCardPage: React.FC = () => {
   const router = useRouter()
   const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
   const getPost = useQuery<getPost, getPostParams>(GET_POST, {
-    variables: { first: 10, accountId: myAccount.data?.getMyAccountInfo.id },
+    variables: {
+      first: 20,
+      accountId: myAccount.data?.getMyAccountInfo.id,
+      postState: 'Submitted',
+      postType: 'Ask',
+    },
   })
 
   const getMyNewPostCount = useQuery<
     getMyNewPostCount,
     getMyNewPostCountParams
   >(GET_MY_NEW_POST_COUNT, {
-    variables: { postType: 'Ask' },
+    variables: { postType: 'Ask', postState: 'Submitted' },
   })
 
   const [create_comment] =
@@ -77,6 +82,7 @@ const NewSecretCardPage: React.FC = () => {
   useEffect(() => {
     updateCurTabIdx(0)
   }, [])
+
   return (
     <AppContainer>
       <NewSecretCardTemplate

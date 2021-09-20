@@ -15,12 +15,14 @@ const AnswerNewOXPage: VFC = () => {
   const router = useRouter()
   const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
   const { data: postData } = useQuery<getPost, getPostParams>(GET_POST, {
-    variables: { first: 10, accountId: myAccount.data?.getMyAccountInfo.id },
+    variables: {
+      first: 10,
+      accountId: myAccount.data?.getMyAccountInfo.id,
+      postState: 'Submitted',
+      postType: 'Quiz',
+    },
   })
-  const quizPostData = postData?.getPosts.edges.filter(
-    (content) =>
-      content.node.postType === 'Quiz' && content.node.comments.length === 0
-  )
+  const quizPostData = postData?.getPosts.edges
   const cardData = quizPostData?.map((content) => {
     return {
       id: content.node.id,
@@ -39,6 +41,7 @@ const AnswerNewOXPage: VFC = () => {
   useEffect(() => {
     updateCurTabIdx(2)
   }, [])
+
   if (!cardData || !cardDataColors) {
     return <></>
   }
