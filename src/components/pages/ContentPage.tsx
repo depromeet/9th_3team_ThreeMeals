@@ -115,7 +115,7 @@ const ContentPage: React.FC = () => {
     getMyNewPostCount,
     getMyNewPostCountParams
   >(GET_MY_NEW_POST_COUNT, {
-    variables: { postType: 'Ask' },
+    variables: { postType: 'Ask', postState: 'Submitted' },
   })
 
   const getUnreadNotiCount = useQuery<getUnreadNotiCount>(GET_UNREAD_NOTI_COUNT)
@@ -182,6 +182,7 @@ const ContentPage: React.FC = () => {
   const onClickTabIndex = useCallback(async (index: number) => {
     updateCurTabIdx(index)
   }, [])
+
   return (
     <div>
       <AppContainer>

@@ -13,7 +13,8 @@ export interface getPostByIdParams {
 }
 
 export interface getMyNewPostCountParams {
-  postType?: string
+  postType?: 'Ask' | 'Answer' | 'Quiz'
+  postState?: 'Submitted' | 'Completed' | 'Deleted'
 }
 
 export interface getPostEdges {
@@ -120,8 +121,8 @@ export interface getPostById {
   }
 }
 export const GET_MY_NEW_POST_COUNT = gql`
-  query GetMyNewPostCount($postType: PostType!) {
-    getMyNewPostCount(postType: $postType) {
+  query GetMyNewPostCount($postType: PostType!, $postState: PostState) {
+    getMyNewPostCount(postType: $postType, postState: $postState) {
       postCount {
         count
         postType
