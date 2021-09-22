@@ -32,6 +32,11 @@ const NextHead: FC<Props> = ({ title, description, image }) => {
         name="naver-site-verification"
         content="4480351dcb07dd333511739e6a42ad4b0eddaff7"
       />
+
+      <meta name="NaverBot" content="All" />
+      <meta name="NaverBot" content="index,follow" />
+      <meta name="Yeti" content="All" />
+      <meta name="Yeti" content="index,follow" />
     </Head>
   )
 }
