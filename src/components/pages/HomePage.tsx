@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import HomeTemplate from '../templates/HomeTemplate'
 const AppContainer = styled.div`
   width: 100%;
+  position: fixed;
   display: flex;
   justify-content: center;
 `
