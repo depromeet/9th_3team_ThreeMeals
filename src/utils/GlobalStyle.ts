@@ -36,6 +36,11 @@ export const GlobalStyle = createGlobalStyle`
   }
 }
 
+// chrome
+@supports (-webkit-appearance:none) and (stroke-color: transparent) {
+  min-height: -webkit-fill-available;
+}
+
   a, u {
     text-decoration: none;
   }
