@@ -29,6 +29,8 @@ export default AnswerNewOXTemplate
 
 const TempContainer = styled.div`
   width: 100%;
+  overflow: hidden;
+  touch-action: pan-x;
 `
 
 const BodyContainer = styled.div`
@@ -37,5 +39,4 @@ const BodyContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  overflow: hidden;
 `
