@@ -52,6 +52,8 @@ export const GlobalStyle = createGlobalStyle`
     cursor: pointer;
     text-decoration: none;
   }
+
+// chrome input 배경색상 제거
   input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
