@@ -127,7 +127,7 @@ interface OptionProps {
 const TempContainer = styled.div`
   max-width: 500px;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   @media screen and (max-width: 770px) {

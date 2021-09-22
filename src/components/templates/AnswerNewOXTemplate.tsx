@@ -32,7 +32,7 @@ const TempContainer = styled.div`
 `
 
 const BodyContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: calc(100% - 64px);
   width: 100%;
   display: flex;
   justify-content: center;

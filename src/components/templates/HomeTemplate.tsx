@@ -66,7 +66,7 @@ const AppContainer = styled.div`
 `
 const MainContainer = styled.div`
   width: 100%;
-  height: calc(100vh - 64px);
+  height: calc(100% - 64px);
 `
 const CharIconContainer = styled.div`
   position: relative;

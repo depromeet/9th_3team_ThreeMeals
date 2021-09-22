@@ -497,9 +497,7 @@ const Tab = styled.div`
   cursor: pointer;
 `
 
-const NoticeContainer = styled.a`
-  margin-top: 32px;
-`
+const NoticeContainer = styled.a``
 const NoticeText = styled.div`
   display: flex;
   justify-content: center;
@@ -509,7 +507,7 @@ const NoticeText = styled.div`
   font-size: 14px;
   line-height: 22px;
   /* identical to box height, or 157% */
-
+  margin-top: 1rem;
   text-align: center;
   letter-spacing: -0.04em;
   color: rgba(255, 255, 255, 0.8);
