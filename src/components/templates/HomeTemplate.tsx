@@ -164,6 +164,9 @@ const TextContainer = styled.div`
   width: 100%;
   height: 70%;
   font-size: 18px;
+  @media screen and (max-width: 420px) {
+    font-size: 0.9rem;
+  }
   @media screen and (max-width: 320px) {
     height: 60%;
     font-size: 0.8rem;
@@ -176,6 +179,9 @@ const TextContainer = styled.div`
     align-items: center;
     line-height: 35px;
     height: 60%;
+    @media screen and (max-width: 420px) {
+      line-height: 1.5rem;
+    }
     @media screen and (max-width: 320px) {
       line-height: 30px;
     }
