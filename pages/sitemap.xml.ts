@@ -6,7 +6,7 @@ const Sitemap = () => {}
 export const getServerSideProps = ({ res }) => {
   const baseUrl = {
     development: 'http://localhost:3002',
-    production: 'https://hush-it.com/',
+    production: 'https://hush-it.com',
     test: 'http://localhost:3002',
   }
 
