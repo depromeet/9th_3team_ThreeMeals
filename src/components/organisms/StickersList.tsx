@@ -69,7 +69,7 @@ export default React.memo(StickersList)
 const ListContainer = styled.div`
   position: fixed;
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
   background: #000000;
   max-width: 500px;
   top: 0;
