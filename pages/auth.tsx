@@ -38,7 +38,8 @@ const Auth: React.FC = () => {
           })
             .then((token) => {
               jsCookies.set('token', token.data.signIn.token, { path: '/' })
-              router.back()
+
+              router.push('/content')
             })
             .catch((error) => {
               console.log('error:', error)

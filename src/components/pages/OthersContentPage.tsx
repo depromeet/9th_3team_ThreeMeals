@@ -53,7 +53,7 @@ const OthersContentPage: React.FC = () => {
       setLastPostId(data.getPosts.pageInfo.endCursor)
     },
   })
-  const [_, setIntersectRef] = useIntersect({
+  const [, setIntersectRef] = useIntersect({
     onIntersect: async (entry, observer) => {
       observer.unobserve(entry.target)
       const getPostData = await getPost.refetch({
@@ -95,6 +95,16 @@ const OthersContentPage: React.FC = () => {
     setStopFetchMore(false)
     setGetPostFirstCnt(10)
   }, [currentTabIdx, curPostType])
+  useEffect(() => {
+    if (!myAccount.data && id) {
+      jsCookies.set('beginningRoutingToOtherId', id, { path: '/' })
+    }
+  }, [id, myAccount])
+  useEffect(() => {
+    if (myAccount.data && jsCookies.get('beginningRoutingToOtherId')) {
+      jsCookies.remove('beginningRoutingToOtherId', { path: '/' })
+    }
+  }, [myAccount.data])
   return (
     <>
       <AppContainer>
