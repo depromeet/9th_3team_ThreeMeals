@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useMutation } from '@apollo/client'
 import { SIGN_IN } from '../src/lib/queries/signInQueries'
 import jsCookies from 'js-cookie'
+import { updateIsLazyGetToken } from '../src/lib/localStore/signInMonitoring'
 const Auth: React.FC = () => {
   const router = useRouter()
 
@@ -38,8 +39,14 @@ const Auth: React.FC = () => {
           })
             .then((token) => {
               jsCookies.set('token', token.data.signIn.token, { path: '/' })
-
-              router.push('/content')
+            })
+            .finally(() => {
+              if (jsCookies.get('token')) {
+                router.push('/content')
+              } else {
+                alert('로그인에 실패했습니다.')
+                router.push('/')
+              }
             })
             .catch((error) => {
               console.log('error:', error)

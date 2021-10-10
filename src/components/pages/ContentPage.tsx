@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import jsCookies from 'js-cookie'
 import {
   Dispatch,
   Ref,
@@ -46,6 +47,7 @@ import {
 } from '../../lib/localStore/contentTabIndex'
 import checkCurPostType from '../../utils/checkCurPostType'
 import useIntersect from '../../hooks/useIntersect'
+import { initializeApollo } from '../../lib/apollo'
 
 const ContentPage: React.FC = () => {
   const [lastPostId, setLastPostId] = useState<undefined | string>()

@@ -22,8 +22,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const token = cookies(ctx).token
 
   if (!_isEmpty(token)) {
-    ctx.res.writeHead(302, { Location: '/content' })
-    ctx.res.end()
+    // ctx.res.writeHead(302, { Location: '/content' })
+    // ctx.res.end()
+    return {
+      props: {},
+      redirect: {
+        destination: '/content',
+        permanent: false,
+      },
+    }
   }
 
   return {

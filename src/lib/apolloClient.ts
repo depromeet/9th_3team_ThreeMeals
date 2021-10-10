@@ -1,3 +1,7 @@
+import {
+  isLazyGetToken,
+  updateIsLazyGetToken,
+} from './localStore/signInMonitoring'
 import { GetServerSidePropsContext } from 'next'
 import {
   ApolloClient,
@@ -20,7 +24,21 @@ function createApolloClient(
     accessToken = cookies(ctx).token ?? ''
   } else if (typeof window !== 'undefined') {
     // 클라이언트에서는 브라우저 쿠키를 참조
-    accessToken = jsCookies.get('token') ?? ''
+
+    if (isLazyGetToken()) {
+      /** 처음 로그인시 */
+      // HACK: setTimeout
+      setTimeout(() => {
+        if (jsCookies.get('token')) {
+          accessToken = jsCookies.get('token') ?? ''
+          updateIsLazyGetToken(false)
+        } else {
+          console.error('non authorization token')
+        }
+      }, 300)
+    } else {
+      accessToken = jsCookies.get('token') ?? ''
+    }
   }
 
   // const httpLink = createHttpLink({
