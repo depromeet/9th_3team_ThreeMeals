@@ -7,8 +7,8 @@ const AppContainer = styled.div`
   position: fixed;
   display: flex;
   justify-content: center;
+  overflow: auto;
 `
-
 const HomePage: VFC = () => {
   const [randomIndex, setRandomIndex] = useState<number>(0)
 
