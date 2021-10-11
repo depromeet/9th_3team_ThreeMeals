@@ -1,5 +1,8 @@
+import Link from 'next/link'
 import React, { FC, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
+import { updateCurTabIdx } from '../../lib/localStore/contentTabIndex'
+import { updateLinkedPostId } from '../../lib/localStore/notiLinkInfo'
 import { timeDiffCalc } from '../../utils/TimeDiffCalc'
 interface Props {
   myNickName: string | undefined
@@ -7,7 +10,9 @@ interface Props {
   contentType: string
   time: string
   otherContentInfo?: {
+    accountId: string
     nickname: string
+    postId: string
     postType: 'Ask' | 'Quiz' | 'Answer'
     isLikeNotiType: boolean
   }
@@ -30,7 +35,9 @@ const FieldContainer = styled.div<FieldContainerProps>`
   margin-bottom: 1rem;
   ${({ isWithOtherAccount }) =>
     isWithOtherAccount &&
-    `background: rgba(103, 213, 133, 0.05); 1px solid rgba(103, 213, 133, 0.1);`}
+    `background: rgba(103, 213, 133, 0.05); 1px solid rgba(103, 213, 133, 0.1);
+    cursor: pointer;
+    `}
   .header {
     width: 100%;
     height: 50%;
@@ -97,22 +104,45 @@ const AlarmContentField: FC<Props> = (props) => {
   const checkIsWithOtherAccount = useCallback(() => {
     return props.otherContentInfo !== undefined
   }, [props.otherContentInfo])
-  return (
-    <FieldContainer isWithOtherAccount={checkIsWithOtherAccount()}>
-      <div className="header">
-        <span className="contentTitle">
-          {props.otherContentInfo ? contentTitleWithOtherAccount : contentType}
-        </span>
-        <span className="time">
-          {timeDiffCalc(new Date(props.time), new Date())}
-        </span>
-      </div>
-      <div className="content">
-        <span className="contentText">
-          {props.otherContentInfo ? otherContentText : props.content}
-        </span>
-      </div>
-    </FieldContainer>
+  const onClickLink = () => {
+    if (props.otherContentInfo?.postType === 'Ask') {
+      updateCurTabIdx(0)
+    } else if (props.otherContentInfo?.postType === 'Quiz') {
+      updateCurTabIdx(2)
+    } else if (props.otherContentInfo?.postType === 'Answer') {
+      updateCurTabIdx(1)
+    }
+    updateLinkedPostId(props.otherContentInfo?.postId)
+  }
+  const AlarmContentFieldComponent = useMemo(() => {
+    return (
+      <FieldContainer isWithOtherAccount={checkIsWithOtherAccount()}>
+        <div className="header">
+          <span className="contentTitle">
+            {props.otherContentInfo
+              ? contentTitleWithOtherAccount
+              : contentType}
+          </span>
+          <span className="time">
+            {timeDiffCalc(new Date(props.time), new Date())}
+          </span>
+        </div>
+        <div className="content">
+          <span className="contentText">
+            {props.otherContentInfo ? otherContentText : props.content}
+          </span>
+        </div>
+      </FieldContainer>
+    )
+  }, [])
+
+  const linkHrefToOthersContent = `/otherscontent/${props.otherContentInfo?.accountId}`
+  return props.otherContentInfo?.accountId ? (
+    <Link href={linkHrefToOthersContent} passHref>
+      <a onClick={onClickLink}>{AlarmContentFieldComponent}</a>
+    </Link>
+  ) : (
+    AlarmContentFieldComponent
   )
 }
 

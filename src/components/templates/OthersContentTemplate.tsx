@@ -1,6 +1,6 @@
 import React, {
   Dispatch,
-  FC,
+  useRef,
   forwardRef,
   ReactElement,
   RefObject,
@@ -26,6 +26,10 @@ import { SpacingText } from '../../utils/SpacingText'
 import { EmptyCase } from './ContentTemplate'
 import { useReactiveVar } from '@apollo/client'
 import { curTabIdx } from '../../lib/localStore/contentTabIndex'
+import {
+  linkedPostId,
+  updateLinkedPostId,
+} from '../../lib/localStore/notiLinkInfo'
 
 interface Props {
   token?: string
@@ -46,6 +50,7 @@ const OthersContentTemplate = forwardRef<
   | null,
   Props
 >((props, ref) => {
+  const cardRefForNotiLink = useRef<HTMLDivElement | null>(null)
   const currentTabIdx = useReactiveVar(curTabIdx)
   const [windowObjet, setWindowObjet] = useState<Window | undefined>()
   const router = useRouter()
@@ -101,6 +106,14 @@ const OthersContentTemplate = forwardRef<
     (postContent && currentTabIdx === 0 && postContent.ask.length >= 2) ||
     (postContent && currentTabIdx === 2 && postContent.quiz.length >= 2)
 
+  /** scroll to linked notification post */
+  useEffect(() => {
+    if (cardRefForNotiLink.current) {
+      cardRefForNotiLink.current.scrollIntoView({ block: 'center' })
+      updateLinkedPostId('')
+    }
+  }, [cardRefForNotiLink.current])
+
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (currentTabIdx) {
       case 0:
@@ -110,20 +123,28 @@ const OthersContentTemplate = forwardRef<
               {isExistAsk === 'exist' ? (
                 postContent?.ask.map((content, index) => {
                   const questionCardComponent = (
-                    <QuestionCard
+                    <div
+                      ref={
+                        linkedPostId() === content.node.id
+                          ? cardRefForNotiLink
+                          : undefined
+                      }
                       key={index}
-                      id={content.node.id}
-                      createdAt={content.node.createdAt}
-                      updatedAt={content.node.updatedAt}
-                      secretType={content.node.secretType}
-                      questionTitle={content.node.content}
-                      backColor={content.node.color}
-                      stickers={content.node.usedEmoticons}
-                      isLikeActive={content.node.likedPosts.length > 0}
-                      isOnNewSecretPage={false}
-                      comments={content.node.comments}
-                      fromAccount={content.node.fromAccount}
-                    />
+                    >
+                      <QuestionCard
+                        id={content.node.id}
+                        createdAt={content.node.createdAt}
+                        updatedAt={content.node.updatedAt}
+                        secretType={content.node.secretType}
+                        questionTitle={content.node.content}
+                        backColor={content.node.color}
+                        stickers={content.node.usedEmoticons}
+                        isLikeActive={content.node.likedPosts.length > 0}
+                        isOnNewSecretPage={false}
+                        comments={content.node.comments}
+                        fromAccount={content.node.fromAccount}
+                      />
+                    </div>
                   )
                   const isLastPost = index === postContent.ask.length - 1
                   return isLastPost ? (
@@ -186,7 +207,14 @@ const OthersContentTemplate = forwardRef<
               {isExistOX === 'exist' ? (
                 postContent?.quiz.map((content, index) => {
                   const quizAnswerCardComponent = (
-                    <QuizAnswerCardContainer key={index}>
+                    <QuizAnswerCardContainer
+                      key={index}
+                      ref={
+                        linkedPostId() === content.node.id
+                          ? cardRefForNotiLink
+                          : undefined
+                      }
+                    >
                       <QuizAnswerCard
                         content={content.node.content}
                         backColor={content.node.color}

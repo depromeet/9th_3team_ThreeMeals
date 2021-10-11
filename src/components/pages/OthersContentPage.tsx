@@ -28,6 +28,8 @@ import { updateCurTabIdx } from '../../lib/localStore/contentTabIndex'
 import { curTabIdx } from '../../lib/localStore/contentTabIndex'
 import checkCurPostType from '../../utils/checkCurPostType'
 import useIntersect from '../../hooks/useIntersect'
+import { linkedPostId } from '../../lib/localStore/notiLinkInfo'
+import { useInView } from 'react-intersection-observer'
 
 const OthersContentPage: React.FC = () => {
   const router = useRouter()
@@ -85,6 +87,8 @@ const OthersContentPage: React.FC = () => {
   const onClickTabIndex = useCallback(async (index: number) => {
     updateCurTabIdx(index)
   }, [])
+
+  /** update getPost when changing tab */
   useEffect(() => {
     getPost.refetch({
       first: 10,
@@ -95,6 +99,8 @@ const OthersContentPage: React.FC = () => {
     setStopFetchMore(false)
     setGetPostFirstCnt(10)
   }, [currentTabIdx, curPostType])
+
+  /** save otherAccount Id when not log in */
   useEffect(() => {
     if (!myAccount.data && id) {
       jsCookies.set('beginningRoutingToOtherId', id, { path: '/' })
@@ -105,6 +111,29 @@ const OthersContentPage: React.FC = () => {
       jsCookies.remove('beginningRoutingToOtherId', { path: '/' })
     }
   }, [myAccount.data])
+
+  /** refetch getPosts until find postId of linked notification content */
+  useEffect(() => {
+    if (linkedPostId() && getPost.data) {
+      const linkedPost = getPost.data?.getPosts.edges.find(
+        (postData) => postData.node.id === linkedPostId()
+      )
+      if (!linkedPost) {
+        getPost
+          .refetch({
+            first: getPostFirstCnt + 10,
+            accountId: account.data?.getAccountInfo.id,
+            postType: curPostType,
+            postState: 'Completed',
+          })
+          .then((value) => {
+            setLastPostId(value.data.getPosts.pageInfo.endCursor)
+            setGetPostFirstCnt(getPostFirstCnt + 10)
+          })
+      }
+    }
+  }, [getPost.data])
+
   return (
     <>
       <AppContainer>

@@ -32,6 +32,7 @@ export interface GetNotification {
     content: string
   }
   otherAccount: {
+    id: string
     nickname: string
   }
 }
@@ -69,6 +70,7 @@ export const GET_NOTIFICATIONS = gql`
         content
       }
       otherAccount {
+        id
         nickname
       }
     }

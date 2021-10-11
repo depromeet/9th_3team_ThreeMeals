@@ -31,7 +31,9 @@ const NotificationTemplate: FC<Props> = (props) => {
               otherContentInfo={
                 value.otherAccount !== null
                   ? {
+                      accountId: value.otherAccount.id,
                       nickname: value.otherAccount.nickname,
+                      postId: value.relatedPost.id,
                       postType: value.relatedPost.postType,
                       isLikeNotiType: value.notificationType === 'LikeToMine',
                     }
