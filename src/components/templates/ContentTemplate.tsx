@@ -307,10 +307,10 @@ const ContentTemplate = forwardRef<
                       />
                     </QuizAnswerCardContainer>
                   )
-                  const isLasPost = index === postContent.quiz.length - 1
+                  const isLastPost = index === postContent.quiz.length - 1
                   return content.node.comments &&
                     content.node.comments.length > 0 ? (
-                    isLasPost ? (
+                    isLastPost ? (
                       <div
                         ref={ref as RefObject<HTMLDivElement>}
                         key={content.node.id}
