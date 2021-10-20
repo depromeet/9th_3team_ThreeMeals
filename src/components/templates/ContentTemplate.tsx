@@ -289,22 +289,24 @@ const ContentTemplate = forwardRef<
                 postContent?.quiz.map((content, index) => {
                   const quizAnswerCardComponent = (
                     <QuizAnswerCardContainer key={content.node.id}>
-                      <QuizAnswerCard
-                        content={content.node.content}
-                        backColor={content.node.color}
-                        answerType={content.node.comments[0]?.content}
-                        isMyFeed={true}
-                        isLikeActive={content.node.likedPosts.length > 0}
-                        onClickOption={() => {
-                          onClickRemove(content.node.id)
-                        }}
-                        onClickLike={() => {
-                          onClickLike(
-                            content.node.id,
-                            content.node.likedPosts.length > 0
-                          )
-                        }}
-                      />
+                      {content.node.comments && (
+                        <QuizAnswerCard
+                          content={content.node.content}
+                          backColor={content.node.color}
+                          answerType={content.node.comments[0]?.content}
+                          isMyFeed={true}
+                          isLikeActive={content.node.likedPosts.length > 0}
+                          onClickOption={() => {
+                            onClickRemove(content.node.id)
+                          }}
+                          onClickLike={() => {
+                            onClickLike(
+                              content.node.id,
+                              content.node.likedPosts.length > 0
+                            )
+                          }}
+                        />
+                      )}
                     </QuizAnswerCardContainer>
                   )
                   const isLastPost = index === postContent.quiz.length - 1
@@ -323,7 +325,15 @@ const ContentTemplate = forwardRef<
                   ) : null
                 })
               ) : (
-                <></>
+                <>
+                  <EmptyContainer>
+                    {isExistOX === 'request'
+                      ? 'OX카드에 답장을 완료하면 이곳에 카드로 뜰거에요 !'
+                      : SpacingText(
+                          '아직 도착한 OX카드가 없네요..ㅠㅠ!\\n친구들에게 링크를 공유해보세요!'
+                        )}
+                  </EmptyContainer>
+                </>
               )}
             </ContentContainer>
           </>
