@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { initializeApollo } from '../../src/lib/apollo'
 import { GET_ACCOUNT_INFO } from '../../src/lib/queries/userQueries'
 import { GET_MY_PROFILE } from '../../src/lib/queries/meQueries'
+import { GET_POST } from '../../src/lib/queries/getPostQueries'
 
 const OthersContent: React.FC = () => {
   return <OthersContentPage />
@@ -21,6 +22,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       query: GET_ACCOUNT_INFO,
       variables: {
         accountId: id,
+      },
+    })
+    await apolloClient.query({
+      query: GET_POST,
+      variables: {
+        first: 10,
+        accountId: id,
+        postType: 'Ask',
+        postState: 'Completed',
       },
     })
   } catch (error) {

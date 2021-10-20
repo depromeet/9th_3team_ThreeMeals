@@ -24,7 +24,6 @@ function createApolloClient(
     accessToken = cookies(ctx).token ?? ''
   } else if (typeof window !== 'undefined') {
     // 클라이언트에서는 브라우저 쿠키를 참조
-
     if (isLazyGetToken()) {
       /** 처음 로그인시 */
       // HACK: setTimeout
@@ -35,7 +34,7 @@ function createApolloClient(
         } else {
           console.error('non authorization token')
         }
-      }, 300)
+      }, 500)
     } else {
       accessToken = jsCookies.get('token') ?? ''
     }
