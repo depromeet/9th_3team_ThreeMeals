@@ -414,6 +414,8 @@ const WriteButton = styled.button.attrs({ type: 'button' })`
   position: fixed;
   overflow-y: auto;
   overflow-x: hidden;
+  border-radius: 50px;
+  backdrop-filter: blur(2px);
 
   @media all and (min-width: 515px) {
     margin-right: -webkit-calc((100% - 400px) / 2);
