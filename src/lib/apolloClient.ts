@@ -34,7 +34,7 @@ function createApolloClient(
         } else {
           console.error('non authorization token')
         }
-      }, 500)
+      }, 800)
     } else {
       accessToken = jsCookies.get('token') ?? ''
     }
