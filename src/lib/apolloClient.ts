@@ -13,7 +13,7 @@ import cookies from 'next-cookies'
 import jsCookies from 'js-cookie'
 import { setContext } from '@apollo/client/link/context'
 import { createUploadLink } from 'apollo-upload-client'
-import writePostInfoVar from './localStore/writePost'
+import { relayStylePagination } from '@apollo/client/utilities'
 
 function createApolloClient(
   ctx?: GetServerSidePropsContext
@@ -65,11 +65,7 @@ function createApolloClient(
       typePolicies: {
         Query: {
           fields: {
-            getWritePostInfo: {
-              read() {
-                return writePostInfoVar()
-              },
-            },
+            getPosts: relayStylePagination(),
           },
         },
       },

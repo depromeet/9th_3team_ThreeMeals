@@ -45,7 +45,7 @@ const useIntersect: ({
       observer.observe(ref as any)
       return () => observer.unobserve(ref as any)
     }
-  }, [ref, stopFetchMore])
+  }, [checkIntersect, option, ref, stopFetchMore])
 
   return [ref, setRef]
 }

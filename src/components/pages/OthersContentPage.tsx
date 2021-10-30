@@ -29,7 +29,6 @@ import { curTabIdx } from '../../lib/localStore/contentTabIndex'
 import checkCurPostType from '../../utils/checkCurPostType'
 import useIntersect from '../../hooks/useIntersect'
 import { linkedPostId } from '../../lib/localStore/notiLinkInfo'
-import { useInView } from 'react-intersection-observer'
 
 const OthersContentPage: React.FC = () => {
   const router = useRouter()
@@ -44,6 +43,7 @@ const OthersContentPage: React.FC = () => {
   const account = useQuery<getAccountInfo>(GET_ACCOUNT_INFO, {
     variables: { accountId: id },
   })
+  const getUnreadNotiCount = useQuery<getUnreadNotiCount>(GET_UNREAD_NOTI_COUNT)
   const getPost = useQuery<getPost, getPostParams>(GET_POST, {
     variables: {
       first: getPostFirstCnt,
@@ -55,29 +55,29 @@ const OthersContentPage: React.FC = () => {
       setLastPostId(data.getPosts.pageInfo.endCursor)
     },
   })
+
+  /** intersection observer for infinite scroll */
   const [, setIntersectRef] = useIntersect({
     onIntersect: async (entry, observer) => {
-      observer.unobserve(entry.target)
-      const getPostData = await getPost.refetch({
-        first: getPostFirstCnt + 10,
-        accountId: account.data?.getAccountInfo.id,
-        postType: curPostType,
-        postState: 'Completed',
+      const getPostData = await getPost.fetchMore({
+        variables: {
+          first: getPostFirstCnt + 10,
+          accountId: account.data?.getAccountInfo.id,
+          postType: curPostType,
+          postState: 'Completed',
+        },
       })
       if (lastPostId === getPostData.data.getPosts.pageInfo.endCursor) {
-        setStopFetchMore(true)
+        return setStopFetchMore(true)
       } else {
-        await new Promise((_) => {
-          setLastPostId(getPostData.data.getPosts.pageInfo.endCursor)
-          setGetPostFirstCnt(getPostFirstCnt + 10)
-        })
-        observer.observe(entry.target)
+        setLastPostId(getPostData.data.getPosts.pageInfo.endCursor)
+        setGetPostFirstCnt(getPostFirstCnt + 10)
       }
     },
     option: { threshold: 0.2 },
     stopFetchMore,
   })
-  const getUnreadNotiCount = useQuery<getUnreadNotiCount>(GET_UNREAD_NOTI_COUNT)
+
   const onClickAnswerCard = useCallback(
     (postId) => {
       router.push({ pathname: '/answerDetail', query: { postId } })
@@ -120,11 +120,13 @@ const OthersContentPage: React.FC = () => {
       )
       if (!linkedPost) {
         getPost
-          .refetch({
-            first: getPostFirstCnt + 10,
-            accountId: account.data?.getAccountInfo.id,
-            postType: curPostType,
-            postState: 'Completed',
+          .fetchMore({
+            variables: {
+              first: getPostFirstCnt + 10,
+              accountId: account.data?.getAccountInfo.id,
+              postType: curPostType,
+              postState: 'Completed',
+            },
           })
           .then((value) => {
             setLastPostId(value.data.getPosts.pageInfo.endCursor)

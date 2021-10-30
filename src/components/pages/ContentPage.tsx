@@ -47,9 +47,11 @@ import {
 } from '../../lib/localStore/contentTabIndex'
 import checkCurPostType from '../../utils/checkCurPostType'
 import useIntersect from '../../hooks/useIntersect'
-import { initializeApollo } from '../../lib/apollo'
 
 const ContentPage: React.FC = () => {
+  const router = useRouter()
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [selectedPostId, setSelectedPostId] = useState<string>()
   const [lastPostId, setLastPostId] = useState<undefined | string>()
   const [getPostFirstCnt, setGetPostFirstCnt] = useState(10)
   const [stopFetchMore, setStopFetchMore] = useState(false)
@@ -67,28 +69,45 @@ const ContentPage: React.FC = () => {
       setLastPostId(data.getPosts.pageInfo.endCursor)
     },
   })
-  const [_, setIntersectRef] = useIntersect({
+  const getMyNewPostCount = useQuery<
+    getMyNewPostCount,
+    getMyNewPostCountParams
+  >(GET_MY_NEW_POST_COUNT, {
+    variables: { postType: 'Ask', postState: 'Submitted' },
+  })
+
+  const getUnreadNotiCount = useQuery<getUnreadNotiCount>(GET_UNREAD_NOTI_COUNT)
+
+  const newPostCount = useMemo(() => {
+    if (getMyNewPostCount.data) {
+      return getMyNewPostCount.data?.getMyNewPostCount.postCount[0].count
+    } else {
+      return 0
+    }
+  }, [getMyNewPostCount])
+
+  /** intersection observer for infinite scroll */
+  const [, setIntersectRef] = useIntersect({
     onIntersect: async (entry, observer) => {
-      observer.unobserve(entry.target)
-      const getPostData = await getPost.refetch({
-        first: getPostFirstCnt + 10,
-        accountId: myAccount.data?.getMyAccountInfo.id,
-        postType: curPostType,
-        postState: 'Completed',
+      const getPostData = await getPost.fetchMore({
+        variables: {
+          first: getPostFirstCnt + 10,
+          accountId: myAccount.data?.getMyAccountInfo.id,
+          postType: curPostType,
+          postState: 'Completed',
+        },
       })
       if (lastPostId === getPostData.data.getPosts.pageInfo.endCursor) {
-        setStopFetchMore(true)
+        return setStopFetchMore(true)
       } else {
-        await new Promise((_) => {
-          setLastPostId(getPostData.data.getPosts.pageInfo.endCursor)
-          setGetPostFirstCnt(getPostFirstCnt + 10)
-        })
-        observer.observe(entry.target)
+        setLastPostId(getPost.data?.getPosts.pageInfo.endCursor)
+        setGetPostFirstCnt(getPostFirstCnt + 10)
       }
     },
     option: { threshold: 0.2 },
     stopFetchMore,
   })
+
   const [createLike] = useMutation<createLikeRes, createLikeParams>(
     CREATE_LIKE,
     {
@@ -113,37 +132,6 @@ const ContentPage: React.FC = () => {
       getPost.refetch()
     },
   })
-  const getMyNewPostCount = useQuery<
-    getMyNewPostCount,
-    getMyNewPostCountParams
-  >(GET_MY_NEW_POST_COUNT, {
-    variables: { postType: 'Ask', postState: 'Submitted' },
-  })
-
-  const getUnreadNotiCount = useQuery<getUnreadNotiCount>(GET_UNREAD_NOTI_COUNT)
-  useEffect(() => {
-    getPost.refetch({
-      first: 10,
-      accountId: myAccount.data?.getMyAccountInfo.id,
-      postType: curPostType,
-      postState: 'Completed',
-    })
-    getMyNewPostCount.refetch({ postType: curPostType })
-    setStopFetchMore(false)
-    setGetPostFirstCnt(10)
-  }, [currentTabIdx, curPostType])
-
-  const router = useRouter()
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [selectedPostId, setSelectedPostId] = useState<string>()
-
-  const newPostCount = useMemo(() => {
-    if (getMyNewPostCount.data) {
-      return getMyNewPostCount.data?.getMyNewPostCount.postCount[0].count
-    } else {
-      return 0
-    }
-  }, [getMyNewPostCount])
   const onClickAnswerCard = useCallback(
     (postId, isMine) => {
       router.push({ pathname: '/answerDetail', query: { postId, isMine } })
@@ -184,6 +172,19 @@ const ContentPage: React.FC = () => {
   const onClickTabIndex = useCallback(async (index: number) => {
     updateCurTabIdx(index)
   }, [])
+
+  /** update getPost when changing tab */
+  useEffect(() => {
+    getPost.refetch({
+      first: 10,
+      accountId: myAccount.data?.getMyAccountInfo.id,
+      postType: curPostType,
+      postState: 'Completed',
+    })
+    getMyNewPostCount.refetch({ postType: curPostType })
+    setStopFetchMore(false)
+    setGetPostFirstCnt(10)
+  }, [currentTabIdx, curPostType])
 
   return (
     <div>
