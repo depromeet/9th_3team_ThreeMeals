@@ -24,7 +24,7 @@ const BookMarkListItem: React.FC<Props> = (props: Props) => {
 export default React.memo(BookMarkListItem)
 
 const Container = styled.div`
-  width: 343px;
+  min-width: 343px;
   height: 60px;
   background: #242424;
   box-shadow: 0px 6px 11px rgba(0, 0, 0, 0.04);
