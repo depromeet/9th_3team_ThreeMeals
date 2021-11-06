@@ -86,6 +86,10 @@ export const IMAGES = {
   icon_24_comment: require('../assets/images/icon_24_comment.png'),
 
   inputSend: require('../assets/images/inputSend.png'),
+
+  // BookMark //
+  bookmark: require('../assets/images/bookmark.png'),
+  bookmark_disabled: require('../assets/images/bookmark_disabled.png'),
 }
 
 export const HOME_ICONS: Record<number, string> = {
