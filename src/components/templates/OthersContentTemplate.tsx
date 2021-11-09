@@ -30,6 +30,7 @@ import {
   linkedPostId,
   updateLinkedPostId,
 } from '../../lib/localStore/notiLinkInfo'
+import BookMark from '../atoms/BookMark'
 
 interface Props {
   token?: string
@@ -285,6 +286,8 @@ const OthersContentTemplate = forwardRef<
       />
       <MainContainer>
         <ProfileContent
+          isMyProfile={false}
+          isFavoriteAccount={true}
           name={
             props.account?.getAccountInfo.nickname || '닉네임을 입력해주세요.'
           }
