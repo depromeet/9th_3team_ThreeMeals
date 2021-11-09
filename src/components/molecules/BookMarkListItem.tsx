@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { IMAGES } from '../../constants/images'
+import BookMark from '../atoms/BookMark'
 
 interface Props {
   profileImage: string
@@ -15,9 +15,7 @@ const BookMarkListItem: React.FC<Props> = (props: Props) => {
         <Image src={props.profileImage} />
         <Title>{props.title}</Title>
       </Content>
-      <BookMark
-        src={props.isMarked ? IMAGES.bookmark : IMAGES.bookmark_disabled}
-      />
+      <BookMark isMarked={props.isMarked} />
     </Container>
   )
 }
@@ -57,10 +55,4 @@ const Title = styled.div`
   opacity: 0.9;
 
   margin-left: 8px;
-`
-
-const BookMark = styled.img`
-  width: 24px;
-  height: 24px;
-  align-self: center;
 `
