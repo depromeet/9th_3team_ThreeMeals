@@ -7,6 +7,7 @@ import { initializeApollo } from '../../src/lib/apollo'
 import { GET_ACCOUNT_INFO } from '../../src/lib/queries/userQueries'
 import { GET_MY_PROFILE } from '../../src/lib/queries/meQueries'
 import { GET_POST } from '../../src/lib/queries/getPostQueries'
+import { GET_FAVORITES } from '../../src/lib/queries/getQueries'
 
 const OthersContent: React.FC = () => {
   return <OthersContentPage />
@@ -32,6 +33,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         postType: 'Ask',
         postState: 'Completed',
       },
+    })
+    await apolloClient.query({
+      query: GET_FAVORITES,
     })
   } catch (error) {
     console.error(error)

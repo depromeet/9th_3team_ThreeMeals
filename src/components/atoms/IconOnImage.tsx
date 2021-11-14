@@ -21,7 +21,6 @@ const avatarProps = {
 }
 
 const IconOnImage: React.FC<Props> = (props: Props) => {
-  console.log(props.curImage)
   return (
     <Container style={props.containerStyle}>
       {props.curImage !== null ? (

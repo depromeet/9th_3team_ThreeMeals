@@ -22,6 +22,9 @@ import QuizAnswerCard from '../organisms/QuizAnswerCard'
 import { SpacingText } from '../../utils/SpacingText'
 import Link from 'next/link'
 import { SVGS } from '../../constants/svgs'
+import BookMark from '../atoms/BookMark'
+import BookMarkListItem from '../molecules/BookMarkListItem'
+import { getFavorites } from '../../lib/queries/getQueries'
 
 /**
  * exist : 질문 한개라도 이미 답변 한 상태
@@ -35,6 +38,7 @@ interface Props {
   getUnreadNotiCount?: number
   newPostCount: number
   getPost?: getPost
+  getFavorites?: getFavorites
   myAccount?: getMyAccountInfo
   isProfile: boolean
   profileImage: string
@@ -46,6 +50,7 @@ interface Props {
   onClickWrite?: () => void
   onClickRemove: (id: string) => void
   onClickLike: (id: string, isLikeActive: boolean) => void
+  onClickCancelBookMark: (favoriteId: string) => void
 }
 
 const ContentTemplate = forwardRef<
@@ -77,6 +82,8 @@ const ContentTemplate = forwardRef<
       }
     }
   }, [props.getPost?.getPosts.edges])
+  const getFavoriteArr = props.getFavorites?.getFavorites
+
   const checkExistAskIsRequest = useCallback(
     () =>
       !postContent?.ask?.find(
@@ -104,20 +111,26 @@ const ContentTemplate = forwardRef<
       return 'request'
     } else return 'exist'
   }, [newPostCount, postContent])
+  const isExisBooktMark = useMemo(() => {
+    if (getFavoriteArr === undefined || getFavoriteArr.length === 0) {
+      return 'empty'
+    } else return 'exist'
+  }, [getFavoriteArr])
+
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
       case 0:
         return (
           <>
-            <Link href="/newSecretCard">
-              <NoticeContainer>
-                {isExistAsk === 'empty' ? (
-                  <img
-                    style={{ position: 'relative', bottom: 15, zIndex: -1 }}
-                    src={IMAGES.img_tape_empty}
-                    width={'100%'}
-                  />
-                ) : (
+            <NoticeContainer>
+              {isExistAsk === 'empty' ? (
+                <img
+                  style={{ position: 'relative', bottom: 15, zIndex: -1 }}
+                  src={IMAGES.img_tape_empty}
+                  width={'100%'}
+                />
+              ) : (
+                <Link href="/newSecretCard">
                   <>
                     <NoticeText>
                       <>
@@ -148,9 +161,10 @@ const ContentTemplate = forwardRef<
                       width={'100%'}
                     />
                   </>
-                )}
-              </NoticeContainer>
-            </Link>
+                </Link>
+              )}
+            </NoticeContainer>
+
             <ContentContainer>
               {isExistAsk === 'exist' ? (
                 postContent?.ask.map((data, index) => {
@@ -244,15 +258,15 @@ const ContentTemplate = forwardRef<
       case 2:
         return (
           <>
-            <Link href="/answerNewOX">
-              <NoticeContainer>
-                {newPostCount === 0 && !isExistOX ? (
-                  <img
-                    style={{ position: 'relative', bottom: 15, zIndex: -1 }}
-                    src={IMAGES.img_tape_empty}
-                    width={'100%'}
-                  />
-                ) : (
+            <NoticeContainer>
+              {isExistOX === 'empty' ? (
+                <img
+                  style={{ position: 'relative', bottom: 15, zIndex: -1 }}
+                  src={IMAGES.img_tape_empty}
+                  width={'100%'}
+                />
+              ) : (
+                <Link href="/answerNewOX">
                   <>
                     <NoticeText>
                       <img
@@ -281,11 +295,12 @@ const ContentTemplate = forwardRef<
                       width={'100%'}
                     />
                   </>
-                )}
-              </NoticeContainer>
-            </Link>
+                </Link>
+              )}
+            </NoticeContainer>
+
             <ContentContainer>
-              {isExistOX ? (
+              {isExistOX === 'exist' ? (
                 postContent?.quiz.map((content, index) => {
                   const quizAnswerCardComponent = (
                     <QuizAnswerCardContainer key={content.node.id}>
@@ -338,6 +353,48 @@ const ContentTemplate = forwardRef<
             </ContentContainer>
           </>
         )
+      case 3:
+        return (
+          <>
+            <ContentContainer>
+              {isExisBooktMark === 'exist' ? (
+                getFavoriteArr?.map((favoriteInfo, index) => {
+                  const bookMarkComponent = (
+                    <BookMarkItemContainer>
+                      <BookMarkListItem
+                        onClickCancelBookMark={props.onClickCancelBookMark}
+                        key={favoriteInfo.id}
+                        accountId={favoriteInfo.favoriteAccount.id}
+                        title={favoriteInfo.favoriteAccount.nickname}
+                        profileImage={favoriteInfo.favoriteAccount.profileUrl}
+                        isMarked={true}
+                      />
+                    </BookMarkItemContainer>
+                  )
+                  const isLastPost = index === getFavoriteArr.length - 1
+                  return isLastPost ? (
+                    <div
+                      ref={ref as RefObject<HTMLDivElement>}
+                      key={favoriteInfo.id}
+                    >
+                      {bookMarkComponent}
+                    </div>
+                  ) : (
+                    bookMarkComponent
+                  )
+                })
+              ) : (
+                <>
+                  {isExisBooktMark === 'empty' && (
+                    <EmptyContainer>
+                      아직 즐겨찾기한 친구가 없어요!
+                    </EmptyContainer>
+                  )}
+                </>
+              )}
+            </ContentContainer>
+          </>
+        )
       default:
         break
     }
@@ -345,13 +402,15 @@ const ContentTemplate = forwardRef<
     tabIndex,
     isExistAsk,
     newPostCount,
-    postContent?.ask,
-    postContent?.quiz,
+    postContent,
     isExistOX,
+    isExisBooktMark,
+    getFavoriteArr,
     onClickNewSecretCard,
     ref,
     onClickRemove,
     onClickLike,
+    props.onClickCancelBookMark,
   ])
 
   const profileImage = useMemo(() => {
@@ -381,6 +440,7 @@ const ContentTemplate = forwardRef<
       />
       <MainContainer>
         <ProfileContent
+          isMyProfile
           name={
             props.myAccount?.getMyAccountInfo.nickname ||
             '닉네임을 입력해주세요.'
@@ -399,9 +459,59 @@ const ContentTemplate = forwardRef<
           snsInfos={props.myAccount?.getMyAccountInfo.snsInfos}
         />
         <TabContainer>
-          <Tab
+          <TabContentContainer>
+            <Tab
+              style={
+                props.tabIndex === 0
+                  ? {
+                      borderBottom: 1,
+                      borderColor: 'white',
+                      borderStyle: 'solid',
+                    }
+                  : undefined
+              }
+              onClick={() => {
+                props.onClickTabIndex(0)
+              }}
+            >
+              물어봐
+            </Tab>
+            <Tab
+              style={
+                props.tabIndex === 2
+                  ? {
+                      borderBottom: 1,
+                      borderColor: 'white',
+                      borderStyle: 'solid',
+                    }
+                  : undefined
+              }
+              onClick={() => {
+                props.onClickTabIndex(2)
+              }}
+            >
+              OX퀴즈
+            </Tab>
+            <Tab
+              style={
+                props.tabIndex === 1
+                  ? {
+                      borderBottom: 1,
+                      borderColor: 'white',
+                      borderStyle: 'solid',
+                    }
+                  : undefined
+              }
+              onClick={() => {
+                props.onClickTabIndex(1)
+              }}
+            >
+              <TobeContinueTitle>답해줘</TobeContinueTitle>
+            </Tab>
+          </TabContentContainer>
+          <TabBookMarkContainer
             style={
-              props.tabIndex === 0
+              props.tabIndex === 3
                 ? {
                     borderBottom: 1,
                     borderColor: 'white',
@@ -410,43 +520,11 @@ const ContentTemplate = forwardRef<
                 : undefined
             }
             onClick={() => {
-              props.onClickTabIndex(0)
+              props.onClickTabIndex(3)
             }}
           >
-            물어봐
-          </Tab>
-          <Tab
-            style={
-              props.tabIndex === 2
-                ? {
-                    borderBottom: 1,
-                    borderColor: 'white',
-                    borderStyle: 'solid',
-                  }
-                : undefined
-            }
-            onClick={() => {
-              props.onClickTabIndex(2)
-            }}
-          >
-            OX퀴즈
-          </Tab>
-          <Tab
-            style={
-              props.tabIndex === 1
-                ? {
-                    borderBottom: 1,
-                    borderColor: 'white',
-                    borderStyle: 'solid',
-                  }
-                : undefined
-            }
-            onClick={() => {
-              props.onClickTabIndex(1)
-            }}
-          >
-            <TobeContinueTitle>답해줘</TobeContinueTitle>
-          </Tab>
+            <BookMark isMarked={props.tabIndex === 3} />
+          </TabBookMarkContainer>
         </TabContainer>
         <DefaultLine
           containerStyle={{ position: 'relative', bottom: 8, zIndex: -1 }}
@@ -486,9 +564,24 @@ const MainContainer = styled.div`
 
 const TabContainer = styled.div`
   display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+`
+
+const TabContentContainer = styled.div`
+  display: flex;
   flex-direction: row;
   margin-top: 24px;
   margin-bottom: 7px;
+`
+const TabBookMarkContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: 24px;
+  margin-bottom: 7px;
+  margin-right: 1rem;
+  padding-bottom: 7px;
+  cursor: pointer;
 `
 
 const Tab = styled.div`
@@ -606,4 +699,9 @@ const TobeContinueContainer = styled.div`
 
 const TobeContinueTitle = styled.div`
   opacity: 0.3;
+`
+
+const BookMarkItemContainer = styled.div`
+  width: 100%;
+  padding: 0.5rem 1rem;
 `

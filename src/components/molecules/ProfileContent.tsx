@@ -1,20 +1,37 @@
 import * as React from 'react'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 import { SnsInfo } from '../../lib/queries/meQueries'
+import BookMark from '../atoms/BookMark'
 import Tag from '../atoms/Tag'
 
 interface Props {
+  isMyProfile: boolean
   name: string
   desc: string
   url: string
   urlName: string
   snsInfos: SnsInfo[] | undefined
+  isFavoriteAccount?: boolean
+  onClickBookMark?: (isBookMarkActive: boolean | undefined) => void
 }
 
 const ProfileContent: React.FC<Props> = (props: Props) => {
+  const onClickBookMark = useCallback(
+    () =>
+      props.onClickBookMark && props.onClickBookMark(props.isFavoriteAccount),
+    [props]
+  )
   return (
     <Container>
-      <NameText>{props.name}</NameText>
+      <NameText>
+        {!props.isMyProfile && (
+          <BookMarkContainer onClick={onClickBookMark}>
+            <BookMark isMarked={props.isFavoriteAccount} />
+          </BookMarkContainer>
+        )}
+        {props.name}
+      </NameText>
       <DescText>{props.desc}</DescText>
       <ProfileInfoContainer>
         {props.snsInfos &&
@@ -42,8 +59,14 @@ const Container = styled.div`
   padding-left: 24px;
   padding-right: 24px;
 `
-
+const BookMarkContainer = styled.div`
+  display: flex;
+  cursor: pointer;
+  align-self: center;
+`
 const NameText = styled.div`
+  display: flex;
+  gap: 0.2rem;
   font-style: normal;
   font-weight: normal;
   font-size: 22px;

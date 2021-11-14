@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 import { BackColor } from '../../types/types'
 import { Vector2d } from 'konva/lib/types'
+import { AccountResType } from './meQueries'
 
 interface createPostEmoticonInfo {
   emoticonId: string | undefined
@@ -33,6 +34,19 @@ export interface DeleteLikePostsParams {
   postId: string
 }
 
+export interface createLikeCommentParams {
+  postId: string
+  commentId: string
+}
+
+export interface createLikeParams {
+  postId: string
+}
+
+export interface CreateFavoriteParams {
+  favoriteAccountId: string
+}
+
 // response Types //
 
 export interface CreatePostRes {
@@ -49,6 +63,23 @@ export interface CreateCommentRes {
 export interface CreatLikePostsRes {
   id: string
   createdAt: string
+}
+
+export interface createLikeRes {
+  id: string
+  createAt: string
+}
+
+export interface createLikeCommentRes {
+  message: string
+}
+
+export interface CreateFavoriteRes {
+  id: string
+  account: AccountResType
+  favoriteAccount: AccountResType
+  createdAt: string
+  updatedAt: string
 }
 
 // mutation //
@@ -100,15 +131,6 @@ export const CREATE_COMMENT = gql`
   }
 `
 
-export interface createLikeParams {
-  postId: string
-}
-
-export interface createLikeRes {
-  id: string
-  createAt: string
-}
-
 export const CREATE_LIKE = gql`
   mutation createLikePosts($postId: String!) {
     createLikePosts(postId: $postId) {
@@ -117,19 +139,23 @@ export const CREATE_LIKE = gql`
     }
   }
 `
-export interface createLikeCommentParams {
-  postId: string
-  commentId: string
-}
-
-export interface createLikeCommentRes {
-  message: string
-}
 
 export const CREATE_LIKE_COMMENT = gql`
   mutation createLikeComments($postId: String!, $commentId: String!) {
     createLikeComments(postId: $postId, commentId: $commentId) {
       message
+    }
+  }
+`
+
+export const CREATE_FAVORITE = gql`
+  mutation createFavorite($favoriteAccountId: String!) {
+    createFavorite(favoriteAccountId: $favoriteAccountId) {
+      id
+      favoriteAccount {
+        id
+        nickname
+      }
     }
   }
 `

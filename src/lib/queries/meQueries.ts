@@ -1,15 +1,17 @@
 import { gql } from '@apollo/client'
 
+export interface AccountResType {
+  id: string
+  nickname: string
+  status: string
+  image: string
+  content: string
+  profileUrl: string
+  snsInfos: SnsInfo[]
+}
+
 export interface getMyAccountInfo {
-  getMyAccountInfo: {
-    id: string
-    nickname: string
-    status: string
-    image: string
-    content: string
-    profileUrl: string
-    snsInfos: SnsInfo[]
-  }
+  getMyAccountInfo: AccountResType
 }
 
 export interface SnsInfo {
