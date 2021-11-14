@@ -34,9 +34,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         postState: 'Completed',
       },
     })
-    await apolloClient.query({
-      query: GET_FAVORITES,
-    })
+    // await apolloClient.query({
+    //   query: GET_FAVORITES,
+    // })
   } catch (error) {
     console.error(error)
     return {
