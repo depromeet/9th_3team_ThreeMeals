@@ -42,13 +42,6 @@ const NewSecretCardPage: React.FC = () => {
     variables: { postType: 'Ask', postState: 'Submitted' },
   })
 
-  const { data: postData } = useQuery<getPostById, getPostByIdParams>(
-    GET_POST_BY_ID,
-    {
-      variables: { postId: '12' },
-    }
-  )
-  console.log('postData', postData)
   const [create_comment] = useMutation<
     CreateCommentAskResponse,
     CreateCommentAskParams
