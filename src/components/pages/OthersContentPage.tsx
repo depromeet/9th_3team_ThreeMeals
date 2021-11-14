@@ -1,4 +1,4 @@
-import { useQuery, useReactiveVar } from '@apollo/client'
+import { useMutation, useQuery, useReactiveVar } from '@apollo/client'
 import { useRouter } from 'next/router'
 import React, {
   Dispatch,
@@ -7,6 +7,7 @@ import React, {
   SetStateAction,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from 'react'
 import styled from 'styled-components'
@@ -19,7 +20,9 @@ import {
   getPost,
 } from '../../lib/queries/getPostQueries'
 import {
+  getFavorites,
   getUnreadNotiCount,
+  GET_FAVORITES,
   GET_UNREAD_NOTI_COUNT,
 } from '../../lib/queries/getQueries'
 import jsCookies from 'js-cookie'
@@ -29,6 +32,16 @@ import { curTabIdx } from '../../lib/localStore/contentTabIndex'
 import checkCurPostType from '../../utils/checkCurPostType'
 import useIntersect from '../../hooks/useIntersect'
 import { linkedPostId } from '../../lib/localStore/notiLinkInfo'
+import {
+  CreateFavoriteParams,
+  CreateFavoriteRes,
+  CREATE_FAVORITE,
+} from '../../lib/queries/createQueries'
+import {
+  CancelFavoriteRes,
+  CancelFavoriteParams,
+  CANCEL_FAVORITE,
+} from '../../lib/queries/deleteQueries'
 
 const OthersContentPage: React.FC = () => {
   const router = useRouter()
@@ -55,6 +68,59 @@ const OthersContentPage: React.FC = () => {
       setLastPostId(data.getPosts.pageInfo.endCursor)
     },
   })
+  const getFavorite = useQuery<getFavorites>(GET_FAVORITES)
+
+  const isFavoriteAccount = useMemo(() => {
+    if (
+      getFavorite.data?.getFavorites.find(
+        (favoriteData) => favoriteData.favoriteAccount.id === id
+      )
+    )
+      return true
+
+    return false
+  }, [getFavorite.data, id])
+
+  const [createFavorite] = useMutation<CreateFavoriteRes, CreateFavoriteParams>(
+    CREATE_FAVORITE,
+    {
+      onCompleted: () => {
+        getFavorite.refetch()
+      },
+    }
+  )
+
+  const [cancelFavorite] = useMutation<CancelFavoriteRes, CancelFavoriteParams>(
+    CANCEL_FAVORITE,
+    {
+      onCompleted: () => {
+        getFavorite.refetch()
+      },
+    }
+  )
+
+  const onClickAnswerCard = useCallback(
+    (postId) => {
+      router.push({ pathname: '/answerDetail', query: { postId } })
+    },
+    [router]
+  )
+  const onClickTabIndex = useCallback(async (index: number) => {
+    updateCurTabIdx(index)
+  }, [])
+
+  const onClickBookMark = useCallback(
+    (isBookMarkActive: boolean | undefined) => {
+      if (typeof id === 'string') {
+        if (!isBookMarkActive) {
+          createFavorite({ variables: { favoriteAccountId: id } })
+        } else {
+          cancelFavorite({ variables: { favoriteAccountId: id } })
+        }
+      }
+    },
+    [cancelFavorite, createFavorite, id]
+  )
 
   /** intersection observer for infinite scroll */
   const [, setIntersectRef] = useIntersect({
@@ -77,16 +143,6 @@ const OthersContentPage: React.FC = () => {
     option: { threshold: 0.2 },
     stopFetchMore,
   })
-
-  const onClickAnswerCard = useCallback(
-    (postId) => {
-      router.push({ pathname: '/answerDetail', query: { postId } })
-    },
-    [router]
-  )
-  const onClickTabIndex = useCallback(async (index: number) => {
-    updateCurTabIdx(index)
-  }, [])
 
   /** update getPost when changing tab */
   useEffect(() => {
@@ -146,11 +202,13 @@ const OthersContentPage: React.FC = () => {
           account={account.data}
           getUnreadNotiCount={getUnreadNotiCount.data?.getUnreadNotiCount.count}
           profileImage={IMAGES.background}
+          isFavoriteAccount={isFavoriteAccount}
           onClickSecondRight={() => {
             router.push('/notification')
           }}
           onClickAnswerCard={onClickAnswerCard}
           onClickTabIndex={onClickTabIndex}
+          onClickBookMark={onClickBookMark}
           ref={
             setIntersectRef as Ref<
               Dispatch<SetStateAction<RefObject<HTMLDivElement | null> | null>>

@@ -1,21 +1,39 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import BookMark from '../atoms/BookMark'
-
+import EmptyProfileImg from '../atoms/EmptyProfileImg'
+import Link from 'next/link'
+import { useCallback } from 'react'
 interface Props {
-  profileImage: string
+  profileImage: string | null
+  accountId: string
   title?: string
   isMarked?: boolean
+  onClickCancelBookMark: (favoriteId: string) => void
 }
 
 const BookMarkListItem: React.FC<Props> = (props: Props) => {
+  const linkUrl = `/otherscontent/${props.accountId}`
+  const onClickCancelBookMark = useCallback(
+    () => props.onClickCancelBookMark(props.accountId),
+    [props]
+  )
   return (
     <Container>
-      <Content>
-        <Image src={props.profileImage} />
-        <Title>{props.title}</Title>
-      </Content>
-      <BookMark isMarked={props.isMarked} />
+      <Link href={linkUrl}>
+        <Content>
+          {props.profileImage ? (
+            <Image src={props.profileImage} />
+          ) : (
+            <EmptyProfileImg size="2rem" />
+          )}
+
+          <Title>{props.title}</Title>
+        </Content>
+      </Link>
+      <BookMarkContainer onClick={onClickCancelBookMark}>
+        <BookMark isMarked={props.isMarked} />
+      </BookMarkContainer>
     </Container>
   )
 }
@@ -38,6 +56,7 @@ const Container = styled.div`
 const Content = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
 `
 const Image = styled.img`
   width: 40px;
@@ -55,4 +74,8 @@ const Title = styled.div`
   opacity: 0.9;
 
   margin-left: 8px;
+`
+
+const BookMarkContainer = styled.div`
+  cursor: pointer;
 `

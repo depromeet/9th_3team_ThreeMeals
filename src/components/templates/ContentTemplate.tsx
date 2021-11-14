@@ -24,6 +24,7 @@ import Link from 'next/link'
 import { SVGS } from '../../constants/svgs'
 import BookMark from '../atoms/BookMark'
 import BookMarkListItem from '../molecules/BookMarkListItem'
+import { getFavorites } from '../../lib/queries/getQueries'
 
 /**
  * exist : 질문 한개라도 이미 답변 한 상태
@@ -37,6 +38,7 @@ interface Props {
   getUnreadNotiCount?: number
   newPostCount: number
   getPost?: getPost
+  getFavorites?: getFavorites
   myAccount?: getMyAccountInfo
   isProfile: boolean
   profileImage: string
@@ -48,6 +50,7 @@ interface Props {
   onClickWrite?: () => void
   onClickRemove: (id: string) => void
   onClickLike: (id: string, isLikeActive: boolean) => void
+  onClickCancelBookMark: (favoriteId: string) => void
 }
 
 const ContentTemplate = forwardRef<
@@ -79,10 +82,8 @@ const ContentTemplate = forwardRef<
       }
     }
   }, [props.getPost?.getPosts.edges])
-  const favorites = [
-    { id: '1', account: '12', favoriteAccount: '23' },
-    { id: '2', account: '132', favoriteAccount: '223' },
-  ]
+  const getFavoriteArr = props.getFavorites?.getFavorites
+
   const checkExistAskIsRequest = useCallback(
     () =>
       !postContent?.ask?.find(
@@ -110,11 +111,11 @@ const ContentTemplate = forwardRef<
       return 'request'
     } else return 'exist'
   }, [newPostCount, postContent])
-  const isExistMark = useMemo(() => {
-    if (favorites === undefined) {
+  const isExisBooktMark = useMemo(() => {
+    if (getFavoriteArr === undefined || getFavoriteArr.length === 0) {
       return 'empty'
     } else return 'exist'
-  }, [favorites])
+  }, [getFavoriteArr])
 
   const ContentView = useMemo((): ReactElement | undefined => {
     switch (tabIndex) {
@@ -356,36 +357,35 @@ const ContentTemplate = forwardRef<
         return (
           <>
             <ContentContainer>
-              {isExistMark === 'exist' ? (
-                favorites.map((content, index) => {
-                  const linkUrl = `/otherscontent/${27}`
-                  const favoritesList = (
-                    <Link href={linkUrl}>
-                      <BookMarkItemContainer>
-                        <BookMarkListItem
-                          key={content.id}
-                          title={'가나다'}
-                          profileImage={IMAGES.sticker_food_bread}
-                          isMarked={true}
-                        />
-                      </BookMarkItemContainer>
-                    </Link>
+              {isExisBooktMark === 'exist' ? (
+                getFavoriteArr?.map((favoriteInfo, index) => {
+                  const bookMarkComponent = (
+                    <BookMarkItemContainer>
+                      <BookMarkListItem
+                        onClickCancelBookMark={props.onClickCancelBookMark}
+                        key={favoriteInfo.id}
+                        accountId={favoriteInfo.favoriteAccount.id}
+                        title={favoriteInfo.favoriteAccount.nickname}
+                        profileImage={favoriteInfo.favoriteAccount.profileUrl}
+                        isMarked={true}
+                      />
+                    </BookMarkItemContainer>
                   )
-                  const isLastPost = index === favorites.length - 1
+                  const isLastPost = index === getFavoriteArr.length - 1
                   return isLastPost ? (
                     <div
                       ref={ref as RefObject<HTMLDivElement>}
-                      key={content.id}
+                      key={favoriteInfo.id}
                     >
-                      {favoritesList}
+                      {bookMarkComponent}
                     </div>
                   ) : (
-                    favoritesList
+                    bookMarkComponent
                   )
                 })
               ) : (
                 <>
-                  {isExistMark === 'empty' && (
+                  {isExisBooktMark === 'empty' && (
                     <EmptyContainer>
                       아직 즐겨찾기한 친구가 없어요!
                     </EmptyContainer>
@@ -402,15 +402,15 @@ const ContentTemplate = forwardRef<
     tabIndex,
     isExistAsk,
     newPostCount,
-    postContent?.ask,
-    postContent?.quiz,
+    postContent,
     isExistOX,
-    isExistMark,
-    favorites,
+    isExisBooktMark,
+    getFavoriteArr,
     onClickNewSecretCard,
     ref,
     onClickRemove,
     onClickLike,
+    props.onClickCancelBookMark,
   ])
 
   const profileImage = useMemo(() => {
@@ -704,5 +704,4 @@ const TobeContinueTitle = styled.div`
 const BookMarkItemContainer = styled.div`
   width: 100%;
   padding: 0.5rem 1rem;
-  cursor: pointer;
 `

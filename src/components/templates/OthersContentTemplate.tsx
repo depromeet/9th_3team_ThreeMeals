@@ -30,7 +30,6 @@ import {
   linkedPostId,
   updateLinkedPostId,
 } from '../../lib/localStore/notiLinkInfo'
-import BookMark from '../atoms/BookMark'
 
 interface Props {
   token?: string
@@ -39,10 +38,12 @@ interface Props {
   myAccount?: getMyAccountInfo
   account?: getAccountInfo
   profileImage: string
+  isFavoriteAccount: boolean
   onClickTabIndex: (index: number) => void
   onClickLeft?: () => void
   onClickAnswerCard: (postId: string) => void
   onClickSecondRight?: () => void
+  onClickBookMark: (isBookMarkActive: boolean | undefined) => void
 }
 
 const OthersContentTemplate = forwardRef<
@@ -287,7 +288,7 @@ const OthersContentTemplate = forwardRef<
       <MainContainer>
         <ProfileContent
           isMyProfile={false}
-          isFavoriteAccount={true}
+          isFavoriteAccount={props.isFavoriteAccount}
           name={
             props.account?.getAccountInfo.nickname || '닉네임을 입력해주세요.'
           }
@@ -301,6 +302,7 @@ const OthersContentTemplate = forwardRef<
               : ''
           }
           snsInfos={props.account?.getAccountInfo.snsInfos}
+          onClickBookMark={props.onClickBookMark}
         />
         <TabContainer>
           <Tab

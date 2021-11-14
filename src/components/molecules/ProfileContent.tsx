@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 import { SnsInfo } from '../../lib/queries/meQueries'
 import BookMark from '../atoms/BookMark'
@@ -12,14 +13,20 @@ interface Props {
   urlName: string
   snsInfos: SnsInfo[] | undefined
   isFavoriteAccount?: boolean
+  onClickBookMark?: (isBookMarkActive: boolean | undefined) => void
 }
 
 const ProfileContent: React.FC<Props> = (props: Props) => {
+  const onClickBookMark = useCallback(
+    () =>
+      props.onClickBookMark && props.onClickBookMark(props.isFavoriteAccount),
+    [props]
+  )
   return (
     <Container>
       <NameText>
         {!props.isMyProfile && (
-          <BookMarkContainer>
+          <BookMarkContainer onClick={onClickBookMark}>
             <BookMark isMarked={props.isFavoriteAccount} />
           </BookMarkContainer>
         )}

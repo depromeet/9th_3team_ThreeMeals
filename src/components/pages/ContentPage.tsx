@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router'
-import jsCookies from 'js-cookie'
 import {
   Dispatch,
   Ref,
@@ -21,6 +20,9 @@ import {
   deleteLikeRes,
   deleteLikeParams,
   DELETE_LIKE,
+  CancelFavoriteParams,
+  CancelFavoriteRes,
+  CANCEL_FAVORITE,
 } from '../../lib/queries/deleteQueries'
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client'
 import {
@@ -33,7 +35,9 @@ import {
 } from '../../lib/queries/getPostQueries'
 import { DELETE_POST } from '../../lib/queries/deleteQueries'
 import {
+  getFavorites,
   getUnreadNotiCount,
+  GET_FAVORITES,
   GET_UNREAD_NOTI_COUNT,
 } from '../../lib/queries/getQueries'
 import {
@@ -77,7 +81,7 @@ const ContentPage: React.FC = () => {
   })
 
   const getUnreadNotiCount = useQuery<getUnreadNotiCount>(GET_UNREAD_NOTI_COUNT)
-
+  const getFavorite = useQuery<getFavorites>(GET_FAVORITES)
   const newPostCount = useMemo(() => {
     if (getMyNewPostCount.data) {
       return getMyNewPostCount.data?.getMyNewPostCount.postCount[0].count
@@ -121,6 +125,15 @@ const ContentPage: React.FC = () => {
     {
       onCompleted: () => {
         getPost.refetch()
+      },
+    }
+  )
+
+  const [cancelFavorite] = useMutation<CancelFavoriteRes, CancelFavoriteParams>(
+    CANCEL_FAVORITE,
+    {
+      onCompleted: () => {
+        getFavorite.refetch()
       },
     }
   )
@@ -172,18 +185,25 @@ const ContentPage: React.FC = () => {
   const onClickTabIndex = useCallback(async (index: number) => {
     updateCurTabIdx(index)
   }, [])
-
+  const onClickCancelBookMark = useCallback(
+    (favoriteId: string) => {
+      cancelFavorite({ variables: { favoriteAccountId: favoriteId } })
+    },
+    [cancelFavorite]
+  )
   /** update getPost when changing tab */
   useEffect(() => {
-    getPost.refetch({
-      first: 10,
-      accountId: myAccount.data?.getMyAccountInfo.id,
-      postType: curPostType,
-      postState: 'Completed',
-    })
-    getMyNewPostCount.refetch({ postType: curPostType })
+    if (currentTabIdx !== 3) {
+      getPost.refetch({
+        first: 10,
+        accountId: myAccount.data?.getMyAccountInfo.id,
+        postType: curPostType,
+        postState: 'Completed',
+      })
+      getMyNewPostCount.refetch({ postType: curPostType })
+      setGetPostFirstCnt(10)
+    }
     setStopFetchMore(false)
-    setGetPostFirstCnt(10)
   }, [currentTabIdx, curPostType])
 
   return (
@@ -194,6 +214,7 @@ const ContentPage: React.FC = () => {
           getUnreadNotiCount={getUnreadNotiCount.data?.getUnreadNotiCount.count}
           newPostCount={newPostCount}
           getPost={getPost.data}
+          getFavorites={getFavorite.data}
           myAccount={myAccount.data}
           isProfile={true}
           profileImage={IMAGES.background}
@@ -218,6 +239,7 @@ const ContentPage: React.FC = () => {
           onClickWrite={onClickWrite}
           onClickRemove={onClickRemove}
           onClickLike={onClickLike}
+          onClickCancelBookMark={onClickCancelBookMark}
           ref={
             setIntersectRef as Ref<
               Dispatch<SetStateAction<RefObject<HTMLDivElement | null> | null>>
