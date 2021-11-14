@@ -1,3 +1,4 @@
+import { AccountResType } from './meQueries'
 import { StickerInfo } from './../../types/types'
 import { gql } from '@apollo/client'
 
@@ -40,10 +41,23 @@ export interface GetNotification {
 export interface GetAllNotification {
   getNotifications: GetNotification[]
 }
+
 export interface getUnreadNotiCount {
   getUnreadNotiCount: {
     count: number
   }
+}
+
+export interface getFavorite {
+  id: string
+  account: AccountResType
+  favoriteAccount: AccountResType
+  createdAt: string
+  updatedAt: string
+}
+
+export interface getFavorites {
+  getFavorites: getFavorite[]
 }
 
 export const GET_ALL_EMOTICONS = gql`
@@ -80,6 +94,19 @@ export const GET_UNREAD_NOTI_COUNT = gql`
   query {
     getUnreadNotiCount {
       count
+    }
+  }
+`
+export const GET_FAVORITES = gql`
+  query {
+    getFavorites {
+      id
+
+      favoriteAccount {
+        id
+        nickname
+        profileUrl
+      }
     }
   }
 `

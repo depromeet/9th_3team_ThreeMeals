@@ -8,7 +8,10 @@ import {
   GET_MY_NEW_POST_COUNT,
   GET_POST,
 } from '../src/lib/queries/getPostQueries'
-import { GET_UNREAD_NOTI_COUNT } from '../src/lib/queries/getQueries'
+import {
+  GET_FAVORITES,
+  GET_UNREAD_NOTI_COUNT,
+} from '../src/lib/queries/getQueries'
 
 const Content: React.FC = () => {
   return <ContentPage />
@@ -59,6 +62,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     })
     await apolloClient.query({
       query: GET_UNREAD_NOTI_COUNT,
+    })
+    await apolloClient.query({
+      query: GET_FAVORITES,
     })
   } catch (error) {
     console.error('get query Error:', error)

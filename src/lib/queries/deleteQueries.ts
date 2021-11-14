@@ -56,3 +56,15 @@ export const DELETE_LIKE_COMMENT = gql`
     }
   }
 `
+
+export interface CancelFavoriteParams {
+  favoriteAccountId: string
+}
+
+export type CancelFavoriteRes = boolean
+
+export const CANCEL_FAVORITE = gql`
+  mutation cancelFavorite($favoriteAccountId: String!) {
+    cancelFavorite(favoriteAccountId: $favoriteAccountId)
+  }
+`
