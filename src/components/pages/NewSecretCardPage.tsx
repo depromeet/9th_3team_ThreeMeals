@@ -13,9 +13,6 @@ import {
   getPostParams,
   GET_POST,
   GET_MY_NEW_POST_COUNT,
-  getPostById,
-  getPostByIdParams,
-  GET_POST_BY_ID,
 } from '../../lib/queries/getPostQueries'
 import {
   CREATE_COMMENT_ASK,
