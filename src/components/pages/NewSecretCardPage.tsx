@@ -13,6 +13,9 @@ import {
   getPostParams,
   GET_POST,
   GET_MY_NEW_POST_COUNT,
+  getPostById,
+  getPostByIdParams,
+  GET_POST_BY_ID,
 } from '../../lib/queries/getPostQueries'
 import {
   CREATE_COMMENT_ASK,
@@ -39,10 +42,17 @@ const NewSecretCardPage: React.FC = () => {
     variables: { postType: 'Ask', postState: 'Submitted' },
   })
 
-  const [create_comment] =
-    useMutation<CreateCommentAskResponse, CreateCommentAskParams>(
-      CREATE_COMMENT_ASK
-    )
+  const { data: postData } = useQuery<getPostById, getPostByIdParams>(
+    GET_POST_BY_ID,
+    {
+      variables: { postId: '12' },
+    }
+  )
+  console.log('postData', postData)
+  const [create_comment] = useMutation<
+    CreateCommentAskResponse,
+    CreateCommentAskParams
+  >(CREATE_COMMENT_ASK)
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
