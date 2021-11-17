@@ -63,9 +63,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     await apolloClient.query({
       query: GET_UNREAD_NOTI_COUNT,
     })
-    // await apolloClient.query({
-    //   query: GET_FAVORITES,
-    // })
+    await apolloClient.query({
+      query: GET_FAVORITES,
+    })
   } catch (error) {
     console.error('get query Error:', error)
 
