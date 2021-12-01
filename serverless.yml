@@ -2,7 +2,7 @@
 appEnv: ${env.APP_ENV}
 distributionId: ${env.DISTRIBUTION_ID}
 hush:
-  component: '@sls-next/serverless-component@1.19.0'
+  component: '@sls-next/serverless-component@3.6.0'
   inputs:
     name:
       defaultLambda: "hush-it-${appEnv}-front-default"
