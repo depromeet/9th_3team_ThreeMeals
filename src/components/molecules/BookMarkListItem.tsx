@@ -57,10 +57,12 @@ const Content = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
+  flex: auto;
 `
 const Image = styled.img`
   width: 40px;
   height: 40px;
+  border-radius: 50%;
 `
 
 const Title = styled.div`

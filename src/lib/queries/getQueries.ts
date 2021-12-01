@@ -105,7 +105,7 @@ export const GET_FAVORITES = gql`
       favoriteAccount {
         id
         nickname
-        profileUrl
+        image
       }
     }
   }

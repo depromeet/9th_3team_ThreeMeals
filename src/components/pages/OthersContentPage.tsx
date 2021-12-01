@@ -192,6 +192,13 @@ const OthersContentPage: React.FC = () => {
     }
   }, [getPost.data])
 
+  /** check whether curIdx is on bookmark */
+  useEffect(() => {
+    if (currentTabIdx === 3) {
+      updateCurTabIdx(0)
+    }
+  }, [currentTabIdx])
+
   return (
     <>
       <AppContainer>

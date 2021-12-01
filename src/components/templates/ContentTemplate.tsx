@@ -366,7 +366,7 @@ const ContentTemplate = forwardRef<
                         key={favoriteInfo.id}
                         accountId={favoriteInfo.favoriteAccount.id}
                         title={favoriteInfo.favoriteAccount.nickname}
-                        profileImage={favoriteInfo.favoriteAccount.profileUrl}
+                        profileImage={favoriteInfo.favoriteAccount.image}
                         isMarked={true}
                       />
                     </BookMarkItemContainer>

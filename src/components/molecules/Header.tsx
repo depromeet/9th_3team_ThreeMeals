@@ -47,6 +47,7 @@ const Header: React.FC<Props> = (props: Props) => {
       })
     }
   }, [props.isLogin, router])
+
   return (
     <>
       <Container>
