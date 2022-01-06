@@ -1,8 +1,5 @@
 import OthersContentPage from '../../src/components/pages/OthersContentPage'
 import { GetServerSideProps } from 'next'
-import cookies from 'next-cookies'
-import _isEmpty from 'lodash-es/isEmpty'
-import { useRouter } from 'next/router'
 import { initializeApollo } from '../../src/lib/apollo'
 import { GET_ACCOUNT_INFO } from '../../src/lib/queries/userQueries'
 import { GET_MY_PROFILE } from '../../src/lib/queries/meQueries'
@@ -34,9 +31,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         postState: 'Completed',
       },
     })
-    await apolloClient.query({
-      query: GET_FAVORITES,
-    })
   } catch (error) {
     console.error(error)
     return {
@@ -49,6 +43,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
   try {
     const myData = await apolloClient.query({ query: GET_MY_PROFILE })
+    if (myData) {
+      await apolloClient.query({
+        query: GET_FAVORITES,
+      })
+    }
     if (myData.data.getMyAccountInfo.id === id) {
       return {
         props: {},

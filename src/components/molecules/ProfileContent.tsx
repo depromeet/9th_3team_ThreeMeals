@@ -1,7 +1,12 @@
+import { useQuery } from '@apollo/client'
 import * as React from 'react'
 import { useCallback } from 'react'
 import styled from 'styled-components'
-import { SnsInfo } from '../../lib/queries/meQueries'
+import {
+  getMyAccountInfo,
+  GET_MY_PROFILE,
+  SnsInfo,
+} from '../../lib/queries/meQueries'
 import BookMark from '../atoms/BookMark'
 import Tag from '../atoms/Tag'
 
@@ -17,11 +22,16 @@ interface Props {
 }
 
 const ProfileContent: React.FC<Props> = (props: Props) => {
-  const onClickBookMark = useCallback(
-    () =>
-      props.onClickBookMark && props.onClickBookMark(props.isFavoriteAccount),
-    [props]
-  )
+  const myAccount = useQuery<getMyAccountInfo>(GET_MY_PROFILE)
+  const onClickBookMark = useCallback(() => {
+    if (myAccount.data) {
+      props.onClickBookMark && props.onClickBookMark(props.isFavoriteAccount)
+    } else {
+      window.Kakao.Auth.authorize({
+        redirectUri: `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/auth`,
+      })
+    }
+  }, [myAccount, props])
   return (
     <Container>
       <NameText>
