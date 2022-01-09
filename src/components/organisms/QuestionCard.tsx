@@ -249,18 +249,19 @@ const StyledLabelCardHeader = styled(LabelCardHeader)`
   width: 100%;
   top: 16px;
   left: -14px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `
 
 const QuestionTitle = styled.div`
   text-align: initial;
   font-style: normal;
   font-weight: 500;
-  font-size: 24px;
-  line-height: 32px;
+  font-size: 23px;
+  line-height: 28px;
   letter-spacing: -0.02em;
   color: #000000;
   overflow: hidden;
+  flex: 1;
   .simplebar-content {
     word-break: break-all;
   }
