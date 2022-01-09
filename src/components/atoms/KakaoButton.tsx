@@ -12,6 +12,9 @@ const Button = styled.button`
   background: #ffe812;
   font-weight: 700;
   cursor: pointer;
+  .btn-text {
+    color: black;
+  }
 `
 
 const KakaoButton: FC = () => {
@@ -24,7 +27,7 @@ const KakaoButton: FC = () => {
       }}
     >
       <img src={SVGS.icon_24_kakao} alt="Balloon" />
-      <span>카카오 로그인</span>
+      <span className="btn-text">카카오 로그인</span>
     </Button>
   )
 }

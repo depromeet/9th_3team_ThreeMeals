@@ -175,6 +175,7 @@ const IntroContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin-left: 27px;
+  align-items: center;
 `
 
 const IntroTitle = styled.div`
