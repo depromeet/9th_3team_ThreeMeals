@@ -18,8 +18,14 @@ const PostedSticker: FC<Props> = (props) => {
       y={props.stickerImage.position?.positionY}
       offsetX={stickerImage ? stickerImage.width / 2 : 0}
       offsetY={stickerImage ? stickerImage.height / 2 : 0}
+      preventDefault={false}
     >
-      <KonvaImage width={140} height={stickerHeight} image={stickerImage} />
+      <KonvaImage
+        width={140}
+        height={stickerHeight}
+        image={stickerImage}
+        preventDefault={false}
+      />
     </Group>
   )
 }
