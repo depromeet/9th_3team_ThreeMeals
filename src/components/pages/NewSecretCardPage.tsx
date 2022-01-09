@@ -39,10 +39,10 @@ const NewSecretCardPage: React.FC = () => {
     variables: { postType: 'Ask', postState: 'Submitted' },
   })
 
-  const [create_comment] = useMutation<
-    CreateCommentAskResponse,
-    CreateCommentAskParams
-  >(CREATE_COMMENT_ASK)
+  const [create_comment] =
+    useMutation<CreateCommentAskResponse, CreateCommentAskParams>(
+      CREATE_COMMENT_ASK
+    )
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
@@ -55,18 +55,20 @@ const NewSecretCardPage: React.FC = () => {
   }, [getMyNewPostCount])
 
   const onClickSend = useCallback(
-    (text: string, postId: string, secretType: string) => {
+    async (text: string, postId: string, secretType: string) => {
       if (text.length > 0) {
-        create_comment({
-          variables: { postId: postId, content: text, secretType: secretType },
-        })
-          .then((e) => {
-            console.log('result', e.data)
-            router.replace('/content')
+        try {
+          await create_comment({
+            variables: {
+              postId: postId,
+              content: text,
+              secretType: secretType,
+            },
           })
-          .catch(() => {
-            window.alert('네트워크를 확인해주세요. :)')
-          })
+          router.replace('/content')
+        } catch (error) {
+          window.alert(`네트워크를 확인해주세요.\n${error}`)
+        }
       } else {
         window.alert('내용을 입력해주세요. :)')
       }
